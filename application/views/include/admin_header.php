@@ -526,8 +526,62 @@ $birthday = $CI->Reports->birthday_noti();
       <!-- Customer menu end -->
 
 
+        <!-- Customer menu start -->
+        <?php if (
+        $this->permission1->method('add_customer', 'create')->access() ||
+        $this->permission1->method('manage_customer', 'read')->access() ||
+        $this->permission1->method('credit_customer', 'read')->access() ||
+        $this->permission1->method('paid_customer', 'read')->access()
+        ) { ?>
+        <li class="treeview <?php if ($this->uri->segment('1') == "Ccustomer") {
+            echo "active";
+        } else {
+            echo " ";
+        } ?>">
+            <a href="#">
+                <i class="fa fa-handshake-o"></i><span>Aggregators</span>
+                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <?php if (
+                    $this->permission1->method('manage_brand', 'create')->access() ||
+                    $this->permission1->method('manage_category', 'read')->access() ||
+                    $this->permission1->method('manage_category', 'update')->access() ||
+                    $this->permission1->method('manage_category', 'delete')->access()
+                ) { ?>
+                    <li class="treeview <?php if ($this->uri->segment('1') == "Cbrand") {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url('Caggre'); ?>">Aggregators</a></li>
+                <?php } ?>
+                <?php if (
+                $this->permission1->method('customer_ledger', 'read')->access()
+                ) { ?>
+                    <li class="treeview <?php if (
+                        $this->uri->segment('2') == "customer_ledger_report"
+                    ) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url(
+                            'Ccustomer/customer_ledger_report'
+                        ); ?>">Aggregators Ledger</a></li>
+                <?php } ?>
 
-      <!-- Product menu start -->
+
+
+
+            </ul>
+        </li>
+        <?php } ?>
+        <!-- Customer menu end -->
+
+
+
+        <!-- Product menu start -->
       <?php if (
         $this->permission1->method('create_product', 'create')->access() ||
         $this->permission1->method('add_product_csv', 'create')->access() ||
@@ -582,6 +636,8 @@ $birthday = $CI->Reports->birthday_noti();
                                     echo " ";
                                   } ?>"><a href="<?php echo base_url('Cbrand'); ?>">Brand Name</a></li>
             <?php } ?>
+
+
 
             <?php if (
               $this->permission1->method('manage_ptype', 'create')->access() ||

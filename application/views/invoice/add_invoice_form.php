@@ -116,7 +116,7 @@
                                             <option value="">Select One</option>
                                             <option value="1">Whole Sale</option>
                                             <option value="2">Aggregators</option>
-                                            <option value="3">Transfer to Outlet</option>
+
                                         </select>
                                     </div>
                                 </div>
