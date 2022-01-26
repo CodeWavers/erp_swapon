@@ -1,0 +1,5 @@
+.vscode
+.idea
+my-assets/image/cheque/*
+my-assets/image/qr/*
+assets/data/pdf/invoice/*

@@ -1,0 +1,28 @@
+https://erp.gmebdonline.com/Csms/auto_sms
+https://erp.gmebdonline.com/Csms/auto_sms
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+
+</head>
+<body>
+	<div id="container">
+		<h1>An Error Was Encountered</h1>
+		<p>The action you have requested is not allowed.</p>	</div>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+
+</head>
+<body>
+	<div id="container">
+		<h1>An Error Was Encountered</h1>
+		<p>The action you have requested is not allowed.</p>	</div>
+</body>
+</html>
