@@ -22,7 +22,7 @@ class Laggre {
             'title'         => "Manage Aggre",
             'aggre_list' => $aggre_list,
         );
-        $aggreList = $CI->parser->parse('Aggre/Aggre', $data, true);
+        $aggreList = $CI->parser->parse('aggre/aggre', $data, true);
         return $aggreList;
     }
 
@@ -43,7 +43,7 @@ class Laggre {
             'title'         => 'Aggre',
             'aggre_list' => $aggre_list,
         );
-        $aggreForm = $CI->parser->parse('Aggre/add_aggre', $data, true);
+        $aggreForm = $CI->parser->parse('aggre/add_aggre', $data, true);
         return $aggreForm;
     }
 
@@ -59,7 +59,7 @@ class Laggre {
             'aggre_name' => $aggre_detail[0]['aggre_name'],
             'status'        => $aggre_detail[0]['status']
         );
-        $chapterList = $CI->parser->parse('Aggre/edit_aggre_form', $data, true);
+        $chapterList = $CI->parser->parse('aggre/edit_aggre_form', $data, true);
         return $chapterList;
     }
 
