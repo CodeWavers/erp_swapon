@@ -133,8 +133,9 @@
 
                                         <select name="agg_id" id="aggregator" class="form-control"  >
                                             <option value="">Select One</option>
-                                            <option value="1">Daraz</option>
-                                            <option value="2">Alesha Mart</option>
+                                            {aggre_list}
+                                            <option value="{id}">{aggre_name}</option>
+                                            {/aggre_list}
                                         </select>
                                     </div>
                                 </div>

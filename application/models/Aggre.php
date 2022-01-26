@@ -106,4 +106,55 @@ class Aggre extends CI_Model {
     }
 
 
+    public function count_aggre_ledger()
+    {
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->where('b.PHeadName', 'Customer Receivable');
+        $this->db->where('a.IsAppove', 1);
+        $this->db->order_by('a.VDate', 'desc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->num_rows();
+        }
+        return false;
+    }
+
+    public function aggre_buy($per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->join('invoice i', 'i.invoice_id=a.VNo');
+        $this->db->where('b.PHeadName', 'Aggregators Receivable');
+        $this->db->where('a.IsAppove', 1);
+        $this->db->where('i.outlet_id', $outlet_id);
+        $this->db->order_by('a.VDate', 'desc');
+        $this->db->limit($per_page, $page);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+    public function aggre_list_ledger()
+    {
+        $this->db->select('*');
+        $this->db->from('aggre_list');
+        $this->db->order_by('aggre_name', 'asc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+
+
 }

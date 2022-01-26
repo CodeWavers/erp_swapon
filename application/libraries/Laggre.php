@@ -63,6 +63,36 @@ class Laggre {
         return $chapterList;
     }
 
+    public function aggre_ledger_report($links, $per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Customers');
+        $CI->load->model('Aggre');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+
+        $aggre = $CI->Aggre->aggre_list_ledger();
+        $ledger   = $CI->Aggre->aggre_buy($per_page, $page);
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        $data = array(
+            'title'          => 'Aggregators Ledger',
+            'ledgers'        => $ledger,
+            'customer_name'  => '',
+            'address'        => '',
+            'customer'       => $aggre,
+            'customer_id'    => '',
+            'start'          => '',
+            'end'            => '',
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'links'          => $links,
+        );
+
+        $singlecustomerdetails = $CI->parser->parse('aggre/aggre_ledger_report', $data, true);
+        return $singlecustomerdetails;
+    }
+
 }
 
 ?>

@@ -262,6 +262,7 @@ class Linvoice
         $CI->load->model('Service');
         $CI->load->model('Warehouse');
         $CI->load->model('Settings');
+        $CI->load->model('Aggre');
 
         $card_list = $CI->Settings->get_real_card_data();
         $employee_list    = $CI->Service->employee_list();
@@ -281,6 +282,7 @@ class Linvoice
         $outlet_list = $CI->Warehouse->branch_list_product();
 
         $cw = $CI->Warehouse->central_warehouse();
+        $aggre_list = $CI->Aggre->aggre_list_product();
 
         $data = array(
             'title'         => display('add_new_invoice'),
@@ -297,6 +299,7 @@ class Linvoice
             'branch_list'     => $branch_list,
             'outlet_list'     => $outlet_user,
             'receiver_list'    => $receiver_list,
+            'aggre_list'    => $aggre_list,
             'cw'            => $cw
         );
         $invoiceForm = $CI->parser->parse('invoice/add_invoice_form', $data, true);

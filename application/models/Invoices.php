@@ -970,15 +970,24 @@ class Invoices extends CI_Model
         // print_r($sumval);
         // exit();
 
-        if ($sel_type == 1){
+        if ($sel_type == 1) {
 
 
+            $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $headn = $customer_id . '-' . $cusifo->customer_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->customer_name;
 
+        } else if ($sel_type == 2){
 
-        $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
-        $headn = $customer_id . '-' . $cusifo->customer_name;
-        $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
-        $customer_headcode = $coainfo->HeadCode;
+            $cusifo = $this->db->select('*')->from('aggre_list')->where('id', $agg_id)->get()->row();
+            $headn = $agg_id . '-' . $cusifo->aggre_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->aggre_name;
+        }
+
 
 
         ///Inventory credit
@@ -1009,7 +1018,7 @@ class Invoices extends CI_Model
             'Vtype'          =>  'INV',
             'VDate'          =>  $Vdate,
             'COAID'          =>  $customer_headcode,
-            'Narration'      =>  'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cusifo->customer_name,
+            'Narration'      =>  'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
             'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
             'Credit'         =>  0,
             'IsPosted'       =>  1,
@@ -1024,7 +1033,7 @@ class Invoices extends CI_Model
             'Vtype'          =>  'INVOICE',
             'VDate'          =>  $Vdate,
             'COAID'          =>  303,
-            'Narration'      =>  'Sale Income For Invoice ID - ' . $invoice_id . ' Customer ' . $cusifo->customer_name,
+            'Narration'      =>  'Sale Income For Invoice ID - ' . $invoice_id . ' Customer ' .$cs_name,
             'Debit'          =>  0,
             'Credit'         =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
             'IsPosted'       => 1,
@@ -1050,7 +1059,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INV',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  1020101,
-                        'Narration'      =>  'Cash in Hand in Sale for Invoice ID - ' . $invoice_id . ' customer- ' . $cusifo->customer_name,
+                        'Narration'      =>  'Cash in Hand in Sale for Invoice ID - ' . $invoice_id . ' customer- ' . $cs_name,
                         'Debit'          =>  $paid[$i],
                         'Credit'         =>  0,
                         'IsPosted'       =>  1,
@@ -1077,7 +1086,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INV',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cusifo->customer_name,
+                        'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
                         'Debit'          =>  0,
                         'Credit'         =>  $paid[$i],
                         'IsPosted'       => 1,
@@ -1102,7 +1111,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INVOICE',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  $bankcoaid,
-                        'Narration'      =>  'Paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                        'Narration'      =>  'Paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
                         'Debit'          =>  $paid[$i],
                         'Credit'         =>  0,
                         'IsPosted'       =>  1,
@@ -1129,7 +1138,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INV',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cusifo->customer_name,
+                        'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
                         'Debit'          =>  0,
                         'Credit'         =>  $paid[$i],
                         'IsPosted'       => 1,
@@ -1154,7 +1163,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INVOICE',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  $bkashcoaid,
-                        'Narration'      =>  'Cash in Bkash paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                        'Narration'      =>  'Cash in Bkash paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
                         'Debit'          =>  $paid[$i],
                         'Credit'         =>  0,
                         'IsPosted'       =>  1,
@@ -1181,7 +1190,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INV',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Bkash) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cusifo->customer_name,
+                        'Narration'      =>  'Customer credit (Cash In Bkash) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
                         'Debit'          =>  0,
                         'Credit'         =>  $paid[$i],
                         'IsPosted'       => 1,
@@ -1290,7 +1299,7 @@ class Invoices extends CI_Model
                         'Vtype'          =>  'INV',
                         'VDate'          =>  $Vdate,
                         'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cusifo->customer_name,
+                        'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
                         'Debit'          =>  0,
                         'Credit'         =>  $paid[$i],
                         'IsPosted'       => 1,
@@ -1325,7 +1334,7 @@ class Invoices extends CI_Model
 
             // echo '<pre>';print_r($CUS);
 
-        }
+
 
         //  $p_id_two=$this->db->query(" SELECT product_id_two FROM `product_information` WHERE product_id=$product_id")->result();
 
