@@ -91,7 +91,7 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
           </div>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-            <div class="small-box bg-darkgreen whitecolor">
+            <div class="small-box bg-yellow whitecolor">
             <div class="inner">
               <h4><span class="count-number"><?php echo html_escape($total_sales) ?></span> </h4>
 

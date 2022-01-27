@@ -139,7 +139,7 @@
 .usablity{
 	text-align:left;
 	font-size:15px;
-	color: green;
+	color: var(--main-color);
 	font-weight: bold;
 }
 
@@ -388,7 +388,7 @@
 	margin: 13px 2px;
 }
 .prints{
-	background-color: #31B404;
+	background-color: var(--main-color);
 	color:#fff;
 }
 
@@ -459,7 +459,7 @@
 }
 
 .profitloss-result{
-	background-color: green;
+	background-color: var(--main-color);
 	color: #fff;
 }
 
@@ -658,7 +658,7 @@
 }
 
 .bg-bringal{
-	background-color:#8459cf;
+	background-color: #370090;
 }
 
 .bg-darkgreen{
@@ -686,7 +686,7 @@
 }
 
 .filterbutton{
-	background-color: green;
+	background-color: var(--main-color);
 	color:#fff;
 }
 
@@ -767,7 +767,7 @@
 }
 
 .spinner-layer.pl-green {
-	border-color: #37a000
+	border-color: var(--main-color)
 }
 
 .right {
