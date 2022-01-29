@@ -583,15 +583,10 @@ $(document).ready(function(){
     "use strict";
      function invoice_productList(sl) {
 
- var priceClass = 'price_item'+sl;
+ var priceClass = 'qty_price_'+sl;
         var available_quantity = 'available_quantity_'+sl;
         var unit = 'unit_'+sl;
-        var tax = 'total_tax_'+sl;
-        var serial_no = 'serial_no_'+sl;
-        var warehouse = 'warehouse_'+sl;
-        var warrenty_date='warrenty_date_'+sl;
-       var expiry_date='expiry_date_'+sl;
-        var discount_type = 'discount_type_'+sl;
+  
         var csrf_test_name = $('[name="csrf_test_name"]').val();
         var base_url = $("#base_url").val();
 
@@ -640,16 +635,11 @@ $(document).ready(function(){
                             var txclass = 'total_tax'+i+'_'+sl;
                            $('.'+txclass).val(obj.taxdta[i]);
                             }
-                            $('.'+priceClass).val(obj.price);
-                            $('.'+available_quantity).val(obj.total_product.toFixed(2,2));
                             $('.'+unit).val(obj.unit);
-                            $('.'+warrenty_date).val(obj.warrenty_date);
-                            $('.'+expiry_date).val(obj.expired_date);
-                            $('#'+warehouse).html(obj.warehouse);
-                            $('.'+tax).val(obj.tax);
-                            $('#txfieldnum').val(obj.txnmber);
-                            $('#'+serial_no).html(obj.serial);
-                            $('#'+discount_type).val(obj.discount_type);
+                            $('#'+priceClass).val(obj.price);
+                            $('.'+available_quantity).val(obj.total_product.toFixed(2,2));
+
+
                                    quantity_calculate(sl);
                             
                         } 

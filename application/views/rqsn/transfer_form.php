@@ -150,6 +150,7 @@
                                     <th class="text-center"><?php echo display('unit') ?></th>
                                     <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
 
+                                    <th class="text-center">Sale Price</th>
                                     <th class="text-center"><?php echo display('action') ?></th>
                                 </tr>
                                 </thead>
@@ -164,35 +165,50 @@
                                     </td>
 
                                     <td>
-                                        <input name="unit[]" id="" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
+                                        <input name="unit[]" id="unit_1" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                     </td>
                                     <td>
                                         <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8"  value="1" />
                                     </td>
 
-
+                                    <td>
+                                        <input type="text" name="qty_price[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="qty_price form-control text-right" id="qty_price_1" placeholder="0.00" value="<?= (isset($isedit) ? $pr_total_price : '0.00') ?>" tabindex="8" />
+                                        <input type="hidden" name="rate[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="rate_1 form-control text-right" id="rate_1" placeholder="0.00" tabindex="8" value="<?= (isset($isedit) ? $pr_per_price : '0.00') ?>" />
+                                    </td>
                                     <td>
 
 
                                         <button  class='btn btn-danger text-right' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button>
+                                        <a   id="add_invoice_item" class="btn btn-info" name="add-invoice-item"  onClick="addInputField('addinvoiceItem');"  tabindex="11"><i class="fa fa-plus"></i></a>
 
                                     </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
+
                                 <tr>
-                                    <td colspan="3" rowspan="1">
+                                    <td colspan="3" class="text-right">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text" name="total_expense" id="total_expense" readonly>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" rowspan="1">
                                         <center><label  for="details" class="  col-form-label text-center">Remark...</label></center>
                                         <textarea name="inva_details" id="details" class="form-control" placeholder="Remark..." ></textarea>
                                     </td>
-                                    <td><a style="margin-top: 30%"  id="add_invoice_item" class="btn btn-info" name="add-invoice-item"  onClick="addInputField('addinvoiceItem');"  tabindex="11"><i class="fa fa-plus"></i></a></td>
+
 
                                 </tr>
 
 
-                                <tr>
+
 
                                 </tfoot>
+
+
                             </table>
                         </div>
 

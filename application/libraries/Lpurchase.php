@@ -13,6 +13,7 @@ class Lpurchase
         $CI->load->model('Purchases');
         $CI->load->model('Web_settings');
         $CI->load->model('Warehouse');
+        $CI->load->model('Categories');
         $all_supplier = $CI->Purchases->select_all_supplier();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $bank_list        = $CI->Web_settings->bank_list();
@@ -21,6 +22,7 @@ class Lpurchase
         $outlet_list = $CI->Warehouse->branch_list_product();
         $outlet_user        = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->central_warehouse();
+        $cates = $CI->Categories->cates();
         $data = array(
             'title'         => display('add_purchase'),
             'all_supplier'  => $all_supplier,
@@ -31,6 +33,7 @@ class Lpurchase
             'nagad_list'    => $nagad_list,
             'outlet_list'   => $outlet_user,
             'cw'            => $cw,
+            'cates'            => $cates,
         );
         $purchaseForm = $CI->parser->parse('purchase/add_purchase_form', $data, true);
         return $purchaseForm;

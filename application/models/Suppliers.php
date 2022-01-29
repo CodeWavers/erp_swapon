@@ -223,7 +223,7 @@ class Suppliers extends CI_Model
     }
 
     //Product search item
-    public function product_search_item($product_name,$product_status)
+    public function product_search_item($product_name,$product_status,$cat_id)
     {
 
         // echo '<pre>';
@@ -232,7 +232,8 @@ class Suppliers extends CI_Model
 
         $this->db->select('*')
             ->from('product_information a')
-            ->where('a.finished_raw', $product_status);
+            ->where('a.finished_raw', $product_status)
+            ->where('a.category_id', $cat_id);
 
 
 

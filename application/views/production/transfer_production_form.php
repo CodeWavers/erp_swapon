@@ -132,8 +132,6 @@
                                         <th class="text-center">Stock</th>
                                         <th class="text-center"><?php echo display('unit') ?></th>
                                         <th class="text-center">Quantity <i class="text-danger">*</i></th>
-
-                                        <th class="text-center">Price</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -156,9 +154,6 @@
                                             <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="total_qntt_1 form-control text-right qty" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="<?= (isset($isedit) ? $pr_stock : '0') ?>" />
                                         </td>
 
-                                        <td>
-                                            <input type="text" name="qty_price[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="qty_price form-control text-right" id="qty_price_t_1" placeholder="0.00" value="0" tabindex="8" />
-                                        </td>
 
 
                                         <td>
@@ -173,16 +168,9 @@
                                 </tbody>
                                 <tfoot>
 
-                                    <tr>
-                                        <td class="text-right" colspan="4"><b><?php echo display('total') ?>:</b></td>
-                                        <td class="text-right">
-                                            <input type="text" id="Total" class="text-right form-control" name="total" value="<?= (isset($isedit) ? $pr_total_price : '0.00') ?>" readonly="readonly" />
-                                        </td>
 
-                                        <td></td>
-                                    </tr>
                                     <tr>
-                                        <td colspan="5" rowspan="1">
+                                        <td colspan="4" rowspan="1">
                                             <center><label for="details" class="  col-form-label text-center">Remark</label></center>
                                             <textarea name="inva_details" id="details" class="form-control" placeholder="Remark"><?= (isset($isedit) ? $remark : '') ?></textarea>
                                         </td>

@@ -2232,40 +2232,28 @@ class Invoices extends CI_Model
     //Get total product
     public function get_total_product($product_id, $product_status)
     {
-        $this->db->select('SUM(a.quantity) as total_purchase,b.*');
-        $this->db->from('product_purchase_details a');
-        $this->db->where('a.product_id', $product_id);
-        $total_purchase = $this->db->get()->row();
 
-        $this->db->select('SUM(b.quantity) as total_sale');
-        $this->db->from('invoice_details b');
-        $this->db->where('b.product_id', $product_id);
-        $total_sale = $this->db->get()->row();
+        $CI = &get_instance();
+        $CI->load->model('Web_settings');
+        $CI->load->model('Reports');
 
-        $this->db->select('a.*,b.*');
+        $this->db->select('a.*');
         $this->db->from('product_information a');
         $this->db->where(array('a.product_id' => $product_id, 'a.status' => 1));
 
         $product_information = $this->db->get()->row();
 
-        $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $product_id)->get()->row();
 
-        $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->from('product_purchase_details')->where('status', 2)->where('product_id', $product_id)->get()->row();
-
-        $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')->from('rqsn_details')->where('isaprv', 1)->where('isrcv', 1)->where('product_id', $product_id)->get()->row();
-
-        $available_quantity =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) - (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0);
+        $available_quantity=$CI->Reports->current_stock($product_id,$product_status=null);
 
 
-        $CI = &get_instance();
-        $CI->load->model('Web_settings');
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
 
         $data2 = array(
             'total_product'  => $available_quantity,
-            'supplier_price' => $product_information->supplier_price,
-            'price'          => $product_information->price,
-            'supplier_id'    => $product_information->supplier_id,
+//            'supplier_price' => $product_information->supplier_price,
+//            'price'          => $product_information->price,
+//            'supplier_id'    => $product_information->supplier_id,
             'unit'           => $product_information->unit,
             'tax'            => $product_information->tax,
             'discount_type'  => $currency_details[0]['discount_type'],

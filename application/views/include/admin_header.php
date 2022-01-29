@@ -32,7 +32,7 @@ $birthday = $CI->Reports->birthday_noti();
 
   <nav class="navbar navbar-static-top text-center">
 
-    <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
       <!-- Sidebar toggle button-->
       <span class="sr-only">Toggle navigation</span>
 

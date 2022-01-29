@@ -182,7 +182,8 @@ class Cpurchase extends CI_Controller
         $CI->load->model('Suppliers');
         $product_status = $this->input->post('product_status', TRUE);
         $product_name = $this->input->post('product_name', TRUE);
-        $product_info = $CI->Suppliers->product_search_item($product_name,$product_status);
+        $cat_id = $this->input->post('cat_id', TRUE);
+        $product_info = $CI->Suppliers->product_search_item($product_name,$product_status,$cat_id);
         if (!empty($product_info)) {
             $list[''] = '';
             foreach ($product_info as $value) {
