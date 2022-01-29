@@ -29,7 +29,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     title: {
         text: "Expense statement",
-         fontColor: "green"
+         fontColor: "#1b74e4"
     },
    
     data: [{
@@ -83,12 +83,12 @@ $(function (){
     datasets: [{ 
         data: sale,
         label: "Sales",
-        borderColor: "#008000",
+        borderColor: "#1b74e4",
         fill: false
       }, { 
         data: purchase,
         label: "Purchase",
-        borderColor: "#3e95cd",
+        borderColor: "#8e0b1b",
         fill: false
       }
     ]
