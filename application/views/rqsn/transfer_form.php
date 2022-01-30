@@ -97,7 +97,27 @@
 
 
                             </div>
+                            <div class="col-sm-8" id="payment_from">
 
+                                <div class="form-group row">
+                                    <label for="payment_type" class="col-sm-3 col-form-label">From<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
+                                        <select name="from_id" class="form-control" required=""  tabindex="3">
+                                            <?php foreach($outlet_list as $outlet){?>
+                                                <option value="<?php echo html_escape($outlet['outlet_id'])?>"><?php echo html_escape($outlet['outlet_name']) ;?></option>
+                                            <?php }?>
+                                                                                        <?php foreach($cw_list as $cw){?>
+                                                                                            <option value="<?php echo html_escape($cw['warehouse_id'])?>"><?php echo html_escape($cw['central_warehouse']) ;?></option>
+                                                                                        <?php }?>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
 
                             <div class="col-sm-8" id="payment_from">
 
@@ -186,14 +206,14 @@
                                 </tbody>
                                 <tfoot>
 
-                                <tr>
-                                    <td colspan="3" class="text-right">
-                                        <strong>Total</strong>
-                                    </td>
-                                    <td>
-                                        <input class="form-control" type="text" name="total_expense" id="total_expense" readonly>
-                                    </td>
-                                </tr>
+<!--                                <tr>-->
+<!--                                    <td colspan="3" class="text-right">-->
+<!--                                        <strong>Total</strong>-->
+<!--                                    </td>-->
+<!--                                    <td>-->
+<!--                                        <input class="form-control" type="text" name="total_expense" id="total_expense" readonly>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
                                 <tr>
                                     <td colspan="4" rowspan="1">
                                         <center><label  for="details" class="  col-form-label text-center">Remark...</label></center>

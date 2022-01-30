@@ -272,13 +272,7 @@ $birthday = $CI->Reports->birthday_noti();
                                                   ); ?>"><?php echo display('gui_pos'); ?></a></li>
             <?php } ?>
 
-              <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
-                  <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
-                      echo "active";
-                  } else {
-                      echo " ";
-                  } ?>"><a href="<?php echo base_url('Crqsn/transfer_form') ?>">Transfer to Outlet</a></li>
-              <?php } ?>
+
 
 
               <?php if ($this->permission1->method('gui_pos', 'create')->access()) { ?>
@@ -310,7 +304,61 @@ $birthday = $CI->Reports->birthday_noti();
         </li>
       <?php } ?>
       <!-- Invoice menu end -->
+        <!-- Requisition Menu start -->
+        <?php if ($this->permission1->method('reacquisition', 'create')->access() || $this->permission1->method('rqsn_form', 'create')->access() || $this->permission1->method('cw_purchase', 'create')->access()) { ?>
+        <li class="treeview <?php
+        if ($this->uri->segment('2') == ("index") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn")) {
+            echo "active";
+        } else {
+            echo " ";
+        }
+        ?>">
+            <a href="#">
+                <i class="glyphicon glyphicon-circle-arrow-down"></i><span>Transfer</span>
+                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                    <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url('Crqsn/transfer_form') ?>">Transfer to Outlet</a></li>
+                <?php } ?>
 
+
+                <!-- Product recieve start -->
+                <?php if ($this->permission1->method('product_recieve', 'create')->access() || $this->permission1->method('outlet_approve', 'create')->access() || $this->permission1->method('aprove_chalan', 'create')->access()) { ?>
+
+
+
+                    <?php if ($this->permission1->method('outlet_approve', 'create')->access()) { ?>
+                        <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                            echo "active";
+                        } else {
+                            echo " ";
+                        } ?>"><a href="<?php echo base_url('Crqsn/outlet_approve') ?>">Outlet Received</a></li>
+                    <?php } ?>
+
+
+                    <?php if ($this->permission1->method('aprove_chalan', 'create')->access()) { ?>
+                        <li class="treeview <?php if ($this->uri->segment('2') == ("aprove_chalan")) {
+                            echo "active";
+                        } else {
+                            echo " ";
+                        } ?>"><a href="<?php echo base_url('Crqsn/aprove_chalan') ?>">Product Receive</a></li>
+                    <?php } ?>
+
+
+                <?php } ?>
+
+
+            </ul>
+        </li>
+        <?php } ?>
+        <!-- Requisition menu end -->
       <!-- Discount menu start -->
       <!-- <?php if (
               $this->permission1->method('new_discount', 'create')->access() ||
@@ -1083,7 +1131,10 @@ $birthday = $CI->Reports->birthday_noti();
       <?php if (
         $this->permission1->method('stock_report', 'read')->access() ||
         $this->permission1->method('stock_report_sp_wise', 'read')->access() ||
-        $this->permission1->method('stock_report_pro_wise', 'read')->access()
+        $this->permission1->method('stock_report_pro_wise', 'read')->access() ||
+        $this->permission1->method('outlet_stock', 'read')->access() ||
+        $this->permission1->method('outlet_stock', 'read')->access() ||
+        $this->permission1->method('outlet_stock', 'read')->access()
       ) { ?>
         <li class="treeview <?php if ($this->uri->segment('1') == "Creport") {
                               echo "active";

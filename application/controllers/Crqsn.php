@@ -72,10 +72,10 @@ class Crqsn extends CI_Controller
         if ($rqsn == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));
 
-            redirect(base_url('Crqsn/rqsn_form'));
+            redirect(base_url('Crqsn/transfer_form'));
         } else {
             $this->session->set_userdata(array('error_message' => display('please_try_again')));
-            redirect(base_url('Crqsn/rqsn_form'));
+            redirect(base_url('Crqsn/transfer_form'));
         }
     }
 
@@ -338,7 +338,7 @@ class Crqsn extends CI_Controller
         $data['title'] = 'Outlet Approve';
         $data['t'] = $this->Rqsn->approve_outlet();
 
-        //echo '<pre>';print_r($data);exit();
+     //   echo '<pre>';print_r($data);exit();
         $content = $this->parser->parse('rqsn/rqsn_approve_outlet', $data, true);
         $this->template->full_admin_html_view($content);
     }
