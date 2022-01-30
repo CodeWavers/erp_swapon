@@ -73,6 +73,35 @@ class Lrqsn
         $invoiceForm = $CI->parser->parse('rqsn/rqsn_form', $data, true);
         return $invoiceForm;
     }
+    public function pr_rqsn_add_form()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $CI->load->model('Web_settings');
+//        $outlet_list    = $CI->Rqsn->outlet_list();
+//        $outlet_list_to    = $CI->Rqsn->outlet_list_to();
+//        $cw_list    = $CI->Rqsn->cw_list();
+        $role_list    = $CI->Rqsn->role_list();
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $taxfield = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $data = array(
+            'title'         => "Production Requisition",
+//            'outlet_list' => $outlet_list,
+//            'outlet_list_to' => $outlet_list_to,
+//            'cw_list' => $cw_list,
+            'role_list' => $role_list,
+            'discount_type' => $currency_details[0]['discount_type'],
+            'taxes'         => $taxfield,
+        );
+
+        // echo '<pre'; print_r($cw_list);exit();
+        //    die();
+        $invoiceForm = $CI->parser->parse('rqsn/pr_rqsn_form', $data, true);
+        return $invoiceForm;
+    }
     public function transfer_add_form()
     {
         $CI = &get_instance();
@@ -309,5 +338,29 @@ class Lrqsn
 
         $view = $CI->parser->parse('rqsn/view_outlet_rqsn_form', $data, true);
         return $view;
+    }
+
+    public function production_list_from_rqsn()
+    {
+        $CI = & get_instance();
+        $CI->load->model('Rqsn');
+
+        $rqsn_list = $CI->Rqsn->get_rqsn_approved_list();
+
+
+        $i = 0;
+        foreach ($rqsn_list as $k => $v) {
+            $i++;
+            $rqsn_list[$k]['sl'] = $i + $CI->uri->segment(3);
+        }
+
+        $data = array(
+            'title'     => 'Production List',
+            'pur_list'  => $rqsn_list
+        );
+        // echo '<pre>'; print_r($data); die();
+
+        return $CI->parser->parse('production/production_list_form', $data, true);
+
     }
 }

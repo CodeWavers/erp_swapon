@@ -16,7 +16,15 @@ class Rqsn extends CI_Model
         $this->load->model('Service');
         $this->auth->check_admin_auth();
     }
+    public function role_list()
+    {
 
+        return $list = $this->db->select('*')
+            ->from('sec_role')
+            ->where('type','production')
+
+            ->get()->result_array();
+    }
 
     // outlet list
     public function outlet_list()
@@ -156,6 +164,63 @@ class Rqsn extends CI_Model
         }
 
         return $rqsn_id;
+    }
+    public function pr_rqsn_entry()
+    {
+        $this->load->model('Web_settings');
+        $pr_rqsn_id = date('Ymdhs');
+
+        //    echo "Ok";exit();
+
+        //Data inserting into invoice table
+        $datarq = array(
+            'pr_rqsn_id'     => $pr_rqsn_id,
+            'date'            => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
+            'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Production Requisition'),
+
+            'to_id'  => $this->input->post('to_id', true),
+            'status'   => 1,
+        );
+   ;
+
+        $this->db->insert('pr_rqsn', $datarq);
+
+
+        $quantity            = $this->input->post('product_quantity', true);
+        $p_id             = $this->input->post('product_id', true);
+        $unit             = $this->input->post('unit', true);
+
+
+
+        for ($i = 0, $n   = count($p_id); $i < $n; $i++) {
+            $qty  = $quantity[$i];
+            $un  = $unit[$i];
+            $product_id   = $p_id[$i];
+
+
+
+            $rqsn_details = array(
+                'pr_rqsn_detail_id'     => mt_rand(),
+                'pr_rqsn_id'     => $pr_rqsn_id,
+                'product_id'         => $product_id,
+                'quantity'                => $qty,
+                'unit'                => $un,
+                'status'                => 1,
+
+
+                //temporary added
+
+
+                'isaprv'                => 1,
+//                'isrcv'                => 1,
+
+            );
+            if (!empty($quantity)) {
+                $this->db->insert('pr_rqsn_details', $rqsn_details);
+            }
+        }
+
+        return $pr_rqsn_id;
     }
 
     public function rqsn_entry_cw()
@@ -1696,5 +1761,29 @@ class Rqsn extends CI_Model
         }
 
         return false;
+    }
+
+    public function get_rqsn_approved_list()
+    {
+        $this->db->select('a.*, b.*, c.*,SUM(b.quantity) as qty');
+        $this->db->from('pr_rqsn a');
+        $this->db->join('pr_rqsn_details b', 'b.pr_rqsn_id = a.pr_rqsn_id');
+        $this->db->join('product_information c', 'c.product_id = b.product_id');
+        $this->db->group_by('b.product_id');
+        $this->db->where('a.status', 1);
+
+        // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');
+
+        $query = $this->db->get();
+
+        // echo '<pre>'; print_r($query->result_array()); die();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+
+        return false;
+
+
     }
 }

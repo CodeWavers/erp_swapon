@@ -36,6 +36,15 @@ class Crqsn extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function pr_rqsn_form()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lrqsn');
+        $content = $CI->lrqsn->pr_rqsn_add_form();
+        $this->template->full_admin_html_view($content);
+    }
+
     public function transfer_form()
     {
         $CI = &get_instance();
@@ -76,6 +85,31 @@ class Crqsn extends CI_Controller
         } else {
             $this->session->set_userdata(array('error_message' => display('please_try_again')));
             redirect(base_url('Crqsn/transfer_form'));
+        }
+    }
+
+    public function insert_rqsn_pr()
+    {
+        $CI = &get_instance();
+
+        //echo "Ok";exit();
+
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Rqsn');
+
+        $rqsn = $CI->Rqsn->pr_rqsn_entry();
+
+
+
+        //   echo "ok";exit();
+
+        if ($rqsn == TRUE) {
+            $this->session->set_userdata(array('message' => display('successfully_added')));
+
+            redirect(base_url('Crqsn/pr_rqsn_form'));
+        } else {
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Crqsn/pr_rqsn_form'));
         }
     }
 
@@ -610,4 +644,45 @@ class Crqsn extends CI_Controller
 
         redirect(base_url('Creport'));
     }
+
+
+    public function production_list()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lrqsn');
+        $content = $CI->lrqsn->production_list_from_rqsn();
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function update_pr_rqsn()
+    {
+        $product_id=$_POST["product_id"];
+        $pr_rqsn_id=$_POST["rqsn_no"];
+        $rq_d_id=$_POST["rq_d_id"];
+
+        $data = array(
+
+            "cutting"  => $_POST["cutting"],
+            "printing"  => $_POST["printing"],
+            "sewing"  => $_POST["sewing"],
+            "finishing"  => $_POST["finishing"],
+
+        );
+
+        $this->db->where('pr_rqsn_detail_id', $rq_d_id);
+        $this->db->where('product_id', $product_id);
+        $this->db->update('pr_rqsn_details',$data);
+
+        //            $sq = "UPDATE rqsn_details
+        //            SET purchase_status = 2
+        //            WHERE rqsn_detail_id = ".$product_id.";";
+        //
+        //            $this->db->query($sq);
+
+
+
+        json_encode($data);
+    }
+
 }

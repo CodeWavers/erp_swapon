@@ -1121,7 +1121,42 @@ $birthday = $CI->Reports->birthday_noti();
                   }
                   ?>"><a href="<?php echo base_url('Cproduction/manage_production') ?>"><?php echo "Manage Producton" ?></a></li>
               <?php } ?>
+              <?php if ($this->permission1->method('approval', 'create')->access() || $this->permission1->method('aprove_rqsn', 'create')->access() || $this->permission1->method('aprove_rqsn_outlet', 'create')->access() || $this->permission1->method('aprove_rqsn_purchase', 'create')->access()) { ?>
+                  <li class="treeview <?php
+                  if ($this->uri->segment('2') == ("index") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn")) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  }
+                  ?>">
+                      <a href="#">
+                          <span>Production Requistion</span>
+                          <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                      </a>
+                      <ul class="treeview-menu">
 
+                          <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url('Crqsn/pr_rqsn_form') ?>">Requisition Form</a></li>
+                          <?php } ?>
+
+                          <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url('Crqsn/production_list') ?>">Production Status</a></li>
+                          <?php } ?>
+
+
+                      </ul>
+                  </li>
+              <?php } ?>
           </ul>
         </li>
       <?php } ?>
