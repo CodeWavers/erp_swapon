@@ -177,7 +177,6 @@ class Rqsn extends CI_Model
             'pr_rqsn_id'     => $pr_rqsn_id,
             'date'            => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
             'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Production Requisition'),
-
             'to_id'  => $this->input->post('to_id', true),
             'status'   => 1,
         );
@@ -186,7 +185,7 @@ class Rqsn extends CI_Model
         $this->db->insert('pr_rqsn', $datarq);
 
 
-        $quantity            = $this->input->post('product_quantity', true);
+        $quantity         = $this->input->post('product_quantity', true);
         $p_id             = $this->input->post('product_id', true);
         $unit             = $this->input->post('unit', true);
 
@@ -198,26 +197,42 @@ class Rqsn extends CI_Model
             $product_id   = $p_id[$i];
 
 
+            $check_product = $this->db->select('*')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->num_rows();
+            $exist_qty = $this->db->select('quantity')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row()->quantity;
 
-            $rqsn_details = array(
-                'pr_rqsn_detail_id'     => mt_rand(),
-                'pr_rqsn_id'     => $pr_rqsn_id,
-                'product_id'         => $product_id,
-                'quantity'                => $qty,
-                'unit'                => $un,
-                'status'                => 1,
+            if ($check_product > 0){
+
+                $this->db->set(array('quantity'=> $qty+$exist_qty,'last_updated' =>date('Y-m-d')));
+                $this->db->where('product_id', $product_id);
+                $this->db->update('pr_rqsn_details');
+
+            }else{
+                $rqsn_details = array(
+                    'pr_rqsn_detail_id'     => mt_rand(),
+                    'pr_rqsn_id'     => $pr_rqsn_id,
+                    'product_id'         => $product_id,
+                    'quantity'                => $qty,
+                    'unit'                => $un,
+                    'status'                => 1,
+                    'create_date'                => date('Y-m-d'),
 
 
-                //temporary added
+                    //temporary added
 
 
-                'isaprv'                => 1,
+                    'isaprv'                => 1,
 //                'isrcv'                => 1,
 
-            );
-            if (!empty($quantity)) {
-                $this->db->insert('pr_rqsn_details', $rqsn_details);
+                );
+                if (!empty($quantity)) {
+                    $this->db->insert('pr_rqsn_details', $rqsn_details);
+                }
+
             }
+
+
+
+
         }
 
         return $pr_rqsn_id;
@@ -1765,7 +1780,7 @@ class Rqsn extends CI_Model
 
     public function get_rqsn_approved_list()
     {
-        $this->db->select('a.*, b.*, c.*,SUM(b.quantity) as qty');
+        $this->db->select('a.*, b.*, c.*');
         $this->db->from('pr_rqsn a');
         $this->db->join('pr_rqsn_details b', 'b.pr_rqsn_id = a.pr_rqsn_id');
         $this->db->join('product_information c', 'c.product_id = b.product_id');

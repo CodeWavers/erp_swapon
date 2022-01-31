@@ -658,19 +658,22 @@ class Crqsn extends CI_Controller
     public function update_pr_rqsn()
     {
         $product_id=$_POST["product_id"];
-        $pr_rqsn_id=$_POST["rqsn_no"];
         $rq_d_id=$_POST["rq_d_id"];
 
-        $data = array(
+        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row()->finished_qty;
 
+
+        $data = array(
             "cutting"  => $_POST["cutting"],
             "printing"  => $_POST["printing"],
             "sewing"  => $_POST["sewing"],
             "finishing"  => $_POST["finishing"],
-
+            "finished_qty"  => $_POST["finishing"]+$exist_fq,
+            "last_updated"  => date('Y-m-d'),
+            "isrcv"  => '',
         );
 
-        $this->db->where('pr_rqsn_detail_id', $rq_d_id);
+
         $this->db->where('product_id', $product_id);
         $this->db->update('pr_rqsn_details',$data);
 

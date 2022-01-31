@@ -65,12 +65,28 @@
                                         <th>Printing</th>
                                         <th>Sewing</th>
                                         <th>Finishing</th>
+                                        <th>Total Finished</th>
                                         <th><?php echo display('action') ?></th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
-                                <?php foreach ($pur_list as $row) { ?>
+                                <?php foreach ($pur_list as $row) {
+
+
+                                    $cutting=$row['cutting']-$row['printing'];
+                                    $printing=$row['printing']-$row['sewing'];
+                                    $sewing=$row['sewing']-$row['finishing'];
+                                    $finishing=$row['finishing'];
+
+                                    $quantity=$row['quantity']-$row['finished_qty'];
+                                    $total_finished=$row['finished_qty']
+
+
+
+
+
+                                    ?>
                                     <tr class="text-center">
                                         <td><?php echo $row['sl']?> </td>
                                         <td class="text-center"><img src="<?php echo $row['image']?>" class="img-zoom" alt="Product Photo"></td>
@@ -81,19 +97,22 @@
                                             <?php echo $row['product_name']?>
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control quantity" value="<?php echo $row['qty'];?>" style="width:100%;" name="quantity" id="quantity_<?php echo $row['product_id']?>" readonly>
+                                            <input  size="10" type="text" class="form-control quantity" value="<?php echo $quantity > 0 ? $quantity : 0;?>" style="width:100%;" name="quantity" id="quantity_<?php echo $row['product_id']?>" readonly>
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control cutting" value="<?php echo $row['cutting'];?>" style="width:100%;" name="cutting" id="cutting_<?php echo $row['product_id']?>">
+                                            <input  size="10" type="text" class="form-control cutting" value="<?php echo $cutting > 0 ? $cutting : 0;?>" style="width:100%;" name="cutting" id="cutting_<?php echo $row['product_id']?>">
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control printing" value="<?php echo $row['printing'];?>" style="width:100%;" name="printing" id="printing_<?php echo $row['product_id']?>">
+                                            <input  size="10" type="text" min="0" class="form-control printing" value="<?php echo $printing > 0 ? $printing : 0;?>" style="width:100%;" name="printing" id="printing_<?php echo $row['product_id']?>">
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control sewing" value="<?php echo $row['sewing'];?>" style="width:100%;" name="sewing" id="sewing_<?php echo $row['product_id']?>">
+                                            <input  size="10" type="text" min="0" class="form-control sewing" value="<?php echo $sewing > 0 ? $sewing : 0;?>" style="width:100%;" name="sewing" id="sewing_<?php echo $row['product_id']?>">
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control finishing" value="<?php echo $row['finishing'];?>" style="width:100%;" name="finishing" id="finishing_<?php echo $row['product_id']?>">
+                                            <input  size="10" type="text" class="form-control finishing" value="0" style="width:100%;" name="finishing" id="finishing_<?php echo $row['product_id']?>">
+                                        </td>
+                                        <td>
+                                            <input  size="10" type="text" class="form-control total_finished" value="<?php echo $total_finished > 0 ? $total_finished : 0;?>" style="width:100%;" name="total_finished" id="total_finished_<?php echo $row['product_id']?>" readonly>
                                         </td>
 
 
@@ -175,6 +194,7 @@ function add_and_delete(e) {
                         btn.html('<i class="fa fa-check"></i>');
                         btn.removeClass("btn-success");
                         btn.addClass("btn-warning");
+                        btn.attr("disabled", true);
                          // a.parentNode.removeChild(a);
                         // setTimeout(function(){
                         //     btn.html('<i class="fa fa-plus"></i>')

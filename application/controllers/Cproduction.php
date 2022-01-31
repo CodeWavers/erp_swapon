@@ -265,55 +265,38 @@ class Cproduction extends CI_Controller
     public function retrieve_product_data_production_transfer()
     {
 
+        $CI = &get_instance();
+        $CI->load->model('Web_settings');
+        $CI->load->model('Reports');
         $user_id = $this->session->userdata('user_id');
 
         $outlet_id = $this->input->post('outlet_id', TRUE);
         $product_id = $this->input->post('product_id', TRUE);
         $customer_id = $this->input->post('customer_id', TRUE);
-        // print_r($user_id);
-        // exit();
 
-        $this->db->select('a.*,SUM(a.qty) as total_purchase');
-        $this->db->from('product_purchase_details a');
-        $this->db->where('a.product_id', $product_id);
-        $total_purchase = $this->db->get()->row();
 
-        $this->db->select('SUM(b.quantity) as total_sale');
-        $this->db->from('invoice_details b');
-        $this->db->where('b.product_id', $product_id);
-        $total_sale = $this->db->get()->row();
 
         $this->db->select('a.*');
         $this->db->from('product_information a');
-
-        // $this->db->join('product_purchase_details c', 'a.product_id=c.product_id');
         $this->db->where(array('a.product_id' => $product_id, 'a.status' => 1));
         $product_information = $this->db->get()->row();
-        // $warehouse_information = $this->db->query("SELECT warehouse FROM `product_purchase_details` WHERE product_id=$product_id GROUP BY warehouse")->result();
-        // $sn_info = $this->db->query("SELECT sn FROM `product_purchase_details` WHERE product_id=$product_id")->result();
 
 
+        $available_quantity = $this->Reports->current_stock($product_id,1);
 
+        $rqsn_quantity=$this->db->select('*')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row();
+        $rcv_qty=$this->db->select('SUM(quantity) as rcv_qty')->from('production_goods')->where('product_id',$product_id)->get()->row()->rcv_qty;
 
+        $qty= $rqsn_quantity->isrcv == 1 ? 0 : $rqsn_quantity->finished_qty;
 
-            $out_qty = (!empty($total_sale->total_sale) ? $total_sale->total_sale : 0);
-            $available_quantity =  (!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty;
-
-
-        $CI = &get_instance();
-        $CI->load->model('Web_settings');
-
-
-
-
-
-
+        $quantity=$qty-$rcv_qty;
 
 
         $data2['supplier_price'] = 0;
 
         $data2['customer_id'] = $customer_id;
         $data2['stock']     = ($available_quantity ? $available_quantity : 0);
+        $data2['quantity']     = ($quantity ? $quantity : 0);
 
         $data2['price']          = $product_information->price;
         $data2['supplier_id']    = '';
@@ -883,10 +866,34 @@ class Cproduction extends CI_Controller
         if ($rqsn == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));
 
-            redirect(base_url('Cproduction/production'));
+            redirect(base_url('Cproduction/receive_production'));
         } else {
             $this->session->set_userdata(array('error_message' => display('please_try_again')));
-            redirect(base_url('Cproduction/production'));
+            redirect(base_url('Cproduction/receive_production'));
+        }
+    }
+    public function rcv_goods()
+    {
+        $CI = &get_instance();
+
+        //echo "Ok";exit();
+
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Production');
+
+        $rqsn = $CI->Production->rcv_goods_entry();
+
+
+
+        //   echo "ok";exit();
+
+        if ($rqsn == TRUE) {
+            $this->session->set_userdata(array('message' => display('successfully_added')));
+
+            redirect(base_url('Cproduction/receive_production'));
+        } else {
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Cproduction/receive_production'));
         }
     }
 

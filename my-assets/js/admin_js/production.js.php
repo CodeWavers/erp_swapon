@@ -1079,10 +1079,10 @@ function invoice_productList_transfer(sl) {
                 {
                     var obj = jQuery.parseJSON(data);
 
-                    // console.log(obj.product_info.price);
+                     console.log(obj);
 
 
-                    $('.'+available_quantity).val(obj.stock.toFixed(2,2));
+                    $('.'+available_quantity).val(obj.stock);
                     //$('#'+qty_price).val(obj.price);
                     $('.'+unit).val(obj.unit);
 
@@ -1106,6 +1106,7 @@ function invoice_productList_rcv(sl) {
 
     var priceClass = 'price_item'+sl;
     var available_quantity = 'stock_'+sl;
+    var qty = 'qty_'+sl;
     var unit = 'unit_'+sl;
     var multiplier = 'multiplier_'+sl;
     var price = 'rate_'+sl;
@@ -1171,12 +1172,13 @@ function invoice_productList_rcv(sl) {
                 {
                     var obj = jQuery.parseJSON(data);
 
-                    // console.log(obj.product_info.price);
+                  //   console.log(obj);
 
 
-                    $('.'+available_quantity).val(obj.stock.toFixed(2,2));
+                    $('.'+available_quantity).val(obj.stock);
                  //   $('#'+qty_price).val(obj.price);
                     $('.'+unit).val(obj.unit);
+                    $('.'+qty).val(obj.quantity);
 
 
                     quantity_calculate_p(sl);

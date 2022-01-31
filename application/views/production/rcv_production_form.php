@@ -93,7 +93,7 @@
                         <?php echo form_open_multipart('Cproduction/production_update', array('class' => 'form-vertical', 'id' => 'insert_rqsn'));
                         } else {
                         ?>
-                        <?php echo form_open_multipart('Cproduction/insert_goods', array('class' => 'form-vertical', 'id' => 'insert_rqsn'));
+                        <?php echo form_open_multipart('Cproduction/rcv_goods', array('class' => 'form-vertical', 'id' => 'insert_rqsn'));
                         } ?>
                         <div class="row">
                             <input type="hidden" name="pro_id" value="<?php echo (isset($isedit) ? $pro_id : ''); ?>">
@@ -153,7 +153,7 @@
                                             <input name="unit[]" id="" class="form-control text-right unit_1 valid" value="<?= (isset($isedit) ? $pr_unit : 'None') ?>" readonly="" aria-invalid="false" type="text">
                                         </td>
                                         <td>
-                                            <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="total_qntt_1 form-control text-right qty" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="<?= (isset($isedit) ? $pr_stock : '0') ?>" />
+                                            <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="qty_1 form-control text-right " id="qty_1" placeholder="0.00" min="0" tabindex="8" value="0"  readonly/>
                                         </td>
 
                                         <td>
@@ -173,14 +173,14 @@
                                 </tbody>
                                 <tfoot>
 
-                                    <tr>
-                                        <td class="text-right" colspan="4"><b><?php echo display('total') ?>:</b></td>
-                                        <td class="text-right">
-                                            <input type="text" id="Total" class="text-right form-control" name="total" value="<?= (isset($isedit) ? $pr_total_price : '0.00') ?>" readonly="readonly" />
-                                        </td>
-
-                                        <td></td>
-                                    </tr>
+<!--                                    <tr>-->
+<!--                                        <td class="text-right" colspan="4"><b>--><?php //echo display('total') ?><!--:</b></td>-->
+<!--                                        <td class="text-right">-->
+<!--                                            <input type="text" id="Total" class="text-right form-control" name="total" value="--><?//= (isset($isedit) ? $pr_total_price : '0.00') ?><!--" readonly="readonly" />-->
+<!--                                        </td>-->
+<!---->
+<!--                                        <td></td>-->
+<!--                                    </tr>-->
                                     <tr>
                                         <td colspan="5" rowspan="1">
                                             <center><label for="details" class="  col-form-label text-center">Remark</label></center>
