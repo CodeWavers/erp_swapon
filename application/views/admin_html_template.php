@@ -153,6 +153,7 @@
      <!-- summernote js -->
 
      <script src="<?php echo base_url() ?>assets/js/jstree.min.js"></script>
+     <script src="<?php echo base_url() ?>assets/js/spartan-multi-image-picker-min.js"></script>
      <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
 
 

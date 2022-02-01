@@ -481,7 +481,7 @@
 
 
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-<script src="https://swaponsworld.com/public/js/spartan-multi-image-picker-min.js"></script>
+<!--<script src="https://swaponsworld.com/public/js/spartan-multi-image-picker-min.js"></script>-->
 <script type="text/javascript">
     CKEDITOR.replace( 'description' );
     CKEDITOR.replace( 'summery' );
