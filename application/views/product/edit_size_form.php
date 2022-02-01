@@ -5,12 +5,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1>Product Size</h1>
-            <small>Edit Size</small>
+            <h1>Product Attributes</h1>
+            <small>Edit Attributes</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#">Product</a></li>
-                <li class="active">Edit Size</li>
+                <li class="active">Edit Attributes</li>
             </ol>
         </div>
     </section>
@@ -47,20 +47,20 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4>Edit Size</h4>
+                            <h4>Edit Attributes</h4>
                         </div>
                     </div>
-                  <?php echo form_open_multipart('Cproduct/size_update',array('class' => 'form-vertical', 'id' => 'category_update'))?>
+                  <?php echo form_open_multipart('Cproduct/attr_update',array('class' => 'form-vertical', 'id' => 'category_update'))?>
                     <div class="panel-body">
 
                     	<div class="form-group row">
-                            <label for="category_name" class="col-sm-3 col-form-label">Size <i class="text-danger">*</i></label>
+                            <label for="category_name" class="col-sm-3 col-form-label">Attributes <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input class="form-control" name ="category_name" id="category_name" type="text" placeholder="Enter Size"  required="" value="{size_name}">
+                                <input class="form-control" name ="category_name" id="category_name" type="text" placeholder="Enter Attributes"  required="" value="{name}">
                             </div>
                         </div>
 
-                        <input type="hidden" value="{size_id}" name="category_id">
+                        <input type="hidden" value="{id}" name="category_id">
 
                         <div class="form-group row">
                             <label for="example-text-input" class="col-sm-4 col-form-label"></label>

@@ -6,11 +6,11 @@
         </div>
         <div class="header-title">
             <h1><?php echo display('product') ?></h1>
-            <small>Size</small>
+            <small>Attributes</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#"><?php echo display('product') ?></a></li>
-                <li class="active">Size</li>
+                <li class="active">Attributes</li>
             </ol>
         </div>
     </section>
@@ -49,15 +49,15 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4>Product Size</h4>
+                            <h4>Product Attributes</h4>
                         </div>
                     </div>
 
                     <div class="panel-body category">
 <ul class="nav nav-tabs">
- <li class="active"><a data-toggle="tab" href="#categoryList"><i class="ti-align-justify"> </i> Manage Sizes</a></li>
-  <li><a data-toggle="tab" href="#add_category"><i class="fa fa-plus"> </i> Add Size </a></li>
-  <li><a data-toggle="tab" href="#csvupload"><i class="fa fa-file"> </i> Size CSV Upload </a></li>
+ <li class="active"><a data-toggle="tab" href="#categoryList"><i class="ti-align-justify"> </i> Manage Attributes</a></li>
+  <li><a data-toggle="tab" href="#add_category"><i class="fa fa-plus"> </i> Add Attributes </a></li>
+<!--  <li><a data-toggle="tab" href="#csvupload"><i class="fa fa-file"> </i> Size CSV Upload </a></li>-->
 </ul>
 
 <div class="tab-content">
@@ -69,7 +69,7 @@
                                 <thead>
                                     <tr>
 
-                                        <th class="text-center">Size</th>
+                                        <th class="text-center">Attributes</th>
                                         <th class="text-center"><?php echo display('action') ?></th>
                                     </tr>
                                 </thead>
@@ -80,15 +80,15 @@
                                         {size_list}
                                         <tr>
 
-                                            <td class="text-center">{size_name}</td>
+                                            <td class="text-center">{name}</td>
                                             <td>
                                     <center>
                                         <?php echo form_open() ?>
                                         <?php if($this->permission1->method('manage_category','update')->access()){ ?>
-                                        <a href="<?php echo base_url() . 'Cproduct/size_update_form/{size_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                        <a href="<?php echo base_url() . 'Cproduct/attr_update_form/{id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     <?php }?>
                                       <?php if($this->permission1->method('manage_category','delete')->access()){ ?>
-                                        <a href="<?php echo base_url() . 'Cproduct/delete_size/{size_id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                        <a href="<?php echo base_url() . 'Cproduct/delete_attr/{id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                     <?php }?>
                                             <?php echo form_close() ?>
                                     </center>
@@ -105,12 +105,12 @@
   </div>
     <div id="add_category" class="tab-pane fade">
          <div class="row cat-tabcontent">
-      <?php echo form_open('Cproduct/insert_size', array('class' => 'form-vertical', 'id' => 'insert_category')) ?>
+      <?php echo form_open('Cproduct/insert_attr', array('class' => 'form-vertical', 'id' => 'insert_category')) ?>
 
                         <div class="form-group row">
-                            <label for="category_name" class="col-sm-3 col-form-label">Size<i class="text-danger">*</i></label>
+                            <label for="category_name" class="col-sm-3 col-form-label">Attributes<i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input class="form-control" name ="category_name" id="category_name" type="text" placeholder="Size"  required="">
+                                <input class="form-control" name ="category_name" id="category_name" type="text" placeholder="Attributes"  required="">
                             </div>
                               <div class="col-sm-3">
                                 <input type="submit" id="add-category" class="btn btn-success btn-large" name="add-category" value="<?php echo display('add') ?>" />

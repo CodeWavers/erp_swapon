@@ -769,7 +769,7 @@ $birthday = $CI->Reports->birthday_noti();
                                     echo "active";
                                   } else {
                                     echo " ";
-                                  } ?>"><a href="<?php echo base_url('Cproduct/size'); ?>">Size</a></li>
+                                  } ?>"><a href="<?php echo base_url('Cproduct/attributes'); ?>">Attributes</a></li>
             <?php } ?>
             <?php if (
               $this->permission1->method('manage_category', 'create')->access() ||

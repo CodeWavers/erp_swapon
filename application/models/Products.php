@@ -455,7 +455,7 @@ class Products extends CI_Model
     public function get_size_list()
     {
         $this->db->select('*');
-        $this->db->from('size_list');
+        $this->db->from('attributes');
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
@@ -477,26 +477,25 @@ class Products extends CI_Model
         return false;
     }
 
-    public function size_entry($data)
+    public function attr_entry($data)
     {
         $this->db->select('*');
-        $this->db->from('size_list');
-        $this->db->where('status', 1);
-        $this->db->where('size_name', $data['size_name']);
+        $this->db->from('attributes');
+        $this->db->where('name', $data['name']);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return FALSE;
         } else {
-            $this->db->insert('size_list', $data);
+            $this->db->insert('attributes', $data);
             return TRUE;
         }
     }
 
-    public function retrieve_size_editdata($size_id)
+    public function retrieve_attr_editdata($size_id)
     {
         $this->db->select('*');
-        $this->db->from('size_list');
-        $this->db->where('size_id', $size_id);
+        $this->db->from('attributes');
+        $this->db->where('id', $size_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -504,10 +503,10 @@ class Products extends CI_Model
         return false;
     }
 
-    public function update_size($data, $size_id)
+    public function update_attr($data, $size_id)
     {
-        $this->db->where('size_id', $size_id);
-        $this->db->update('size_list', $data);
+        $this->db->where('id', $size_id);
+        $this->db->update('attributes', $data);
         return true;
     }
 

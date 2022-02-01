@@ -335,7 +335,7 @@ class Lproduct
         $size_list = $CI->Products->get_size_list();
 
         $data = array(
-            'title' => 'Product Size',
+            'title' => 'Product Attributes',
             'size_list' => $size_list
         );
 
@@ -343,17 +343,17 @@ class Lproduct
         return $view;
     }
 
-    public function size_edit_data($size_id)
+    public function attr_edit_data($size_id)
     {
         $CI = &get_instance();
         $CI->load->model('Products');
-        $category_detail = $CI->Products->retrieve_size_editdata($size_id);
+        $category_detail = $CI->Products->retrieve_attr_editdata($size_id);
 
         $data = array(
-            'title'         => 'Edit Size',
-            'size_id'       => $category_detail[0]['size_id'],
-            'size_name'     => $category_detail[0]['size_name'],
-            'status'        => $category_detail[0]['status']
+            'title'         => 'Edit Attributes',
+            'name'     => $category_detail[0]['name'],
+            'id'     => $category_detail[0]['id'],
+
         );
         $view = $CI->parser->parse('product/edit_size_form', $data, true);
         return $view;

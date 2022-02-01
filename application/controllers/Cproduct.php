@@ -942,7 +942,7 @@ class Cproduct extends CI_Controller
         echo json_encode($data);
     }
 
-    public function size()
+    public function attributes()
     {
         $CI = &get_instance();
         $CI->load->library('lproduct');
@@ -951,7 +951,7 @@ class Cproduct extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
-    public function insert_size()
+    public function insert_attr()
     {
 
         $this->load->model('Products');
@@ -959,49 +959,49 @@ class Cproduct extends CI_Controller
         $size_id = $this->auth->generator(15);
 
         $data = array(
-            'size_id'   => $size_id,
-            'size_name' => $this->input->post('category_name', TRUE),
-            'status'        => 1
+
+            'name' => $this->input->post('category_name', TRUE),
+
         );
 
-        $result = $this->Products->size_entry($data);
+        $result = $this->Products->attr_entry($data);
 
         if ($result == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));
 
-            redirect(base_url('Cproduct/size'));
+            redirect(base_url('Cproduct/attributes'));
         } else {
             $this->session->set_userdata(array('error_message' => display('already_inserted')));
-            redirect(base_url('Cproduct/size'));
+            redirect(base_url('Cproduct/attributes'));
         }
     }
 
-    public function size_update_form($size_id)
+    public function attr_update_form($size_id)
     {
         $this->load->library('lproduct');
-        $content = $this->lproduct->size_edit_data($size_id);
+        $content = $this->lproduct->attr_edit_data($size_id);
         $this->template->full_admin_html_view($content);
     }
 
-    public function delete_size($size_id)
+    public function delete_attr($size_id)
     {
-        $this->db->where('size_id', $size_id);
-        $this->db->delete('size_list');
-        redirect(base_url('Cproduct/size'));
+        $this->db->where('id', $size_id);
+        $this->db->delete('attributes');
+        redirect(base_url('Cproduct/attributes'));
     }
 
-    public function size_update()
+    public function attr_update()
     {
         $this->load->model('Products');
         $size_id = $this->input->post('category_id', TRUE);
         $data = array(
-            'size_name' => $this->input->post('category_name', TRUE),
-            'status'        => 1,
+            'name' => $this->input->post('category_name', TRUE),
+
         );
 
-        $this->Products->update_size($data, $size_id);
+        $this->Products->update_attr($data, $size_id);
         $this->session->set_userdata(array('message' => display('successfully_updated')));
-        redirect(base_url('Cproduct/size'));
+        redirect(base_url('Cproduct/attributes'));
     }
 
     function uploadCsv_size()
