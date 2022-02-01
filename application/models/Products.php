@@ -464,6 +464,18 @@ class Products extends CI_Model
 
         return false;
     }
+    public function get_atr_list()
+    {
+        $this->db->select('*');
+        $this->db->from('attributes');
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+
+        return false;
+    }
 
     public function size_entry($data)
     {

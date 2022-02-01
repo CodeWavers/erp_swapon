@@ -66,6 +66,7 @@
      <link href="<?php echo base_url('assets/css/style.css') ?>" rel="stylesheet" type="text/css" />
 
      <link href="<?php echo base_url('assets/js/sweetalert/sweetalert.css') ?>" rel="stylesheet" type="text/css" />
+     <link href="<?php echo base_url('assets/css/bootstrap-tagsinput.css') ?>" rel="stylesheet" type="text/css" />
      <!-- summernote css -->
 
      <?php if (!empty($Web_settings[0]['rtr']) && $Web_settings[0]['rtr'] == 1) {  ?>
@@ -148,6 +149,7 @@
      <script src="<?php echo base_url() ?>assets/js/sweetalert/sweetalert.min.js" type="text/javascript"></script>
      <!-- Custom Theme JavaScript -->
      <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
+     <script src="<?php echo base_url() ?>assets/js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
      <!-- summernote js -->
 
      <script src="<?php echo base_url() ?>assets/js/jstree.min.js"></script>

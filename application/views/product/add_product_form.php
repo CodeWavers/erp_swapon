@@ -250,28 +250,63 @@
                                             <option value=""></option>
                                             <?php if ($color_list) {
                                                 foreach ($color_list as $color) { ?>
-                                                    <option value="<?= $color['id'] ?>"> <?= $color['color_name'] ?></option>
+                                                    <option value="<?= $color['code'] ?>"> <?= $color['color_name'] ?></option>
                                                 <?php }
                                             } ?>
                                         </select>
                                     </div>
                                 </div>
                             </div>
+<!--                            <div class="col-sm-6">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="product_size" class="col-sm-4 col-form-label">Size </label>-->
+<!--                                    <div class="col-sm-8">-->
+<!--                                        <select class="form-control" id="product_size" multiple name="product_size[]" tabindex="3">-->
+<!--                                            <option value=""></option>-->
+<!--                                            --><?php //if ($size_list) { ?>
+<!--                                                {size_list}-->
+<!--                                                <option value="{size_id}">{size_name}</option>-->
+<!--                                                {/size_list}-->
+<!--                                            --><?php //} ?>
+<!--                                        </select>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+                        </div>
+                        <div class="row">
                             <div class="col-sm-6">
                                 <div class="form-group row">
-                                    <label for="product_size" class="col-sm-4 col-form-label">Size </label>
+                                    <label for="color" class="col-sm-4 col-form-label">Attributes </label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="product_size" multiple name="product_size[]" tabindex="3">
-                                            <option value=""></option>
-                                            <?php if ($size_list) { ?>
-                                                {size_list}
-                                                <option value="{size_id}">{size_name}</option>
-                                                {/size_list}
+                                        <select name="choice_attributes[]" id="choice_attributes" class="form-control demo-select2" multiple data-placeholder="Attributes">
+                                            <?php if ($attribute) { ?>
+                                                {attribute}
+                                                <option value="{id}">{name}</option>
+                                                {/attribute}
                                             <?php } ?>
                                         </select>
                                     </div>
+
                                 </div>
                             </div>
+
+
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label for="color" class="col-sm-4 col-form-label"> </label>
+                                    <div class="col-sm-8">
+                                        <div class="customer_choice_options" id="customer_choice_options">
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
 
                         </div>
                         <div class="row">
@@ -384,7 +419,6 @@
 
 
 
-
             </div>
 
                         <div class="row">
@@ -483,7 +517,7 @@
             fieldName:        'thumbnail_img',
             maxCount:         1,
             rowHeight:        '200px',
-            groupClassName:   'col-md-3 col-sm-3 col-xs-6',
+            groupClassName:   'col-md-3 col-sm-3 col-xs-6 thumbnail_img',
             maxFileSize:      '',
             dropFileLabel : "Drop Here",
             onExtensionErr : function(index, file){
@@ -499,7 +533,7 @@
             fieldName:        'meta_img',
             maxCount:         1,
             rowHeight:        '200px',
-            groupClassName:   'col-md-3 col-sm-3 col-xs-6',
+            groupClassName:   'col-md-3 col-sm-3 col-xs-6 ',
             maxFileSize:      '',
             dropFileLabel : "Drop Here",
             onExtensionErr : function(index, file){
@@ -512,7 +546,9 @@
             }
         });
 
-        $( "#add-productttt" ).on("click", function(  ) {
+        $( "#add-producttttt" ).on("click", function(  ) {
+
+
 
             var product_status=$('#product_status').val();
             var product_name=$('#product_name').val(),
@@ -523,7 +559,8 @@
                 sku=$('#sku').val(),
                 min_qty=$('#min_qty').val(),
                 tags=$('#tags').val(),
-                product_size=$('#product_size').val(),
+                color=$('#color').val(),
+
                 description=CKEDITOR. instances['description']. getData(),
                 video_provider=$('#video_provider').val(),
                 video_link=$('#video_link').val(),
@@ -533,31 +570,60 @@
                 refund=$('#refund').val(),
                 unit=$('#unit').val(),
                 meta_title=$('#meta_title').val(),
-                meta_description=$('#meta_description').val();
+                meta_description=$('#meta_description').val(),
 
 
+                // color  = $("input[name='color[]']")
+                // .map(function(){return $(this).val();}).get(),
 
-            if (product_status == '1'){
+                choice_no  = $("input[name='choice_no[]']")
+                    .map(function(){return $(this).val();}).get(),
+
+                choice  = $("input[name='choice[]']")
+                    .map(function(){return $(this).val();}).get();
+
+                if (product_status == '1'){
                 var form = new FormData();
 
+                // console.log( document.getElementsByName("photos[]")[0].files[0])
+                //
+                //     return
+
+
+
                 document.getElementsByName("photos[]").forEach((el) => {
-                        if ($(el)[0].files[0] != undefined)
+                        // if ($(el)[0].files[0] != undefined)
                             form.append('photos', $(el)[0].files[0]);
+
+                            // console.log($(el)[0].files[0])
                     }
 
                 );
-                var fileInput_t_img = document.getElementsByName("thumbnail_img");
 
-                    form.append("thumbnail_img",fileInput_t_img.files[0]);
+
+
+
+                        //  var thumbnail_img = document.getElementsByName("thumbnail_img");
+                        //  console.log(thumbnail_img)
+                        //
+                        // return
+                        // form.append("thumbnail_img", thumbnail_img.files[0]);
+
+
+                // var fileInput_t_img = document.getElementsByName("thumbnail_img");
+                //
+                //     form.append("thumbnail_img",fileInput_t_img.files[0]);
 
                 // var fileInput_photos = document.getElementById("photos");
                 // if (fileInput_photos.files.length > 0) {
                 //     form.append("photos", fileInput_photos.files[0]);
                 // }
+
                 // var meta_photo = document.getElementById("meta_photo");
                 // if (meta_photo.files.length > 0) {
                 //     form.append("meta_photo", meta_photo.files[0]);
                 // }
+
                 form.append("name", product_name);
                 form.append("barcode", product_id);
                 form.append("unit_price", sell_price)
@@ -576,10 +642,14 @@
                 form.append("refundable", refund);
                 form.append("meta_title", meta_title);
                 form.append("meta_description", meta_description);
+                form.append("color", color);
+                form.append("choice_no", choice_no);
+                form.append("choice", choice);
 
-                console.log(form)
+             //   console.log(form)
 
-
+                // alert('Ok')
+                // return;
                 // form.append("logo", fileInput.files[0], logo);
 
                 var settings = {
@@ -627,6 +697,21 @@
         });
 
     }
+
+    function add_more_customer_choice_option(i, name){
+        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-2"><input type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control" name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
+
+        $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
+    }
+
+    $('#choice_attributes').on('change', function() {
+        $('#customer_choice_options').html(null);
+        $.each($("#choice_attributes option:selected"), function(){
+            //console.log($(this).val());
+            add_more_customer_choice_option($(this).val(), $(this).text());
+        });
+        // update_sku();
+    });
 </script>
 
 

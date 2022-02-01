@@ -37,6 +37,7 @@ class Lproduct
         $unit_list     = $CI->Units->unit_list();
 
         $size_list = $CI->Products->get_size_list();
+        $attribute = $CI->Products->get_atr_list();
         $color_list = $CI->Products->get_color_list();
 
 
@@ -53,11 +54,12 @@ class Lproduct
             'unit_list'    => $unit_list,
             'size_list'    => $size_list,
             'color_list'    => $color_list,
+            'attribute'    => $attribute,
             'taxfield'     => $taxfield
         );
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
+//         echo '<pre>';
+//         print_r($attribute);
+//         exit();
         $productForm = $CI->parser->parse('product/add_product_form', $data, true);
         return $productForm;
     }
