@@ -699,7 +699,7 @@
     }
 
     function add_more_customer_choice_option(i, name){
-        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-2"><input type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control" name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
+        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control" name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
 
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
     }
