@@ -133,7 +133,7 @@
                                         <th class="text-center"><?php echo display('unit') ?></th>
                                         <th class="text-center">Quantity <i class="text-danger">*</i></th>
 
-                                        <th class="text-center">Price</th>
+                                        <th class="text-center">Receive QTY</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
@@ -157,7 +157,7 @@
                                         </td>
 
                                         <td>
-                                            <input type="text" name="qty_price[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="qty_price form-control text-right" id="qty_price_t_1" placeholder="0.00" value="0" tabindex="8" />
+                                            <input type="text" name="rcv_qty[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="rcv_qty form-control text-right" id="rcv_qty_1" placeholder="0.00" value="0" tabindex="8" />
                                         </td>
 
 

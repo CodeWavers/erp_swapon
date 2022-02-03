@@ -900,6 +900,7 @@ class Production extends CI_Model
         $quantity            = $this->input->post('product_quantity', true);
         $p_id             = $this->input->post('product_id', true);
         $price_rate             = $this->input->post('qty_price', true);
+        $rcv_qty             = $this->input->post('rcv_qty', true);
         // $unit             = $this->input->post('unit',true);
 
 
@@ -907,6 +908,7 @@ class Production extends CI_Model
             $qty  = $quantity[$i];
             $price  = $price_rate[$i];
             $product_id   = $p_id[$i];
+            $r_q   = $rcv_qty[$i];
             $transfer_price =  $this->input->post('transfer_price', true);
 
 
@@ -918,6 +920,7 @@ class Production extends CI_Model
                 'per_unit_cost'     => $this->input->post('per_item_extra_cost', true),
                 'transfer_cost'     => $transfer_price,
                 'quantity'                => $qty,
+                'rcv_qty'                => $r_q,
                 'status'                => 1,
 
             );

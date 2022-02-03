@@ -74,16 +74,38 @@
                                 <?php foreach ($pur_list as $row) {
 
 
-                                    $cutting=$row['cutting']-$row['printing'];
+
+//                                    $cutting=$row['quantity']-$row['cutting'];
+
+
                                     $printing=$row['printing']-$row['sewing'];
                                     $sewing=$row['sewing']-$row['finishing'];
                                     $finishing=$row['finishing'];
 
                                     $quantity=$row['quantity']-$row['finished_qty'];
-                                    $total_finished=$row['finished_qty']
+                                    $total_finished=$row['finished_qty'];
+
+
+                                    $rqsn_quantity=$this->db->select('*')->from('pr_rqsn_details')->where('product_id',$row['product_id'])->get()->row();
+                                    $rcv_qty=$this->db->select('SUM(rcv_qty) as rc_qty')->from('production_goods')->where('product_id',$row['product_id'])->get()->row();
+
+                                    $qty= $rqsn_quantity->isrcv == 1 ? 0 : $rqsn_quantity->finished_qty;
+
+                                    $finished_qty=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
+
+//                                    $ct=$row['cutting'] = 0 ? 0 : $cutting
 
 
 
+                                    if (!empty($row['cutting'])){
+
+                                        $ct=$row['quantity']-$row['cutting'];
+
+
+                                    }else{
+
+                                        $ct=0;
+                                    }
 
 
                                     ?>
@@ -100,7 +122,7 @@
                                             <input  size="10" type="text" class="form-control quantity" value="<?php echo $quantity > 0 ? $quantity : 0;?>" style="width:100%;" name="quantity" id="quantity_<?php echo $row['product_id']?>" readonly>
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control cutting" value="<?php echo $cutting > 0 ? $cutting : 0;?>" style="width:100%;" name="cutting" id="cutting_<?php echo $row['product_id']?>">
+                                            <input  size="10" type="text" class="form-control cutting" value="<?php echo $ct ;?>" style="width:100%;" name="cutting" id="cutting_<?php echo $row['product_id']?>">
                                         </td>
                                         <td>
                                             <input  size="10" type="text" min="0" class="form-control printing" value="<?php echo $printing > 0 ? $printing : 0;?>" style="width:100%;" name="printing" id="printing_<?php echo $row['product_id']?>">
@@ -112,7 +134,7 @@
                                             <input  size="10" type="text" class="form-control finishing" value="0" style="width:100%;" name="finishing" id="finishing_<?php echo $row['product_id']?>">
                                         </td>
                                         <td>
-                                            <input  size="10" type="text" class="form-control total_finished" value="<?php echo $total_finished > 0 ? $total_finished : 0;?>" style="width:100%;" name="total_finished" id="total_finished_<?php echo $row['product_id']?>" readonly>
+                                            <input  size="10" type="text" class="form-control total_finished" value="<?php echo $finished_qty > 0 ? $finished_qty : 0;?>" style="width:100%;" name="total_finished" id="total_finished_<?php echo $row['product_id']?>" readonly>
                                         </td>
 
 
