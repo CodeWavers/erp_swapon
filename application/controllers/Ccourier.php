@@ -41,6 +41,37 @@ class Ccourier extends CI_Controller {
         );
 
         $result = $this->Courier->category_entry($data);
+        $courier_id = $this->db->insert_id();
+        //Customer  basic information adding.
+        $coa = $this->Courier->headcode();
+        if ($coa->HeadCode != NULL) {
+            $headcode = $coa->HeadCode + 1;
+        } else {
+            $headcode = "4040101";
+        }
+        $c_acc = $courier_id . '-' . $this->input->post('category_name', TRUE);
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+
+
+        $courier_coa = [
+            'HeadCode'         => $headcode,
+            'HeadName'         => $c_acc,
+            'PHeadName'        => 'Operating Expenses',
+            'HeadLevel'        => '3',
+            'IsActive'         => '1',
+            'IsTransaction'    => '0',
+            'IsGL'             => '0',
+            'HeadType'         => 'A',
+            'IsBudget'         => '0',
+            'IsDepreciation'   => '0',
+            'customer_id'      => $courier_id,
+            'DepreciationRate' => '0',
+            'CreateBy'         => $createby,
+            'CreateDate'       => $createdate,
+        ];
+
+        $this->db->insert('acc_coa', $courier_coa);
 
         if ($result == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));

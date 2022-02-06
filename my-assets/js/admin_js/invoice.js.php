@@ -114,7 +114,8 @@ function calculateSum() {
         tx = 0,
         ds = 0,
 
-        s_cost =  $("#shipping_cost").val();
+        s_cost =  $("#shipping_cost").val(),
+        c_cost =  $("#condition_cost").val();
 
     //Total Tax
     for(var i=0;i<taxnumber;i++){
@@ -151,7 +152,7 @@ function calculateSum() {
         tx = f.toFixed(2, 2),
         ds = p.toFixed(2, 2);
 
-    var test = +tx + +s_cost + +e + -ds + + ad;
+    var test = +tx + +s_cost + +e + -ds + + ad + + c_cost;
     $("#grandTotal").val(test.toFixed(2, 2));
 
 
@@ -467,6 +468,28 @@ function  sale_type(val){
         document.getElementById('aggregator').style.display = style;
 
     }
+}
+function  condition_charge(val){
+
+
+
+    if (val==1 ) {
+
+        $('#condition_tr').removeClass('d-none')
+    }
+
+    if (val==2 ) {
+
+        $('#condition_tr').removeClass('d-none')
+    }
+
+    if (val==3 ) {
+
+        $('#condition_tr').addClass('d-none')
+    }
+
+
+
 }
 
 

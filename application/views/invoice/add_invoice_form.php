@@ -218,7 +218,7 @@
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-3 col-form-label">Condition<i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <select name="courier_condtion" class="form-control bankpayment" id="">
+                                        <select name="courier_condtion" class="form-control bankpayment" id="" onchange="condition_charge(this.value)">
                                             <option value="">Select Condition</option>
                                             <option value="1">Condition</option>
                                             <option value="2">Partial</option>
@@ -422,11 +422,18 @@
                                     </tr>
 
                                     <tr>
-                                        <td class="text-right" colspan="8"><b><?php echo display('shipping_cost') ?>:</b></td>
+                                        <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" tabindex="14" />
                                         </td>
                                     </tr>
+                                    <tr id="condition_tr" class=" d-none" >
+                                        <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" tabindex="14" />
+                                        </td>
+                                    </tr>
+
                                     <tr>
                                         <td colspan="8" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
                                         <td class="text-right">

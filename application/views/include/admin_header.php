@@ -581,7 +581,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('credit_customer', 'read')->access() ||
         $this->permission1->method('paid_customer', 'read')->access()
         ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Ccustomer") {
+        <li class="treeview <?php if ($this->uri->segment('1') == "Caggre") {
             echo "active";
         } else {
             echo " ";
@@ -609,7 +609,7 @@ $birthday = $CI->Reports->birthday_noti();
                 $this->permission1->method('customer_ledger', 'read')->access()
                 ) { ?>
                     <li class="treeview <?php if (
-                        $this->uri->segment('2') == "customer_ledger_report"
+                        $this->uri->segment('2') == "aggre_ledger_report"
                     ) {
                         echo "active";
                     } else {
@@ -2766,6 +2766,21 @@ $birthday = $CI->Reports->birthday_noti();
                                                     'Ccourier/branch'
                                                   ); ?>">Branch </a></li>
             <?php } ?>
+
+              <?php if (
+              $this->permission1->method('add_branch', 'read')->access()
+              ) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('2') == "courier_ledger_report"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url(
+                          'Ccustomer/customer_ledger_report'
+                      ); ?>">Courier Ledger</a></li>
+              <?php } ?>
+
 
           </ul>
         </li>
