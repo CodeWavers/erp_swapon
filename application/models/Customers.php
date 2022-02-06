@@ -767,9 +767,11 @@ class Customers extends CI_Model
     }
 
     //autocomplete part
-    public function customer_search($customer_id)
+    public function customer_search($customer_id,$sale_type)
     {
-        $query = $this->db->select('*')->from('customer_information')
+        $query =
+            $this->db->select('*')->from('customer_information')
+                ->where('cus_type',$sale_type)
             ->group_start()
             ->like('customer_name', $customer_id)
             ->or_like('customer_mobile', $customer_id)

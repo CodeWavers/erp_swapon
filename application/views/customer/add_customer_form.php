@@ -132,6 +132,19 @@
                             </div>
                         </div>
 
+                         <div class="form-group row">
+                             <label for="website" class="col-sm-4 col-form-label">Customer Type</label>
+                             <div class="col-sm-8">
+
+                                 <select name="cus_type" class="form-control" tabindex="3">
+                                     <option value="1">WholeSale Customer</option>
+                                     <option value="2">Retail Customer</option>
+
+                                 </select>
+
+                             </div>
+                         </div>
+
 <!--                         <div class="form-group row">-->
 <!--                             <label for="discount_customer" class="col-sm-4 col-form-label">Discount</label>-->
 <!--                             <div class="col-sm-8">-->
@@ -160,6 +173,7 @@
                                 <input class="form-control" name="zip" id="zip" type="text" placeholder="<?php echo display('zip') ?>"  >
                             </div>
                         </div>
+
                          <div class="form-group row">
                             <label for="country" class="col-sm-4 col-form-label"><?php echo display('country') ?> <i class="text-danger"></i></label>
                             <div class="col-sm-8">
@@ -196,6 +210,8 @@
                                 <input class="form-control" name="website" id="website" type="text"  placeholder="Website Link" tabindex="5">
                             </div>
                         </div>
+
+
                     </div>
 
                         <div class="form-group row">

@@ -234,6 +234,18 @@ class Lcustomer
         $CI = &get_instance();
         $CI->load->model('Customers');
         $customer_detail = $CI->Customers->retrieve_customer_editdata($customer_id);
+
+        $cus_type=$customer_detail[0]['cus_type'];
+
+//        if($cus_type == 1){
+//
+//            $cus_type_text='WholeSale Customer';
+//        }else{
+//            $cus_type_text='Retail Customer';
+//        }
+
+        $cus_type_text= $cus_type == 1 ? 'WholeSale Customer' : 'Retail Customer';
+
         $data = array(
             'title'           => display('customer_edit'),
             'customer_id'     => $customer_detail[0]['customer_id'],
@@ -253,7 +265,9 @@ class Lcustomer
             'customer_email'  => $customer_detail[0]['customer_email'],
             'email_address'   => $customer_detail[0]['email_address'],
             'status'          => $customer_detail[0]['status'],
-            'website'          => $customer_detail[0]['website']
+            'website'          => $customer_detail[0]['website'],
+            'cus_type'          => $customer_detail[0]['cus_type'],
+            'cus_type_text'          => $cus_type_text,
         );
         $chapterList = $CI->parser->parse('customer/edit_customer_form', $data, true);
         return $chapterList;

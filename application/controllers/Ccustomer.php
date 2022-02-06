@@ -211,6 +211,7 @@ class Ccustomer extends CI_Controller
             'state'           => $this->input->post('state', TRUE),
             'zip'             => $this->input->post('zip', TRUE),
             'country'         => $this->input->post('country', TRUE),
+            'cus_type'         => $this->input->post('cus_type', TRUE),
             // 'discount_customer'=> $this->input->post('discount_customer',TRUE),
             'email_address'   => $this->input->post('emailaddress', TRUE),
             'website'   => $this->input->post('website', TRUE),
@@ -452,6 +453,7 @@ class Ccustomer extends CI_Controller
             'email_address'   => $this->input->post('emailaddress', TRUE),
             'customer_email'  => $this->input->post('email', TRUE),
             'website'  => $this->input->post('website', TRUE),
+            'cus_type'  => $this->input->post('cus_type', TRUE),
         );
         $customer_coa = [
             'HeadName'         => $c_acc

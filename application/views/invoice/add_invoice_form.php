@@ -112,10 +112,12 @@
                                     </label>
                                     <div class="col-sm-6" style="margin-bottom: 10px;">
 
-                                        <select name="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                        <select name="sel_type" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
                                             <option value="">Select One</option>
                                             <option value="1">Whole Sale</option>
-                                            <option value="2">Aggregators</option>
+                                            <option value="2">Retail</option>
+                                            <option value="3">Aggregators</option>
+
 
                                         </select>
                                     </div>
@@ -150,9 +152,9 @@
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-3 col-form-label">Customer Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <input autocomplete="off"   type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="" />
+                                        <input autocomplete="off"  type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="" />
 
-                                        <input id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="">
+                                        <input autocomplete="off" id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="">
                                     </div>
                                     <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
                                         <div class=" col-sm-3">
@@ -208,6 +210,20 @@
                                             <?php foreach ($branch_list as $courier) { ?>
                                                 <option value="<?php echo html_escape($courier['branch_id']) ?>"><?php echo html_escape($courier['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
                                             <?php } ?>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="bank" class="col-sm-3 col-form-label">Condition<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
+                                        <select name="courier_condtion" class="form-control bankpayment" id="">
+                                            <option value="">Select Condition</option>
+                                            <option value="1">Condition</option>
+                                            <option value="2">Partial</option>
+                                            <option value="3">Unconditional</option>
+
                                         </select>
                                     </div>
 
@@ -820,6 +836,19 @@
                                         <label for="address " class="col-sm-3 col-form-label"><?php echo display('customer_address') ?></label>
                                         <div class="col-sm-6">
                                             <textarea class="form-control" name="address" id="address " rows="3" placeholder="<?php echo display('customer_address') ?>" tabindex="4"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="website" class="col-sm-3 col-form-label">Customer Type</label>
+                                        <div class="col-sm-6">
+
+                                            <select name="cus_type" class="form-control" tabindex="3">
+                                                <option value="1">WholeSale Customer</option>
+                                                <option value="2">Retail Customer</option>
+
+                                            </select>
+
                                         </div>
                                     </div>
 

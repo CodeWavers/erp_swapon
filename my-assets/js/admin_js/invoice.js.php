@@ -444,9 +444,9 @@ function  delivery_type(val){
 "use strict";
 function  sale_type(val){
 
-    if (val==1 || 2) {
+    if (val==1 || 2 || 3) {
 
-    if(val==1){
+    if(val==1 || 2){
         var style = 'block';
         document.getElementById('whole_sale').setAttribute("required", true);
     }else{
@@ -456,7 +456,7 @@ function  sale_type(val){
 
     document.getElementById('whole_sale').style.display = style;
 
-        if(val==2){
+        if(val==3){
             var style = 'block';
             document.getElementById('aggregator').setAttribute("required", true);
         }else{
@@ -514,7 +514,12 @@ $('#myRadioButton_2').click(function () {
 "use strict";
 function customer_autocomplete(sl) {
 
+
+
+
+
     var customer_id = $('#customer_id').val();
+
     // Auto complete
     var options = {
         minLength: 0,
@@ -522,6 +527,8 @@ function customer_autocomplete(sl) {
             var customer_name = $('#customer_name').val();
             var csrf_test_name = $('[name="csrf_test_name"]').val();
             var base_url = $("#base_url").val();
+            var sale_type = $('#sel_type').val();
+
 
             $.ajax( {
                 url: base_url + "Cinvoice/customer_autocomplete",
@@ -530,6 +537,7 @@ function customer_autocomplete(sl) {
                 data: {
                     term: request.term,
                     customer_id:customer_name,
+                    sale_type:sale_type,
                     csrf_test_name:csrf_test_name,
                 },
                 success: function( data ) {

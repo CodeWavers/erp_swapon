@@ -958,7 +958,8 @@ class Cinvoice extends CI_Controller
         $CI->load->library('lpurchase');
         $CI->load->model('Customers');
         $customer_id    = $this->input->post('customer_id', TRUE);
-        $customer_info   = $CI->Customers->customer_search($customer_id);
+        $sale_type    = $this->input->post('sale_type', TRUE);
+        $customer_info   = $CI->Customers->customer_search($customer_id,$sale_type);
 
         if ($customer_info) {
             $json_customer[''] = '';
@@ -1165,6 +1166,7 @@ class Cinvoice extends CI_Controller
             'customer_address' => $this->input->post('address', TRUE),
             'customer_mobile'  => $this->input->post('mobile', TRUE),
             'customer_email'   => $this->input->post('email', TRUE),
+            'cus_type'   => $this->input->post('cus_type', TRUE),
             'status'           => 1
         );
 

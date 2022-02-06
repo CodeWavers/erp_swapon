@@ -111,6 +111,20 @@
                                 <input class="form-control" name="fax" id="fax" type="text" value="fax" placeholder="<?php echo display('fax') ?>"  >
                             </div>
                         </div>
+
+                          <div class="form-group row">
+                              <label for="website" class="col-sm-4 col-form-label">Customer Type</label>
+                              <div class="col-sm-8">
+
+                                  <select name="cus_type" class="form-control" tabindex="3">
+                                      <option value="{cus_type}">{cus_type_text}</option>
+                                      <option value="1">WholeSale Customer</option>
+                                      <option value="2">Retail Customer</option>
+
+                                  </select>
+
+                              </div>
+                          </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group row">
