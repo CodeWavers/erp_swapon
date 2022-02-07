@@ -585,14 +585,6 @@ class Invoices extends CI_Model
         }
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
-        // $bankname = '';
-        // if (!empty($bank_id)) {
-        //     $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
-
-        //     $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-        // } else {
-        //     $bankcoaid = '';
-        // }
 
         $bkash_id = $this->input->post('bkash_id', TRUE);
         $bkashname = '';
@@ -661,6 +653,7 @@ class Invoices extends CI_Model
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
+                'courier_status'      => 1,
 
             );
 
@@ -679,10 +672,7 @@ class Invoices extends CI_Model
 
             $this->load->library('upload');
             $image = array();
-            // print_r($_FILES);
-            // print_r($_POST);
-            // exit();
-            // $image_url = "";
+
 
             if ($_FILES['image']['name']) {
                 $ImageCount = count($_FILES['image']['name']);
@@ -751,10 +741,7 @@ class Invoices extends CI_Model
 
             $this->load->library('upload');
             $image = array();
-            // print_r($_FILES);
-            // print_r($_POST);
-            // exit();
-            // $image_url = "";
+
 
             if ($_FILES['image']['name']) {
                 $ImageCount = count($_FILES['image']['name']);
