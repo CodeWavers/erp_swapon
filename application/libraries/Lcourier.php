@@ -197,6 +197,30 @@ class Lcourier {
         return $singlecustomerdetails;
     }
 
+    public function courier_status_from_invoice()
+    {
+        $CI = & get_instance();
+        $CI->load->model('Courier');
+
+        $rqsn_list = $CI->Courier->get_invoice_data();
+
+
+        $i = 0;
+        foreach ($rqsn_list as $k => $v) {
+            $i++;
+            $rqsn_list[$k]['sl'] = $i + $CI->uri->segment(3);
+        }
+
+        $data = array(
+            'title'     => 'Courier Status',
+            'pur_list'  => $rqsn_list
+        );
+        // echo '<pre>'; print_r($data); die();
+
+        return $CI->parser->parse('courier/courier_status', $data, true);
+
+    }
+
 }
 
 ?>

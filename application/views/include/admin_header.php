@@ -2779,6 +2779,16 @@ $birthday = $CI->Reports->birthday_noti();
                   } ?>"><a href="<?php echo base_url(
                           'Ccourier/courier_ledger_report'
                       ); ?>">Courier Ledger</a></li>
+
+                  <li class="treeview <?php if (
+                      $this->uri->segment('2') == "courier_status"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url(
+                          'Ccourier/courier_status'
+                      ); ?>">Courier Status</a></li>
               <?php } ?>
 
 

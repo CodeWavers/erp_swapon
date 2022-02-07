@@ -352,6 +352,29 @@ class Courier extends CI_Model
         return false;
     }
 
+    public function get_invoice_data()
+    {
+        $this->db->select('a.*, b.*, c.*');
+        $this->db->from('invoice a');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
+        $this->db->join('courier_name c', 'c.id = a.courier_id','left');
+
+
+        // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');
+
+        $query = $this->db->get();
+
+        // echo '<pre>'; print_r($query->result_array()); die();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+
+        return false;
+
+
+    }
+
 
 
 

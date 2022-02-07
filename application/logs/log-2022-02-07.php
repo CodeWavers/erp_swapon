@@ -119,3 +119,58 @@ ERROR - 2022-02-07 14:18:22 --> Severity: Notice --> Undefined variable: courier
 ERROR - 2022-02-07 14:18:45 --> Severity: Notice --> Undefined variable: courier_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_ledger_report.php 123
 ERROR - 2022-02-07 14:20:12 --> Severity: Notice --> Undefined variable: courier_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_ledger_report.php 123
 ERROR - 2022-02-07 14:20:16 --> Severity: Notice --> Undefined variable: courier_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_ledger_report.php 123
+ERROR - 2022-02-07 15:42:56 --> Query error: Unknown column 'b.courier_id' in 'on clause' - Invalid query: SELECT `a`.*, `b`.*, `c`.*
+FROM `invoice` `a`
+LEFT JOIN `customer_information` `b` ON `b`.`customer_id` = `a`.`customer_id`
+LEFT JOIN `courier_name` `c` ON `c`.`courier_id` = `b`.`courier_id`
+WHERE `a`.`status` = 1
+ERROR - 2022-02-07 15:43:20 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\git\erp_swapon\application\libraries\Lcourier.php 209
+ERROR - 2022-02-07 15:43:20 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 74
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:15 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:46:44 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_name C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 103
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: product_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 104
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_detail_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 105
+ERROR - 2022-02-07 15:47:11 --> Severity: Notice --> Undefined index: pr_rqsn_id C:\laragon\www\git\erp_swapon\application\views\courier\courier_status.php 106

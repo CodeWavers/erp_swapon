@@ -383,6 +383,15 @@ class Ccourier extends CI_Controller {
         $this->template->full_admin_html_view($content);
     }
 
+    public function courier_status()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lcourier');
+        $content = $CI->lcourier->courier_status_from_invoice();
+        $this->template->full_admin_html_view($content);
+    }
+
 
 }
 
