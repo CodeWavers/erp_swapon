@@ -270,4 +270,77 @@ class Courier extends CI_Model
         return $query->row();
     }
 
+    public function count_courier_ledger()
+    {
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->where('b.PHeadName', 'Customer Receivable');
+        $this->db->where('a.IsAppove', 1);
+        $this->db->order_by('a.VDate', 'desc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->num_rows();
+        }
+        return false;
+    }
+
+    public function courier_list_ledger()
+    {
+        $this->db->select('*');
+        $this->db->from('courier_name');
+        $this->db->order_by('courier_name', 'asc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+    public function courier_product_buy($per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->join('invoice i', 'i.invoice_id=a.VNo');
+        $this->db->where('b.PHeadName', 'Operating Expenses');
+        $this->db->where('a.IsAppove', 1);
+//        $this->db->where('i.outlet_id', $outlet_id);
+        $this->db->order_by('a.VDate', 'desc');
+        $this->db->limit($per_page, $page);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+    public function courierledger_searchdata($customer_id, $start, $end)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->join('invoice i', 'i.invoice_id=a.VNo');
+        $this->db->where('i.outlet_id', $outlet_id);
+        $this->db->where(array('b.customer_id' => $customer_id, 'a.VDate >=' => $start, 'a.VDate <=' => $end));
+        $this->db->where('a.IsAppove', 1);
+        $this->db->order_by('a.VDate', 'desc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+
+
+
 }

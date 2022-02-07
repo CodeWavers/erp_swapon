@@ -137,6 +137,64 @@ class Lcourier {
         return $chapterList;
     }
 
+    public function courier_ledger_report($links, $per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Courier');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+
+        $courier = $CI->Courier->courier_list_ledger();
+        $ledger   = $CI->Courier->courier_product_buy($per_page, $page);
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        $data = array(
+            'title'          => 'Courier Ledger',
+            'ledgers'        => $ledger,
+            'customer_name'  => '',
+            'address'        => '',
+            'courier'       => $courier,
+            'courier_id'    => '',
+            'start'          => '',
+            'end'            => '',
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'links'          => $links,
+        );
+
+        $singlecustomerdetails = $CI->parser->parse('courier/courier_ledger_report', $data, true);
+        return $singlecustomerdetails;
+    }
+
+    public function courier_ledger($id, $start, $end)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Courier');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $courier = $CI->Courier->courier_list_ledger();
+        $courier_detail = $CI->Courier->retrieve_category_editdata($id);
+        $ledger   = $CI->Courier->courierledger_searchdata($id, $start, $end);
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        $data = array(
+            'title'          => 'Courier Ledger',
+            'ledgers'        => $ledger,
+            'customer_name'  => $courier_detail[0]['courier_name'],
+
+            'courier'       => $courier,
+            'courier_id'    => $id,
+            'start'          => $start,
+            'end'            => $end,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'links'          => '',
+        );
+
+        $singlecustomerdetails = $CI->parser->parse('courier/courier_ledger_report', $data, true);
+        return $singlecustomerdetails;
+    }
+
 }
 
 ?>

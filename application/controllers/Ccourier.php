@@ -344,6 +344,46 @@ class Ccourier extends CI_Controller {
         force_download(FCPATH.'assets/data/pdf/'.$file_name, null);
     }
 
+    public function courier_ledger_report()
+    {
+        $config["base_url"] = base_url('Ccourier/courier_ledger_report/');
+        $config["total_rows"] = $this->Courier->count_courier_ledger();
+        $config["per_page"] = 10;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        $content = $this->lcourier->courier_ledger_report($links, $config["per_page"], $page);
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function courier_ledgerData()
+    {
+        $start       = $this->input->post('from_date');
+        $end         = $this->input->post('to_date');
+        $courier_id = $this->input->post('courier_id');
+        $content     = $this->lcourier->courier_ledger($courier_id, $start, $end);
+        $this->template->full_admin_html_view($content);
+    }
+
+
 }
 
 

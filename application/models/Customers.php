@@ -165,6 +165,7 @@ class Customers extends CI_Model
         }
         return false;
     }
+
     public function customer_product_buy_cheque($per_page, $page)
     {
         $this->db->select('a.*,b.HeadName,c.*');

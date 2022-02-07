@@ -2777,7 +2777,7 @@ $birthday = $CI->Reports->birthday_noti();
                   } else {
                       echo " ";
                   } ?>"><a href="<?php echo base_url(
-                          'Ccustomer/customer_ledger_report'
+                          'Ccourier/courier_ledger_report'
                       ); ?>">Courier Ledger</a></li>
               <?php } ?>
 
