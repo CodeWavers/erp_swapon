@@ -65,7 +65,7 @@ class Ccourier extends CI_Controller {
             'HeadType'         => 'A',
             'IsBudget'         => '0',
             'IsDepreciation'   => '0',
-            'customer_id'      => $courier_id,
+            'courier_id'      => $courier_id,
             'DepreciationRate' => '0',
             'CreateBy'         => $createby,
             'CreateDate'       => $createdate,

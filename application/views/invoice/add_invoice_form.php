@@ -194,8 +194,8 @@
 
                                         <select name="courier_id" class="form-control bankpayment" id="">
                                             <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                            <?php foreach ($courier_list as $courier) { ?>
+                                                <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -207,8 +207,8 @@
                                     <div class="col-sm-6">
                                         <select name="branch_id" class="form-control bankpayment" id="">
                                             <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['branch_id']) ?>"><?php echo html_escape($courier['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                            <?php foreach ($branch_list as $b) { ?>
+                                                <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
                                             <?php } ?>
                                         </select>
                                     </div>

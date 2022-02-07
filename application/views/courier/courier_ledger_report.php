@@ -71,7 +71,7 @@
                                 <select name="courier_id"  class="form-control" required="">
                                     <option value=""></option>
                                    <?php foreach($courier as $couriers){?>
-                                    <option value="<?php echo html_escape($couriers['courier_name'])?>"  <?php if($couriers['id'] == $courier_id){echo 'selected';}?>><?php echo html_escape($couriers['courier_name'])?></option>
+                                    <option value="<?php echo html_escape($couriers['id'])?>"  <?php if($couriers['id'] == $courier_id){echo 'selected';}?>><?php echo html_escape($couriers['courier_name'])?></option>
                                    <?php }?>
                                 </select>
                             </div>
@@ -120,10 +120,10 @@
                     <div class="panel-body">
                         <div id="printableArea">
 
-                            <?php if ($customer_name) { ?>
+                            <?php if ($courier_name) { ?>
                                 <div class="text-center">
-                                    <h3> {customer_name} </h3>
-                                    <h4><?php echo display('address') ?> : {address} </h4>
+                                    <h3> {courier_name} </h3>
+
                                     <h4> <?php echo display('print_date') ?>: <?php echo date("d/m/Y h:i:s"); ?> </h4>
                                 </div>
                             <?php } ?>

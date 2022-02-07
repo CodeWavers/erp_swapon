@@ -93,6 +93,18 @@ class Courier extends CI_Model
         return false;
     }
 
+    public function courier_data($courier_id)
+    {
+        $this->db->select('*');
+        $this->db->from('courier_name');
+        $this->db->where('id', $courier_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
     //Update Categories
     public function update_category($data, $courier_id)
     {
@@ -323,14 +335,14 @@ class Courier extends CI_Model
     {
         $CI = &get_instance();
         $CI->load->model('Warehouse');
-        $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+//        $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
 
         $this->db->select('a.*,b.HeadName');
         $this->db->from('acc_transaction a');
         $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
         $this->db->join('invoice i', 'i.invoice_id=a.VNo');
-        $this->db->where('i.outlet_id', $outlet_id);
-        $this->db->where(array('b.customer_id' => $customer_id, 'a.VDate >=' => $start, 'a.VDate <=' => $end));
+//        $this->db->where('i.outlet_id', $outlet_id);
+        $this->db->where(array('b.courier_id' => $customer_id, 'a.VDate >=' => $start, 'a.VDate <=' => $end));
         $this->db->where('a.IsAppove', 1);
         $this->db->order_by('a.VDate', 'desc');
         $query = $this->db->get();

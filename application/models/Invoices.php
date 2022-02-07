@@ -568,6 +568,7 @@ class Invoices extends CI_Model
         $Vdate = $this->input->post('invoice_date', TRUE);
         $agg_id = $this->input->post('agg_id', TRUE);
         $customer_id = $this->input->post('customer_id', TRUE);
+
         $sel_type = $this->input->post('sel_type', TRUE);
 
         $pay_type = $this->input->post('paytype', TRUE);
@@ -620,101 +621,9 @@ class Invoices extends CI_Model
         }
 
 
-
-
-
-
-//        if (($this->input->post('customer_id') == null) && ($this->input->post('customer_name') == null)) {
-//
-//            $data = array(
-//                'customer_name'    => $this->input->post('customer_name_others', TRUE),
-//                'customer_address' => $this->input->post('customer_name_others_address', TRUE),
-//                'customer_mobile'  => $this->input->post('customer_mobile', TRUE),
-//                'customer_email'   => "",
-//                'status'           => 2
-//            );
-//
-//
-//
-//            $this->db->insert('customer_information', $data);
-//            $customer_id = $this->db->insert_id();
-//            $coa = $this->headcode();
-//            if ($coa->HeadCode != NULL) {
-//                $headcode = $coa->HeadCode + 1;
-//            } else {
-//                $headcode = "102030000001";
-//            }
-//            $c_acc = $customer_id . '-' . $this->input->post('customer_name_others', TRUE);
-//            $createby = $this->session->userdata('user_id');
-//            $createdate = date('Y-m-d H:i:s');
-//            $customer_coa = [
-//                'HeadCode'         => $headcode,
-//                'HeadName'         => $c_acc,
-//                'PHeadName'        => 'Customer Receivable',
-//                'HeadLevel'        => '4',
-//                'IsActive'         => '1',
-//                'IsTransaction'    => '1',
-//                'IsGL'             => '0',
-//                'HeadType'         => 'A',
-//                'IsBudget'         => '0',
-//                'IsDepreciation'   => '0',
-//                'DepreciationRate' => '0',
-//                'CreateBy'         => $createby,
-//                'CreateDate'       => $createdate,
-//            ];
-//            $this->db->insert('acc_coa', $customer_coa);
-//            $this->db->select('*');
-//            $this->db->from('customer_information');
-//            $query = $this->db->get();
-//            foreach ($query->result() as $row) {
-//                $json_customer[] = array('label' => $row->customer_name, 'value' => $row->customer_id);
-//            }
-//            $cache_file = './my-assets/js/admin_js/json/customer.json';
-//            $customerList = json_encode($json_customer);
-//            file_put_contents($cache_file, $customerList);
-//
-//
-//            //Previous balance adding -> Sending to customer model to adjust the data.
-//            $this->Customers->previous_balance_add(0, $customer_id);
-//        } else {
-//            $customer_id = $this->input->post('customer_id', TRUE);
-//        }
-
-
-        //Full or partial Payment record.
-//        $paid_amount = $this->input->post('paid_amount', TRUE);
-//        if ($this->input->post('paid_amount', TRUE) >= 0) {
-//
-//            $this->db->set('status', '1');
-//            $this->db->where('customer_id', $customer_id);
-//
-//            $this->db->update('customer_information');
-//        }
-//        $transection_id = $this->auth->generator(15);
-//
-//
-//        for ($j = 0; $j < $num_column; $j++) {
-//            $taxfield = 'tax' . $j;
-//            $taxvalue = 'total_tax' . $j;
-//            $taxdata[$taxfield] = $this->input->post($taxvalue);
-//        }
-//        $taxdata['customer_id'] = $customer_id;
-//        $taxdata['date']        = (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d'));
-//        $taxdata['relation_id'] = $invoice_id;
-//        $this->db->insert('tax_collection', $taxdata);
-
-        // Inserting for Accounts adjustment.
-        ############ default table :: customer_payment :: inflow_92mizdldrv #################
-
-
         //Data inserting into invoice table
         $delivery_type = $this->input->post('deliver_type', TRUE);
 
-
-
-
-        //        $cheque=implode(",",$cheque_no);
-        //        $cheque_d=implode(",",$cheque_date);
 
 
 
@@ -737,6 +646,8 @@ class Invoices extends CI_Model
                 'due_amount'      => $this->input->post('due_amount', TRUE),
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
+                'condition_cost'   => $this->input->post('condition_cost', TRUE),
+                'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
                 'sales_by'        => $createby,
                 'status'          => 2,
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE),
@@ -902,6 +813,7 @@ class Invoices extends CI_Model
             }
 
 
+
             $datainv = array(
                 'invoice_id'      => $invoice_id,
                 'customer_id'     => $customer_id,
@@ -919,6 +831,8 @@ class Invoices extends CI_Model
                 'due_amount'      => $this->input->post('due_amount', TRUE),
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
+                'condition_cost'   => $this->input->post('condition_cost', TRUE),
+                'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
                 'sales_by'        => $createby,
                 'status'          => 1,
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE)[0],
@@ -934,6 +848,7 @@ class Invoices extends CI_Model
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
+                'courier_status'      => 1,
 
             );
 
@@ -987,6 +902,54 @@ class Invoices extends CI_Model
             $customer_headcode = $coainfo->HeadCode;
             $cs_name= $cusifo->aggre_name;
         }
+        $courier_condtion = $this->input->post('courier_condtion', TRUE);
+
+        $courier_id = $this->input->post('courier_id', TRUE);
+        $corifo = $this->db->select('*')->from('courier_name')->where('id', $courier_id)->get()->row();
+        $headn_cour = $courier_id . '-' . $corifo->courier_name;
+        $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
+        $courier_headcode = $coainfo_cor->HeadCode;
+        $courier_name= $corifo->courier_name;
+
+
+        if ( $courier_condtion == 1 || 2){
+
+
+            $cordr = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                'Debit'          =>  $this->input->post('shipping_cost', TRUE)+$this->input->post('condition_cost', TRUE),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cordr);
+
+        }else{
+
+            $cordr = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cordr);
+
+        }
+
+
 
 
 
@@ -1546,6 +1509,8 @@ class Invoices extends CI_Model
             'prevous_due'     => $this->input->post('previous', TRUE),
             // 'sales_by'     => $this->input->post('employee_id',TRUE),
             'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
+            'condition_cost'   => $this->input->post('condition_cost', TRUE),
+            'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
             // 'payment_type'    => (!empty($this->input->post('paytype', TRUE)) ? $this->input->post('paytype', TRUE) : null),
             'delivery_type'    => (!empty($this->input->post('delivery_type', TRUE)) ? $this->input->post('delivery_type', TRUE) : null),
             // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
