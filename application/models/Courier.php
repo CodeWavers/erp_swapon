@@ -354,7 +354,7 @@ class Courier extends CI_Model
 
     public function get_invoice_data()
     {
-        $this->db->select('a.*, b.*, c.*');
+        $this->db->select('a.*, b.*, c.courier_name');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('courier_name c', 'c.id = a.courier_id','left');

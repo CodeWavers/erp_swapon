@@ -220,7 +220,7 @@
                                     <div class="col-sm-6">
                                         <select name="courier_condtion" class="form-control bankpayment" id="" onchange="condition_charge(this.value)">
                                             <option value="">Select Condition</option>
-                                            <option value="1">Condition</option>
+                                            <option value="1">Conditional</option>
                                             <option value="2">Partial</option>
                                             <option value="3">Unconditional</option>
 

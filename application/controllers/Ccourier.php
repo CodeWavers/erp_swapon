@@ -392,6 +392,60 @@ class Ccourier extends CI_Controller {
         $this->template->full_admin_html_view($content);
     }
 
+    public function update_courier_status()
+    {
+        $invoice=$_POST["invoice_no"];
+        $invoice_id=$_POST["invoice_id"];
+        $courier_id=$_POST["courier_id"];
+        $courier_status=$_POST["courier_status"];
+        $condition_cost=$_POST["condition_cost"];
+        $shipping_cost=$_POST["shipping_cost"];
+
+//        echo '<pre>';print_r($courier_id);exit();
+
+
+//        $Vdate = $this->input->post('invoice_date', TRUE);
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+
+        $corifo = $this->db->select('*')->from('courier_name')->where('id', $courier_id)->get()->row();
+        $headn_cour = $courier_id . '-' . $corifo->courier_name;
+        $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
+        $courier_headcode = $coainfo_cor->HeadCode;
+        $courier_name= $corifo->courier_name;
+
+        if ($courier_status == 3){
+
+            $cordr = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  date('Y-m-d'),
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier debit For Invoice No -  ' . $invoice . ' Courier  ' . $courier_name,
+                'Credit'          =>  $condition_cost+$shipping_cost,
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cordr);
+        }
+
+
+        $data = array(
+            "courier_status"  => $courier_status,
+
+        );
+
+
+        $this->db->where('invoice_id', $invoice_id);
+        $this->db->update('invoice',$data);
+
+
+        json_encode($data);
+    }
+
 
 }
 
