@@ -476,6 +476,7 @@ function  condition_charge(val){
     if (val==1 ) {
 
         $('#condition_tr').removeClass('d-none')
+        $('#payment_div').addClass('d-none')
     }
 
     if (val==2 ) {

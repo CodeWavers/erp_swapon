@@ -278,7 +278,7 @@ class Courier extends CI_Model
 
     public function headcode()
     {
-        $query = $this->db->query("SELECT MAX(HeadCode) as HeadCode FROM acc_coa WHERE HeadLevel='3' And HeadCode LIKE '40401%'");
+        $query = $this->db->query("SELECT MAX(HeadCode) as HeadCode FROM acc_coa WHERE HeadLevel='3' And HeadCode LIKE '10206%'");
         return $query->row();
     }
 

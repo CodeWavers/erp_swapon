@@ -889,50 +889,189 @@ class Invoices extends CI_Model
             $customer_headcode = $coainfo->HeadCode;
             $cs_name= $cusifo->aggre_name;
         }
-        $courier_condtion = $this->input->post('courier_condtion', TRUE);
 
-        $courier_id = $this->input->post('courier_id', TRUE);
-        $corifo = $this->db->select('*')->from('courier_name')->where('id', $courier_id)->get()->row();
-        $headn_cour = $courier_id . '-' . $corifo->courier_name;
-        $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
-        $courier_headcode = $coainfo_cor->HeadCode;
-        $courier_name= $corifo->courier_name;
+        if (isset($courier_id)){
+            $courier_condtion = $this->input->post('courier_condtion', TRUE);
+
+            $courier_id = $this->input->post('courier_id', TRUE);
+            $corifo = $this->db->select('*')->from('courier_name')->where('id', $courier_id)->get()->row();
+            $headn_cour = $courier_id . '-' . $corifo->courier_name;
+            $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
+            $courier_headcode = $coainfo_cor->HeadCode;
+            $courier_name= $corifo->courier_name;
+
+            $grand_total=$this->input->post('grand_total_price', TRUE);
+            $shipping_cost=$this->input->post('shipping_cost', TRUE);
+            $condition_cost=$this->input->post('condition_cost', TRUE);
+            $due_amount= $this->input->post('due_amount', TRUE);
+            $paid_amount= $this->input->post('paid_amount', TRUE);
+
+            $courier_pay=$grand_total-($shipping_cost+$condition_cost);
+            $courier_pay_partial=$due_amount-($shipping_cost+$condition_cost);
 
 
-        if ( $courier_condtion == 1 || 2){
+
+            if ( $courier_condtion ==  1){
 
 
-            $cordr = array(
-                'VNo'            =>  $invoice_id,
-                'Vtype'          =>  'INV',
-                'VDate'          =>  $Vdate,
-                'COAID'          =>  $courier_headcode,
-                'Narration'      =>  'Courier debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
-                'Debit'          =>  $this->input->post('shipping_cost', TRUE)+$this->input->post('condition_cost', TRUE),
-                'Credit'         =>  0,
-                'IsPosted'       =>  1,
-                'CreateBy'       => $createby,
-                'CreateDate'     => $createdate,
-                'IsAppove'       => 1
-            );
-            $this->db->insert('acc_transaction', $cordr);
+                $corcr = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  $courier_headcode,
+                    'Narration'      =>  'Courier Debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                    'Credit'          => 0,
+                    'Debit'         =>   (!empty($courier_pay) ? $courier_pay : null),
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $corcr);
 
-        }else{
 
-            $cordr = array(
-                'VNo'            =>  $invoice_id,
-                'Vtype'          =>  'INV',
-                'VDate'          =>  $Vdate,
-                'COAID'          =>  $courier_headcode,
-                'Narration'      =>  'Courier debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
-                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                'Credit'         =>  0,
-                'IsPosted'       =>  1,
-                'CreateBy'       => $createby,
-                'CreateDate'     => $createdate,
-                'IsAppove'       => 1
-            );
-            $this->db->insert('acc_transaction', $cordr);
+                $dc = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV-DC',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  4040104,
+                    'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                    'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): 0),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $dc);
+
+                $condition_charge = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV-CC',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  4040105,
+                    'Narration'      =>  'Condition Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                    'Debit'          =>   (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $condition_charge);
+
+            }
+
+            if ( $courier_condtion ==  2){
+
+
+
+
+                $cordr = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  $courier_headcode,
+                    'Narration'      =>  'Courier Debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                    'Debit'          =>  (!empty($courier_pay_partial) ? $courier_pay_partial : null),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $cordr);
+
+
+                $dc = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV-DC',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  4040104,
+                    'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                    'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): 0),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $dc);
+
+                $condition_charge = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV-CC',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  4040105,
+                    'Narration'      =>  'Condition Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                    'Debit'          =>   (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $condition_charge);
+
+            }
+
+            if($courier_condtion == 3){
+
+                $cosdr = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  $customer_headcode,
+                    'Narration'      =>  'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                    'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $cosdr);
+
+                $corcr = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  $courier_headcode,
+                    'Narration'      =>  'Courier Credit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                    'Credit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                    'Debit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $corcr);
+
+                $dc = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INV-DC',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  4040104,
+                    'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                    'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $dc);
+
+
+
+            }
+
 
         }
 
@@ -955,28 +1094,8 @@ class Invoices extends CI_Model
             'IsAppove'       => 1
         );
 
-        /***************************************************************
-            Inventory ledger will be credit only in Perpetual Accounting
-            Method. Not in the method we are following.
-         **************************************************************/
-        // $this->db->insert('acc_transaction', $coscr);
 
-        // Customer Transactions
-        //Customer debit for Product Value
-        $cosdr = array(
-            'VNo'            =>  $invoice_id,
-            'Vtype'          =>  'INV',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  $customer_headcode,
-            'Narration'      =>  'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
-            'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
-            'Credit'         =>  0,
-            'IsPosted'       =>  1,
-            'CreateBy'       => $createby,
-            'CreateDate'     => $createdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $cosdr);
+
 
         $pro_sale_income = array(
             'VNo'            =>  $invoice_id,
@@ -998,285 +1117,289 @@ class Invoices extends CI_Model
 
         $paid = $this->input->post('p_amount', TRUE);
         // echo "<pre>";print_r($paid);
-        if (count($paid) > 0) {
+
+        if (count($paid) > 0 ) {
             for ($i = 0; $i < count($pay_type); $i++) {
 
+                if ($paid[$i] > 0){
 
-                if ($pay_type[$i] == 1) {
+                    if ($pay_type[$i] == 1) {
 
-                    $cc = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  1020101,
-                        'Narration'      =>  'Cash in Hand in Sale for Invoice ID - ' . $invoice_id . ' customer- ' . $cs_name,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $createby,
-                        'CreateDate'     =>  $createdate,
-                        'IsAppove'       =>  1,
+                        $cc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  1020101,
+                            'Narration'      =>  'Cash in Hand in Sale for Invoice ID - ' . $invoice_id . ' customer- ' . $cs_name,
+                            'Debit'          =>  $paid[$i],
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
 
-                    );
+                        );
 
-                    $data = array(
-                        'invoice_id'    => $invoice_id,
-                        'pay_type'      => $pay_type[$i],
-                        'amount'        => $paid[$i],
-                        'pay_date'      =>  $Vdate,
-                        'status'        =>  1,
-                        'account'       => '',
-                        'COAID'         => 1020101
-                    );
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'pay_date'      =>  $Vdate,
+                            'status'        =>  1,
+                            'account'       => '',
+                            'COAID'         => 1020101
+                        );
 
-                    $this->db->insert('paid_amount', $data);
+                        $this->db->insert('paid_amount', $data);
 
-                    $cuscredit = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
-                    $this->db->insert('acc_transaction', $cuscredit);
+                        $cuscredit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $customer_headcode,
+                            'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                            'Debit'          =>  0,
+                            'Credit'         =>  $paid[$i],
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
+                        $this->db->insert('acc_transaction', $cuscredit);
 
-                    $this->db->insert('acc_transaction', $cc);
-                }
-                if ($pay_type[$i] == 4) {
-                    if (!empty($bank_id)) {
-                        $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id[$i])->get()->row()->bank_name;
-
-                        $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-                    } else {
-                        $bankcoaid = '';
+                        $this->db->insert('acc_transaction', $cc);
                     }
-                    $bankc = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INVOICE',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $bankcoaid,
-                        'Narration'      =>  'Paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $createby,
-                        'CreateDate'     =>  $createdate,
-                        'IsAppove'       =>  1,
+                    if ($pay_type[$i] == 4) {
+                        if (!empty($bank_id)) {
+                            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id[$i])->get()->row()->bank_name;
 
-                    );
+                            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+                        } else {
+                            $bankcoaid = '';
+                        }
+                        $bankc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INVOICE',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $bankcoaid,
+                            'Narration'      =>  'Paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
+                            'Debit'          =>  $paid[$i],
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
 
-                    $data = array(
-                        'invoice_id'    => $invoice_id,
-                        'pay_type'      => $pay_type[$i],
-                        'amount'        => $paid[$i],
-                        'account'       => $bankname,
-                        'COAID'         => $bankcoaid,
-                        'pay_date'       =>  $Vdate,
-                        'status'        =>  1
-                    );
+                        );
 
-                    $this->db->insert('paid_amount', $data);
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'account'       => $bankname,
+                            'COAID'         => $bankcoaid,
+                            'pay_date'       =>  $Vdate,
+                            'status'        =>  1
+                        );
 
-                    $cuscredit = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
-                    $this->db->insert('acc_transaction', $cuscredit);
+                        $this->db->insert('paid_amount', $data);
 
-                    $this->db->insert('acc_transaction', $bankc);
-                }
-                if ($pay_type[$i] == 3) {
-                    if (!empty($bkash_id)) {
-                        $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id[$i])->get()->row()->bkash_no;
+                        $cuscredit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $customer_headcode,
+                            'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                            'Debit'          =>  0,
+                            'Credit'         =>  $paid[$i],
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
+                        $this->db->insert('acc_transaction', $cuscredit);
 
-                        $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
-                    } else {
-                        $bkashcoaid = '';
+                        $this->db->insert('acc_transaction', $bankc);
                     }
-                    $bkashc = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INVOICE',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $bkashcoaid,
-                        'Narration'      =>  'Cash in Bkash paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $createby,
-                        'CreateDate'     =>  $createdate,
-                        'IsAppove'       =>  1,
+                    if ($pay_type[$i] == 3) {
+                        if (!empty($bkash_id)) {
+                            $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id[$i])->get()->row()->bkash_no;
 
-                    );
+                            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+                        } else {
+                            $bkashcoaid = '';
+                        }
+                        $bkashc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INVOICE',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $bkashcoaid,
+                            'Narration'      =>  'Cash in Bkash paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
+                            'Debit'          =>  $paid[$i],
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
 
-                    $data = array(
-                        'invoice_id'    => $invoice_id,
-                        'pay_type'      => $pay_type[$i],
-                        'amount'        => $paid[$i],
-                        'account'       => $bkashname,
-                        'pay_date'       =>  $Vdate,
-                        'COAID'         => $bkashcoaid,
-                        'status'        =>  1,
-                    );
+                        );
 
-                    $this->db->insert('paid_amount', $data);
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'account'       => $bkashname,
+                            'pay_date'       =>  $Vdate,
+                            'COAID'         => $bkashcoaid,
+                            'status'        =>  1,
+                        );
 
-                    $cuscredit = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Bkash) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
-                    $this->db->insert('acc_transaction', $cuscredit);
+                        $this->db->insert('paid_amount', $data);
 
-                    $this->db->insert('acc_transaction', $bkashc);
-                }
-                if ($pay_type[$i] == 5) {
+                        $cuscredit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $customer_headcode,
+                            'Narration'      =>  'Customer credit (Cash In Bkash) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                            'Debit'          =>  0,
+                            'Credit'         =>  $paid[$i],
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
+                        $this->db->insert('acc_transaction', $cuscredit);
 
-                    if (!empty($nagad_id)) {
-                        $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id[$i])->get()->row()->nagad_no;
-
-                        $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
-                    } else {
-                        $nagadcoaid = '';
+                        $this->db->insert('acc_transaction', $bkashc);
                     }
+                    if ($pay_type[$i] == 5) {
 
-                    $nagadc = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INVOICE',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $nagadcoaid,
-                        'Narration'      =>  'Cash in Nagad paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $createby,
-                        'CreateDate'     =>  $createdate,
-                        'IsAppove'       =>  1,
+                        if (!empty($nagad_id)) {
+                            $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id[$i])->get()->row()->nagad_no;
 
-                    );
+                            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+                        } else {
+                            $nagadcoaid = '';
+                        }
 
-                    $data = array(
-                        'invoice_id'    => $invoice_id,
-                        'pay_type'      => $pay_type[$i],
-                        'amount'        => $paid[$i],
-                        'pay_date'       =>  $Vdate,
-                        'account'       => $nagadname,
-                        'COAID'         => $nagadcoaid,
-                        'status'        =>  1,
-                    );
+                        $nagadc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INVOICE',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $nagadcoaid,
+                            'Narration'      =>  'Cash in Nagad paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                            'Debit'          =>  $paid[$i],
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
 
-                    $this->db->insert('paid_amount', $data);
+                        );
 
-                    $cuscredit = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Nagad) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cusifo->customer_name,
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
-                    $this->db->insert('acc_transaction', $cuscredit);
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'pay_date'       =>  $Vdate,
+                            'account'       => $nagadname,
+                            'COAID'         => $nagadcoaid,
+                            'status'        =>  1,
+                        );
 
-                    $this->db->insert('acc_transaction', $nagadc);
-                }
-                if ($pay_type[$i] == 6) {
+                        $this->db->insert('paid_amount', $data);
 
-                    $card_info = $CI->Settings->get_real_card_data($card_id[$i]);
+                        $cuscredit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $customer_headcode,
+                            'Narration'      =>  'Customer credit (Cash In Nagad) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cusifo->customer_name,
+                            'Debit'          =>  0,
+                            'Credit'         =>  $paid[$i],
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
+                        $this->db->insert('acc_transaction', $cuscredit);
 
-                    if (!empty($card_id)) {
-                        $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $card_info[0]['bank_id'])->get()->row()->bank_name;
-
-                        $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-                    } else {
-                        $bankcoaid = '';
+                        $this->db->insert('acc_transaction', $nagadc);
                     }
-                    $bankc = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INVOICE',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $bankcoaid,
-                        'Narration'      =>  'Paid amount for customer in card - ' . $card_info[0]['card_no'] . '  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
-                        'Debit'          => ($paid[$i]) - ($paid[$i] * ($card_info[0]['percentage'] / 100)),
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $createby,
-                        'CreateDate'     =>  $createdate,
-                        'IsAppove'       =>  1,
+                    if ($pay_type[$i] == 6) {
 
-                    );
+                        $card_info = $CI->Settings->get_real_card_data($card_id[$i]);
 
-                    $data = array(
-                        'invoice_id'    => $invoice_id,
-                        'pay_type'      => $pay_type[$i],
-                        'amount'        => $paid[$i],
-                        'account'       => $bankname,
-                        'pay_date'       =>  $Vdate,
-                        'COAID'         => $bankcoaid,
-                        'status'        =>  1,
-                    );
+                        if (!empty($card_id)) {
+                            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $card_info[0]['bank_id'])->get()->row()->bank_name;
 
-                    $this->db->insert('paid_amount', $data);
+                            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+                        } else {
+                            $bankcoaid = '';
+                        }
+                        $bankc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INVOICE',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $bankcoaid,
+                            'Narration'      =>  'Paid amount for customer in card - ' . $card_info[0]['card_no'] . '  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                            'Debit'          => ($paid[$i]) - ($paid[$i] * ($card_info[0]['percentage'] / 100)),
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
 
-                    $cuscredit = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  $customer_headcode,
-                        'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
+                        );
 
-                    $carddebit = array(
-                        'VNo'            =>  $invoice_id,
-                        'Vtype'          =>  'INV',
-                        'VDate'          =>  $Vdate,
-                        'COAID'          =>  '40404',
-                        'Narration'      =>  'Expense Debit for card no. ' . $card_info[0]['card_no'] . ' Invoice NO- ' . $invoice_no_generated,
-                        'Debit'          =>  $paid[$i] * ($card_info[0]['percentage'] / 100),
-                        'Credit'         =>  0,
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'account'       => $bankname,
+                            'pay_date'       =>  $Vdate,
+                            'COAID'         => $bankcoaid,
+                            'status'        =>  1,
+                        );
+
+                        $this->db->insert('paid_amount', $data);
+
+                        $cuscredit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $customer_headcode,
+                            'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                            'Debit'          =>  0,
+                            'Credit'         =>  $paid[$i],
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
+
+                        $carddebit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  '40404',
+                            'Narration'      =>  'Expense Debit for card no. ' . $card_info[0]['card_no'] . ' Invoice NO- ' . $invoice_no_generated,
+                            'Debit'          =>  $paid[$i] * ($card_info[0]['percentage'] / 100),
+                            'Credit'         =>  0,
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
 
 
-                    $this->db->insert('acc_transaction', $cuscredit);
-                    $this->db->insert('acc_transaction', $carddebit);
-                    $this->db->insert('acc_transaction', $bankc);
+                        $this->db->insert('acc_transaction', $cuscredit);
+                        $this->db->insert('acc_transaction', $carddebit);
+                        $this->db->insert('acc_transaction', $bankc);
+                    }
                 }
+
             }
 
 
@@ -1688,7 +1811,7 @@ class Invoices extends CI_Model
                 'discount_per'       => $dis_per,
                 'tax'                => $this->input->post('total_tax', TRUE),
                 'paid_amount'        => $paidamount,
-                'supplier_rate'     => $supplier_rate,
+                'supplier_rate'     => (!empty($supplier_rate)) ? $supplier_rate: null,
                 'due_amount'         => $this->input->post('due_amount', TRUE),
                 // 'description'       => $desciption,
             );

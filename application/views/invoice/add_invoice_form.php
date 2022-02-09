@@ -424,13 +424,13 @@
                                     <tr>
                                         <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
-                                            <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" tabindex="14" />
+                                            <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0" tabindex="14" />
                                         </td>
                                     </tr>
                                     <tr id="condition_tr" class=" d-none" >
                                         <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                         <td class="text-right">
-                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" tabindex="14" />
+                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0" tabindex="14" />
                                         </td>
                                     </tr>
 
@@ -480,8 +480,8 @@
                             </table>
                         </div>
 
-                        <div class="row">
-                            <div class="col-sm-12">
+                        <div class="row " >
+                            <div class="col-sm-12" id="payment_div">
                                 <div class="panel panel-bd lobidrag">
                                     <div class="panel-heading">
                                         <div class="panel-title">
