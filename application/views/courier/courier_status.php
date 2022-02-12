@@ -128,7 +128,7 @@
                                                     data-courier_id="<?php echo $row['courier_id']?>"
                                                     onclick="add_and_delete(this)"
                                             >
-                                                <i class="fa fa-tasks" aria-hidden="true"></i>
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
                                             </button>
 
 
