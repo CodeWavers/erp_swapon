@@ -545,6 +545,7 @@ class Linvoice
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'customer_email'    => $invoice_detail[0]['customer_email'],
@@ -574,6 +575,7 @@ class Linvoice
             'is_serial'         => $isserial,
             'is_unit'           => $isunit,
         );
+
 
 
 
@@ -655,6 +657,7 @@ class Linvoice
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
             'outlet_name'        => $outlet[0]['outlet_name'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],

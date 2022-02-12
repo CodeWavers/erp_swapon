@@ -115,7 +115,8 @@ function calculateSum() {
         ds = 0,
 
         s_cost =  $("#shipping_cost").val(),
-        c_cost =  $("#condition_cost").val();
+        c_cost =  $("#condition_cost").val(),
+        commission =  $("#commission").val();
 
     //Total Tax
     for(var i=0;i<taxnumber;i++){
@@ -152,14 +153,16 @@ function calculateSum() {
         tx = f.toFixed(2, 2),
         ds = p.toFixed(2, 2);
 
-    var test = +tx + +s_cost + +e + -ds + + ad + + c_cost;
+    var test = +tx + +s_cost + +e + -ds + + ad + + c_cost  - commission;
     $("#grandTotal").val(test.toFixed(2, 2));
+
 
 
     var gt = $("#grandTotal").val();
     var invdis = $("#invoice_discount").val();
     var total_discount_ammount = $("#total_discount_ammount").val();
     var ttl_discount = +total_discount_ammount;
+    //var ttl_cms = +commission;
     $("#total_discount_ammount").val(ttl_discount.toFixed(2, 2));
     var grnt_totals = gt;
     invoice_paidamount();
@@ -482,11 +485,13 @@ function  condition_charge(val){
     if (val==2 ) {
 
         $('#condition_tr').removeClass('d-none')
+        $('#payment_div').removeClass('d-none')
     }
 
     if (val==3 ) {
 
         $('#condition_tr').addClass('d-none')
+        $('#payment_div').removeClass('d-none')
     }
 
 

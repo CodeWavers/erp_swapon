@@ -171,10 +171,14 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                         </style>
                         <div class="panel-body">
 
+                            <?php
+                            $sale_text= ($sale_type == 1) ?'Whole Sale':(($sale_type == 2) ?'Retail Sale' :'Aggregators Sale');
+                            ?>
 
 
 
 
+                            <h1 class="text-left"><?php echo $sale_text?></h1>
                             <div style="width: 50%;">
                                 <div><b>{customer_name}</b><br>
                                     <?php if ($customer_address) { ?>

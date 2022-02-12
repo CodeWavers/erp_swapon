@@ -395,6 +395,7 @@
                                             <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
+
                                     <?php $x = 0;
                                     foreach ($taxes as $taxfldt) { ?>
                                         <tr class="hideableRow hiddenRow">
@@ -424,13 +425,20 @@
                                     <tr>
                                         <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
-                                            <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0" tabindex="14" />
+                                            <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                         </td>
                                     </tr>
                                     <tr id="condition_tr" class=" d-none" >
                                         <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                         <td class="text-right">
-                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0" tabindex="14" />
+                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right" colspan="8"><b>Commission:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="0.00"  />
                                         </td>
                                     </tr>
 

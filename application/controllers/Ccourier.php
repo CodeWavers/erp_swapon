@@ -429,7 +429,7 @@ class Ccourier extends CI_Controller {
                 'CreateDate'     => $createdate,
                 'IsAppove'       => 1
             );
-            $this->db->insert('acc_transaction', $cordr);
+            //$this->db->insert('acc_transaction', $cordr);
         }
 
 

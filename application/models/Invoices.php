@@ -624,7 +624,7 @@ class Invoices extends CI_Model
             $datainv = array(
                 'invoice_id'      => $invoice_id,
                 'customer_id'     => $customer_id,
-                'agg_id'     => $agg_id,
+                'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
                 'date'            => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
                 'total_amount'    => $this->input->post('grand_total_price', TRUE),
                 'total_tax'       => $this->input->post('total_tax', TRUE),
@@ -639,6 +639,8 @@ class Invoices extends CI_Model
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
                 'condition_cost'   => $this->input->post('condition_cost', TRUE),
+                'commission'   => $this->input->post('commission', TRUE),
+                'sale_type'   => $this->input->post('sel_type', TRUE),
                 'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
                 'sales_by'        => $createby,
                 'status'          => 2,
@@ -804,7 +806,7 @@ class Invoices extends CI_Model
             $datainv = array(
                 'invoice_id'      => $invoice_id,
                 'customer_id'     => $customer_id,
-                'agg_id'     => $agg_id,
+                'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
                 'date'            => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
                 'total_amount'    => $this->input->post('grand_total_price', TRUE),
                 'total_tax'       => $this->input->post('total_tax', TRUE),
@@ -819,6 +821,8 @@ class Invoices extends CI_Model
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
                 'condition_cost'   => $this->input->post('condition_cost', TRUE),
+                'commission'   => $this->input->post('commission', TRUE),
+                'sale_type'   => $this->input->post('sel_type', TRUE),
                 'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
                 'sales_by'        => $createby,
                 'status'          => 1,
@@ -872,7 +876,7 @@ class Invoices extends CI_Model
         // print_r($sumval);
         // exit();
 
-        if ($sel_type == 1) {
+        if ($sel_type == 1 || 2) {
 
 
             $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
@@ -881,7 +885,7 @@ class Invoices extends CI_Model
             $customer_headcode = $coainfo->HeadCode;
             $cs_name= $cusifo->customer_name;
 
-        } else if ($sel_type == 2){
+        } else if ($sel_type == 3){
 
             $cusifo = $this->db->select('*')->from('aggre_list')->where('id', $agg_id)->get()->row();
             $headn = $agg_id . '-' . $cusifo->aggre_name;
@@ -890,7 +894,7 @@ class Invoices extends CI_Model
             $cs_name= $cusifo->aggre_name;
         }
 
-        if (isset($courier_id)){
+        if ($delivery_type == 2){
             $courier_condtion = $this->input->post('courier_condtion', TRUE);
 
             $courier_id = $this->input->post('courier_id', TRUE);
@@ -1619,7 +1623,6 @@ class Invoices extends CI_Model
             'prevous_due'     => $this->input->post('previous', TRUE),
             // 'sales_by'     => $this->input->post('employee_id',TRUE),
             'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
-            'condition_cost'   => $this->input->post('condition_cost', TRUE),
             'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
             // 'payment_type'    => (!empty($this->input->post('paytype', TRUE)) ? $this->input->post('paytype', TRUE) : null),
             'delivery_type'    => (!empty($this->input->post('delivery_type', TRUE)) ? $this->input->post('delivery_type', TRUE) : null),
