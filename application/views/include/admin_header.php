@@ -756,6 +756,20 @@ $birthday = $CI->Reports->birthday_noti();
                                                   ); ?>"><?php echo display('manage_product'); ?></a></li>
             <?php } ?>
 
+              <?php if (
+              $this->permission1->method('manage_product', 'read')->access()
+              ) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('2') == "manage_finished_product"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url(
+                          'Cproduct/manage_finished_product'
+                      ); ?>">Finished Products</a></li>
+              <?php } ?>
+
             <?php if (
               $this->permission1->method('manage_category', 'create')->access() ||
               $this->permission1->method('manage_category', 'read')->access() ||

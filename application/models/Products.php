@@ -190,6 +190,165 @@ class Products extends CI_Model
 
         return $response;
     }
+    public function getFinishedProductList($postData = null)
+    {
+
+        $response = array();
+
+        ## Read value
+        $draw = $postData['draw'];
+        $start = $postData['start'];
+        $rowperpage = $postData['length']; // Rows display per page
+        $columnIndex = $postData['order'][0]['column']; // Column index
+        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+        $searchValue = $postData['search']['value']; // Search value
+
+        ## Search
+        $searchQuery = "";
+        if ($searchValue != '') {
+            $searchQuery = " (a.product_name like '%" . $searchValue . "%' or a.product_model like '%" . $searchValue . "%' or a.size like '%" . $searchValue . "%' or a.color like '%" . $searchValue . "%' or a.product_code like '%" . $searchValue . "%' or a.price like'%" . $searchValue . "%' or c.supplier_price like'%" . $searchValue . "%' or m.supplier_name like'%" . $searchValue . "%' or x.category_name like'%" . $searchValue . "%' or d.ptype_name like'%" . $searchValue . "%') ";
+        }
+
+        ## Total number of records without filtering
+        $this->db->select('count(*) as allcount');
+        $this->db->from('product_information a');
+        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $records = $this->db->get()->result();
+        $totalRecords = $records[0]->allcount;
+
+        ## Total number of record with filtering
+        $this->db->select('count(*) as allcount');
+        $this->db->from('product_information a');
+        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $records = $this->db->get()->result();
+        $totalRecordwithFilter = $records[0]->allcount;
+
+        ## Fetch records
+        $this->db->select("a.*,
+                a.product_name,
+                a.product_id,
+                a.product_model,
+                a.finished_raw,
+                a.image,
+                c.supplier_price,
+                c.supplier_id,
+                m.supplier_name,
+                k.color_name,
+                l.size_name,
+              x.category_name,
+              d.*
+                ");
+        $this->db->from('product_information a');
+        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+        $this->db->join('color_list k', 'k.color_id = a.color', 'left');
+        $this->db->join('size_list l', 'l.size_id = a.size', 'left');
+        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+        if ($searchValue != '')
+            $this->db->where($searchQuery);
+        $this->db->order_by($columnName, $columnSortOrder);
+        $this->db->limit($rowperpage, $start);
+        $records = $this->db->get()->result();
+        $data = array();
+        $sl = 1;
+
+        foreach ($records as $record) {
+            $button = '';
+            $base_url = base_url();
+            $jsaction = "return confirm('Are You Sure ?')";
+            $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
+            if ($this->permission1->method('manage_product', 'delete')->access()) {
+
+                $button .= '<a href="' . $base_url . 'Cproduct/product_delete/' . $record->product_id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
+            }
+
+            $button .= '  <a href="' . $base_url . 'Cqrcode/qrgenerator/' . $record->product_id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('qr_code') . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
+
+            $button .= '  <a href="' . $base_url . 'Cbarcode/barcode_print/' . $record->product_id . '" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('barcode') . '"><i class="fa fa-barcode" aria-hidden="true"></i></a>';
+            if ($this->permission1->method('manage_product', 'update')->access()) {
+                $button .= ' <a href="' . $base_url . 'Cproduct/product_update_form/' . $record->product_id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+            }
+
+            $product_name = '<a href="' . $base_url . 'Cproduct/product_details/' . $record->product_id . '">' . $record->product_name . '</a>';
+            $supplier = '<a href="' . $base_url . 'Csupplier/supplier_ledger_info/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
+            $product_status='';
+            if ($record->finished_raw == 1){
+                $product_status = 'Finished Goods';
+            }
+            if ($record->finished_raw == 2){
+                $product_status = 'Raw Materials';
+            }
+            if ($record->finished_raw == 3){
+                $product_status = 'Tools';
+            }
+
+            $url = "https://swaponsworld.com/api/v1/products/home";
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $resp = curl_exec($curl);
+            curl_close($curl);
+
+            $json_data=json_decode($resp)->data[0];
+            $data[] = array(
+                'sl'               => $sl,
+                'product_name'     => $json_data->name,
+                'product_category'    => $record->category_name,
+                'product_code'     => $record->product_code,
+                'product_type'    => $record->ptype_name,
+                'product_size'    => $record->size_name,
+                'product_status'      => $product_status,
+                'color'    => $record->color_name,
+                'product_model'    => $record->product_model,
+                'supplier_name'    => $supplier,
+                'price'            => $record->price,
+                'purchase_p'       => $record->supplier_price,
+                'image'            => $image,
+                'button'           => $button,
+
+            );
+
+            $sl++;
+        }
+
+
+
+//        var_dump($resp);
+
+//        echo '<pre>';
+//        print_r(json_decode($resp)->data[0]->name);
+//        exit();
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecordwithFilter,
+            "iTotalDisplayRecords" => $totalRecords,
+            "aaData" => $data
+            //"aaData" => $json_data
+        );
+
+        return $response;
+    }
+
+
 
     //Product List
     public function product_list_count()

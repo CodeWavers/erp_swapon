@@ -319,12 +319,33 @@ class Cproduct extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function manage_finished_product()
+    {
+
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lproduct');
+        $CI->load->model('Products');
+        $content = $this->lproduct->finished_product_list();
+        $this->template->full_admin_html_view($content);
+    }
+
     public function CheckProductList()
     {
         // GET data
         $this->load->model('Products');
         $postData = $this->input->post();
         $data = $this->Products->getProductList($postData);
+        echo json_encode($data);
+    }
+
+
+    public function CheckFinishedProductList()
+    {
+        // GET data
+        $this->load->model('Products');
+        $postData = $this->input->post();
+        $data = $this->Products->getFinishedProductList($postData);
         echo json_encode($data);
     }
     //Add Product CSV
