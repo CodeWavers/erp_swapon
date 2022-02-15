@@ -88,6 +88,9 @@ class Lproduct
         $CI->load->model('Units');
 
         $product_detail = $CI->Products->retrieve_product_editdata($product_id);
+        // echo '<pre>';
+        // print_r($product_detail);
+        // exit();
         $supplier_product_detail = $CI->Products->supplier_product_editdata($product_id);
         @$supplier_id = $product_detail[0]['supplier_id'];
 
@@ -106,7 +109,9 @@ class Lproduct
         $ptype_selected = $CI->Ptype->category_search_item($ptype_id);
 
         $size_list = $CI->Products->get_size_list();
-
+        // echo '<pre>';
+        // print_r($size_list);
+        // exit();
         $color_list = $CI->Products->get_color_list();
 
 
@@ -122,6 +127,7 @@ class Lproduct
             $data[$tax] = $product_detail[0][$tax] * 100;
             $i++;
         }
+        
 
 
         $data['title']            = display('edit_your_product');

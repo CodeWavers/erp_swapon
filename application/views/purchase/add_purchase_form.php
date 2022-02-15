@@ -135,10 +135,10 @@
                                     <label for="product_status" class="col-sm-2 col-form-label"> Product Type <i class="text-danger">*</i></label>
                                     <div class="col-sm-3">
                                         <select name="product_status" id="product_status" class="form-control" required">
-                                        <option value="">Select One</option>
-                                        <option value="1">Finished Goods</option>
-                                        <option value="2">Raw Materials</option>
-                                        <option value="3">Tools</option>
+                                            <option value="">Select One</option>
+                                            <option value="1">Finished Goods</option>
+                                            <option value="2">Raw Materials</option>
+                                            <option value="3">Tools</option>
                                         </select>
                                     </div>
                                 </div>
@@ -152,10 +152,12 @@
                                     <label for="cat_id" class="col-sm-2 col-form-label"> Category <i class="text-danger">*</i></label>
                                     <div class="col-sm-3">
                                         <select name="cat_id" id="cat_id" class="form-control" required">
-                                        <option value="">Select One</option>
-                                        {cates}
-                                        <option value="{id}">{name}</option>
-                                        {/cates}
+                                            <option value="">Select One</option>
+                                            
+                                            {cates}
+
+                                            <option value="{id}">{name}</option>
+                                            {/cates}
                                         </select>
                                     </div>
                                 </div>
@@ -249,7 +251,7 @@
                                         <th class="text-center" width="9%"><?php echo display('item_information') ?><i class="text-danger">*</i></th>
                                         <!-- <th class="text-center" width="8%">SN</th> -->
                                         <th class="text-center">Stock</th>
-                                         <th class="text-center" width="8%">Unit</th>
+                                        <th class="text-center" width="8%">Unit</th>
                                         <!-- <th class="text-center" width="8%">Origin</th> -->
                                         <!-- <th class="text-center" width="8%">Warehouse</th> -->
 
@@ -281,7 +283,7 @@
                                             <input type="text" id="available_quantity_1" class="form-control text-right stock_ctn_1" placeholder="0.00" readonly />
                                         </td>
 
-                                         <td class="wt"> <input type="text" id="unit_1" placeholder="Unit" name="unit[]"  class="form-control text-right unit_1" readonly/></td>
+                                        <td class="wt"> <input type="text" id="unit_1" placeholder="Unit" name="unit[]" class="form-control text-right unit_1" readonly /></td>
                                         <!-- <td class="wt"> <input type="text" placeholder="Origin" name="origin[]" id="origin" class="form-control text-right stock_ctn_1" /></td> -->
                                         <!-- <td class="wt"> <input type="text" placeholder="Warehouse" name="warehouse[]" id="shelf_number" class="form-control text-right stock_ctn_1"  /></td> -->
 

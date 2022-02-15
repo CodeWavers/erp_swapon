@@ -23,6 +23,9 @@ class Lpurchase
         $outlet_user        = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->central_warehouse();
         $cates = $CI->Categories->cates();
+        // echo "<pre>";
+        // print_r($cates);
+        // exit();
         $data = array(
             'title'         => display('add_purchase'),
             'all_supplier'  => $all_supplier,

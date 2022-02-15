@@ -135,7 +135,7 @@
                             </div>
                             <div class="row">
 
-                                <div class="col-sm-6" id="sale_price_div">
+                                <div class="col-sm-6" >
                                     <div class="form-group row">
                                         <label for="sell_price" class="col-sm-4 col-form-label">Sales Price<i class="text-danger">*</i> </label>
                                         <div class="col-sm-8">

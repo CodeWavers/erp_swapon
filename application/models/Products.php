@@ -86,6 +86,7 @@ class Products extends CI_Model
         $records = $this->db->get()->result();
         $totalRecords = $records[0]->allcount;
 
+
         ## Total number of record with filtering
         $this->db->select('count(*) as allcount');
         $this->db->from('product_information a');
@@ -98,33 +99,26 @@ class Products extends CI_Model
         $records = $this->db->get()->result();
         $totalRecordwithFilter = $records[0]->allcount;
 
+
         ## Fetch records
-        $this->db->select("a.*,
-                a.product_name,
-                a.product_id,
-                a.product_model,
-                a.finished_raw,
-                a.image,
-                c.supplier_price,
-                c.supplier_id,
-                m.supplier_name,
-                k.color_name,
-                l.size_name,
-              x.category_name,
-              d.*
+        $this->db->select("a.*,k.*
+             
                 ");
         $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('color_list k', 'k.color_id = a.color', 'left');
-        $this->db->join('size_list l', 'l.size_id = a.size', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+        // $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+        // $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+        // $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+        $this->db->join('products k', 'k.barcode = a.product_id', 'left');
+        //$this->db->join('size_list l', 'l.size_id = a.size', 'left');
+        // $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
         if ($searchValue != '')
             $this->db->where($searchQuery);
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
         $records = $this->db->get()->result();
+        // echo "<pre>";
+        // print_r($records[0]);
+        // exit();
         $data = array();
         $sl = 1;
 
@@ -132,6 +126,8 @@ class Products extends CI_Model
             $button = '';
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
+
+            // $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
             $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
             if ($this->permission1->method('manage_product', 'delete')->access()) {
 
@@ -146,30 +142,30 @@ class Products extends CI_Model
             }
 
             $product_name = '<a href="' . $base_url . 'Cproduct/product_details/' . $record->product_id . '">' . $record->product_name . '</a>';
-            $supplier = '<a href="' . $base_url . 'Csupplier/supplier_ledger_info/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
-            $product_status='';
-            if ($record->finished_raw == 1){
+            //$supplier = '<a href="' . $base_url . 'Csupplier/supplier_ledger_info/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
+            $product_status = '';
+            if ($record->finished_raw == 1) {
                 $product_status = 'Finished Goods';
             }
-            if ($record->finished_raw == 2){
+            if ($record->finished_raw == 2) {
                 $product_status = 'Raw Materials';
             }
-            if ($record->finished_raw == 3){
+            if ($record->finished_raw == 3) {
                 $product_status = 'Tools';
             }
             $data[] = array(
                 'sl'               => $sl,
                 'product_name'     => $product_name,
-                'product_category'    => $record->category_name,
-                'product_code'     => $record->product_code,
-                'product_type'    => $record->ptype_name,
-                'product_size'    => $record->size_name,
+                //'product_category'    => $record->category_name,
+                //'product_code'     => $record->product_code,
+                //'product_type'    => $record->ptype_name,
+                //'product_size'    => $record->size_name,
                 'product_status'      => $product_status,
-                'color'    => $record->color_name,
-                'product_model'    => $record->product_model,
-                'supplier_name'    => $supplier,
+                //'color'    => $record->color_name,
+                //'product_model'    => $record->product_model,
+                //'supplier_name'    => $supplier,
                 'price'            => $record->price,
-                'purchase_p'       => $record->supplier_price,
+                //'purchase_p'       => $record->supplier_price,
                 'image'            => $image,
                 'button'           => $button,
 
@@ -180,6 +176,9 @@ class Products extends CI_Model
             $sl++;
         }
 
+        //  echo '<pre>';
+        //     print_r($data);
+        //     exit();
         ## Response
         $response = array(
             "draw" => intval($draw),
@@ -244,7 +243,7 @@ class Products extends CI_Model
     }
 
     //Count Product
-    public function product_entry($data,$data2)
+    public function product_entry($data, $data2)
     {
         $this->db->insert('products', $data);
         $this->db->insert('product_information', $data2);
@@ -316,10 +315,12 @@ class Products extends CI_Model
     }
 
     //Update Categories
-    public function update_product($data, $product_id)
+    public function update_product($data, $data2, $product_id)
     {
         $this->db->where('product_id', $product_id);
         $this->db->update('product_information', $data);
+        $this->db->where('barcode', $product_id);
+        $this->db->update('products', $data2);
         $this->db->select('*');
         $this->db->from('product_information');
         $this->db->where('status', 1);

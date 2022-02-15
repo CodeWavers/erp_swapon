@@ -624,9 +624,11 @@ $(function ($) {
       { data: "product_name" },
       { data: "product_status" },
       { data: "product_model" },
-      { data: "supplier_name" },
+      { data: "product_category" },
+      
+      // { data: "supplier_name" },
       { data: "price" },
-      { data: "purchase_p" },
+      // { data: "purchase_p" },
       { data: "image" },
       { data: "button" },
     ],
