@@ -639,7 +639,7 @@ $(function ($) {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6] },
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5] },
     ],
     processing: true,
     serverSide: true,
@@ -701,13 +701,14 @@ $(function ($) {
     },
     columns: [
       { data: "sl" },
-      { data: "product_name" },
-      { data: "product_status" },
-      { data: "product_model" },
-      { data: "supplier_name" },
-      { data: "price" },
-      { data: "purchase_p" },
       { data: "image" },
+      { data: "product_name" },
+
+      { data: "sku" },
+
+      { data: "price" },
+
+
       { data: "button" },
     ],
   });
