@@ -20,6 +20,18 @@ class Lproduct
         return $productList;
     }
 
+    public function finished_product_list()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Products');
+        $CI->load->model('Web_settings');
+        $company_info = $CI->Products->retrieve_company();
+        $data['total_product']    = $CI->Products->count_product();
+        $data['company_info']     = $company_info;
+        $productList = $CI->parser->parse('product/finished_product', $data, true);
+        return $productList;
+    }
+
     //Sub Category Add
     public function product_add_form()
     {
