@@ -914,7 +914,7 @@ class Invoices extends CI_Model
             $courier_pay_partial=$due_amount-($shipping_cost+$condition_cost);
 
 
-            $DC=$this->input->post('shipping_cost', TRUE)+$this->input->post('shipping_cost', TRUE);
+            $DC=$this->input->post('shipping_cost', TRUE)+$this->input->post('condition_cost', TRUE);
 
             if ( $courier_condtion ==  1){
 

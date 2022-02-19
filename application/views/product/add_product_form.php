@@ -201,7 +201,7 @@
                                 <div class="form-group row">
                                     <label for="category_id" class="col-sm-4 col-form-label"><?php echo display('category') ?></label>
                                     <div class="col-sm-8">
-                                        <select class="form-control" id="category_id" multiple name="category_id[]" tabindex="3">
+                                        <select class="form-control" id="category_id"  name="category_id[]" tabindex="3">
                                             <option value=""></option>
                                         </select>
                                     </div>
