@@ -560,7 +560,7 @@ $(function ($) {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6] },
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5] },
     ],
     processing: true,
     serverSide: true,
@@ -625,7 +625,7 @@ $(function ($) {
       { data: "product_name" },
       { data: "product_status" },
       { data: "product_model" },
-      { data: "product_category" },
+      // { data: "product_category" },
       
       // { data: "supplier_name" },
       { data: "price" },

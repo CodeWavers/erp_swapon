@@ -82,3 +82,13 @@ WHERE `a`.`PHeadName` = 'Courier Ledger'
 AND `a`.`IsAppove` = 1
 ORDER BY `a`.`VDate` DESC
  LIMIT 10
+ERROR - 2022-02-19 09:13:55 --> Severity: Notice --> Trying to access array offset on value of type bool C:\laragon\www\git\erp_swapon\application\models\Reports.php 2646
+ERROR - 2022-02-19 09:13:55 --> Severity: Notice --> Trying to access array offset on value of type null C:\laragon\www\git\erp_swapon\application\models\Reports.php 2646
+ERROR - 2022-02-19 09:13:55 --> Severity: Notice --> Trying to access array offset on value of type bool C:\laragon\www\git\erp_swapon\application\models\Reports.php 2713
+ERROR - 2022-02-19 09:13:55 --> Severity: Notice --> Trying to access array offset on value of type null C:\laragon\www\git\erp_swapon\application\models\Reports.php 2713
+ERROR - 2022-02-19 09:13:55 --> Severity: Warning --> A non-numeric value encountered C:\laragon\www\git\erp_swapon\application\views\include\admin_home.php 333
+ERROR - 2022-02-19 09:25:05 --> Severity: Notice --> Trying to access array offset on value of type bool C:\laragon\www\git\erp_swapon\application\models\Reports.php 2646
+ERROR - 2022-02-19 09:25:05 --> Severity: Notice --> Trying to access array offset on value of type null C:\laragon\www\git\erp_swapon\application\models\Reports.php 2646
+ERROR - 2022-02-19 09:25:05 --> Severity: Notice --> Trying to access array offset on value of type bool C:\laragon\www\git\erp_swapon\application\models\Reports.php 2713
+ERROR - 2022-02-19 09:25:05 --> Severity: Notice --> Trying to access array offset on value of type null C:\laragon\www\git\erp_swapon\application\models\Reports.php 2713
+ERROR - 2022-02-19 09:25:05 --> Severity: Warning --> A non-numeric value encountered C:\laragon\www\git\erp_swapon\application\views\include\admin_home.php 333

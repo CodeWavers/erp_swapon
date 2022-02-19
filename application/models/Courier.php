@@ -319,7 +319,7 @@ class Courier extends CI_Model
         $this->db->from('acc_transaction a');
         $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
         $this->db->join('invoice i', 'i.invoice_id=a.VNo');
-        $this->db->where('b.PHeadName', 'Operating Expenses');
+        $this->db->where('b.PHeadName', 'Courier Ledger');
         $this->db->where('a.IsAppove', 1);
 //        $this->db->where('i.outlet_id', $outlet_id);
         $this->db->order_by('a.VDate', 'desc');

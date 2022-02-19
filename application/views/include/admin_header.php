@@ -572,7 +572,91 @@ $birthday = $CI->Reports->birthday_noti();
         </li>
       <?php } ?>
       <!-- Customer menu end -->
+        <!-- Order menu start -->
+        <?php if (
+        $this->permission1->method('add_customer', 'create')->access() ||
+        $this->permission1->method('manage_customer', 'read')->access() ||
+        $this->permission1->method('credit_customer', 'read')->access() ||
+        $this->permission1->method('paid_customer', 'read')->access()
+        ) { ?>
+        <li class="treeview <?php if ($this->uri->segment('1') == "Ccustomer") {
+            echo "active";
+        } else {
+            echo " ";
+        } ?>">
+            <a href="#">
+                <i class="fa fa-handshake-o"></i><span><?php echo display(
+                        'customer'
+                    ); ?></span>
+                <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+            </a>
+            <ul class="treeview-menu">
+                <?php if (
+                $this->permission1->method('add_customer', 'create')->access()
+                ) { ?>
+                    <li class="treeview <?php if (
+                        $this->uri->segment('1') == "Ccustomer" &&
+                        $this->uri->segment('2') == ""
+                    ) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url('Ccustomer'); ?>"><?php echo display(
+                                'add_customer'
+                            ); ?></a></li>
+                <?php } ?>
 
+
+
+
+
+
+
+                <?php if (
+                $this->permission1->method('credit_customer', 'read')->access()
+                ) { ?>
+                    <li class="treeview <?php if (
+                        $this->uri->segment('2') == "credit_customer"
+                    ) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url(
+                            'Ccustomer/credit_customer'
+                        ); ?>"><?php echo display('credit_customer'); ?></a></li>
+                <?php } ?>
+                <?php if (
+                $this->permission1->method('paid_customer', 'read')->access()
+                ) { ?>
+                    <li class="treeview <?php if (
+                        $this->uri->segment('2') == "paid_customer"
+                    ) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url(
+                            'Ccustomer/paid_customer'
+                        ); ?>"><?php echo display('paid_customer'); ?></a></li>
+                <?php } ?>
+                <?php if (
+                $this->permission1->method('customer_advance', 'create')->access()
+                ) { ?>
+                    <li class="treeview <?php if (
+                        $this->uri->segment('2') == "customer_advance"
+                    ) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url(
+                            'Ccustomer/customer_advance'
+                        ); ?>"><?php echo display('customer_advance'); ?></a></li>
+                <?php } ?>
+            </ul>
+        </li>
+        <?php } ?>
+        <!-- Customer menu end -->
 
         <!-- Customer menu start -->
         <?php if (
