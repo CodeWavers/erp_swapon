@@ -193,6 +193,10 @@ class Lcourier {
 
 
 
+        //echo '<pre>';print_r($ledger);exit();
+
+
+
         $singlecustomerdetails = $CI->parser->parse('courier/courier_ledger_report', $data, true);
         return $singlecustomerdetails;
     }
