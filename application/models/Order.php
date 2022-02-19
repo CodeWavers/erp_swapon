@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Products extends CI_Model
+class Order extends CI_Model
 {
 
     public function __construct()
@@ -156,7 +156,7 @@ class Products extends CI_Model
             $data[] = array(
                 'sl'               => $sl,
                 'product_name'     => $product_name,
-                'product_category'    => $record->category_id,
+//                'product_category'    => $record->category_id,
                 //'product_code'     => $record->product_code,
                 //'product_type'    => $record->ptype_name,
                 //'product_size'    => $record->size_name,
@@ -298,14 +298,13 @@ class Products extends CI_Model
             }
 
             $image = '<img src="https://swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
-            $site_url='https://swaponsworld.com';
-            $product_name = '<a href="'  . $site_url .  '/product/' . $record->slug . '">' . $record->name . '</a>';
+            $product_name = '<a href="'  . 'Cproduct/product_details/' . $record->id . '">' . $record->name . '</a>';
 
             $data[] = array(
                 'sl'               => $sl,
                 'product_name'     => $product_name,
                 'price'            =>  $record->base_price,
-                'sku'              =>  $record->sku,
+                'sku'       =>  $record->sku,
                 'image'            =>  $image,
                 'button'           =>  $button,
 
