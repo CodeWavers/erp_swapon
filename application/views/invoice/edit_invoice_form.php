@@ -62,18 +62,49 @@
 
                                         <input id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="{customer_id}">
                                     </div>
-
                                 </div>
+                                <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Sale Type <i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" size="100" name="sel_type" class=" form-control"  id="sel_type" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>" />
+                                    </div>
+                                </div>
+
                                 <div class="form-group row">
                                     <label for="customer_mobile_two" class="col-sm-4 col-form-label">Customer Mobile </label>
                                     <div class="col-sm-8">
                                         <input type="text" size="100" name="customer_mobile_two" class=" form-control" placeholder='Customer Mobile' id="customer_mobile_two" value="{customer_mobile_two}" />
                                     </div>
                                 </div>
-
                             </div>
-
-
+                            <div class="col-md-6">
+                            <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Branch Name <i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+                                    <select name="branch_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                            <option value="">Select One</option>
+                                            <?php foreach ($branch_list as $b_list) { ?>
+                                                <option value="<?php echo html_escape($b_list['branch_id']) ?>" <?php echo $b_list['branch_id'] == $courier_id ? $b_list['branch_id'] : 'selected';  ?>>
+                                                     <?php echo html_escape($b_list['branch_name']); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+                                    <select name="courier_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                            <option value="">Select One</option>
+                                            <?php foreach ($branch_list as $c_list) { ?>
+                                            <option value="<?php echo html_escape($c_list['courier_id']) ?>" <?php echo $c_list['courier_id'] == $courier_id ? $b_list['branch_id'] : 'selected'; ?>>
+                                                    <?php echo html_escape($c_list['courier_name']); ?>
+                                            </option>
+                                            <?php } ?>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -122,9 +153,8 @@
                                         <select name="courier_id" class="form-control bankpayment" id="">
                                             <option value="">Select Location</option>
                                             <?php foreach ($branch_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['courier_id']) ?>" <?php if ($courier['courier_id'] == $courier_id) {
-                                                                                                                        echo 'selected';
-                                                                                                                    } ?>><?php echo html_escape($courier['courier_name']); ?></option>
+                                                <option value="<?php echo html_escape($courier['courier_id']) ?>" <?php if ($courier['courier_id'] == $courier_id) {echo 'selected'; } ?>><?php echo html_escape($courier['courier_name']); ?>
+                                                </option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -143,8 +173,9 @@
                                             <option value=""></option>
                                             <?php foreach ($bkash_list as $bkash) { ?>
                                                 <option value="<?php echo html_escape($bkash['bkash_id']) ?>" <?php if ($bkash['bkash_id'] == $bkash_id) {
-                                                                                                                    echo 'selected';
-                                                                                                                } ?>><?php echo html_escape($bkash['bkash_no']) . ' (' . html_escape($bkash['ac_name']) . ')'; ?></option>
+                                                    echo 'selected';
+                                                } ?>>
+                                                <?php echo html_escape($bkash['bkash_no']) . ' (' . html_escape($bkash['ac_name']) . ')'; ?></option>
                                             <?php } ?>
                                         </select>
                                         <input type="hidden" id="editpayment_type" value="<?php echo $paytype; ?>" name="">
@@ -368,7 +399,7 @@
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th class="text-center">Payment Type</th>
+                                                            <th class="text-center">Payment Type </th>
                                                             <th class="text-center">Account</th>
                                                             <th width="15%" class="text-center">Amount</th>
                                                             <!-- <th class="text-center">Action</th> -->
