@@ -189,7 +189,7 @@ class Order extends CI_Model
 
         return $response;
     }
-    public function getFinishedProductList($postData = null)
+    public function getOrderList($postData = null)
     {
 
         $response = array();
@@ -211,6 +211,7 @@ class Order extends CI_Model
 
         //count product
 
+        $api_url=api_url();
 
 
 
@@ -218,7 +219,7 @@ class Order extends CI_Model
 
         if ($searchValue != '') {
 
-            $url = "https://swaponsworld.com/api/v1/products/count_product_search/".$searchValue;
+            $url = $api_url."products/count_product_search/".$searchValue;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -233,7 +234,7 @@ class Order extends CI_Model
 
 
 
-            $url = "https://swaponsworld.com/api/v1/products/search_products/".$searchValue."/".$rowperpage;
+            $url = $api_url."products/search_products/".$searchValue."/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -254,7 +255,7 @@ class Order extends CI_Model
         }else{
 
 
-            $url = "https://swaponsworld.com/api/v1/products/count_product";
+            $url = $api_url."products/count_product";
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -267,7 +268,7 @@ class Order extends CI_Model
             $total_product = curl_exec($curl);
             curl_close($curl);
 
-            $url = "https://swaponsworld.com/api/v1/products/get_products/".$rowperpage;
+            $url = $api_url."products/get_products/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);

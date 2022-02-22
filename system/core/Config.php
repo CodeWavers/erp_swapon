@@ -321,6 +321,25 @@ class CI_Config {
 
 		return $base_url.$this->_uri_string($uri);
 	}
+	public function api_url($uri = '', $protocol = NULL)
+	{
+		$api_url = $this->slash_item('api_url');
+
+		if (isset($protocol))
+		{
+			// For protocol-relative links
+			if ($protocol === '')
+			{
+				$api_url = substr($api_url, strpos($api_url, '//'));
+			}
+			else
+			{
+				$api_url = $protocol.substr($api_url, strpos($api_url, '://'));
+			}
+		}
+
+		return $api_url.$this->_uri_string($uri);
+	}
 
 	// -------------------------------------------------------------
 

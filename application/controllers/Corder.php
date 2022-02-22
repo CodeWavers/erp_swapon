@@ -25,8 +25,19 @@ class Corder extends CI_Controller
         $CI->load->model('Products');
 
 
-        $content = $this->lorder->finished_product_list();
+
+       // die();
+        $content = $this->lorder->order_list();
         $this->template->full_admin_html_view($content);
+    }
+
+    public function CheckOrderList()
+    {
+        // GET data
+        $this->load->model('Order');
+        $postData = $this->input->post();
+        $data = $this->Order->getOrderList($postData);
+        echo json_encode($data);
     }
 
 

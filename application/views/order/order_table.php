@@ -4,12 +4,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1>Finished Products</h1>
-            <small>Finished Products</small>
+            <h1>Order</h1>
+            <small>Order Table</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
-                <li><a href="#"><?php echo display('product') ?></a></li>
-                <li class="active">Finished Products</li>
+                <li><a href="#">Order</a></li>
+                <li class="active">Order</li>
             </ol>
         </div>
     </section>
@@ -70,18 +70,20 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="finished_productList">
+                            <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="order_table">
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
-                                        <th><?php echo display('image') ?>s</th>
-                                        <th><?php echo display('product_name') ?></th>
-
-                                        <th>SKU</th>
-
-                                        <th><?php echo display('price') ?></th>
-
-
+                                        <th>Order Code</th>
+                                        <th>Order Date</th>
+                                        <th>Num. of Pro</th>
+                                        <th>Customer</th>
+                                        <th>Number</th>
+                                        <th>Amount</th>
+                                        <th>Delivery Status</th>
+                                        <th>Payment Method</th>
+                                        <th>Payment Status</th>
+                                        <th>Refund</th>
                                         <th><?php echo display('action') ?>
                                         </th>
                                     </tr>
@@ -94,8 +96,11 @@
                         </div>
                     </div>
                 </div>
+
+                <input type="text" class="form-control" id="api_url" name="api_url" value="<?php echo api_url() ?>">
+
                 <input type="hidden" id="total_product" value="<?php echo $total_product; ?>" name="">
-                <input type="hidden" id="api_url" value="https://swaponsworld.com/api/v1/" name="">
+
             </div>
         </div>
     </section>

@@ -10,7 +10,7 @@ class Lorder
      */
 
 
-    public function finished_product_list()
+    public function order_list()
     {
         $CI = &get_instance();
         $CI->load->model('Products');
@@ -20,8 +20,8 @@ class Lorder
 
 
 
-//
-        $url = "https://swaponsworld.com/api/v1/products/count_product";
+
+        $url = "http://dev.swaponsworld.com/api/v1/products/count_product";
 
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -39,7 +39,7 @@ class Lorder
         $data['company_info']     = $company_info;
 //        $data['records']     = $records;
 //        echo '<pre>';print_r($data);exit();
-        $productList = $CI->parser->parse('order/finished_product', $data, true);
+        $productList = $CI->parser->parse('order/order_table', $data, true);
         return $productList;
     }
 
