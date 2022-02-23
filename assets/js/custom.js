@@ -723,8 +723,8 @@ $(function ($) {
     serverSide: true,
 
     lengthMenu: [
-      [10, 25, 50, 100, 250, 500, total_product],
-      [10, 25, 50, 100, 250, 500, "All"],
+      [30,50, 100, 250, 500, total_product],
+      [30,50, 100, 250, 500, "All"],
     ],
 
     dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
@@ -779,20 +779,16 @@ $(function ($) {
     },
     columns: [
       { data: "sl" },
-      { data: "image" },
-      { data: "product_name" },
-
-      { data: "sku" },
-      { data: "sku" },
-      { data: "sku" },
-      { data: "sku" },
-      { data: "sku" },
-      { data: "sku" },
-      { data: "sku" },
-
-      { data: "price" },
-
-
+      { data: "order_code" },
+      { data: "date" },
+      { data: "num_of_product" },
+      { data: "customer_name" },
+      { data: "customer_number" },
+      { data: "amount" },
+      { data: "delivery_status" },
+      { data: "payment_method" },
+      { data: "payment_status" },
+      { data: "refund" },
       { data: "button" },
     ],
   });

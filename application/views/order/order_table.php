@@ -63,7 +63,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4>Finished Products</h4>
+                            <h4>Orders</h4>
 
 
                         </div>

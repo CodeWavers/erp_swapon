@@ -219,7 +219,7 @@ class Order extends CI_Model
 
         if ($searchValue != '') {
 
-            $url = $api_url."products/count_product_search/".$searchValue;
+            $url = $api_url."order/count_order_search/".$searchValue;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -234,7 +234,7 @@ class Order extends CI_Model
 
 
 
-            $url = $api_url."products/search_products/".$searchValue."/".$rowperpage;
+            $url = $api_url."order/search_order/".$searchValue."/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -247,7 +247,7 @@ class Order extends CI_Model
             $resp = curl_exec($curl);
             curl_close($curl);
 
-            $records = json_decode($resp)->data;//fetch all product
+            $records = json_decode($resp);//fetch all product
 
 //            echo '<pre>';
 //            print_r($records);
@@ -255,7 +255,7 @@ class Order extends CI_Model
         }else{
 
 
-            $url = $api_url."products/count_product";
+            $url = $api_url."order/count_order";
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -268,7 +268,7 @@ class Order extends CI_Model
             $total_product = curl_exec($curl);
             curl_close($curl);
 
-            $url = $api_url."products/get_products/".$rowperpage;
+            $url = $api_url."order/get_order/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -281,32 +281,70 @@ class Order extends CI_Model
             $resp = curl_exec($curl);
             curl_close($curl);
 
-            $records=json_decode($resp)->data;
+            $records=json_decode($resp);
         }
 
 
+        $url = $api_url."order/add_on";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $add_on= curl_exec($curl);
+        curl_close($curl);
+
+       $ad_js=json_decode($add_on);
 
 
-
+//            echo '<pre>';print_r($records);exit();
 
 //        $totalRecordwithFilter = $records[0]->allcount;
         foreach ($records as $record) {
             $button = '';
 //            https://swaponsworld.com/public/uploads/products/thumbnail/7nKgZ7HuR0f0qB4dwtxKCQ1CxFe37Qmnrulzjzp0.jpeg
             if ($this->permission1->method('manage_product', 'update')->access()) {
-                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                $button .= ' <a href="'  . 'Corder/order_status_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+//                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
             }
 
-            $image = '<img src="https://swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
-            $product_name = '<a href="'  . 'Cproduct/product_details/' . $record->id . '">' . $record->name . '</a>';
+//            $image = '<img src="https://swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
+//            $product_name = '<a href="'  . 'Cproduct/product_details/' . $record->id . '">' . $record->code . '</a>';
 
+
+
+            $shipping_address=json_decode($record->shipping_address);
+            $order_detail=$record->order_details;
+
+            $no_of_product=count($order_detail);
+
+
+            if ($ad_js != null && $ad_js->activated == 1 ){
+
+//                if (count($records->refund_requests) > 0){
+//                    $ad='Refund';
+//                }else{
+                    $ad='No Refund';
+//                }
+            }
             $data[] = array(
                 'sl'               => $sl,
-                'product_name'     => $product_name,
-                'price'            =>  $record->base_price,
-                'sku'       =>  $record->sku,
-                'image'            =>  $image,
+                'order_code'     =>  $record->code,
+                'date'            =>  date('m/d/Y H:i:s', $record->date),
+                'num_of_product'   =>  $no_of_product,
+                'customer_name'      =>  $shipping_address->name,
+                'customer_number'   =>  $shipping_address->phone,
+                'amount'            =>  $record->grand_total,
+                'delivery_status'   =>  (!empty($order_detail[0]->delivery_status) ?$order_detail[0]->delivery_status : null),
+                'payment_method'    =>  $record->payment_type,
+                'payment_status'            =>   (!empty($record->order_details[0]->payment_status) ? $record->order_details[0]->payment_status : null),
+                'refund'            => $ad,
+//                'record'            =>  $add_on,
+
                 'button'           =>  $button,
 
             );
