@@ -30,14 +30,14 @@ class Corder extends CI_Controller
         $content = $this->lorder->order_list();
         $this->template->full_admin_html_view($content);
     }
-    public function order_status_form()
+    public function order_status_form($id)
     {
         $CI = &get_instance();
         $this->auth->check_admin_auth();
         $CI->load->library('lorder');
         $CI->load->model('Products');
 
-        $content = $this->lorder->order_status();
+        $content = $this->lorder->order_status($id);
         $this->template->full_admin_html_view($content);
     }
 

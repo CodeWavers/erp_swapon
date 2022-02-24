@@ -84,23 +84,28 @@
                                 <div class="col-lg-offset-3 col-lg-3">
                                     <label for="update_payment_status&quot;&quot;">Payment Status</label>
                                     <select class="form-control demo-select2 select2-hidden-accessible" data-minimum-results-for-search="Infinity" id="update_payment_status" tabindex="-1" aria-hidden="true">
-                                        <option value="paid" selected="">Paid</option>
+                                        <option value="<?php echo $order[0]->payment_status?>" selected ><?php echo $order[0]->payment_status?></option>
+                                        <option value="paid" >Paid</option>
                                         <option value="partial">Partial</option>
                                         <option value="unpaid">Unpaid</option>
-                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_payment_status-container"><span class="select2-selection__rendered" id="select2-update_payment_status-container" title="Paid">Paid</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                    </select>
+<!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_payment_status-container"><span class="select2-selection__rendered" id="select2-update_payment_status-container" title="Paid">Paid</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
                                 </div>
                                 <div class="col-lg-3">
                                     <label for="update_delivery_status&quot;&quot;">Delivery Status</label>
                                     <select class="form-control demo-select2 select2-hidden-accessible" data-minimum-results-for-search="Infinity" id="update_delivery_status" tabindex="-1" aria-hidden="true">
+                                        <option value="<?php echo $order[0]->delivery_status?>" selected ><?php echo $order[0]->delivery_status?></option>
+
                                         <option value="pending">pending</option>
                                         <option value="Order Confirmed">Order Confirmed</option>
                                         <option value="Processing">Processing</option>
                                         <option value="Shipped">Shipped</option>
-                                        <option value="Delivered" selected="">Delivered</option>
+                                        <option value="Delivered" >Delivered</option>
                                         <option value="Returned">Returned</option>
                                         <option value="Hold">Hold</option>
                                         <option value="Canceled">Canceled</option>
-                                    </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_delivery_status-container"><span class="select2-selection__rendered" id="select2-update_delivery_status-container" title="Delivered">Delivered</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                    </select>
+<!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_delivery_status-container"><span class="select2-selection__rendered" id="select2-update_delivery_status-container" title="Delivered">Delivered</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
                                 </div>
                                 <div class="col-lg-3 pt-3">
                                     <a class="btn btn-primary" data-toggle="modal" data-target="#paymentForm">Make Payment</a>
@@ -111,11 +116,11 @@
                                 <div class="col-sm-6 text-xs-center">
                                     <address>
 
-                                        <strong class="text-main">HostRare</strong><br>
-                                        info@hostrare.com<br>
-                                        01303204773<br>
-                                        ashulia,  Mirpur-10 ,  Dhaka  ,, root<br>
-                                        Bangladesh
+                                        <strong class="text-main"><?php echo $customer_name?></strong><br>
+                                        <?php echo $email?><br>
+                                        <?php echo $phone?><br>
+                                        <?php echo $address.','.$thana.','.$division.','.$district.','.$country?><br>
+
                                     </address>
                                     <button class="btn btn-danger" onclick="update_address()">Edit Address</button>
                                 </div>
@@ -127,7 +132,7 @@
                                                 Order #
                                             </td>
                                             <td class="text-right text-info text-bold">
-                                                00035984
+                                               <?php echo $order[0]->code?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -135,7 +140,7 @@
                                                 Order Status
                                             </td>
                                             <td class="text-right">
-                                                <span class="badge badge-info">Delivered</span>
+                                                <span class="badge badge-info"><?php echo $order[0]->delivery_status?></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -143,7 +148,7 @@
                                                 Order Date
                                             </td>
                                             <td class="text-right">
-                                                02-01-2022 02:51 PM
+                                                <?php echo  date('m/d/Y H:i:s',$order[0]->date)?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -151,7 +156,7 @@
                                                 Total amount
                                             </td>
                                             <td class="text-right">
-                                                ৳2,112
+                                                <?php echo $currency.' '.$order[0]->grand_total?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -159,7 +164,7 @@
                                                 Payment method
                                             </td>
                                             <td class="text-right">
-                                                BKash Payment
+                                                <?php echo $order[0]->payment_type ?>
                                             </td>
                                         </tr>
                                         <tr>
@@ -167,7 +172,8 @@
                                                 Shipping method
                                             </td>
                                             <td class="text-right">
-                                                Dhaka (Inside Metro)                            </td>
+
+                                                <?php echo $order[0]->shipping_method?> </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -204,32 +210,37 @@
                                         </tr>
                                         </thead>
                                         <tbody>
+
+
+                                        <?php foreach ($order as $od) {?>
                                         <tr>
                                             <td>1</td>
                                             <td>
-                                                <a href="https://dev.swaponsworld.com/product/Couple-Printed-Panjabi--Kameez-By-Swapons-World-17231P-p6QAt" target="_blank"><img height="50" src="https://dev.swaponsworld.com/public/uploads/products/thumbnail/mvVMwYOyHcCZ7qnfINqLmOJrfHg27u7MiaS9NYIy.jpeg"></a>
+                                                <a href="https://dev.swaponsworld.com/product/<?php echo $od->slug?>" target="_blank"><img height="50" src="https://dev.swaponsworld.com/public/<?php echo $od->thumbnail_img?>"></a>
                                             </td>
                                             <td>
-                                                <strong><a href="https://dev.swaponsworld.com/product/Couple-Printed-Panjabi--Kameez-By-Swapons-World-17231P-p6QAt" target="_blank">Couple Printed Panjabi &amp; Kameez By Swapon's World-17231P</a></strong>
-                                                <small>36-36</small>
+                                                <strong><a href="https://dev.swaponsworld.com/product/<?php echo $od->slug?>" target="_blank"><?php echo $od->name?></a></strong>
+                                                <small><?php echo $od->variation?></small>
                                             </td>
                                             <td>
                                             </td>
                                             <td class="text-center">
-                                                <input type="number" value="1" onchange="qtyUpdate(434)" id="order434">
+                                                <input type="number" value="<?php echo $od->quantity?>" onchange="qtyUpdate(<?php echo $od->id?>)" id="order434">
 
                                             </td>
                                             <td class="text-center">
-                                                ৳2,062
-                                                <s style="font-size:11px">৳3,173</s>
+                                                <?php echo $currency.' '.$od->price/$od->quantity?>
+                                                <s style="font-size:11px"><?php echo $currency.' '.$od->unit_price?></s>
                                             </td>
                                             <td class="text-center">
-                                                ৳2,062
+                                                <?php echo $currency.' '.$od->price?>
                                             </td>
                                             <td class="text-center">
-                                                <button class="btn btn-danger item_remove" data-id="434">Remove</button>
+                                                <button class="btn btn-danger item_remove" data-id="<?php echo $od->id?>">Remove</button>
                                             </td>
                                         </tr>
+
+                                        <?php } ?>
                                         </tbody>
                                     </table>
 
@@ -245,15 +256,15 @@
                                     <form action="https://dev.swaponsworld.com/admin/amount-update/359" method="post">
                                         <input type="hidden" name="_token" value="Hk9jJQWcjdJHasykJ1FfsoFUksB5LLRY9YNhcGGU">                                <div class="form-group">
                                             <label for="sc">Shipping Cost</label>
-                                            <input type="number" class="form-control" step="0.1" name="shipping_cost" placeholder="Add Shipping Charge" value="50">
+                                            <input type="number" class="form-control" step="0.1" name="shipping_cost" placeholder="Add Shipping Charge" value="<?php echo $order[0]->shipping_cost?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="sc">Coupon</label>
-                                            <input type="text" class="form-control" name="coupon" placeholder="Add Coupon Code" value="">
+                                            <input type="text" class="form-control" name="coupon" placeholder="Add Coupon Code" value="<?php echo $order[0]->admin_coupon?>">
                                         </div>
                                         <div class="form-group">
                                             <label for="sc">Discount Amount</label>
-                                            <input type="number" class="form-control" step="0.1" name="discount_charge" placeholder="Add Discount Amount" value="0">
+                                            <input type="number" class="form-control" step="0.1" name="discount_charge" placeholder="Add Discount Amount" value="<?php echo $order[0]->flat_discount?>">
                                         </div>
                                     </form>
                                 </div>
@@ -266,13 +277,13 @@
                                                     <strong>Sub Total :</strong>
                                                 </td>
                                                 <td>
-                                                    ৳2,062
+                                                    <?php echo array_sum(array_column($order,'price'))?>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Shipping Cost</th>
 
-                                                <td class="currency"> ৳50
+                                                <td class="currency"> <?php echo $currency.' '.$order[0]->shipping_cost?>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -280,7 +291,7 @@
                                                     <strong>Tax :</strong>
                                                 </td>
                                                 <td>
-                                                    ৳0
+                                                    <?php echo $currency.' '.$order[0]->tax?>
                                                 </td>
                                             </tr>
 
@@ -290,21 +301,21 @@
                                             <tr>
                                                 <th>Coupon Discount</th>
                                                 <td class="currency">
-                                                    ৳0
+                                                    <?php echo $currency.' '.$order[0]->coupon_discount?>
 
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Admin Coupon Discount </th>
                                                 <td class="currency">
-                                                    ৳0
+                                                    <?php echo $currency.' '.$order[0]->admin_coupon_discount?>
 
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>Flat Discount</th>
                                                 <td class="currency">
-                                                    ৳0
+                                                    <?php echo $currency.' '.$order[0]->flat_discount?>
 
                                                 </td>
                                             </tr>
@@ -312,7 +323,7 @@
                                             <tr>
                                                 <th>Grand Total</th>
                                                 <td class="currency">
-                                                    ৳2,112
+                                                    <?php echo $currency.' '.$order[0]->grand_total?>
 
                                                 </td>
                                             </tr>
@@ -323,10 +334,31 @@
                                                 </td>
                                                 <td>
 
+                                                        <?php if (substr($order[0]->payment_details,0,1=='{')) {
+
+                                                            $data = json_decode($order[0]->payment_details);
+                                                            if($data){
+                                                                (int) $paidtotal= $data->amount;
+                                                            }
+                                                            else {
+                                                                (int) $paidtotal= 0;
+                                                            }
+
+                                                        }else {
+
+                                                            //API likte hobe
+                                                            (int) $paidtotal= 0;
+
+
+                                                         }
+
+                                                         echo $paidtotal;
+                                                         ?>
 
 
 
-                                                    ৳0
+
+
 
                                                 </td>
                                             </tr>
@@ -335,7 +367,7 @@
                                                     <strong>TOTAL DUE :</strong>
                                                 </td>
                                                 <td class="text-bold h4">
-                                                    ৳2,112
+                                                    <?php echo $currency.' '.($order[0]->grand_total-$paidtotal)?>
                                                 </td>
                                             </tr>
                                             </tbody>

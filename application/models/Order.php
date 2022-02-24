@@ -341,10 +341,9 @@ class Order extends CI_Model
                 'amount'            =>  $record->grand_total,
                 'delivery_status'   =>  (!empty($order_detail[0]->delivery_status) ?$order_detail[0]->delivery_status : null),
                 'payment_method'    =>  $record->payment_type,
-                'payment_status'            =>   (!empty($record->order_details[0]->payment_status) ? $record->order_details[0]->payment_status : null),
+                'payment_status'            =>   (!empty($order_detail[0]->payment_status) ? $order_detail[0]->payment_status : null),
                 'refund'            => $ad,
 //                'record'            =>  $add_on,
-
                 'button'           =>  $button,
 
             );
