@@ -23,9 +23,7 @@ class Lpurchase
         $outlet_user        = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->central_warehouse();
         $cates = $CI->Categories->cates();
-        // echo "<pre>";
-        // print_r($cates);
-        // exit();
+
         $data = array(
             'title'         => display('add_purchase'),
             'all_supplier'  => $all_supplier,
@@ -38,6 +36,9 @@ class Lpurchase
             'cw'            => $cw,
             'cates'            => $cates,
         );
+        // echo "<pre>";
+        // print_r($data);
+        // exit();
         $purchaseForm = $CI->parser->parse('purchase/add_purchase_form', $data, true);
         return $purchaseForm;
     }
@@ -196,6 +197,7 @@ class Lpurchase
         $CI->load->model('Suppliers');
         $CI->load->model('Web_settings');
         $CI->load->model('Warehouse');
+        $CI->load->model('Categories');
         $payment_info = $CI->Purchases->payment_details($purchase_id);
 
         $bank_list        = $CI->Web_settings->bank_list();
@@ -205,7 +207,7 @@ class Lpurchase
         $supplier_id = $purchase_detail[0]['supplier_id'];
         $supplier_list = $CI->Suppliers->supplier_list("110", "0");
         $supplier_selected = $CI->Suppliers->supplier_search_item($supplier_id);
-
+        // $cates = $CI->Categories->cates();
         if (!empty($purchase_detail)) {
             $i = 0;
             foreach ($purchase_detail as $k => $v) {
@@ -242,9 +244,10 @@ class Lpurchase
             'supplier_selected' => $supplier_selected,
             'discount_type' => $currency_details[0]['discount_type'],
             'paytype'       => $purchase_detail[0]['payment_type'],
-            'payment_info'    => $payment_info,
+            'payment_info'  => $payment_info,
+            // 'cates'            => $cates
         );
-        // echo "<pre>";print_r($data);exit();
+//        echo "<pre>";print_r($data);exit();
         $chapterList = $CI->parser->parse('purchase/edit_purchase_form', $data, true);
         return $chapterList;
     }

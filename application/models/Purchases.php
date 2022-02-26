@@ -913,7 +913,7 @@ class Purchases extends CI_Model
     public function retrieve_purchase_editdata($purchase_id)
     {
         $this->db->select(
-            'a.*,
+                        'a.*,
 						b.*,
 						c.product_id,
 						c.product_name,
@@ -934,10 +934,12 @@ class Purchases extends CI_Model
         $this->db->where('a.purchase_id', $purchase_id);
         $this->db->order_by('a.purchase_details', 'asc');
         $query = $this->db->get();
+        // echo "<pre>";print_r($query->result_array());exit();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
         return false;
+
     }
 
     //Retrieve company Edit Data

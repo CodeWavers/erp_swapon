@@ -64,7 +64,7 @@ class Lproduct
         $CI->load->model('Ptype');
         $CI->load->model('Units');
         $supplier      = $CI->Suppliers->supplier_list("110", "0");
-        $category_list = $CI->Categories->category_list_product();
+        $category_list = $CI->Categories->cates();
         $brand_list = $CI->Brands->category_list_product();
         $ptype_list = $CI->Ptype->category_list_product();
         $unit_list     = $CI->Units->unit_list();
@@ -160,7 +160,7 @@ class Lproduct
             $data[$tax] = $product_detail[0][$tax] * 100;
             $i++;
         }
-        
+
 
 
         $data['title']            = display('edit_your_product');

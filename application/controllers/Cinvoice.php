@@ -445,11 +445,11 @@ class Cinvoice extends CI_Controller
         $users = $CI->Invoices->user_invoice_data($user_id);
         $data = array(
             'title'             => display('invoice_details'),
-            'balance'        => $customer_balance[0]['balance'],
-            'pay_type' => $invoice_detail[0]['payment_type'],
+            'balance'           => $customer_balance[0]['balance'],
+            'pay_type'          => $invoice_detail[0]['payment_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
-            // 'outlet_name'        => $outlet[0]['outlet_name'],
+            // 'outlet_name'    => $outlet[0]['outlet_name'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],

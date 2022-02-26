@@ -189,7 +189,7 @@
                             <table class="table table-bordered table-hover" id="normalinvoice">
                                 <thead>
                                     <tr>
-                                        <th class="text-center " width="9%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
+                                        <th class="text-center " width="9%"><?php echo display('item_information ') ?> <i class="text-danger">*</i></th>
                                         <!-- <th class="text-center" width="9%">Warehouse</th>
                                         <th class="text-center"><?php echo display('available_qnty') ?></th> -->
                                         <th class="text-center"><?php echo display('unit') ?></th>
@@ -308,9 +308,6 @@
                                                 <input id="total_tax_ammount<?php echo $x; ?>" tabindex="-1" class="form-control text-right valid totalTax" name="total_tax<?php echo $x; ?>" value="<?php $txval = 'tax' . $x;
                                                                                                                                                                                                         echo html_escape($taxvalu[0][$txval]) ?>" readonly="readonly" aria-invalid="false" type="text">
                                             </td>
-
-
-
                                         </tr>
                                     <?php $x++;
                                     } ?>
@@ -323,7 +320,8 @@
                                         </td>
                                         <td><button type="button" class="toggle btn-warning">
                                                 <i class="fa fa-angle-double-down"></i>
-                                            </button></td>
+                                            </button>
+                                        </td>
                                     </tr>
 
                                     <tr>
@@ -427,7 +425,7 @@
                                                                     <input type="hidden" name="row_id[]" value="<?= $pay['id'] ?>">
                                                                 </td>
                                                                 <td class="text-right">
-                                                                    <input type="text" class="form-control text-right" name="pay_amount[]" id="amount_<?= $pay['amount'] ?>" value="<?php echo $pay['amount'] ?>" readonly>
+                                                                    <input type="text" class="form-control text-right" name="pay_amount[]" id=" amount_<?= $pay['amount'] ?>" value="<?= $pay['amount'] ?>" readonly>
                                                                 </td>
                                                                 <!-- <td class="text-center">
                                                                     <button type="button" onclick="delete_payment(this, <?php echo $pay['id'] ?>)" class="btn btn-danger btn-sm">
@@ -448,8 +446,8 @@
                                             <div class="row margin-top10">
                                                 <div class="col-sm-4">
                                                     <label for="payment_type" class="col-sm-5 col-form-label"><?php
-                                                                                                                echo display('payment_type');
-                                                                                                                ?> <i class="text-danger">*</i></label>
+                                                        echo display('payment_type');
+                                                            ?> <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
                                                         <select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
                                                             <option value="1"><?php echo display('cash_payment') ?></option>
@@ -659,12 +657,10 @@
 
                                                         <div class="col-sm-6" style="padding-bottom:10px ">
                                                             <input type="file" name="image" class="form-control" id="image" tabindex="4">
-                                                            <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                            <!-- <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
                                                                                                                                                                                                             ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
-
-
 
 
                                                         <div class=" col-sm-1">
@@ -691,7 +687,6 @@
                                     </div><!-- /.modal-content -->
                                 </div><!-- /.modal-dialog -->
                             </div><!-- /.modal -->
-
                             <?php echo form_close() ?>
                         </div>
                     </div>
