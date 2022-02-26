@@ -39,7 +39,7 @@ $dirname = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/';
 $root = $protocol . $_SERVER['HTTP_HOST'] . $dirname;
 
 $config["base_url"] = $root;
-$config["api_url"] = 'https://swaponsworld.com/api/v1/products/home';
+$config["api_url"] = 'http://dev.swaponsworld.com/api/v1';
 
 /*
 |--------------------------------------------------------------------------
