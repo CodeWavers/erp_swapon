@@ -143,7 +143,9 @@ class Cpurchase extends CI_Controller
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->library('lpurchase');
+
         $content = $CI->lpurchase->purchase_edit_data($purchase_id);
+
         $this->template->full_admin_html_view($content);
     }
 

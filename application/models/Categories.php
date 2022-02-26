@@ -28,7 +28,7 @@ class Categories extends CI_Model
         }
         return false;
     }
-    public function cates($pr_status = null)
+    public function cates()
     {
         $this->db->select('name,id');
         $this->db->from('cats');
