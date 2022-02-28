@@ -68,19 +68,52 @@ class Lorder
 
         $response=json_decode($resp);
 
-//        $shipping_id=$response[0]->shipping_method;
-//        $url = api_url()."order/shipping_method/$shipping_id";
-//
-//        $curl = curl_init($url);
-//        curl_setopt($curl, CURLOPT_URL, $url);
-//        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-//
-////for debug only!
-//        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-//        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-//
-//        $shipping_method = curl_exec($curl);
-//        curl_close($curl);
+        $url = api_url()."order/show_details/$id";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $order_details=json_decode($resp);
+
+        $url = api_url()."order/offline_payment/$id";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $offline_payment=json_decode($resp);
+
+        $url = api_url()."order/change_log/$id";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $change_log=json_decode($resp);
+
+
 
 
 
@@ -92,7 +125,7 @@ class Lorder
 
       //  echo '<pre>';print_r($response[0]->delivery_status);exit();
 
-
+       // echo '<pre>';print_r($offline_payment);exit();
 //        $data['payment_status']    = $order_details[0]->payment_status;
 //        $data['delivery_status']    = $order_details[0]->delivery_status;
         $data['customer_name']    = $shipping_address->name;
@@ -103,11 +136,16 @@ class Lorder
         $data['division']    = $shipping_address->division;
         $data['district']    = $shipping_address->district;
         $data['country']    = $shipping_address->country;
+        $data['postal_code']    = $shipping_address->postal_code;
         $data['order']    = $response;
+        $data['order_details']    = $order_details;
+        $data['offline_payment']    = $offline_payment;
+        $data['change_log']    = $change_log;
+        $data['order_id']    = $id;
         $data['company_info']     = $company_info;
         $data['currency']         = $currency_details[0]['currency'];
 
-        //echo '<pre>';print_r($data);exit();
+
         $productList = $CI->parser->parse('order/order_status', $data, true);
         return $productList;
     }
