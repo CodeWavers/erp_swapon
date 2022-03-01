@@ -54,9 +54,9 @@ function addInputField(t) {
             "<td><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
-            document.getElementById(t).appendChild(e),
-            document.getElementById(a).focus(),
-            document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
+        document.getElementById(t).appendChild(e),
+        document.getElementById(a).focus(),
+        document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
         document.getElementById("details").setAttribute("tabindex", tab7);
         document.getElementById("invoice_discount").setAttribute("tabindex", tab8);
         document.getElementById("shipping_cost").setAttribute("tabindex", tab9);
@@ -118,6 +118,9 @@ function calculateSum() {
         c_cost =  $("#condition_cost").val(),
         commission =  $("#commission").val();
 
+   // alert(s_cost);
+
+
     //Total Tax
     for(var i=0;i<taxnumber;i++){
 
@@ -154,9 +157,13 @@ function calculateSum() {
         ds = p.toFixed(2, 2);
 
     var test = +tx + +s_cost + +e + -ds + + ad + + c_cost  - commission;
-    $("#grandTotal").val(test.toFixed(2, 2));
+    var test2 = +tx + +s_cost + +e + -ds + + ad ;
 
-
+    if(c_cost == undefined || commission ==undefined){
+        $("#grandTotal").val(test2.toFixed(2, 2));
+    }else {
+        $("#grandTotal").val(test.toFixed(2, 2));
+    }
 
     var gt = $("#grandTotal").val();
     var invdis = $("#invoice_discount").val();

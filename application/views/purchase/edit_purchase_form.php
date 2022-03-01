@@ -101,22 +101,6 @@
                                         <?php $date = date('Y-m-d'); ?>
                                         <input type="text" tabindex="2" class="form-control datepicker" name="purchase_date" value="{purchase_date}" id="date" required />
                                         <input type="hidden" name="purchase_id" value="{purchase_id}">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="form-group row">
-                                    <label for="product_status" class="col-sm-2 col-form-label"> Product Status <i class="text-danger">*</i></label>
-                                    <div class="col-sm-3">
-                                        <select name="product_status" id="product_status" class="form-control" required">
-                                            <option value="">Select One</option>
-                                            <option value="1">Finished Goods</option>
-                                            <option value="2">Raw Materials</option>
-                                            <option value="3">Tools</option>
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -133,10 +117,8 @@
                                         <th class="text-center">Expired Date</th>
                                         <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
 
-
                                         <th class="text-center">Damaged Quantity</th>
                                         <th class="text-center"><?php echo display('rate') ?><i class="text-danger">*</i></th>
-
 
                                         <th class="text-center"><?php echo display('total') ?></th>
                                         <th class="text-center"><?php echo display('action') ?></th>
@@ -156,8 +138,6 @@
                                         <!-- <td class="wt">
                                             <input type="text" id="available_quantity_{sl}" class="form-control text-right stock_ctn_{sl}" placeholder="0.00" readonly />
                                         </td> -->
-
-
 
 
 
@@ -222,7 +202,6 @@
                                         </tr>
 
                                         <tr>
-
                                             <td class="text-right" colspan="6"><b><?php echo display('grand_total') ?>:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="grandTotal" class="text-right form-control" name="grand_total_price" value="{grand_total}" readonly="readonly" />
@@ -560,9 +539,6 @@
                                                                                                                                                                                                             ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
-
-
-
 
                                                         <div class=" col-sm-1">
                                                             <a href="#" id="Add_cheque" class="client-add-btn btn btn-primary add_cheque"><i class="fa fa-plus-circle m-r-2"></i></a>

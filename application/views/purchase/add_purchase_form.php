@@ -153,7 +153,7 @@
                                     <div class="col-sm-3">
                                         <select name="cat_id" id="cat_id" class="form-control" required">
                                             <option value="">Select One</option>
-                                            
+
                                             {cates}
 
                                             <option value="{id}">{name}</option>
@@ -447,14 +447,10 @@
                                                 <option value="<?php echo html_escape($bank['bank_id']) ?>"><?php echo html_escape($bank['bank_name']) . '(' . html_escape($bank['ac_number']) . ')'; ?></option>
                                             <?php } ?>'>
 
-
                                                         </div>
-
 
                                                     </div>
                                                 </div>
-
-
 
                                                 <div class="col-sm-4" style="display: none" id="bkash_div_1">
 
@@ -550,7 +546,6 @@
                                                                                 <option value="<?php echo html_escape($bank['bank_id']) ?>"><?php echo html_escape($bank['bank_name']) . '(' . html_escape($bank['ac_number']) . ')'; ?></option>
                                                                             <?php } ?>' />
 
-
                                                         </div>
 
 
@@ -564,7 +559,6 @@
                                                         <label for="lc_1" class="col-sm-5 col-form-label">LC Number <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
                                                             <input type="text" pattern="[a-zA-Z'-'\s]*" name="lc[]" class="form-control" id="lc_1">
-
                                                         </div>
 
 
@@ -611,11 +605,10 @@
                                                             <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
                                                             <input type="text" name="cheque_type[]" class=" form-control" placeholder="" autocomplete="off" />
-                                                            <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                            <!--  <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
                                                                                                                                                                                                             ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
-
                                                         <label for="bank" class="col-sm-4 col-form-label">Cheque NO:
                                                             <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
@@ -624,7 +617,6 @@
                                                                                                                                                                                                             ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
-
 
                                                         <label for="date" class="col-sm-4 col-form-label">Due Date <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
@@ -653,12 +645,9 @@
                                                         </div>
 
 
-
-
                                                         <div class=" col-sm-1">
                                                             <a href="#" id="Add_cheque" class="client-add-btn btn btn-primary add_cheque"><i class="fa fa-plus-circle m-r-2"></i></a>
                                                         </div>
-
 
                                                     </div>
                                                 </div>
@@ -672,7 +661,6 @@
                                         <div class="modal-footer">
 
                                             <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
-
 
                                         </div>
 

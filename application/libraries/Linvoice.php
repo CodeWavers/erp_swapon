@@ -364,12 +364,11 @@ class Linvoice
 
         $employee_list    = $CI->Service->employee_list();
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
-
         $payment_info = $CI->Invoices->payment_details($invoice_id);
 
         $bank_list      = $CI->Web_settings->bank_list();
-        $bkash_list      = $CI->Web_settings->bkash_list();
-        $branch_list      = $CI->Courier->get_branch_list();
+        $bkash_list     = $CI->Web_settings->bkash_list();
+        $branch_list    = $CI->Courier->get_branch_list();
         $taxinfo        = $CI->Invoices->service_invoice_taxinfo($invoice_id);
         $taxfield       = $CI->db->select('tax_name,default_value')
             ->from('tax_settings')
@@ -407,7 +406,7 @@ class Linvoice
             'due_amount'      => $invoice_detail[0]['due_amnt'],
             'invoice_discount' => $invoice_detail[0]['invoice_discount'],
             'total_discount'  => $invoice_detail[0]['total_discount'],
-            'unit'            => $invoice_detail[0]['unit'],
+            'rr'            => $invoice_detail[0]['unit'],
             'warrenty_date'   => $invoice_detail[0]['warrenty_date'],
             'sn'              => $invoice_detail[0]['sn'],
             'bank'             => $invoice_detail[0]['bank_id'],
@@ -434,10 +433,10 @@ class Linvoice
             'delivery_type'   => $invoice_detail[0]['delivery_type'],
             'payment_info'    => $payment_info,
             //'sales_by'   => $invoice_detail[0]['sales_by'],
-            'sales_first_name'   => $invoice_detail[0]['first_name'],
-            'sales_last_name'   => $invoice_detail[0]['last_name'],
+            'sales_first_name'   => $invoice_detail[0]['customer_name'],
+            // 'sales_last_name'   => $invoice_detail[0]['last_name'],
         );
-        // echo "<pre>" ;print_r($data);exit();
+//         echo "<pre>" ;print_r($data);exit();
         $chapterList = $CI->parser->parse('invoice/edit_invoice_form', $data, true);
         return $chapterList;
     }
