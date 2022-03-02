@@ -62,6 +62,25 @@ class Ccustomer extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function all_customer()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lcustomer');
+        $CI->load->model('Customers');
+        $content = $this->lcustomer->all_customer_list();
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function Check_all_customer()
+    {
+        // GET data
+        $this->load->model('Customers');
+        $postData = $this->input->post();
+        $data = $this->Customers->get_all_customerList($postData);
+        echo json_encode($data);
+    }
+
     public function CheckCustomerList()
     {
         // GET data
@@ -268,6 +287,87 @@ class Ccustomer extends CI_Controller
             redirect(base_url('Ccustomer'));
             exit;
         }
+    }
+    public function insert_customer_ecom()
+    {
+
+        $url = api_url()."order/all_customer";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+        $data=array();
+        foreach ($records as $r){
+
+            $data=array(
+
+                'customer_name'   => $r->name,
+                'customer_mobile'   => $r->phone,
+                'zip'   => $r->postal_code,
+                'country'   => $r->country,
+                'customer_email'  => $r->email,
+                'city' => $r->city,
+                'customer_address' => $r->address,
+                'cus_type' => 2,
+            );
+
+            $result = $this->db->insert('customer_information', $data);
+            $customer_id = $this->db->insert_id();
+            $coa = $this->Customers->headcode();
+            if ($coa->HeadCode != NULL) {
+                $headcode = $coa->HeadCode + 1;
+            } else {
+                $headcode = "102030100001";
+            }
+            $c_acc = $customer_id . '-' . $r->name;
+            $createby = $this->session->userdata('user_id');
+            $createdate = date('Y-m-d H:i:s');
+
+            $customer_coa = [
+                'HeadCode'         => $headcode,
+                'HeadName'         => $c_acc,
+                'PHeadName'        => 'Customer Receivable',
+                'HeadLevel'        => '4',
+                'IsActive'         => '1',
+                'IsTransaction'    => '0',
+                'IsGL'             => '0',
+                'HeadType'         => 'A',
+                'IsBudget'         => '0',
+                'IsDepreciation'   => '0',
+                'customer_id'      => $customer_id,
+                'DepreciationRate' => '0',
+                'CreateBy'         => $createby,
+                'CreateDate'       => $createdate,
+            ];
+
+            $this->db->insert('acc_coa', $customer_coa);
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
     // =================== customer Csv Upload ===============================
     //CSV Customer Add From here

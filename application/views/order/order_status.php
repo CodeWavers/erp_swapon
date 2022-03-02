@@ -359,8 +359,8 @@
 
                                                         }else {
 
-                                                            //API likte hobe
-                                                            (int) $paidtotal= 0;
+
+                                                            (int) $paidtotal= array_sum(array_column($offline_payment,'amount'));
 
 
                                                          }

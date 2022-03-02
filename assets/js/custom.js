@@ -712,6 +712,86 @@ $(function ($) {
       { data: "button" },
     ],
   });
+  $("#all_customer").DataTable({
+    responsive: true,
+
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [25, 50, 100, 250, 500, total_product],
+      [25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want
+        },
+        className: "btn-sm prints",
+      },
+      {
+        extend: "csv",
+        title: "ProductList",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        className: "btn-sm prints",
+      },
+      {
+        extend: "excel",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        title: "ProductList",
+        className: "btn-sm prints",
+      },
+      {
+        extend: "pdf",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        title: "ProductList",
+        className: "btn-sm prints",
+      },
+      {
+        extend: "print",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        title: "<center>ProductList</center>",
+        className: "btn-sm prints",
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Ccustomer/Check_all_customer",
+      data: {
+        csrf_test_name: CSRF_TOKEN,
+      },
+    },
+    columns: [
+      { data: "sl" },
+      { data: "customer_name" },
+      { data: "email" },
+
+      { data: "phone" },
+
+      {
+        data: "balance",
+        class: "balance",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+
+    ],
+  });
   $("#order_table").DataTable({
     responsive: true,
 

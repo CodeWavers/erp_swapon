@@ -218,7 +218,7 @@ class Products extends CI_Model
 
         if ($searchValue != '') {
 
-            $url = "https://swaponsworld.com/api/v1/products/count_product_search/".$searchValue;
+            $url = api_url()."products/count_product_search/".$searchValue;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -233,7 +233,7 @@ class Products extends CI_Model
 
 
 
-            $url = "https://swaponsworld.com/api/v1/products/search_products/".$searchValue."/".$rowperpage;
+            $url = api_url()."products/search_products/".$searchValue."/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -254,7 +254,7 @@ class Products extends CI_Model
         }else{
 
 
-            $url = "https://swaponsworld.com/api/v1/products/count_product";
+            $url = api_url()."products/count_product";
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -267,7 +267,7 @@ class Products extends CI_Model
             $total_product = curl_exec($curl);
             curl_close($curl);
 
-            $url = "https://swaponsworld.com/api/v1/products/get_products/".$rowperpage;
+            $url = api_url()."products/get_products/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -297,7 +297,7 @@ class Products extends CI_Model
                 $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
             }
 
-            $image = '<img src="https://swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
+            $image = '<img src="https://dev.swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
             $site_url='https://swaponsworld.com';
             $product_name = '<a href="'  . $site_url .  '/product/' . $record->slug . '">' . $record->name . '</a>';
 

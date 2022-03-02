@@ -246,7 +246,8 @@
                     // form.append("logo", fileInput.files[0], logo);
 
                     var settings = {
-                        // "url": "https://swaponsworld.com/api/v1/categories/store",
+                        "url": '<?= api_url() ?>' + "categories/store",
+
                         "method": "POST",
                         "timeout": 0,
                         "processData": false,

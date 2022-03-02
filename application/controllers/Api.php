@@ -867,14 +867,18 @@ if($start == 0){
     |_____________________________________________________
     */
     public function insert_customer(){
-       
+
+
+
         $data = array(
-            'customer_name'    => $this->input->get('customer_name'),
-            'customer_address' => $this->input->get('address'),
-            'customer_mobile'  => $this->input->get('mobile'),
-            'customer_email'   => $this->input->get('email'),
-            'status'           => 2
+            'customer_name'    => $this->input->post('name'),
+            'customer_id_two'    => '',
+            'customer_mobile'  => (!empty($this->input->post('phone')) ?$this->input->post('phone') : ''),
+            'customer_email'   => (!empty($this->input->post('email')) ?$this->input->post('email') : ''),
+            'cus_type'           => 2
         );
+
+  // echo '<pre>';print_r($data);exit();
 
 
     if ($this->Api_model->customer_create($data)) { 
@@ -887,7 +891,7 @@ if($start == 0){
            }else{
                 $headcode="102030000001";
             }
-    $c_acc=$customer_id.'-'.$this->input->get('customer_name');
+    $c_acc=$customer_id.'-'.$this->input->post('name');
    $createby=1;
   $createdate=date('Y-m-d H:i:s');
 
@@ -907,7 +911,6 @@ if($start == 0){
              'CreateDate'       => $createdate,
         ];
         $this->db->insert('acc_coa',$customer_coa);
-        $this->Customers->previous_balance_add($this->input->get('previous_balance'), $customer_id);
         $json['response'] = [
                      'status'     => 'ok',
                      'message'    => 'Successfully Added',
@@ -917,8 +920,9 @@ if($start == 0){
   $json['response'] = [
                     'status'     => 'error',
                     'message'    => 'Please try again',
-                    'permission' => 'read'
-                ]; 
+                    'permission' => 'read',
+
+                ];
             }
 
      echo json_encode($json,JSON_UNESCAPED_UNICODE);

@@ -496,7 +496,21 @@ $birthday = $CI->Reports->birthday_noti();
                                     echo " ";
                                   } ?>"><a href="<?php echo base_url(
                                                     'Ccustomer/manage_customer'
-                                                  ); ?>"><?php echo display('manage_customer'); ?></a></li>
+                                                  ); ?>"><?php echo display('manage_customer'); ?></a>
+              </li>
+                <li class="treeview <?php if (
+                                    $this->uri->segment('2') == "all_customer"
+                                  ) {
+                                    echo "active";
+                                  } else {
+                                    echo " ";
+                                  } ?>"><a href="<?php echo base_url(
+                                                    'Ccustomer/all_customer'
+                                                  ); ?>">Customer List</a>
+                </li>
+
+
+
             <?php } ?>
             <?php if (
               $this->permission1->method('customer_ledger', 'read')->access()
@@ -595,8 +609,7 @@ $birthday = $CI->Reports->birthday_noti();
                 $this->permission1->method('add_customer', 'create')->access()
                 ) { ?>
                     <li class="treeview <?php if (
-                        $this->uri->segment('1') == "Corder" &&
-                        $this->uri->segment('2') == ""
+                        $this->uri->segment('1') == "Corder"
                     ) {
                         echo "active";
                     } else {
