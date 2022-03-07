@@ -230,23 +230,27 @@ class Suppliers extends CI_Model
         // print_r($pr_status);
         // exit();
 
-        $this->db->select('*')
-            ->from('product_information a')
-            ->where('a.finished_raw', $product_status)
-            ->where('a.category_id', $cat_id);
+        $this->db->select('*');
+            $this->db->from('product_information a');
+            $this->db->where('a.finished_raw', $product_status);
+
+            if (!empty($cat_id)){
+                $this->db->where('a.category_id', $cat_id);
+            }
 
 
 
-        $query = $this->db->group_start()
-            ->like('a.product_model', $product_name, 'both')
-            ->or_like('a.product_name', $product_name, 'both')
-            ->group_end()
-            ->join('size_list sz', 'a.size=sz.size_id', 'left')
-            ->join('color_list cl', 'a.color=cl.color_id', 'left')
-            ->group_by('a.product_id')
-            ->order_by('a.product_name', 'asc')
+
+            $this->db->group_start();
+            $this->db->like('a.product_model', $product_name, 'both');
+            $this->db->or_like('a.product_name', $product_name, 'both');
+            $this->db->group_end();
+            $this->db->join('size_list sz', 'a.size=sz.size_id', 'left');
+            $this->db->join('color_list cl', 'a.color=cl.color_id', 'left');
+            $this->db->group_by('a.product_id');
+            $this->db->order_by('a.product_name', 'asc');
             // ->limit(15)
-            ->get();
+        $query =$this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }

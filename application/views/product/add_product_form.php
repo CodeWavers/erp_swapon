@@ -346,7 +346,7 @@
                                 <div class="form-group row">
                                     <label for="category_id" class="col-sm-4 col-form-label">Video Provider</label>
                                     <div class="col-sm-8">
-                                        <select name="video_provider" id="video_provider" class="form-control" required onchange="pr_status_changed(this.value)">
+                                        <select name="video_provider" id="video_provider" class="form-control" required >
                                             <option value="1">Vimeo</option>
                                             <option value="2">Youtube</option>
                                             <option value="3">Dailymotion</option>

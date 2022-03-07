@@ -282,23 +282,28 @@ class Cproduction extends CI_Controller
         $product_information = $this->db->get()->row();
 
 
+
+
         $available_quantity = $this->Reports->current_stock($product_id,1);
 
         $rqsn_quantity=$this->db->select('*')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row();
         $rcv_qty=$this->db->select('SUM(rcv_qty) as rc_qty')->from('production_goods')->where('product_id',$product_id)->get()->row();
+      //  echo '<pre>';print_r($rcv_qty);exit();
+//        $qty= $rqsn_quantity->isrcv == 1 ? 0 : $rqsn_quantity->finished_qty;
+//
+        if (!empty($rqsn_quantity)){
+            $quantity=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
 
-        $qty= $rqsn_quantity->isrcv == 1 ? 0 : $rqsn_quantity->finished_qty;
-
-        $quantity=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
+        }
 
 
         $data2['supplier_price'] = 0;
 
         $data2['customer_id'] = $customer_id;
         $data2['stock']     = ($available_quantity ? $available_quantity : 0);
-        $data2['quantity']     = ($quantity > 0 ? $quantity : 0);
-        $data2['finished_qty']     = $rqsn_quantity->finished_qty;
-        $data2['rc_qty']     = $rcv_qty->rc_qty;
+        $data2['quantity']     = (!empty($rqsn_quantity)? $quantity : 0);
+        $data2['finished_qty']  = (!empty($rqsn_quantity)? $rqsn_quantity->finished_qty : 0);
+       $data2['rc_qty']     = (!empty($rcv_qty)? $rcv_qty->rc_qty : 0);
 
         $data2['price']          = $product_information->price;
         $data2['supplier_id']    = '';

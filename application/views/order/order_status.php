@@ -540,6 +540,7 @@
 
                 <div class="modal-dialog">
                     <form action="" method="post" id="address_update">
+                        <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
 
                         <!-- Modal content-->
                         <div class="modal-content">
