@@ -69,6 +69,8 @@
                                         <tr>
                                             <th class="text-center"><?php echo display('sl') ?></th>
                                             <th class="text-center"><?php echo display('product_name') ?></th>
+                                            <th class="text-center">Category</th>
+                                            <th class="text-center">SKU</th>
                                             <th class="text-center"><?php echo display('product_model') ?></th>
                                             <th class="text-center"><?php echo display('sell_price') ?></th>
                                             <th class="text-center"><?php echo display('purchase_price') ?></th>
@@ -85,6 +87,8 @@
                                     <tbody>
                                     <tfoot>
                                         <tr>
+                                            <th></th>
+                                            <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>

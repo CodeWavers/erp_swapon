@@ -390,7 +390,7 @@ class Products extends CI_Model
     //Count Product
     public function product_entry($data, $data2)
     {
-        $this->db->insert('products', $data);
+//        $this->db->insert('products', $data);
         $this->db->insert('product_information', $data2);
 
         $this->db->select('*');

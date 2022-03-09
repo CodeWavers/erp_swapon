@@ -29,6 +29,8 @@ class Cproduct extends CI_Controller
     //Insert Product and uload
     public function insert_product()
     {
+
+
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->library('lproduct');
@@ -39,7 +41,7 @@ class Cproduct extends CI_Controller
             $this->session->set_userdata(array('error_message' => display('already_exists')));
             redirect(base_url('Cproduct'));
         }
-        $product_id_two = $this->input->post('$product_id_two', TRUE);
+        $product_id_two = $this->input->post('product_id_two', TRUE);
 
         $product_model = $this->input->post('model', TRUE);
         $product_code = $this->input->post('product_code', TRUE);
@@ -122,10 +124,12 @@ class Cproduct extends CI_Controller
         $data2['finished_raw']  = $this->input->post('product_status', TRUE);
         $data2['price']        = $price;
         $data2['unit']         = $this->input->post('unit', TRUE);
+        $data2['sku']  = $this->input->post('sku', TRUE);
         $data2['tax']          = 0;
         $data2['product_details'] = $this->input->post('description', TRUE);
         $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
         $data2['status']       = 1;
+
         $data['barcode']   = $product_id;
         $data['name'] = $this->input->post('product_name', TRUE);
         $data['added_by'] = 'ERP';

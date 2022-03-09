@@ -1221,7 +1221,7 @@ $(document).ready(function () {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 2, 3, 4, 5, 6, 7] },
+      { bSortable: false, aTargets: [0, 2, 3, 4, 5, 6, 7,8,9] },
     ],
     processing: true,
     serverSide: true,
@@ -1298,6 +1298,8 @@ $(document).ready(function () {
     columns: [
       { data: "sl" },
       { data: "product_name" },
+      { data: "category" },
+      { data: "sku" },
       { data: "product_model", class: "text-center" },
 
       {

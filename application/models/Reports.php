@@ -250,6 +250,10 @@ class reports extends CI_Model
                     . $searchValue .
                     "%' or a.product_model like '%"
                     . $searchValue .
+                    "%' or a.sku like '%"
+                    . $searchValue .
+                    "%' or b.name like '%"
+                    . $searchValue .
                     "%'  or a.product_id like '%"
                     . $searchValue .
                     "%') ";
@@ -258,6 +262,8 @@ class reports extends CI_Model
             ## Total number of records without filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information a');
+            $this->db->join('cats b','a.category_id=b.id','left');
+
 
 
             if (isset($p_s) && $p_s != '') {
@@ -275,6 +281,7 @@ class reports extends CI_Model
             ## Total number of record with filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information a');
+            $this->db->join('cats b','a.category_id=b.id','left');
 
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
@@ -288,9 +295,11 @@ class reports extends CI_Model
                 a.product_name,
                 a.product_id,
                 a.product_model,
+                b.name
              
                 ");
         $this->db->from('product_information a');
+        $this->db->join('cats b','a.category_id=b.id','left');
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->group_by('a.product_id');
         $this->db->limit($rowperpage, $start);
@@ -391,6 +400,8 @@ class reports extends CI_Model
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
                 'product_model' => ($record->product_model ? $record->product_model : ''),
+                'category' => ($record->name ? $record->name : ''),
+                'sku' => ($record->sku ? $record->sku : ''),
                 'sales_price'   =>  sprintf('%0.2f', $sprice),
                 'purchase_p'    =>  $pprice,
                 'totalPurchaseQnty' => $total_in,
