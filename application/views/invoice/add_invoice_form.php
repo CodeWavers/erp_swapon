@@ -112,7 +112,7 @@
                                     </label>
                                     <div class="col-sm-6" style="margin-bottom: 10px;">
 
-                                        <select name="sel_type" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                        <select name="sel_type" id="sel_type" class="form-control sel_type" onchange="sale_type(this.value)" tabindex="3">
                                             <option value="">Select One</option>
                                             <option value="1">Whole Sale</option>
                                             <option value="2">Retail</option>
@@ -146,7 +146,7 @@
 
                         <div class="row" >
 
-                            <div id="whole_sale" style="display: none">
+                            <div id="whole_sale" class="whole_sale" style="display: none">
 
                             <div class="col-sm-8 " id="payment_from_1"  >
                                 <div class="form-group row">
@@ -158,7 +158,7 @@
                                     </div>
                                     <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
                                         <div class=" col-sm-3">
-                                            <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
+                                            <a href="#" class="client-add-btn btn btn-success" id="add_customer" onclick="add_customer()" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -188,6 +188,7 @@
 
 
                             <div class="col-sm-8" style="display:none;" id="courier_div">
+
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-3 col-form-label">Courier Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
@@ -268,6 +269,22 @@
                                 </div>
                             </div>
 
+                            <div class="col-sm-8 commission_check d-none" id="commission_check" >
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-3 col-form-label">Commission<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
+                                        <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
+                                            <option value="">Select Commission</option>
+                                            <option value="1">Product Wise</option>
+                                            <option value="2">Overall</option>
+                                        </select>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
                         </div>
 
 
@@ -286,11 +303,12 @@
                                         <th class="text-center">Expiry Date </th>
 
                                         <th class="text-center"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
+<!--                                        <th  class="text-center comm_th  d-none" >Commission</th>-->
 
                                         <?php if ($discount_type == 1) { ?>
-                                            <th class="text-center invoice_fields"><?php echo display('discount_percentage') ?> %</th>
+                                            <th class="text-center invoice_fields"><?php echo display('discount_percentage') ?> % <span class="comm_th d-none">|Commission %</span></th>
                                         <?php } elseif ($discount_type == 2) { ?>
-                                            <th class="text-center invoice_fields"><?php echo display('discount') ?> </th>
+                                            <th class="text-center invoice_fields"><?php echo display('discount') ?> <span class="">|Commission %</span> </th>
                                         <?php } elseif ($discount_type == 3) { ?>
                                             <th class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
                                         <?php } ?>
@@ -302,7 +320,7 @@
                                 </thead>
                                 <tbody id="addinvoiceItem">
                                     <tr>
-                                        <td class="product_field">
+                                        <td class="product_field" >
                                             <input type="text" required name="product_name" onkeypress="invoice_productList(1)" id="product_name_1" class="form-control productSelection" placeholder="<?php echo display('product_name') ?>" tabindex="5">
 
                                             <input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" />
@@ -310,7 +328,7 @@
                                             <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
                                         </td>
 
-                                        <td>
+                                        <td  width="100">
                                             <input type="text" id="stock_1" class="form-control" value="" readonly>
                                         </td>
                                         <!-- <td class="invoice_fields">
@@ -322,37 +340,43 @@
                                         <!-- <td>
                                         <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
                                     </td> -->
-                                        <td>
+                                        <td  width="100">
                                             <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
                                             <input name="" id="" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                         </td>
-                                        <td>
+                                        <td  width="100">
                                             <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="1" />
                                         </td>
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <?php $date = date('Y-m-d'); ?>
                                             <input type="date" style="width: 110px" id="warrenty_date" class="form-control warrenty_date_1" name="warrenty_date[]" value="" />
                                         </td>
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <?php $date = date('Y-m-d'); ?>
                                             <input type="date" style="width: 110px" id="expiry_date" class="form-control expiry_date_1" name="expiry_date[]" value="" />
                                         </td>
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0" readonly />
                                         </td>
                                         <!-- Discount -->
-                                        <td>
-                                            <input type="text" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
+                                        <td  width="200" class="text-center">
+
+                                                    <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
+                                                    <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0.00" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
+
                                             <input type="hidden" value="" name="discount_type" id="discount_type_1">
 
                                         </td>
 
 
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
                                         </td>
 
-                                        <td>
+<!--                                        <td class="invoice_fields comm_th">-->
+<!--                                        </td>-->
+
+                                        <td  width="100">
                                             <!-- Tax calculate start-->
                                             <?php $x = 0;
                                             foreach ($taxes as $taxfldt) { ?>
@@ -435,7 +459,7 @@
                                         </td>
                                     </tr>
 
-                                    <tr>
+                                    <tr id="commission_tr" class=" d-none">
                                         <td class="text-right" colspan="8"><b>Commission:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="0.00"  />
@@ -506,10 +530,10 @@
                                                                                                                 echo display('payment_type');
                                                                                                                 ?> <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
-                                                        <select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
+                                                        <select name="paytype[]" class="form-control pay_type" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
                                                             <option value="1"><?php echo display('cash_payment') ?></option>
-                                                            <option value="2">Cheque Payment</option>
-                                                            <option value="4"><?php echo display('bank_payment') ?></option>
+<!--                                                            <option value="2"><span class="d-none">Cheque Payment</span></option>-->
+<!--                                                            <option value="4">--><?php //echo display('bank_payment') ?><!--</option>-->
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
                                                             <option value="6">Card Payment</option>
@@ -805,17 +829,17 @@
                                 <div id="customeMessage" class="alert hide"></div>
                                 <div class="panel-body">
                                     <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                    <div class="form-group row">
-                                        <label for="customer_id_two" class="col-sm-3 col-form-label">Customer ID <i class="text-danger">*</i></label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" name="customer_id_two" id="" type="text" placeholder="Customer ID" required="" tabindex="1">
-                                        </div>
-                                    </div>
+<!--                                    <div class="form-group row">-->
+<!--                                        <label for="customer_id_two" class="col-sm-3 col-form-label">Customer ID <i class="text-danger">*</i></label>-->
+<!--                                        <div class="col-sm-6">-->
+<!--                                            <input class="form-control" name="customer_id_two" id="" type="text" placeholder="Customer ID" required="" tabindex="1">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
                                     <div class="form-group row">
                                         <label for="customer_name" class="col-sm-3 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger">*</i></label>
                                         <div class="col-sm-6">
-                                            <input class="form-control" name="customer_name" id="" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
+                                            <input class="form-control" name="customer_name" id="m_customer_name" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
                                         </div>
                                     </div>
 
@@ -887,7 +911,6 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-
                                 <a href="#" class="close" data-dismiss="modal">&times;</a>
                                 <h3 class="modal-title">Add New Receiver</h3>
                             </div>
@@ -897,15 +920,16 @@
                                 <div id="customeMessage_rec" class="alert hide"></div>
                                 <div class="panel-body">
                                     <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
                                     <div class="form-group row">
-                                        <label for="receiver_name" class="col-sm-4 col-form-label">Receiever Name<i class="text-danger">*</i></label>
+                                        <label for="receiver_name" class="col-sm-4 col-form-label">Receiver Name<i class="text-danger">*</i></label>
                                         <div class="col-sm-6">
                                             <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="receiver_number" class="col-sm-4 col-form-label">Receiever Mobile No.<i class="text-danger">*</i></label>
+                                        <label for="receiver_number" class="col-sm-4 col-form-label">Receiver Mobile No.<i class="text-danger">*</i></label>
                                         <div class="col-sm-6">
                                             <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
                                         </div>

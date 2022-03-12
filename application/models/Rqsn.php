@@ -103,7 +103,7 @@ class Rqsn extends CI_Model
     {
         $this->load->model('Web_settings');
         $rqsn_id = mt_rand();
-
+        $user_id = $this->session->userdata('user_id');
         //    echo "Ok";exit();
 
         //Data inserting into invoice table
@@ -113,6 +113,7 @@ class Rqsn extends CI_Model
             'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Requisition'),
             'from_id' => $this->input->post('to_id', true),
             'to_id'  => $this->input->post('from_id', true),
+            'user_id'  => $user_id,
             'status'   => 1,
         );
         //        $datarq = array(
@@ -1739,12 +1740,13 @@ class Rqsn extends CI_Model
     public function get_rqsn_transfer($rqsn_id = null, $outlet_id = null, $limit = null)
     {
         $this->load->model('warehouse');
-        $this->db->select('a.*, b.*, sz.size_name, cl.color_name, d.product_name, d.product_model')
+        $this->db->select('a.*, b.*, sz.size_name,x.first_name,x.last_name, cl.color_name, d.product_name, d.product_model')
             ->from('rqsn a')
             ->join('rqsn_details b', 'a.rqsn_id = b.rqsn_id')
             ->join('product_information d', 'd.product_id=b.product_id')
             ->join('size_list sz', 'd.size=sz.size_id', 'left')
             ->join('color_list cl', 'd.color=cl.color_id', 'left')
+            ->join('users x', 'a.send_by=x.user_id', 'left')
             ->where('a.to_id != 3')
             ->where('b.status', 3)
             ->order_by('a.date', 'desc');

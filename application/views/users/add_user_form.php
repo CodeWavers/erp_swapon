@@ -97,16 +97,16 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="outlet" class="col-sm-3 col-form-label">Outlet <i class="text-danger">*</i></label>
-                            <div class="col-sm-6">
-                                <select class="form-control" name="outlet" id="outlet" tabindex="6" required="">
-                                    {outlet_list}
-                                    <option value="{outlet_id}">{outlet_name}</option>
-                                    {/outlet_list}
-                                </select>
-                            </div>
-                        </div>
+<!--                        <div class="form-group row">-->
+<!--                            <label for="outlet" class="col-sm-3 col-form-label">Outlet <i class="text-danger">*</i></label>-->
+<!--                            <div class="col-sm-6">-->
+<!--                                <select class="form-control" name="outlet" id="outlet" tabindex="6" required="">-->
+<!--                                    {outlet_list}-->
+<!--                                    <option value="{outlet_id}">{outlet_name}</option>-->
+<!--                                    {/outlet_list}-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                         <div class="form-group row">
                             <label for="user_type" class="col-sm-3 col-form-label"><?php echo display('user_type') ?> <i class="text-danger">*</i></label>

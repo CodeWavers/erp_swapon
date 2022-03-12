@@ -430,8 +430,21 @@ class Creport extends CI_Controller
         $CI->load->model('Rqsn');
         $rqsn_details = $CI->Rqsn->get_rqsn_transfer($rqsn_id);
         $sl = 1;
+//        echo '<pre>';
+//
+//          print_r($rqsn_details);
+//          exit();
+        $rcv_by=$this->db->select('b.first_name,b.last_name')->from('outlet_warehouse a')
+            ->join('users b','a.user_id=b.user_id')->where('a.outlet_id',$rqsn_details[0]['from_id'])->get()->row();
+
         foreach ($rqsn_details as $rq) {
+
+
+
+
+
             $rq['sl'] = $sl;
+//            $rq['send_by'] = $send_by;
             $rq['balance'] = $rq['quantity'] - $rq['a_qty'];
             $new_rq[] = $rq;
             $sl++;
@@ -439,12 +452,11 @@ class Creport extends CI_Controller
 
         $data = array(
             'title'     => 'View Transfer Report',
-            'rqsn_list' => $new_rq
+            'rqsn_list' => $new_rq,
+            'rcv_by' => $rcv_by->first_name.' '.$rcv_by->last_name
         );
 
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
+
 
         $view = $CI->parser->parse('report/individual_transfer', $data, true);
         $this->template->full_admin_html_view($view);

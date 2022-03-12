@@ -1444,6 +1444,7 @@ class Invoices extends CI_Model
         $total_amount        = $this->input->post('total_price', TRUE);
         $discount_rate       = $this->input->post('discount_amount', TRUE);
         $discount_per        = $this->input->post('discount', TRUE);
+        $commission_per        = $this->input->post('comm', TRUE);
         // $tax_amount          = $this->input->post('tax',TRUE);
         $invoice_description = $this->input->post('desc', TRUE);
         $serial_n            = $this->input->post('serial_no', TRUE);
@@ -1463,6 +1464,7 @@ class Invoices extends CI_Model
             $total_price = $total_amount[$i];
             $supplier_rate = $this->supplier_price($product_id);
             $disper = $discount_per[$i];
+            $comm = $commission_per[$i];
             $discount = is_numeric($product_quantity) * is_numeric($product_rate) * is_numeric($disper) / 100;
             // $tax = $tax_amount[$i];
             // $description = $invoice_description[$i];
@@ -1480,6 +1482,7 @@ class Invoices extends CI_Model
                 'discount'           => $discount,
                 'description'        => 'Manual Sales',
                 'discount_per'       => $disper,
+                'commission_per'       => $comm,
                 // 'tax'                => $tax,
                 'paid_amount'        => $paidamount,
                 'due_amount'         => $this->input->post('due_amount', TRUE),

@@ -172,6 +172,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                         <div class="panel-body">
 
                             <?php
+
                             $sale_text= ($sale_type == 1) ?'Whole Sale':(($sale_type == 2) ?'Retail Sale' :'Aggregators Sale');
                             ?>
 

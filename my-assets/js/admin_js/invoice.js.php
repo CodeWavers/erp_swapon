@@ -5,6 +5,7 @@ $cache_file = "invoice.json";
 header('Content-Type: text/javascript; charset=utf8');
 ?>
 function addInputField(t) {
+
     var row = $("#normalinvoice tbody tr").length;
     var count = row + 1;
     var  tab1 = 0;
@@ -51,7 +52,7 @@ function addInputField(t) {
             "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
             "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  expiry_date_" + count + "' name='expiry_date[]' value=''/></td>" +
             "<td><input type='text' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0' readonly tabindex='" + tab4 + "'/></td>" +
-            "<td><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
+            "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
         document.getElementById(t).appendChild(e),
@@ -63,6 +64,19 @@ function addInputField(t) {
         document.getElementById("paidAmount").setAttribute("tabindex", tab10);
         // document.getElementById("full_paid_tab").setAttribute("tabindex", tab11);
         document.getElementById("add_invoice").setAttribute("tabindex", tab12);
+        var commision_type=$('#commission_type').val()
+
+        if (commision_type==1 ) {
+            $('.comm_th').removeClass('d-none')
+            $('.comm_th').addClass('d-inline')
+
+        }
+
+        if (commision_type==2 ) {
+            $('.comm_th').removeClass('d-inline')
+            $('.comm_th').addClass('d-none')
+        }
+
         count++
     }
 }
@@ -78,6 +92,7 @@ function quantity_calculate(item) {
     var discount = $("#discount_" + item).val();
     var total_tax = $("#total_tax_" + item).val();
     var total_discount = $("#total_discount_" + item).val();
+    var comm_item = $("#comm_" + item).val();
     var taxnumber = $("#txfieldnum").val();
     var dis_type = $("#discount_type_" + item).val();
     if (parseInt(quantity) > parseInt(available_quantity)) {
@@ -92,8 +107,14 @@ function quantity_calculate(item) {
         }
     }
 
+   // alert(comm_item)
+
+    //if (comm_item != ''){
+    //    var comm=0
+    //}
+
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
 
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
 
@@ -453,19 +474,75 @@ function  delivery_type(val){
 }
 
 "use strict";
+
+function add_customer() {
+
+    var name=$('#customer_name').val();
+
+    if ($.isNumeric(name) == true){
+        $('#mobile').val(name);
+    }else{
+        $('#m_customer_name').val(name);
+    }
+
+
+
+}
+
+function commision_add(val) {
+
+    if (val==1 ) {
+        $('.comm_th').removeClass('d-none')
+        $('.comm_th').addClass('d-inline')
+
+    }
+
+    if (val==2 ) {
+        $('#commission_tr').removeClass('d-none')
+        $('.comm_th').removeClass('d-inline')
+        $('.comm_th').addClass('d-none')
+    }
+}
 function  sale_type(val){
 
     if (val==1 || 2 || 3) {
 
+        if (val==1){
+            $('#commission_check').removeClass('d-none')
+        }else{
+            $('#commission_check').addClass('d-none')
+        }
+
+        if ( val == 2 || 3){
+
+            $('.pay_type option[value="2"]').remove();
+            $('.pay_type option[value="4"]').remove();
+        }
+
+        if (val == 1){
+            $('.pay_type').append($('<option/>', {
+                value: 2,
+                text : 'Cheque Payment'
+            }));
+            $('.pay_type').append($('<option/>', {
+                value: 4,
+                text : 'Bank Payment'
+            }));
+
+        }
+
     if(val==1 || 2){
         var style = 'block';
         document.getElementById('whole_sale').setAttribute("required", true);
+        //document.getElementById('commission_check').setAttribute("required", true);
     }else{
         var style ='none';
         document.getElementById('whole_sale').removeAttribute("required");
+        //document.getElementById('commission_check').removeAttribute("required");
     }
 
     document.getElementById('whole_sale').style.display = style;
+    //document.getElementById('commission_check').style.display = style;
 
         if(val==3){
             var style = 'block';
