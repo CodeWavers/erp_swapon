@@ -358,6 +358,8 @@ class Courier extends CI_Model
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('courier_name c', 'c.id = a.courier_id','left');
+//        $this->db->where('a.courier_paid',0);
+
 
 
         // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');

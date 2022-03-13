@@ -78,13 +78,48 @@
 
 
                                     $courier_condition = ($row['courier_condtion'] == 1) ? "Conditional" : ($row['courier_condtion'] == 2  ? "Partial" : "Unconditional");
-                                    $courier_status = ($row['courier_status'] == 1) ? "In Courier" : ($row['courier_status'] == 2  ? "On the way" : "Delivered");
+//                                    $courier_status =(
+//
+//                                            ($row['courier_status'] == 1) ? "Processing" :
+//                                                ($row['courier_status'] == 2  ? "Shipped" :
+//                                                    ($row['courier_status'] == 3) ? "Delivered":
+//                                                        ($row['courier_status'] == 4) ? "Cancelled":
+//                                                            ($row['courier_status'] == 5) ? "Returned":
+//                                                                ($row['courier_status'] == 6) ? "Exchanged": "")
+//
+//                                    );
+
+                                    if ($row['courier_status'] == 1){
+                                        $courier_status='Processing';
+                                    }
+
+                                    if ($row['courier_status'] == 2){
+                                        $courier_status='Shipped';
+
+                                    }
+                                    if ($row['courier_status'] == 3){
+
+                                        $courier_status='Delivered';
+                                    }
+                                    if ($row['courier_status'] == 4){
+
+                                        $courier_status='Cancelled';
+                                    }
+                                    if ($row['courier_status'] == 5){
+                                        $courier_status='Returned';
+
+                                    }
+                                    if ($row['courier_status'] == 6){
+
+                                        $courier_status='Exchanged';
+                                    }
 
 
 
 //
 
                                     ?>
+                                    <?php if ($row['courier_status'] != 3 || $row['courier_paid'] != 1 ) {?>
                                     <tr class="text-center">
                                         <td><?php echo $row['sl']?> </td>
 
@@ -107,9 +142,12 @@
 
                                                 <select name="courier_status" class="" id="courier_status<?=$row['sl']?>"" >
                                                     <option value="<?php echo $row['courier_status']?>"><?php echo $courier_status ?></option>
-                                                    <option value="1">In Courier</option>
-                                                    <option value="2">On the way</option>
+                                                    <option value="1">Processing</option>
+                                                    <option value="2">Shipped</option>
                                                     <option value="3">Delivered</option>
+                                                    <option value="4">Cancel</option>
+                                                    <option value="5">Returned</option>
+                                                    <option value="6">Exchanged</option>
 
                                                 </select>
                                             </div>
@@ -133,6 +171,7 @@
 
 
                                             <a href="<?php echo base_url("Cretrun_m/invoice_return_form_c/$invoice_id") ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Return"><i class="fa fa-retweet"></i></a>
+                                            <a  class="btn btn-black btn-sm "  onclick="payment_modal(<?php echo $invoice_id?>)" id="editable_table" data-toggle="tooltip" data-placement="left" title="Courier Payment"><i class="fa fa-money"></i></a>
 
 
 
@@ -141,6 +180,7 @@
 
 
                                     </tr>
+                                        <?php }?>
                                     <input type ="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash();?>">
                                 <?php } ?>
                                 </tbody>
@@ -148,16 +188,199 @@
 
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
+
+        <div class="modal fade modal-success updateModal" id="updateProjectModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3 class="modal-title">Courier Payment</h3>
+                    </div>
+
+                    <div class="modal-body">
+                        <div id="customeMessage" class="alert hide"></div>
+                        <form method="post" id="ProjectEditForm" action="<?php echo base_url('Ccourier/courier_payment/') ?>">
+                            <div class="panel-body">
+                                <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                                <input type="hidden" name="invoice_id" id="invoice_id" value="">
+                                <div class="form-group row">
+
+                                    <div class="col-sm-6" id="payment_from_1">
+                                        <div class="form-group row">
+                                            <label for="payment_type" class="col-sm-4 col-form-label">
+                                                Receive By <i class="text-danger">*</i></label>
+                                            <div class="col-sm-6">
+                                                <select name="paytype" id="paytype" class="form-control" required="" onchange="bank_paymet(this.value)">
+                                                    <option value="1">Cash</option>
+                                                    <option value="2">Bank</option>
+                                                    <option value="3">Bkash</option>
+                                                    <option value="4">Nagad</option>
+
+                                                </select>
+
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6" id="bank_div">
+                                        <div class="form-group row">
+                                            <label for="bank" class="col-sm-3 col-form-label"><?php
+                                                echo display('bank');
+                                                ?></label>
+                                            <div class="col-sm-8">
+                                                <select name="bank_id" class="form-control bankpayment" id="bank_id">
+                                                    <option value="">Select Location</option>
+                                                    <?php foreach ($bank_list as $bank) { ?>
+                                                        <option value="<?php echo $bank['bank_id'] ?>"><?php echo $bank['bank_name']; ?> (<?php echo $bank['ac_number']; ?>)</option>
+                                                    <?php } ?>
+                                                </select>
+
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" id="bkash_div">
+                                        <div class="form-group row">
+                                            <label for="bank" class="col-sm-3 col-form-label">Bkash</label>
+                                            <div class="col-sm-8">
+                                                <select name="bkash_id" class="form-control bankpayment" id="bkash_id">
+                                                    <option value="">Select Location</option>
+                                                    <?php foreach ($bkash_list as $bkash) { ?>
+                                                        <option value="<?php echo $bkash['bkash_id'] ?>"><?php echo $bkash['bkash_no']; ?> (<?php echo $bkash['ac_name']; ?>)</option>
+                                                    <?php } ?>
+                                                </select>
+
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" id="nagad_div">
+                                        <div class="form-group row">
+                                            <label for="bank" class="col-sm-3 col-form-label">Nagad</label>
+                                            <div class="col-sm-8">
+                                                <select name="nagad_id" class="form-control bankpayment" id="nagad_id">
+                                                    <option value="">Select Location</option>
+                                                    <?php foreach ($nagad_list as $nagad) { ?>
+                                                        <option value="<?php echo $nagad['nagad_id'] ?>"><?php echo $nagad['nagad_no']; ?> (<?php echo $nagad['ac_name']; ?>)</option>
+                                                    <?php } ?>
+                                                </select>
+
+                                            </div>
+
+
+
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+
+
+
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+                        <button type="submit" id="ProjectUpdateConfirmBtn" class="btn btn-success">Update</button>
+                    </div>
+                    <!--                    <div class="modal-footer">-->
+                    <!---->
+                    <!--                        <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>-->
+                    <!---->
+                    <!--                        <input type="submit" id="ProjectUpdateConfirmBtn" class="btn btn-success" value="Submit">-->
+                    <!--                    </div>-->
+                    <?php echo form_close() ?>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
     </section>
 </div>
 
 <script type="text/javascript">
 
+        function payment_modal(id){
+
+            // alert(id)
+            $('#updateProjectModal').modal('show');
+            $('#invoice_id').val(id)
+
+        }
+
+        "use strict";
+
+        function bank_paymet(val) {
+            if (val == 2) {
+                var style = 'block';
+                document.getElementById('bank_id').setAttribute("required", true);
+            } else {
+                var style = 'none';
+                document.getElementById('bank_id').removeAttribute("required");
+            }
+
+            document.getElementById('bank_div').style.display = style;
+            if (val == 3) {
+                var style = 'block';
+                document.getElementById('bkash_id').setAttribute("required", true);
+            } else {
+                var style = 'none';
+                document.getElementById('bkash_id').removeAttribute("required");
+            }
+
+            document.getElementById('bkash_div').style.display = style;
+            if (val == 4) {
+                var style = 'block';
+                document.getElementById('nagad_id').setAttribute("required", true);
+            } else {
+                var style = 'none';
+                document.getElementById('nagad_id').removeAttribute("required");
+            }
+
+            document.getElementById('nagad_div').style.display = style;
+        }
 
 
+        $(document).ready(function() {
+            var paytype = $("#editpayment_type").val();
+            if (paytype == 2) {
+                $("#bank_div").css("display", "block");
+            } else {
+                $("#bank_div").css("display", "none");
+            }
+
+            if (paytype == 3) {
+                $("#bkash_div").css("display", "block");
+            } else {
+                $("#bkash_div").css("display", "none");
+            }
+
+            if (paytype == 4) {
+                $("#nagad_div").css("display", "block");
+            } else {
+                $("#nagad_div").css("display", "none");
+            }
+
+            $(".bankpayment").css("width", "100%");
+        });
 
 function add_and_delete(e) {
     var a = e.parentNode.parentNode;
@@ -323,6 +546,9 @@ function add_and_delete(e) {
                 { "width": "5%", "targets": 9 }
             ]
         });
+
+
+
 
 
 

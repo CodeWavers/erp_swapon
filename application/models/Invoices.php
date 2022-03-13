@@ -1097,7 +1097,9 @@ class Invoices extends CI_Model
                 );
                 $this->db->insert('acc_transaction', $dc);
 
-
+//                $this->db->set('courier_paid',1);
+//                $this->db->where('invoice_id',$invoice_id);
+//                $this->db->update('invoice');
 
             }
 
