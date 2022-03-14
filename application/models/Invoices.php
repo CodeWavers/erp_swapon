@@ -2222,6 +2222,7 @@ class Invoices extends CI_Model
                         c.*,
                         d.product_id,
                         d.product_name,
+                        d.image,
                         d.product_details,
                         d.unit,
                         d.product_model,

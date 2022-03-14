@@ -649,11 +649,60 @@ class Linvoice
         $amount_inword = $CI->numbertowords->convert_number($totalbal);
         $user_id = $invoice_detail[0]['sales_by'];
         $users = $CI->Invoices->user_invoice_data($user_id);
+
+
+        if ($invoice_detail[0]['delivery_type'] == 1){
+            $dt='Pick Up';
+        }
+        if ($invoice_detail[0]['delivery_type'] == 2){
+            $dt='Courier';
+        }
+
+        if ($invoice_detail[0]['payment_type'] == 1){
+            $pt='Cash';
+        }
+
+        if ($invoice_detail[0]['payment_type'] == 4){
+            $pt='Bank';
+        }
+        if ($invoice_detail[0]['payment_type'] == 3){
+            $pt='Bkash';
+        }
+        if ($invoice_detail[0]['payment_type'] == 6){
+            $pt='Card';
+        }
+        if ($invoice_detail[0]['payment_type'] == 2){
+            $pt='Cheque';
+        }
+
+        if ($invoice_detail[0]['sale_type'] == 1){
+            $st='Whole Sale';
+        }
+        if ($invoice_detail[0]['sale_type'] == 3){
+            $st='Aggregators Sale';
+        }
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
+
+
         $data = array(
             'title'             => display('invoice_details'),
             'balance'        => $customer_balance[0]['balance'],
             'pay_type' => $invoice_detail[0]['payment_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
+            'dt'        => $dt,
+            'pt'        => $pt,
+            'st'        => $st,
+            'con'        => $con,
+            'condition_cost'        => $invoice_detail[0]['condition_cost'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
             'outlet_name'        => $outlet[0]['outlet_name'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
@@ -697,8 +746,16 @@ class Linvoice
         // echo '<pre>';
         // print_r($data);
         // exit();
+        $pay_type=$invoice_detail[0]['sale_type'];
 
-        $chapterList = $CI->parser->parse('invoice/invoice_html_manual', $data, true);
+        if ($pay_type == 2 ){
+            $chapterList = $CI->parser->parse('invoice/pos_dell_arte_invoice_html_manual', $data, true);
+
+        }else{
+            $chapterList = $CI->parser->parse('invoice/invoice_html_manual_new', $data, true);
+
+        }
+//        $chapterList = $CI->parser->parse('invoice/invoice_html_manual', $data, true);
         return $chapterList;
     }
     public function invoice_chalan_html_data_manual($invoice_id)
