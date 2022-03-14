@@ -301,6 +301,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
                                 </table>
+                                <?php if($delivery_type == 2){ ?>
                                 <div class="condition_tag text-danger text-center text-uppercase" >
 
                                     <h3>{con}</h3>
@@ -310,7 +311,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <?php } ?>
 
                                 </div>
-
+                                <?php } ?>
                             </div>
 
 

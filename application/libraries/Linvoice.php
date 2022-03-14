@@ -697,6 +697,7 @@ class Linvoice
             'title'             => display('invoice_details'),
             'balance'        => $customer_balance[0]['balance'],
             'pay_type' => $invoice_detail[0]['payment_type'],
+            'delivery_type'        => $invoice_detail[0]['delivery_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
             'dt'        => $dt,
             'pt'        => $pt,
