@@ -200,10 +200,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <address style="margin-top: 0;">
                                                     <strong class="company_name_p">{company_name}</strong><br>
                                                     <abbr>{address}</abbr><br>
-                                                    <abbr><?php echo display('email') ?>
-                                                        :</abbr>  {email}<br>
-                                                    <abbr><?php echo display('mobile') ?>
-                                                        :</abbr> {mobile}<br>
+                                                    <nobr><abbr><?php echo display('email') ?>
+                                                            :</abbr>  {email}</nobr><br>
+                                                    <nobr><abbr><nobr><?php echo display('mobile') ?>
+                                                                :</abbr> {mobile}</nobr><br>
 
                                                     <abbr><b>
                                                             {/company_info}
@@ -224,8 +224,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 ?>
                                                 <address >
                                                     <h4><b>Shipped To:</b></h4>
-                                                    <abbr>Name: <?php echo $shipping_address->name?></abbr><br>
-                                                    <abbr>Mobile: <?php echo $shipping_address->phone?></abbr><br>
+                                                    <abbr><nobr>Name: <?php echo $shipping_address->name?></nobr></nobr></abbr><br>
+                                                    <abbr><nobr>Mobile: <?php echo $shipping_address->phone?></nobr></abbr><br>
                                                     <abbr>Address: <?php echo $shipping_address->address?></abbr><br>
                                                 </address>
                                             </div>
@@ -245,10 +245,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <address style="margin-top:0;" >
                                                     <h4><b>Order Information:</b></h4>
-                                                    <abbr>Order No: <?php echo $or[0]->code?></abbr><br>
-                                                    <abbr>Date: <?php echo  date('m/d/Y',$or[0]->date)?></abbr><br>
-                                                    <abbr>Payment Method: <?php echo $or[0]->payment_type ?></abbr><br>
-                                                    <abbr>Shipping Method: <?php echo $resp?></abbr><br>
+                                                    <abbr<nobr>Order No: <?php echo $or[0]->code?></nobr></abbr><br>
+                                                    <abbr<nobr>Date: <?php echo  date('m/d/Y',$or[0]->date)?></nobr></abbr><br>
+                                                    <abbr<nobr>Payment Method: <?php echo $or[0]->payment_type ?></nobr></abbr><br>
+                                                    <abbr<nobr>Shipping Method: <?php echo $resp?></nobr></abbr><br>
 <!--                                                    <abbr><b>Sale Type:{st}</b></abbr><br>-->
 
 
