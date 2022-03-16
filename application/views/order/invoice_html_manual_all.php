@@ -198,7 +198,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
                                                 <address style="margin-top: 0;">
-                                                    <strong class="company_name_p">{company_name}</strong><br>
+                                                    <nobr><strong class="company_name_p">{company_name}</strong></nobr><br>
                                                     <abbr>{address}</abbr><br>
                                                     <nobr><abbr><?php echo display('email') ?>
                                                             :</abbr>  {email}</nobr><br>

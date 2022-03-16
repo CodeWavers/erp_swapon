@@ -176,18 +176,18 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
 
-                                    <address style="margin-top: 0;">
-                                      <strong class="company_name_p">{company_name}</strong><br>
-                                        <abbr>{address}</abbr><br>
-                                        <abbr><?php echo display('email') ?>
-                                                :</abbr>  {email}<br>
-                                        <abbr><?php echo display('mobile') ?>
-                                        :</abbr> {mobile}<br>
+                                        <address style="margin-top: 0;">
+                                            <nobr><strong class="company_name_p">{company_name}</strong></nobr><br>
+                                            <abbr>{address}</abbr><br>
+                                            <nobr><abbr><?php echo display('email') ?>
+                                                    :</abbr>  {email}</nobr><br>
+                                            <nobr><abbr><nobr><?php echo display('mobile') ?>
+                                                        :</abbr> {mobile}</nobr><br>
 
-                                        <abbr><b>
-                                        {/company_info}
-                                        <abbr>{tax_regno}</abbr>
-                                    </address>
+                                            <abbr><b>
+                                                    {/company_info}
+
+                                        </address>
 
 
 
@@ -195,20 +195,16 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 <td>
 
-                                    <div class="col-sm-3 " style="margin-bottom: 20px;">
+                                    <div class="col-sm-3 " style="margin-top: 0.7in" >
 
 
-<!--                                        <abbr>Name:{customer_name}</abbr>-->
-<!--                                        <div style="display: flex; justify-content: space-between; margin-top: -0.1cm">-->
-<!--                                            <h4><b>Contact No.:</b> {contact_no}</h4>-->
-<!--                                        </div>-->
 
 
-                                        <address style="margin-top: 0;">
+                                        <address>
                                             <h4><b>Shipped To:</b></h4>
-                                            <abbr>Name:{customer_name}</abbr><br>
-                                            <abbr>Mobile:{customer_mobile}</abbr><br>
-                                            <abbr>Address:{customer_address}</abbr><br>
+                                            <abbr <nobr>Name: {customer_name}</nobr></abbr><br>
+                                            <abbr <nobr>Mobile: {customer_mobile}</nobr></abbr><br>
+                                            <abbr>Address: {customer_address}</abbr><br>
                                         </address>
                                     </div>
 
@@ -227,11 +223,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <address style="margin-top:0;" >
                                                     <h4><b>Order Information:</b></h4>
-                                                    <abbr>Order No:{invoice_no}</abbr><br>
-                                                    <abbr>Date:{final_date}</abbr><br>
-                                                    <abbr>Payment Method:{pt}</abbr><br>
-                                                    <abbr>Shipping Method:{dt}</abbr><br>
-                                                    <abbr><b>Sale Type:{st}</b></abbr><br>
+                                                    <abbr><nobr>Order No: {invoice_no}</nobr></abbr><br>
+                                                    <abbr><nobr>Date: {final_date}</nobr></abbr><br>
+                                                    <abbr><nobr>Payment Method: {pt}</nobr></abbr><br>
+                                                    <abbr><nobr>Shipping Method: {dt}</nobr></abbr><br>
+                                                    <abbr><nobr><b>Sale Type: {st}</b></nobr></abbr><br>
 
 
                                                 </address>
