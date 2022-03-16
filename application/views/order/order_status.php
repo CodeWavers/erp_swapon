@@ -178,7 +178,7 @@
                                             </td>
                                             <td class="text-right">
 
-                                                <?php echo $order[0]->shipping_method?> </td>
+                                                <?php echo $shipping_method?> </td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -216,10 +216,10 @@
                                         </thead>
                                         <tbody>
 
-
+                                        <?php  $sl=1 ?>
                                         <?php foreach ($order as $od) {?>
                                         <tr>
-                                            <td>1</td>
+                                            <td><?php echo $sl++ ?></td>
                                             <td>
                                                 <a href="https://dev.swaponsworld.com/product/<?php echo $od->slug?>" target="_blank"><img height="50" src="https://dev.swaponsworld.com/public/<?php echo $od->thumbnail_img?>"></a>
                                             </td>
@@ -478,7 +478,7 @@
                             <form action="" method="POST" id="payment_form">
                                 <div class="col-md-8">
                                     <div class="content-group">
-                                        <label>Oder ID:</label>
+                                        <label>Order ID:</label>
 
                                         <input type="text" value="<?php echo $order[0]->code?>" name="code" class="form-control" readonly="">
 

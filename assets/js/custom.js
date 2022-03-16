@@ -858,6 +858,7 @@ $(function ($) {
       },
     },
     columns: [
+      { data: "check" },
       { data: "sl" },
       { data: "order_code" },
       { data: "date" },

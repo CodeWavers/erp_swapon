@@ -78,32 +78,30 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                            <div class="form-group row">
-                                    <label for="customer_name" class="col-sm-4 col-form-label">Branch Name <i class="text-danger">*</i></label>
+                                <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
-                                    <select name="branch_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
-                                            <option value="">Select One</option>
-                                            <?php foreach ($branch_list as $b_list) { ?>
-                                                <option value="<?php echo html_escape($b_list['branch_id']) ?>" <?php echo $b_list['branch_id'] == $courier_id ? $b_list['branch_id'] : 'selected';  ?>>
-                                                     <?php echo html_escape($b_list['branch_name']); ?>
-                                                </option>
+                                        <select name="courier_id" id="" class="form-control"  tabindex="3">
+                                            <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
+
+                                            <?php foreach ($courier_list as $courier) { ?>
+                                                <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="customer_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
+                            <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Branch Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
-                                    <select name="courier_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
-                                            <option value="">Select One</option>
-                                            <?php foreach ($branch_list as $c_list) { ?>
-                                            <option value="<?php echo html_escape($c_list['courier_id']) ?>" <?php echo $c_list['courier_id'] == $courier_id ? $b_list['branch_id'] : 'selected'; ?>>
-                                                    <?php echo html_escape($c_list['courier_name']); ?>
-                                            </option>
-                                            <?php } ?>
-                                    </select>
+                                    <select name="branch_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                        <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
+                                        <?php foreach ($branch_list as $b) { ?>
+                                            <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                        <?php } ?>
+                                        </select>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 

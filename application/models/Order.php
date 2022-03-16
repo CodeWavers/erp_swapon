@@ -310,10 +310,12 @@ class Order extends CI_Model
             if ($this->permission1->method('manage_product', 'update')->access()) {
                 $button .= ' <a href="'  . 'Corder/order_status_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 //                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                $button .= '  <a href="' . 'Corder/invoice_inserted_data/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+
             }
 
 //            $image = '<img src="https://swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
-//            $product_name = '<a href="'  . 'Cproduct/product_details/' . $record->id . '">' . $record->code . '</a>';
+            $check = '<input name="select_check[]" class="'  . 'check_' . $record->id . '" value="' . $record->id . '" type="checkbox">';
 
 
 
@@ -334,6 +336,7 @@ class Order extends CI_Model
             $data[] = array(
                 'sl'               => $sl,
                 'order_code'     =>  $record->code,
+                'check'     =>  $check,
                 'date'            =>  date('m/d/Y H:i:s', $record->date),
                 'num_of_product'   =>  $no_of_product,
                 'customer_name'      =>  $shipping_address->name,

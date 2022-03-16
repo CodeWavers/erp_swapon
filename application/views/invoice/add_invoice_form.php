@@ -196,7 +196,7 @@
                                         <select name="courier_id" class="form-control bankpayment" id="">
                                             <option value="">Select Location</option>
                                             <?php foreach ($courier_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                                <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>

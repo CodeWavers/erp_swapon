@@ -95,5 +95,42 @@ class Corder extends CI_Controller
 
     }
 
+    public function invoice_inserted_data($invoice_id)
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lorder');
+        $content = $CI->lorder->invoice_html_data_manual($invoice_id);
+        $this->template->full_admin_html_view($content);
+    }
+    public function print_order()
+    {
+
+
+
+        if(isset($_POST['submit'])){
+
+            if(!empty($_POST['select_check'])) {
+
+
+
+                foreach($_POST['select_check'] as $value){
+
+                    $data['id'][] =  $value;
+
+                }
+
+            }
+
+        }
+//        echo '<pre>';print_r($data);
+//        exit();
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lorder');
+        $content = $CI->lorder->invoice_html_data_all(json_encode($_POST['select_check']));
+        $this->template->full_admin_html_view($content);
+    }
+
 
 }

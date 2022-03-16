@@ -365,7 +365,7 @@ class Linvoice
         $employee_list    = $CI->Service->employee_list();
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
         $payment_info = $CI->Invoices->payment_details($invoice_id);
-
+        $courier_list        = $CI->Courier->get_courier_list();
         $bank_list      = $CI->Web_settings->bank_list();
         $bkash_list     = $CI->Web_settings->bkash_list();
         $branch_list    = $CI->Courier->get_branch_list();
@@ -421,13 +421,16 @@ class Linvoice
             'discount_type'   => $currency_details[0]['discount_type'],
             'bank_list'       => $bank_list,
             'bkash_list'      => $bkash_list,
-            'branch_list'     => $branch_list,
             'employee_list' => $employee_list,
             'bank_id'         => $invoice_detail[0]['bank_id'],
             'bkash_id'        => $invoice_detail[0]['bkash_id'],
             'nagad_list'     => $nagad_list,
             'card_list'     => $card_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
             'courier_id'      => $invoice_detail[0]['courier_id'],
+            'courier_name'      => $invoice_detail[0]['courier_name'],
+            'branch_name'      => $invoice_detail[0]['branch_name'],
             'branch_id'       => $invoice_detail[0]['branch_id'],
             'paytype'         => $invoice_detail[0]['payment_type'],
             'delivery_type'   => $invoice_detail[0]['delivery_type'],
@@ -436,7 +439,7 @@ class Linvoice
             'sales_first_name'   => $invoice_detail[0]['customer_name'],
             // 'sales_last_name'   => $invoice_detail[0]['last_name'],
         );
-//         echo "<pre>" ;print_r($data);exit();
+    //   echo "<pre>" ;print_r($data);exit();
         $chapterList = $CI->parser->parse('invoice/edit_invoice_form', $data, true);
         return $chapterList;
     }
