@@ -154,6 +154,8 @@
                                             </td>
                                             <td class="text-right">
                                                 <?php echo  date('m/d/Y H:i:s',$order[0]->date)?>
+                                                <input type="hidden" name="invoice_date" value="<?php echo date('Y-m-d',$order[0]->date)?>" >
+
                                             </td>
                                         </tr>
                                         <tr>
@@ -198,7 +200,7 @@
                                                 Description
                                             </th>
                                             <th class="text-uppercase">
-                                                Delivery Type
+                                                Current Stock
                                             </th>
                                             <th class="min-col text-center text-uppercase">
                                                 Qty
@@ -217,30 +219,41 @@
                                         <tbody>
 
                                         <?php  $sl=1 ?>
-                                        <?php foreach ($order as $od) {?>
+                                        <?php foreach ($order as $od) {
+                                            $CI = &get_instance();
+                                            $CI->load->model('Reports');
+                                            $current_stock = $CI->Reports->current_stock($od->id,1);
+
+//                                            echo '<pre>';print_r($current_stock);exit();
+                                            ?>
                                         <tr>
                                             <td><?php echo $sl++ ?></td>
                                             <td>
-                                                <a href="https://dev.swaponsworld.com/product/<?php echo $od->slug?>" target="_blank"><img height="50" src="https://dev.swaponsworld.com/public/<?php echo $od->thumbnail_img?>"></a>
+                                                <a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><img height="50" src="<?php echo ecom_url() ?>public/<?php echo $od->thumbnail_img?>"></a>
                                             </td>
                                             <td>
-                                                <strong><a href="https://dev.swaponsworld.com/product/<?php echo $od->slug?>" target="_blank"><?php echo $od->name?></a></strong>
+                                                <input type="number" name="product_id[]" value="<?php echo $od->id?>"   value="<?php echo $od->id?>" id="product_id<?php echo $od->id?>">
+
+                                                <strong><a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><?php echo $od->name?></a></strong>
                                                 <small><?php echo $od->variation?></small>
                                             </td>
                                             <td>
+                                                <?php echo $current_stock ?>
                                             </td>
                                             <td class="text-center">
-                                                <input type="number" value="<?php echo $od->quantity?>" onchange="qtyUpdate(<?php echo $od->id?>)" id="order<?php echo $od->id?>">
+                                                <input type="number" name="quantity[]" value="<?php echo $od->quantity?>" onchange="qtyUpdate(<?php echo $od->id?>)" id="order<?php echo $od->id?>">
 
                                             </td>
                                             <td class="text-center">
                                                 <?php echo $currency.' '.$od->price/$od->quantity?>
                                                 <s style="font-size:11px"><?php echo $currency.' '.$od->unit_price?></s>
-                                                <input type="hidden" value="<?php echo $od->price/$od->quantity?>"  id="price<?php echo $od->id?>">
+                                                <input type="text" value="<?php echo $od->price/$od->quantity?>"  name="price[]" id="price<?php echo $od->id?>">
 
                                             </td>
                                             <td class="text-center">
                                                 <?php echo $currency.' '.$od->price?>
+                                                <input type="text" value="<?php echo $od->price?>"  name="total_price[]" id="total_price<?php echo $od->id?>">
+
                                             </td>
                                             <td class="text-center">
 
@@ -264,7 +277,7 @@
                             <div class="row">
                                 <div class="col-md-6">
 
-                                        <input type="hidden" name="_token" value="Hk9jJQWcjdJHasykJ1FfsoFUksB5LLRY9YNhcGGU">                                <div class="form-group">
+<!--                                        <input type="hidden" name="_token" value="Hk9jJQWcjdJHasykJ1FfsoFUksB5LLRY9YNhcGGU">                                <div class="form-group">-->
                                             <label for="sc">Shipping Cost</label>
                                             <input type="number" class="form-control" step="0.1" name="shipping_cost" placeholder="Add Shipping Charge" value="<?php echo $order_details[0]->shipping_cost?>">
                                             <input type="hidden" class="form-control" step="0.1" name="order_id" id="order_id"  value="<?php echo $order_details[0]->order_id?>">
@@ -288,6 +301,7 @@
                                                     <strong>Sub Total :</strong>
                                                 </td>
                                                 <td>
+                                                    <input type="number" class="form-control" step="0.1" name="sub_total" placeholder="" value="<?php echo array_sum(array_column($order,'price'))?>">
 
                                                     <?php echo array_sum(array_column($order,'price'))?>
                                                 </td>
@@ -329,6 +343,7 @@
                                                 <th>Flat Discount</th>
                                                 <td class="currency">
                                                     <?php echo $currency.' '.$order[0]->flat_discount?>
+                                                    <input type="number" class="form-control" step="0.1" name="discount" placeholder="" value="<?php echo $order[0]->flat_discount?>">
 
                                                 </td>
                                             </tr>
@@ -337,6 +352,7 @@
                                                 <th>Grand Total</th>
                                                 <td class="currency">
                                                     <?php echo $currency.' '.$order[0]->grand_total?>
+                                                    <input type="number" name="grand_total" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total?>">
 
                                                 </td>
                                             </tr>
@@ -368,6 +384,7 @@
                                                          echo $paidtotal;
                                                          ?>
 
+                                                    <input type="number" name="paid_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $paidtotal?>">
 
 
 
@@ -381,6 +398,9 @@
                                                 </td>
                                                 <td class="text-bold h4">
                                                     <?php echo $currency.' '.($order[0]->grand_total-$paidtotal)?>
+                                                    <input type="number" name="due_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total-$paidtotal?>">
+                                                    <input type="text" name="order_id" class="form-control" step="0.1" placeholder="" value="<?php echo $order_id?>">
+
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -389,9 +409,9 @@
                                 </div>
                             </div>
 
-                            <div class="text-right no-print">
-                                <a href="https://dev.swaponsworld.com/admin/invoice/admin/359" class="btn btn-default"><i class="demo-pli-printer icon-lg"></i></a>
-                            </div>
+<!--                            <div class="text-right no-print">-->
+<!--                                <a href="https://dev.swaponsworld.com/admin/invoice/admin/359" class="btn btn-default"><i class="demo-pli-printer icon-lg"></i></a>-->
+<!--                            </div>-->
                             <div class="col-12">
                                 <h3>All Transactions</h3>
                                 <table class="table table-bordered table-hover">
@@ -551,6 +571,7 @@
                             <div class="modal-body">
 
 
+
                                 <div class=" form-group">
                                     <label>Customer Name</label>
                                     <input type="text" class="form-control mb-3" placeholder="Customer Name" name="name" value="<?php echo $customer_name?>" required="">
@@ -676,7 +697,29 @@
                 {
 
                     toastr.success('Data Updated')
-                    location.reload();
+                    // location.reload();
+
+
+                },
+                error: function(xhr)
+                {
+
+
+                    alert('failed!');
+                }
+            });
+            $.ajax({
+                url: '<?= base_url() ?>' + "Corder/order_invoice/",
+                method : $(this).attr('method'),
+                // dataType : 'json',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function(d)
+                {
+
+                   // toastr.success('Data Updated')
+                     location.reload();
 
 
                 },

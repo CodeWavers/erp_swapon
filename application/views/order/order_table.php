@@ -71,6 +71,32 @@
 
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <?php echo form_open('Admin_dashboard/retrieve_warrenty_dateWise_PurchaseReports', array('class' => 'form-inline', 'method' => 'get')) ?>
+                                    <?php date_default_timezone_set("Asia/Dhaka");
+                                    $today = date('Y-m-d');
+                                    ?>
+                                    <div class="form-group">
+                                        <label class="" for="from_date"><?php echo display('start_date') ?></label>
+                                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $today ?>" placeholder="<?php echo display('start_date') ?>" >
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="" for="to_date">End Date</label>
+                                        <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo $today ?>">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success"><?php echo display('search') ?></button>
+
+                                    <?php echo form_close() ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="panel-body">
                         <div class="table-responsive">
                             <?php echo form_open('Corder/print_order', array('class' => 'form-vertical', 'id' => 'invoice_update')) ?>

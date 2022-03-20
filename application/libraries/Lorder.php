@@ -48,8 +48,10 @@ class Lorder
         $CI = &get_instance();
         $CI->load->model('Products');
         $CI->load->model('Web_settings');
+        $CI->load->model('Reports');
         $company_info = $CI->Products->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
 
 
 

@@ -90,6 +90,10 @@ if (!function_exists('base_url')) {
     {
         return get_instance()->config->api_url($uri);
     }
+    function ecom_url($uri = '', $protocol = NULL)
+    {
+        return get_instance()->config->ecom_url($uri);
+    }
 }
 
 // ------------------------------------------------------------------------

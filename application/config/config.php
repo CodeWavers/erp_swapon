@@ -40,6 +40,7 @@ $root = $protocol . $_SERVER['HTTP_HOST'] . $dirname;
 
 $config["base_url"] = $root;
 $config["api_url"] = 'https://dev.swaponsworld.com/api/v1';
+$config["ecom_url"] = 'https://dev.swaponsworld.com/';
 
 /*
 |--------------------------------------------------------------------------

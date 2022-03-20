@@ -340,6 +340,25 @@ class CI_Config {
 
 		return $api_url.$this->_uri_string($uri);
 	}
+	public function ecom_url($uri = '', $protocol = NULL)
+	{
+        $ecom_url = $this->slash_item('ecom_url');
+
+		if (isset($protocol))
+		{
+			// For protocol-relative links
+			if ($protocol === '')
+			{
+                $ecom_url = substr($ecom_url, strpos($ecom_url, '//'));
+			}
+			else
+			{
+                $ecom_url = $protocol.substr($ecom_url, strpos($ecom_url, '://'));
+			}
+		}
+
+		return $ecom_url.$this->_uri_string($uri);
+	}
 
 	// -------------------------------------------------------------
 

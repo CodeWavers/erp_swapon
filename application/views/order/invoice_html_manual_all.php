@@ -63,7 +63,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-bd">
+
                     <div id="printableArea" class="watermark" onload="printDiv('printableArea')">
+
                         <style type="text/css" scoped>
                             .panel-body:last-child {
                                 page-break-after: auto;
@@ -156,7 +158,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                         </div>
 
                         <?php foreach ($order as $or) {?>
-                        <div class="panel-body" >
+                        <div class="panel-body" style="margin-bottom:2in ">
 
                             <div>
 
@@ -391,34 +393,35 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
 
-                            <div class="footer" style="padding: 0.5in;">
-
-                                <div class="row">
-                                    <div class="col-sm-4">
-
-                                        <div class="inv-footer-l">
-                                            <span style="display: block;"><?php echo display('authorised_by') ?>:<span>
-                                                    <span class="text-center" style="display: block;border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-
-                                        <div class="inv-footer-r">
-                                            <span style="display: block;"><?php echo display('received_by') ?>:</span>
-                                            <span class="text-center" style="display: block; border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
+<!--                            <div class="footer" style="padding: 0.5in;">-->
+<!---->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-sm-4">-->
+<!---->
+<!--                                        <div class="inv-footer-l">-->
+<!--                                            <span style="display: block;">--><?php //echo display('authorised_by') ?><!--:<span>-->
+<!--                                                    <span class="text-center" style="display: block;border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!---->
+<!--                                    <div class="col-sm-4">-->
+<!---->
+<!--                                        <div class="inv-footer-r">-->
+<!--                                            <span style="display: block;">--><?php //echo display('received_by') ?><!--:</span>-->
+<!--                                            <span class="text-center" style="display: block; border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!---->
+<!---->
+<!--                                </div>-->
+<!---->
+<!---->
+<!--                            </div>-->
 
                         </div>
                         <?php } ?>
                     </div>
+
                 </div>
 
                 <div class="panel-footer text-left">
