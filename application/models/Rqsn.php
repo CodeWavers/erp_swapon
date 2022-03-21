@@ -1788,6 +1788,31 @@ class Rqsn extends CI_Model
         $this->db->join('product_information c', 'c.product_id = b.product_id');
         $this->db->group_by('b.product_id');
         $this->db->where('a.status', 1);
+        $this->db->where('b.isaprv', 1);
+
+        // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');
+
+        $query = $this->db->get();
+
+        // echo '<pre>'; print_r($query->result_array()); die();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+
+        return false;
+
+
+    }
+    public function get_item_list_finalize()
+    {
+        $this->db->select('a.*, b.*, c.*');
+        $this->db->from('pr_rqsn a');
+        $this->db->join('pr_rqsn_details b', 'b.pr_rqsn_id = a.pr_rqsn_id');
+        $this->db->join('product_information c', 'c.product_id = b.product_id');
+        $this->db->group_by('b.product_id');
+        $this->db->where('a.status', 1);
+        $this->db->where('b.isaprv', 2);
 
         // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');
 

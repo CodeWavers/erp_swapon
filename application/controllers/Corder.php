@@ -115,12 +115,16 @@ class Corder extends CI_Controller
         $CI->auth->check_admin_auth();
         $CI->load->library('lproduct');
         $CI->load->model('Web_settings');
+        $CI->load->model('Rqsn');
         $CI->load->model('Settings');
         $CI->load->model('Products');
+
+        $role_list    = $CI->Rqsn->role_list();
+
+//        echo '<pre>';print_r($role_list[0]['id']);exit();
         $tablecolumn = $this->db->list_fields('tax_collection');
-        $num_column = count($tablecolumn) - 4;
         $invoice_id = $this->input->post('order_id', TRUE);
-//        $invoice_id = strtoupper($invoice_id);
+
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
         //$quantity = $this->input->post('product_quantity', TRUE);
@@ -131,93 +135,116 @@ class Corder extends CI_Controller
 
 
         $pay_type = $this->input->post('type', TRUE);
-//        $p_amount = $this->input->post('p_amount', TRUE);
-        // echo '<pre>'; print_r(count($pay_type)); exit();
 
-        $datainv = array(
-            'invoice_id'      => $invoice_id,
-//            'customer_id'     => $customer_id,
-//            'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
-            'date'            => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
-            'total_amount'    => $this->input->post('grand_total', TRUE),
-//            'total_tax'       => $this->input->post('total_tax', TRUE),
-//            'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
-//            'customer_mobile_two'       => $this->input->post('customer_mobile_two', TRUE),
-            'invoice'         => $invoice_no_generated,
-//            'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : ''),
-//            'invoice_discount' => $this->input->post('invoice_discount', TRUE),
-            'total_discount'  => $this->input->post('discount', TRUE),
-            'paid_amount'     => $this->input->post('paid_amount', TRUE),
-            'due_amount'      => $this->input->post('due_amount', TRUE),
-//            'prevous_due'     => $this->input->post('previous', TRUE),
-            'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
-            'outlet_id'       =>  'OpSoxJvBbbS8Rws',
-//            'condition_cost'   => $this->input->post('condition_cost', TRUE),
-//            'commission'   => $this->input->post('commission', TRUE),
-            'sale_type'   => 2,
-//            'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
-            'sales_by'        => $createby,
-            'status'          => 2,
-            // 'payment_type'    =>  $this->input->post('paytype',TRUE),
-//            'delivery_type'    =>  $delivery_type,
-            // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
-            // 'bkash_id'         => (!empty($this->input->post('bkash_id', TRUE)) ? $this->input->post('bkash_id', TRUE) : null),
-            // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),
-//            'courier_status'      => 1,
+        $check_order = $this->db->select('*')->from('invoice')->where(array('invoice_id'=> $invoice_id))->get()->num_rows();
 
-        );
+        if ($check_order > 0) {
 
 
-        // echo '<pre>'; print_r($datainv); exit();
-        $this->db->insert('invoice', $datainv);
+            $datainv = array(
+                'invoice_id' => $invoice_id,
 
-        $quantity                = $this->input->post('quantity', TRUE);
-        $rate                = $this->input->post('price', TRUE);
-        $p_id                = $this->input->post('product_id', TRUE);
-        $total_amount        = $this->input->post('total_price', TRUE);
-       // $discount_rate       = $this->input->post('discount_amount', TRUE);
-      // $discount_per        = $this->input->post('discount', TRUE);
-      // $commission_per        = $this->input->post('comm', TRUE);
-        // $tax_amount          = $this->input->post('tax',TRUE);
-       // $invoice_description = $this->input->post('desc', TRUE);
-       // $serial_n            = $this->input->post('serial_no', TRUE);
-        // $warehouse           =$this->input->post('warehouse',TRUE);
-      //  $warrenty            = $this->input->post('warrenty_date', TRUE);
-        // $expiry            = $this->input->post('expiry_date', TRUE);
+                'date' => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
+                'total_amount' => $this->input->post('grand_total', TRUE),
+                'invoice' => $invoice_no_generated,
+                'total_discount' => $this->input->post('discount', TRUE),
+                'paid_amount' => $this->input->post('paid_amount', TRUE),
+                'due_amount' => $this->input->post('due_amount', TRUE),
+
+                'shipping_cost' => $this->input->post('shipping_cost', TRUE),
+                'outlet_id' => 'OpSoxJvBbbS8Rws',
+                'sale_type' => 2,
+                'payment_type' => $pay_type,
+                'sales_by' => $createby,
+                'status' => 2,
 
 
-        for ($i = 0, $n = count($p_id); $i < $n; $i++) {
-            $product_quantity = $quantity[$i];
-            // $war=$warehouse[$i];
-            // $warrenty_date = $warrenty[$i];
-            // $expiry_date = $expiry[$i];
-            $product_rate = $rate[$i];
-            $product_id = $p_id[$i];
-            $total_price = $total_amount[$i];
-            $supplier_rate = $this->supplier_price($product_id);
-           // $discount = is_numeric($product_quantity) * is_numeric($product_rate) * is_numeric($disper) / 100;
-            // $tax = $tax_amount[$i];
-            // $description = $invoice_description[$i];
-
-            $data1 = array(
-                'invoice_details_id' => date('Ymdhs'),
-                'invoice_id'         => $invoice_id,
-                'product_id'         => $product_id,
-                'quantity'           => $product_quantity,
-                'rate'               => $product_rate,
-                'description'        => 'Order Sales',
-                // 'tax'                => $tax,
-                'supplier_rate'      => $supplier_rate,
-                'total_price'        => $total_price,
-                'status'             => 2
             );
 
 
-            if (!empty($quantity)) {
-                //echo '<pre>';print_r($data1);exit();
-                $this->db->insert('invoice_details', $data1);
-                //$this->db->insert('product_purchase_details', $data2);
-                // $this->db->insert('product_purchase_details', $data2);
+            // echo '<pre>'; print_r($datainv); exit();
+            //  $this->db->insert('invoice', $datainv);
+
+            $quantity = $this->input->post('quantity', TRUE);
+            $current_stock = $this->input->post('stock', TRUE);
+            $rate = $this->input->post('price', TRUE);
+            $p_id = $this->input->post('product_id', TRUE);
+            $total_amount = $this->input->post('total_price', TRUE);
+            $variation = $this->input->post('variation', TRUE);
+
+
+            for ($i = 0, $n = count($p_id); $i < $n; $i++) {
+                $product_quantity = $quantity[$i];
+                $stock = $current_stock[$i];
+                $var = $variation[$i];
+                $product_rate = $rate[$i];
+                $product_id = $p_id[$i];
+                $total_price = $total_amount[$i];
+                $supplier_rate = $this->supplier_price($product_id);
+
+
+                $data1 = array(
+                    'invoice_details_id' => date('Ymdhs'),
+                    'invoice_id' => $invoice_id,
+                    'product_id' => $product_id,
+                    'quantity' => $product_quantity,
+                    'rate' => $product_rate,
+                    'description' => 'Order Sales',
+                    // 'tax'                => $tax,
+                    'supplier_rate' => $supplier_rate,
+                    'total_price' => $total_price,
+                    'status' => 2
+                );
+
+
+                if (!empty($quantity)) {
+
+                    if ($product_quantity > $stock) {
+                        $pr_rqsn_id = date('Ymdhs');
+                        $datarq = array(
+                            'pr_rqsn_id' => $pr_rqsn_id,
+                            'date' => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
+                            'details' => 'Production Requisition',
+                            'to_id' => $role_list[0]['id'],
+                            'status' => 1,
+                        );
+
+
+                        $this->db->insert('pr_rqsn', $datarq);
+                        $check_product = $this->db->select('*')->from('pr_rqsn_details')->where(array('product_id' => $product_id))->get()->num_rows();
+                        $exist_qty = $this->db->select('quantity')->from('pr_rqsn_details')->where(array('product_id' => $product_id))->get()->row()->quantity;
+
+                        if ($check_product > 0) {
+
+                            $this->db->set(array('quantity' => $product_quantity + $exist_qty, 'last_updated' => date('Y-m-d')));
+                            $this->db->where('product_id', $product_id);
+                            $this->db->update('pr_rqsn_details');
+
+                        } else {
+                            $rqsn_details = array(
+                                'pr_rqsn_detail_id' => mt_rand(),
+                                'pr_rqsn_id' => $pr_rqsn_id,
+                                'product_id' => $product_id,
+                                'quantity' => $product_quantity - $stock,
+//                            'unit'                => $un,
+                                'variation' => $var,
+                                'status' => 1,
+                                'create_date' => date('Y-m-d'),
+                                //temporary added
+                                'isaprv' => 2,
+//                'isrcv'                => 1,
+
+                            );
+
+                            $this->db->insert('pr_rqsn_details', $rqsn_details);
+
+
+                        }
+                    }
+                    //echo '<pre>';print_r($data1);exit();
+                    //  $this->db->insert('invoice_details', $data1);
+
+                }
             }
         }
     }

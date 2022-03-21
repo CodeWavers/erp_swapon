@@ -232,13 +232,17 @@
                                                 <a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><img height="50" src="<?php echo ecom_url() ?>public/<?php echo $od->thumbnail_img?>"></a>
                                             </td>
                                             <td>
-                                                <input type="number" name="product_id[]" value="<?php echo $od->id?>"   value="<?php echo $od->id?>" id="product_id<?php echo $od->id?>">
+                                                <input type="hidden" name="product_id[]" value="<?php echo $od->id?>"    id="product_id<?php echo $od->id?>">
+                                                <input type="hidden" name="variation[]" value="<?php echo $od->variation?>"    id="variation<?php echo $od->id?>">
 
                                                 <strong><a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><?php echo $od->name?></a></strong>
                                                 <small><?php echo $od->variation?></small>
+
                                             </td>
                                             <td>
                                                 <?php echo $current_stock ?>
+                                                <input type="hidden" name="stock[]" value="<?php echo $current_stock?>"  id="stock<?php echo $od->id?>">
+
                                             </td>
                                             <td class="text-center">
                                                 <input type="number" name="quantity[]" value="<?php echo $od->quantity?>" onchange="qtyUpdate(<?php echo $od->id?>)" id="order<?php echo $od->id?>">
@@ -247,12 +251,12 @@
                                             <td class="text-center">
                                                 <?php echo $currency.' '.$od->price/$od->quantity?>
                                                 <s style="font-size:11px"><?php echo $currency.' '.$od->unit_price?></s>
-                                                <input type="text" value="<?php echo $od->price/$od->quantity?>"  name="price[]" id="price<?php echo $od->id?>">
+                                                <input type="hidden" value="<?php echo $od->price/$od->quantity?>"  name="price[]" id="price<?php echo $od->id?>">
 
                                             </td>
                                             <td class="text-center">
                                                 <?php echo $currency.' '.$od->price?>
-                                                <input type="text" value="<?php echo $od->price?>"  name="total_price[]" id="total_price<?php echo $od->id?>">
+                                                <input type="hidden" value="<?php echo $od->price?>"  name="total_price[]" id="total_price<?php echo $od->id?>">
 
                                             </td>
                                             <td class="text-center">
@@ -276,6 +280,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
+                                        <div class="form-group">
 
 <!--                                        <input type="hidden" name="_token" value="Hk9jJQWcjdJHasykJ1FfsoFUksB5LLRY9YNhcGGU">                                <div class="form-group">-->
                                             <label for="sc">Shipping Cost</label>
@@ -290,7 +295,7 @@
                                             <label for="sc">Discount Amount</label>
                                             <input type="number" class="form-control" step="0.1" name="discount_charge" placeholder="Add Discount Amount" value="<?php echo $order[0]->flat_discount?>">
                                         </div>
-
+                                </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="clearfix">
@@ -301,7 +306,7 @@
                                                     <strong>Sub Total :</strong>
                                                 </td>
                                                 <td>
-                                                    <input type="number" class="form-control" step="0.1" name="sub_total" placeholder="" value="<?php echo array_sum(array_column($order,'price'))?>">
+                                                    <input type="hidden" class="form-control" step="0.1" name="sub_total" placeholder="" value="<?php echo array_sum(array_column($order,'price'))?>">
 
                                                     <?php echo array_sum(array_column($order,'price'))?>
                                                 </td>
@@ -343,7 +348,7 @@
                                                 <th>Flat Discount</th>
                                                 <td class="currency">
                                                     <?php echo $currency.' '.$order[0]->flat_discount?>
-                                                    <input type="number" class="form-control" step="0.1" name="discount" placeholder="" value="<?php echo $order[0]->flat_discount?>">
+                                                    <input type="hidden" class="form-control" step="0.1" name="discount" placeholder="" value="<?php echo $order[0]->flat_discount?>">
 
                                                 </td>
                                             </tr>
@@ -352,7 +357,7 @@
                                                 <th>Grand Total</th>
                                                 <td class="currency">
                                                     <?php echo $currency.' '.$order[0]->grand_total?>
-                                                    <input type="number" name="grand_total" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total?>">
+                                                    <input type="hidden" name="grand_total" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total?>">
 
                                                 </td>
                                             </tr>
@@ -384,7 +389,7 @@
                                                          echo $paidtotal;
                                                          ?>
 
-                                                    <input type="number" name="paid_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $paidtotal?>">
+                                                    <input type="hidden" name="paid_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $paidtotal?>">
 
 
 
@@ -398,8 +403,8 @@
                                                 </td>
                                                 <td class="text-bold h4">
                                                     <?php echo $currency.' '.($order[0]->grand_total-$paidtotal)?>
-                                                    <input type="number" name="due_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total-$paidtotal?>">
-                                                    <input type="text" name="order_id" class="form-control" step="0.1" placeholder="" value="<?php echo $order_id?>">
+                                                    <input type="hidden" name="due_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total-$paidtotal?>">
+                                                    <input type="hidden" name="order_id" class="form-control" step="0.1" placeholder="" value="<?php echo $order_id?>">
 
                                                 </td>
                                             </tr>

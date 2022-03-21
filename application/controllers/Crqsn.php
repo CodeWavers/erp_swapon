@@ -655,6 +655,15 @@ class Crqsn extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function item_finalize()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lrqsn');
+        $content = $CI->lrqsn->item_list_finalize();
+        $this->template->full_admin_html_view($content);
+    }
+
     public function update_pr_rqsn()
     {
         $product_id=$_POST["product_id"];
@@ -675,6 +684,32 @@ class Crqsn extends CI_Controller
 
 
         $this->db->where('product_id', $product_id);
+        $this->db->update('pr_rqsn_details',$data);
+
+        //            $sq = "UPDATE rqsn_details
+        //            SET purchase_status = 2
+        //            WHERE rqsn_detail_id = ".$product_id.";";
+        //
+        //            $this->db->query($sq);
+
+
+
+        json_encode($data);
+    }
+
+    public function update_item_finalize()
+    {
+        $product_id=$_POST["product_id"];
+        $variation=$_POST["variation"];
+
+        $data = array(
+            "quantity"  => $_POST["quantity"],
+            "last_updated"  => date('Y-m-d'),
+            "isaprv"  => '1',
+        );
+
+
+        $this->db->where(array('product_id'=> $product_id));
         $this->db->update('pr_rqsn_details',$data);
 
         //            $sq = "UPDATE rqsn_details

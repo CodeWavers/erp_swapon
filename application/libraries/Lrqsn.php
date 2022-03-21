@@ -363,4 +363,27 @@ class Lrqsn
         return $CI->parser->parse('production/production_list_form', $data, true);
 
     }
+    public function item_list_finalize()
+    {
+        $CI = & get_instance();
+        $CI->load->model('Rqsn');
+
+        $rqsn_list = $CI->Rqsn->get_item_list_finalize();
+
+
+        $i = 0;
+        foreach ($rqsn_list as $k => $v) {
+            $i++;
+            $rqsn_list[$k]['sl'] = $i + $CI->uri->segment(3);
+        }
+
+        $data = array(
+            'title'     => 'Item Finalize ',
+            'pur_list'  => $rqsn_list
+        );
+        // echo '<pre>'; print_r($data); die();
+
+        return $CI->parser->parse('production/item_finalize', $data, true);
+
+    }
 }

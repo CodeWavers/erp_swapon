@@ -1120,7 +1120,7 @@ $birthday = $CI->Reports->birthday_noti();
       <!-- Production menu start -->
       <?php if ($this->permission1->method('add_production', 'create')->access()) { ?>
         <li class="treeview <?php
-                            if ($this->uri->segment('2') == ("index") || $this->uri->segment('2') == ("Cproduction") || $this->uri->segment('2') == ("Cproduction") || $this->uri->segment('2') == ("Cproduction")) {
+                            if ($this->uri->segment('2') == ("receive_production") || $this->uri->segment('2') == ("transfer_production") || $this->uri->segment('2') == ("manage_production") || $this->uri->segment('2') == ("pr_rqsn_form") && $this->uri->segment('2') == ("production_list") || $this->uri->segment('2') == ("item_finalize") ) {
                               echo "active";
                             } else {
                               echo " ";
@@ -1185,7 +1185,7 @@ $birthday = $CI->Reports->birthday_noti();
               <?php } ?>
               <?php if ($this->permission1->method('approval', 'create')->access() || $this->permission1->method('aprove_rqsn', 'create')->access() || $this->permission1->method('aprove_rqsn_outlet', 'create')->access() || $this->permission1->method('aprove_rqsn_purchase', 'create')->access()) { ?>
                   <li class="treeview <?php
-                  if ($this->uri->segment('2') == ("index") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn")) {
+                  if ($this->uri->segment('2') == ("pr_rqsn_form") || $this->uri->segment('2') == ("production_list") || $this->uri->segment('2') == ("item_finalize")) {
                       echo "active";
                   } else {
                       echo " ";
@@ -1200,7 +1200,7 @@ $birthday = $CI->Reports->birthday_noti();
                       <ul class="treeview-menu">
 
                           <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
-                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") || $this->uri->segment('2') == ("pr_rqsn_form") ) {
                                   echo "active";
                               } else {
                                   echo " ";
@@ -1208,12 +1208,21 @@ $birthday = $CI->Reports->birthday_noti();
                           <?php } ?>
 
                           <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
-                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("production_list")) {
                                   echo "active";
                               } else {
                                   echo " ";
                               } ?>"><a href="<?php echo base_url('Crqsn/production_list') ?>">Production Status</a></li>
                           <?php } ?>
+
+                          <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("item_finalize")) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url('Crqsn/item_finalize') ?>">Item Finalize</a></li>
+                          <?php } ?>
+
 
 
                       </ul>
