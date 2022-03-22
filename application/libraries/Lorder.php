@@ -49,11 +49,16 @@ class Lorder
         $CI->load->model('Products');
         $CI->load->model('Web_settings');
         $CI->load->model('Reports');
+        $CI->load->model('Courier');
         $company_info = $CI->Products->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
 
 
-
+        $bank_list          = $CI->Web_settings->bank_list();
+        $bkash_list        = $CI->Web_settings->bkash_list();
+        $nagad_list        = $CI->Web_settings->nagad_list();
+        $courier_list        = $CI->Courier->get_courier_list();
+        $branch_list        = $CI->Courier->get_branch_list();
 
         $url = api_url()."order/show/$id";
 
@@ -160,6 +165,11 @@ class Lorder
         $data['order_id']    = $id;
         $data['shipping_method']    = $shipping_method;
         $data['company_info']     = $company_info;
+        $data['bank_list']     = $bank_list;
+        $data['bkash_list']     = $bkash_list;
+        $data['nagad_list']     = $nagad_list;
+        $data['courier_list']     = $courier_list;
+        $data['branch_list']     = $branch_list;
         $data['currency']         = $currency_details[0]['currency'];
 
        // echo '<pre>';print_r($shipping_method);exit();

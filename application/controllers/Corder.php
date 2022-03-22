@@ -138,7 +138,7 @@ class Corder extends CI_Controller
 
         $check_order = $this->db->select('*')->from('invoice')->where(array('invoice_id'=> $invoice_id))->get()->num_rows();
 
-        if ($check_order > 0) {
+        if ($check_order <= 0) {
 
 
             $datainv = array(
@@ -247,6 +247,265 @@ class Corder extends CI_Controller
                 }
             }
         }
+    }
+
+
+
+    public function courier_transaction()
+    {
+
+
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+        $invoice_no_generated = $this->number_generator();
+
+        $Vdate = $this->input->post('invoice_date', TRUE);
+        $invoice_id = $this->input->post('order_id', TRUE);
+        $order_no = $this->input->post('order_no', TRUE);
+
+        $courier_condtion = $this->input->post('courier_condtion', TRUE);
+
+        $courier_id = $this->input->post('courier_id', TRUE);
+        $corifo = $this->db->select('*')->from('courier_name')->where('courier_id', $courier_id)->get()->row();
+        $headn_cour = $corifo->id . '-' . $corifo->courier_name;
+        $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
+        $courier_headcode = $coainfo_cor->HeadCode;
+        $courier_name= $corifo->courier_name;
+
+        $grand_total=$this->input->post('grand_total_price', TRUE);
+        $paid_amount=$this->input->post('paid_amount', TRUE);
+        $due_amount=$this->input->post('due_amount', TRUE);
+        $shipping_cost=$this->input->post('delivery_charge', TRUE);
+        $condition_cost=$this->input->post('condition_cost', TRUE);
+
+        $courier_pay=$grand_total-($shipping_cost+$condition_cost);
+        $courier_pay_partial=$due_amount-($shipping_cost+$condition_cost);
+        $pay_amount=($due_amount)-(($shipping_cost+$condition_cost)*2);
+
+
+        $DC=$this->input->post('delivery_charge', TRUE)+$this->input->post('condition_charge', TRUE);
+
+        if ( $courier_condtion ==  1){
+
+
+            $cordr = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier Debit For  e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+                'Credit'          => 0,
+                'Debit'         =>   (!empty($courier_pay) ? $courier_pay : null),
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cordr);
+            $cor_credit = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier Credit For  e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+                'Debit'          => 0,
+                'Credit'         =>   (!empty($pay_amount) ? $pay_amount : null),
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cor_credit);
+
+            $corcc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Delivery Charge and Condition Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+                'Credit'          => (!empty($DC) ? $DC : null),
+                'Debit'         =>   0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $corcc);
+
+            $dc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  4040104,
+                'Narration'      =>  'Delivery Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Debit'          =>   (!empty($this->input->post('delivery_charge', TRUE)) ? $this->input->post('delivery_charge', TRUE): 0),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $dc);
+
+            $condition_charge = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  4040105,
+                'Narration'      =>  'Condition Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Debit'          =>   (!empty($this->input->post('condition_charge', TRUE)) ? $this->input->post('condition_charge', TRUE): 0),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $condition_charge);
+
+        }
+
+        if ( $courier_condtion ==  2){
+
+            $cordr = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier Debit For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+                'Debit'          =>  (!empty($pay_amount) ? $pay_amount : null),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cordr);
+
+            $cor_credit= array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Courier Credit For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+                'Credit'          =>  (!empty($courier_pay_partial) ? $courier_pay_partial : null),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+
+            $this->db->insert('acc_transaction', $cor_credit);
+
+            $corcc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Delivery Charge and Condition Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+                'Credit'          => (!empty($DC) ? $DC : null),
+                'Debit'         =>   0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $corcc);
+
+            $dc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  4040104,
+                'Narration'      =>  'Delivery Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Debit'          =>   (!empty($this->input->post('delivery_charge', TRUE)) ? $this->input->post('delivery_charge', TRUE): 0),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $dc);
+
+            $condition_charge = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  4040105,
+                'Narration'      =>  'Condition Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Debit'          =>   (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $condition_charge);
+
+        }
+
+        if($courier_condtion == 3){
+
+//            $cosdr = array(
+//                'VNo'            =>  $invoice_id,
+//                'Vtype'          =>  'INV-CC',
+//                'VDate'          =>  $Vdate,
+//                'COAID'          =>  $customer_headcode,
+//                'Narration'      =>  'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+//                'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
+//                'Credit'         =>  0,
+//                'IsPosted'       =>  1,
+//                'CreateBy'       => $createby,
+//                'CreateDate'     => $createdate,
+//                'IsAppove'       => 1
+//            );
+//            $this->db->insert('acc_transaction', $cosdr);
+
+            $corcr = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  $courier_headcode,
+                'Narration'      =>  'Delivery Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Credit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $corcr);
+
+            $dc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  4040104,
+                'Narration'      =>  'Delivery Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $dc);
+
+//                $this->db->set('courier_paid',1);
+//                $this->db->where('invoice_id',$invoice_id);
+//                $this->db->update('invoice');
+
+        }
+
+        redirect('Corder/order_status_form/'.$invoice_id);
+
+       // echo '<pre>';print_r($_POST) ;exit();
     }
 
     public function supplier_price($product_id)

@@ -97,10 +97,10 @@
 <!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_payment_status-container"><span class="select2-selection__rendered" id="select2-update_payment_status-container" title="Paid">Paid</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
                                 </div>
                                 <div class="col-lg-3">
-                                    <label for="update_delivery_status&quot;&quot;">Delivery Status</label>
-                                    <select name="delivery_status" class="form-control demo-select2 select2-hidden-accessible" data-minimum-results-for-search="Infinity" id="update_delivery_status" tabindex="-1" aria-hidden="true">
-                                        <option value="<?php echo $order[0]->delivery_status?>" selected ><?php echo $order[0]->delivery_status?></option>
+                                    <label for="update_delivery_status">Delivery Status</label>
 
+
+                                    <select name="delivery_status" id="sel_type" class="form-control sel_type" onchange="shipped_status(this.value)" tabindex="3">
                                         <option value="Pending">Pending</option>
                                         <option value="Order Confirmed">Order Confirmed</option>
                                         <option value="Processing">Processing</option>
@@ -109,6 +109,8 @@
                                         <option value="Returned">Returned</option>
                                         <option value="Hold">Hold</option>
                                         <option value="Canceled">Canceled</option>
+
+
                                     </select>
 <!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_delivery_status-container"><span class="select2-selection__rendered" id="select2-update_delivery_status-container" title="Delivered">Delivered</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
                                 </div>
@@ -490,6 +492,95 @@
                 </div>
             </div>
 
+        <div class="modal" tabindex="-1" role="dialog"  id="courier_modal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Courier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <?php echo form_open('Corder/courier_transaction', array('class' => 'form-vertical', 'id' => '', 'name' => '')) ?>
+
+                    <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="bank" class="col-sm-3 col-form-label">Courier Name <i class="text-danger">*</i></label>
+                        <div class="col-sm-6">
+
+                            <select name="courier_id" class="form-control bankpayment" id="">
+                                <option value="">Select Location</option>
+                                <?php foreach ($courier_list as $courier) { ?>
+                                    <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <label for="bank" class="col-sm-3 col-form-label">Branch<i class="text-danger">*</i></label>
+                        <div class="col-sm-6">
+                            <select name="branch_id" class="form-control bankpayment" id="">
+                                <option value="">Select Location</option>
+                                <?php foreach ($branch_list as $b) { ?>
+                                    <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                    </div>
+
+                        <div class="form-group row">
+                            <label for="bank" class="col-sm-3 col-form-label">Condition<i class="text-danger">*</i></label>
+                            <div class="col-sm-6">
+                                <select name="courier_condtion" class="form-control bankpayment" id="" onchange="courier_charge(this.value)">
+                                    <option value="">Select Condition</option>
+                                    <option value="1">Conditional</option>
+                                    <option value="2">Partial</option>
+                                    <option value="3">Unconditional</option>
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="bank" class="col-sm-3 col-form-label">Delivery Charge<i class="text-danger">*</i></label>
+                            <div class="col-sm-6">
+                                   <input name="delivery_charge" value="" placeholder="0.00" class="form-control" id="delivery_charge">
+                                <input type="hidden" name="sh_cost" value="<?php echo $order_details[0]->shipping_cost?>" placeholder="0.00" class="form-control" id="sh_cost">
+                                <input type="hidden" name="order_id" class="form-control" step="0.1" placeholder="" value="<?php echo $order_id?>">
+                                <input type="hidden" name="order_no" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->code?>">
+                                <input type="hidden" name="grand_total_price" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->grand_total?>">
+                                <input type="hidden" name="paid_amount" class="form-control" step="0.1" placeholder="" value="<?php echo $paidtotal?>">
+                                <input type="hidden" name="due_amount" class="form-control" step="0.1" placeholder="" value="<?php  echo $order[0]->grand_total - $paidtotal?>">
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row d-none" id="condition_tr">
+                            <label for="bank" class="col-sm-3 col-form-label">Condition Charge<i class="text-danger">*</i></label>
+                            <div class="col-sm-6">
+                                <input name="condition_charge" value="" placeholder="0.00" class="form-control" id="condition_charge">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+
+                    <?php echo form_close() ?>
+
+                </div>
+            </div>
+        </div>
+
             <div class="modal fade in" id="paymentForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: none; padding-right: 26px;">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -682,6 +773,12 @@
 <!-- Invoice Report End -->
 
 <script type="text/javascript">
+    // $( "#update_payment_status" ).click(function() {
+    //     alert( "hellloooooo" );
+    // });
+
+
+
     $(document).ready(function() {
         "use strict";
         var frm = $("#update_order");
@@ -781,7 +878,7 @@
             $.ajax({
                 url: '<?= api_url() ?>' + "order/address_update/"+'<?= $order_id ?>',
                 method : $(this).attr('method'),
-                // dataType : 'json',
+                 // dataType : 'json',
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
@@ -895,11 +992,46 @@
 
     }
 
+    function shipped_status(val) {
+
+        if (val== 'Shipped'){
+            $('#courier_modal').modal('show');
+
+        }
+
+
+    }
+
+    function  courier_charge(val){
+
+
+
+        if (val==1 ) {
+            $('#condition_tr').removeClass('d-none')
+        }
+
+        if (val==2 ) {
+            $('#condition_tr').removeClass('d-none')
+        }
+
+        if (val==3 ) {
+            $('#condition_tr').addClass('d-none')
+        }
+
+
+
+    }
+
+
 
     $("body").on("click",".remove_cheque",function(e){
         $(this).parents('.cheque').remove();
         //the above method will remove the user_data div
     });
+
+
+
+
 </script>
 
 

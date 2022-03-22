@@ -462,7 +462,7 @@ class Ccourier extends CI_Controller {
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
 
-        $corifo = $this->db->select('*')->from('courier_name')->where('id', $inv_details->courier_id)->get()->row();
+        $corifo = $this->db->select('*')->from('courier_name')->where('courier_id', $inv_details->courier_id)->get()->row();
         $headn_cour = $inv_details->courier_id . '-' . $corifo->courier_name;
         $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
         $courier_headcode = $coainfo_cor->HeadCode;

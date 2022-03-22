@@ -2754,4 +2754,29 @@ class Admin_dashboard extends CI_Controller
         $view = $CI->parser->parse('report/paytype_wise_sales_report', $data, true);
         $this->template->full_admin_html_view($view);
     }
+
+    public function data_clean()
+    {
+        $this->db->truncate('acc_transaction');
+        $this->db->truncate('invoice');
+        $this->db->truncate('invoice_details');
+        $this->db->truncate('product_purchase');
+        $this->db->truncate('product_purchase_details');
+        $this->db->truncate('production_goods');
+        $this->db->truncate('production_mix');
+        $this->db->truncate('production_mix_details');
+        $this->db->truncate('pr_rqsn');
+        $this->db->truncate('pr_rqsn_details');
+        $this->db->truncate('production_mix_details');
+        $this->db->truncate('rqsn');
+        $this->db->truncate('rqsn_details');
+        $this->db->truncate('rqsn_return');
+        $this->db->truncate('transfer_items');
+        $this->db->truncate('transfer_item_details');
+        $this->db->truncate('opening_inventory');
+
+        echo 'Data has been cleaned';
+
+
+    }
 }

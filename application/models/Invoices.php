@@ -895,8 +895,8 @@ class Invoices extends CI_Model
             $courier_condtion = $this->input->post('courier_condtion', TRUE);
 
             $courier_id = $this->input->post('courier_id', TRUE);
-            $corifo = $this->db->select('*')->from('courier_name')->where('id', $courier_id)->get()->row();
-            $headn_cour = $courier_id . '-' . $corifo->courier_name;
+            $corifo = $this->db->select('*')->from('courier_name')->where('courier_id', $courier_id)->get()->row();
+            $headn_cour = $corifo->id . '-' . $corifo->courier_name;
             $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
             $courier_headcode = $coainfo_cor->HeadCode;
             $courier_name= $corifo->courier_name;
