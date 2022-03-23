@@ -100,7 +100,9 @@
                                     <label for="update_delivery_status">Delivery Status</label>
 
 
-                                    <select name="delivery_status" id="sel_type" class="form-control sel_type" onchange="shipped_status(this.value)" tabindex="3">
+                                    <select name="delivery_status" id="sel_type" class="form-control sel_type" onchange="shipped_status(this.value)" tabindex="3" required>
+                                        <option value="<?php echo $order[0]->delivery_status?>" selected ><?php echo $order[0]->delivery_status?></option>
+
                                         <option value="Pending">Pending</option>
                                         <option value="Order Confirmed">Order Confirmed</option>
                                         <option value="Processing">Processing</option>
@@ -509,10 +511,24 @@
                         <div class="col-sm-6">
 
                             <select name="courier_id" class="form-control bankpayment" id="">
-                                <option value="">Select Location</option>
-                                <?php foreach ($courier_list as $courier) { ?>
-                                    <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
-                                <?php } ?>
+
+                                <?php
+
+                                if (!empty($invoice_details)) { ?>
+                                    <option value="<?php echo $invoice_details[0]['courier_id']?>"><?php echo $invoice_details[0]['courier_name']?></option>
+                                    <?php foreach ($courier_list as $courier) { ?>
+                                        <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                    <?php } ?>
+
+                              <?php  } else { ?>
+
+                                    <option value="">Select Courier</option>
+                                    <?php foreach ($courier_list as $courier) { ?>
+                                        <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                    <?php } ?>
+                              <?php  } ?>
+
+
                             </select>
                         </div>
 
@@ -521,23 +537,70 @@
                         <label for="bank" class="col-sm-3 col-form-label">Branch<i class="text-danger">*</i></label>
                         <div class="col-sm-6">
                             <select name="branch_id" class="form-control bankpayment" id="">
+                                <?php
+
+                                if (!empty($invoice_details)) { ?>
+                                    <option value="<?php echo $invoice_details[0]['branch_id']?>"><?php echo $invoice_details[0]['branch_name']?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                    <?php foreach ($branch_list as $b) { ?>
+                                        <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                    <?php } ?>
+
+                                <?php  } else { ?>
                                 <option value="">Select Location</option>
                                 <?php foreach ($branch_list as $b) { ?>
                                     <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
                                 <?php } ?>
+
+                                <?php  } ?>
                             </select>
                         </div>
 
                     </div>
 
+
                         <div class="form-group row">
                             <label for="bank" class="col-sm-3 col-form-label">Condition<i class="text-danger">*</i></label>
                             <div class="col-sm-6">
+
                                 <select name="courier_condtion" class="form-control bankpayment" id="" onchange="courier_charge(this.value)">
+
+                                <?php
+
+                                if (!empty($invoice_details)) {
+
+                                    if ($invoice_details[0]['courier_condtion'] == 1){
+
+                                        $courier_condition='Conditional';
+
+                                    }
+
+                                    if ($invoice_details[0]['courier_condtion'] == 2){
+
+                                        $courier_condition='Partial';
+
+                                    }
+
+                                    if ($invoice_details[0]['courier_condtion'] == 3){
+
+                                        $courier_condition='Unconditional';
+
+                                    }
+
+                                    ?>
+                                    <option value="<?php echo $invoice_details[0]['courier_condtion']?>"><?php echo $courier_condition?></option>
                                     <option value="">Select Condition</option>
                                     <option value="1">Conditional</option>
                                     <option value="2">Partial</option>
                                     <option value="3">Unconditional</option>
+
+                                <?php  } else { ?>
+                                    <option value="">Select Condition</option>
+                                    <option value="1">Conditional</option>
+                                    <option value="2">Partial</option>
+                                    <option value="3">Unconditional</option>
+
+                                <?php  } ?>
+
 
                                 </select>
                             </div>
@@ -547,7 +610,7 @@
                         <div class="form-group row">
                             <label for="bank" class="col-sm-3 col-form-label">Delivery Charge<i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                   <input name="delivery_charge" value="" placeholder="0.00" class="form-control" id="delivery_charge">
+                                   <input name="delivery_charge" value="<?php echo !empty($invoice_details) ? $invoice_details[0]['shipping_cost'] : 0; ?>" placeholder="0.00" class="form-control" id="delivery_charge">
                                 <input type="hidden" name="sh_cost" value="<?php echo $order_details[0]->shipping_cost?>" placeholder="0.00" class="form-control" id="sh_cost">
                                 <input type="hidden" name="order_id" class="form-control" step="0.1" placeholder="" value="<?php echo $order_id?>">
                                 <input type="hidden" name="order_no" class="form-control" step="0.1" placeholder="" value="<?php echo $order[0]->code?>">
@@ -558,20 +621,30 @@
                             </div>
 
                         </div>
-
-                        <div class="form-group row d-none" id="condition_tr">
+                        <?php  if ($courier_condition == 'Conditional' || 'Partial') { ?>
+                        <div class="form-group row" id="condition_tr">
                             <label for="bank" class="col-sm-3 col-form-label">Condition Charge<i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input name="condition_charge" value="" placeholder="0.00" class="form-control" id="condition_charge">
+                                <input name="condition_charge" value="<?php echo !empty($invoice_details) ? $invoice_details[0]['condition_cost'] : 0; ?>" placeholder="0.00" class="form-control" id="condition_charge">
                             </div>
 
                         </div>
+
+                        <?php }else{?>
+                            <div class="form-group row d-none" id="condition_tr">
+                                <label for="bank" class="col-sm-3 col-form-label">Condition Charge<i class="text-danger">*</i></label>
+                                <div class="col-sm-6">
+                                    <input name="condition_charge" value="<?php echo !empty($invoice_details) ? $invoice_details[0]['condition_cost'] : 0; ?>" placeholder="0.00" class="form-control" id="condition_charge">
+                                </div>
+
+                            </div>
+                        <?php } ?>
                     </div>
 
 
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
+                        <button type="submit" class="btn btn-primary" id="status_change">Save changes</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
 
@@ -611,7 +684,7 @@
                                             <option value="5">Cheque</option>
                                             <option value="6">Others</option>
                                         </select>
-                                    </div>
+                                    </div>a
                                 </div>
                                 <div class="col-md-8">
                                     <div class="content-group">
@@ -773,9 +846,17 @@
 <!-- Invoice Report End -->
 
 <script type="text/javascript">
-    // $( "#update_payment_status" ).click(function() {
-    //     alert( "hellloooooo" );
-    // });
+    $( "#status_change" ).click(function() {
+
+        $.ajax({
+            url: '<?= api_url() ?>' + "order/status_change/"+'<?= $order_id ?>',
+            method: "get",
+            success: function(data) {
+                console.log("success");
+            },
+
+        });
+    });
 
 
 

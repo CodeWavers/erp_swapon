@@ -47,11 +47,13 @@ class Lorder
     {
         $CI = &get_instance();
         $CI->load->model('Products');
+        $CI->load->model('Invoices');
         $CI->load->model('Web_settings');
         $CI->load->model('Reports');
         $CI->load->model('Courier');
         $company_info = $CI->Products->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $invoice_details = $CI->Invoices->retrieve_invoice_order_data($id);
 
 
         $bank_list          = $CI->Web_settings->bank_list();
@@ -170,9 +172,10 @@ class Lorder
         $data['nagad_list']     = $nagad_list;
         $data['courier_list']     = $courier_list;
         $data['branch_list']     = $branch_list;
+        $data['invoice_details']     = $invoice_details;
         $data['currency']         = $currency_details[0]['currency'];
 
-       // echo '<pre>';print_r($shipping_method);exit();
+      //  echo '<pre>';print_r($invoice_details[0]['courier_name']);exit();
         $productList = $CI->parser->parse('order/order_status', $data, true);
         return $productList;
     }

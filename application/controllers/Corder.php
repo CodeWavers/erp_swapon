@@ -138,7 +138,7 @@ class Corder extends CI_Controller
 
         $check_order = $this->db->select('*')->from('invoice')->where(array('invoice_id'=> $invoice_id))->get()->num_rows();
 
-        if ($check_order <= 0) {
+
 
 
             $datainv = array(
@@ -163,7 +163,16 @@ class Corder extends CI_Controller
 
 
             // echo '<pre>'; print_r($datainv); exit();
-            //  $this->db->insert('invoice', $datainv);
+
+        if ($check_order <= 0) {
+            $this->db->insert('invoice', $datainv);
+        }else{
+            $this->db->where('invoice_id',$invoice_id);
+            $this->db->update('invoice',$datainv);
+
+            $this->db->where('invoice_id',$invoice_id);
+            $this->db->delete('invoice_details');
+        }
 
             $quantity = $this->input->post('quantity', TRUE);
             $current_stock = $this->input->post('stock', TRUE);
@@ -242,12 +251,14 @@ class Corder extends CI_Controller
                         }
                     }
                     //echo '<pre>';print_r($data1);exit();
-                    //  $this->db->insert('invoice_details', $data1);
+
+                        $this->db->insert('invoice_details', $data1);
+
 
                 }
             }
         }
-    }
+
 
 
 
@@ -273,17 +284,53 @@ class Corder extends CI_Controller
         $courier_name= $corifo->courier_name;
 
         $grand_total=$this->input->post('grand_total_price', TRUE);
+        $branch_id=$this->input->post('branch_id', TRUE);
         $paid_amount=$this->input->post('paid_amount', TRUE);
         $due_amount=$this->input->post('due_amount', TRUE);
         $shipping_cost=$this->input->post('delivery_charge', TRUE);
-        $condition_cost=$this->input->post('condition_cost', TRUE);
+        $courier_condtion=$this->input->post('courier_condtion', TRUE);
+        if ($courier_condtion == 1 || 2){
+            $condition_cost=$this->input->post('condition_charge', TRUE);
 
+        }
+
+        if ($courier_condtion == 3){
+            $condition_cost=0;
+
+        }
         $courier_pay=$grand_total-($shipping_cost+$condition_cost);
         $courier_pay_partial=$due_amount-($shipping_cost+$condition_cost);
         $pay_amount=($due_amount)-(($shipping_cost+$condition_cost)*2);
 
 
         $DC=$this->input->post('delivery_charge', TRUE)+$this->input->post('condition_charge', TRUE);
+        $check_order = $this->db->select('*')->from('invoice')->where(array('invoice_id'=> $invoice_id))->get()->num_rows();
+
+
+
+
+        $invoice_data=array(
+            'invoice_id' =>$invoice_id,
+            'courier_id' =>$courier_id,
+            'branch_id' =>$branch_id,
+            'shipping_cost' =>$shipping_cost,
+            'condition_cost' =>$condition_cost,
+
+
+        );
+
+        if ($check_order <=0){
+            $this->db->insert('invoice',$invoice_data);
+
+        }else{
+            $this->db->where('invoice_id',$invoice_id);
+            $this->db->update('invoice',$invoice_data);
+
+            $this->db->where('VNo',$invoice_id);
+            $this->db->delete('acc_transaction');
+
+        }
+
 
         if ( $courier_condtion ==  1){
 
@@ -472,7 +519,7 @@ class Corder extends CI_Controller
                 'COAID'          =>  $courier_headcode,
                 'Narration'      =>  'Delivery Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
 //                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                'Credit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                'Credit'          =>   (!empty($this->input->post('delivery_charge', TRUE)) ? $this->input->post('delivery_charge', TRUE): null),
                 'Debit'         =>  0,
                 'IsPosted'       =>  1,
                 'CreateBy'       => $createby,
@@ -488,7 +535,7 @@ class Corder extends CI_Controller
                 'COAID'          =>  4040104,
                 'Narration'      =>  'Delivery Charge For e-commerce Order No -  ' . $order_no . ' Courier  ' . $courier_name,
 //                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                'Debit'          =>   (!empty($this->input->post('delivery_charge', TRUE)) ? $this->input->post('delivery_charge', TRUE): null),
                 'Credit'         =>  0,
                 'IsPosted'       =>  1,
                 'CreateBy'       => $createby,

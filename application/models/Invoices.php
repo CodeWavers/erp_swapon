@@ -1592,6 +1592,20 @@ class Invoices extends CI_Model
         }
         return false;
     }
+    public function retrieve_invoice_order_data($invoice_id)
+    {
+        $this->db->select('*');
+        $this->db->from('invoice a');
+        $this->db->join('courier_name cr', 'cr.courier_id = a.courier_id','left');
+        $this->db->join('branch_name br', 'br.branch_id = a.branch_id','left');
+
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
 
     //update_invoice
     public function update_invoice()
