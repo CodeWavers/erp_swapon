@@ -242,11 +242,9 @@ class Suppliers extends CI_Model
 
 
             $this->db->group_start();
-            $this->db->like('a.product_model', $product_name, 'both');
+            $this->db->like('a.sku', $product_name, 'both');
             $this->db->or_like('a.product_name', $product_name, 'both');
             $this->db->group_end();
-            $this->db->join('size_list sz', 'a.size=sz.size_id', 'left');
-            $this->db->join('color_list cl', 'a.color=cl.color_id', 'left');
             $this->db->group_by('a.product_id');
             $this->db->order_by('a.product_name', 'asc');
             // ->limit(15)

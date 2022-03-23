@@ -2592,10 +2592,7 @@ class Invoices extends CI_Model
     public function autocompletproductdata($product_name, $pr_status = null)
     {
         $this->db->select('*')
-            ->from('product_information')
-            ->join('product_category', 'product_information.category_id=product_category.category_id', 'left')
-            ->join('size_list', 'product_information.size=size_list.size_id', 'left')
-            ->join('color_list', 'product_information.color=color_list.color_id', 'left');
+            ->from('product_information');
 
         if ($pr_status) {
             $this->db->where('product_information.finished_raw', $pr_status);
@@ -2603,9 +2600,10 @@ class Invoices extends CI_Model
 
         $query =  $this->db->group_start()
             ->like('product_name', $product_name, 'both')
-            ->or_like('product_model', $product_name, 'both')
+            ->or_like('sku', $product_name, 'both')
             ->group_end()
             ->order_by('product_name', 'asc')
+            ->limit(15)
             ->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();

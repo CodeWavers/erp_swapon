@@ -150,13 +150,13 @@ class Corder extends CI_Controller
                 'total_discount' => $this->input->post('discount', TRUE),
                 'paid_amount' => $this->input->post('paid_amount', TRUE),
                 'due_amount' => $this->input->post('due_amount', TRUE),
-
                 'shipping_cost' => $this->input->post('shipping_cost', TRUE),
                 'outlet_id' => 'OpSoxJvBbbS8Rws',
                 'sale_type' => 2,
                 'payment_type' => $pay_type,
                 'sales_by' => $createby,
                 'status' => 2,
+                'is_ecom' => 1,
 
 
             );

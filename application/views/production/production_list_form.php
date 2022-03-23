@@ -60,6 +60,7 @@
                                         <th><?php echo display('sl') ?></th>
                                         <th><?php echo display('image') ?></th>
                                         <th class="col-md-2"><?php echo display('product_name') ?></th>
+                                        <th>SKU</th>
                                         <th>Quantity</th>
                                         <th>Due Quantity</th>
                                         <th>Cutting</th>
@@ -118,6 +119,10 @@
 
                                         <td>
                                             <?php echo $row['product_name']?>
+                                        </td>
+
+                                        <td>
+                                            <?php echo $row['sku']?>
                                         </td>
 
                                         <td>

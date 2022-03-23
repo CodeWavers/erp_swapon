@@ -287,12 +287,17 @@ class Production extends CI_Model
 
     public function autocompletproductdata($product_name)
     {
-        $query = $this->db->select('*')
-            ->from('product_information')
-            //  ->join('product_category','product_information.category_id=product_category.category_id')
-            ->where('finished_raw', 1)
-            //            ->like('product_name', $product_name, 'both')
-            //            ->or_like('product_model', $product_name, 'both')
+        $this->db->select('*')
+            ->from('product_information');
+
+
+        $this->db->where('product_information.finished_raw', 1);
+
+
+        $query =  $this->db->group_start()
+            ->like('product_name', $product_name, 'both')
+            ->or_like('sku', $product_name, 'both')
+            ->group_end()
             ->order_by('product_name', 'asc')
             ->limit(15)
             ->get();

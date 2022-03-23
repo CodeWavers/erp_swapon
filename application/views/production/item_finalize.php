@@ -60,7 +60,7 @@
                                         <th><?php echo display('sl') ?></th>
                                         <th><?php echo display('image') ?></th>
                                         <th class="col-md-2"><?php echo display('product_name') ?></th>
-<!--                                        <th>Variation</th>-->
+                                        <th>SKU</th>
                                         <th>Quantity</th>
 
                                         <th><?php echo display('action') ?></th>
@@ -84,9 +84,9 @@
                                         <td width="60%">
                                             <?php echo $row['product_name']?>
                                         </td>
-<!--                                        <td>-->
-<!--                                            --><?php //echo $row['variation']?>
-<!--                                        </td>-->
+                                        <td  width="50%">
+                                            <?php echo $row['sku']?>
+                                        </td>
                                         <td>
                                             <input  size="10" type="text" class="form-control " value="<?php echo $row['quantity'] > 0 ? $row['quantity'] : 0;?>" style="width:100%;" name="quantity" id="quantity_<?php echo $row['product_id']?>" >
                                         </td>

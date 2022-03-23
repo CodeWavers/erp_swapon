@@ -189,7 +189,7 @@ class Cpurchase extends CI_Controller
         if (!empty($product_info)) {
             $list[''] = '';
             foreach ($product_info as $value) {
-                $json_product[] = array('label' => $value['product_name'] . '(' . $value['product_model'] . ')' . '(' . $value['color_name'] . ')' . '(' . $value['size_name'] . ')', 'value' => $value['product_id']);
+                $json_product[] = array('label' => $value['product_name'] . '(' . $value['sku'] . ')', 'value' => $value['product_id']);
             }
         } else {
             $json_product[] = 'No Product Found';
