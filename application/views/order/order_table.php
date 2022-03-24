@@ -74,25 +74,28 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <?php echo form_open('Admin_dashboard/retrieve_warrenty_dateWise_PurchaseReports', array('class' => 'form-inline', 'method' => 'get')) ?>
-                                    <?php date_default_timezone_set("Asia/Dhaka");
+                            <div class=" panel-default">
+                                <div class="col-sm-10">
+                                    <?php echo form_open('', array('class' => 'form-inline', 'method' => 'get')) ?>
+                                    <?php
+
                                     $today = date('Y-m-d');
                                     ?>
                                     <div class="form-group">
                                         <label class="" for="from_date"><?php echo display('start_date') ?></label>
-                                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $today ?>" placeholder="<?php echo display('start_date') ?>" >
+                                        <input type="datetime-local" name="from_date" class="form-control " id="from_date" value="" placeholder="<?php echo display('start_date') ?>">
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="" for="to_date">End Date</label>
-                                        <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo $today ?>">
+                                        <label class="" for="to_date"><?php echo display('end_date') ?></label>
+                                        <input type="datetime-local" name="to_date" class="form-control " id="to_date" placeholder="<?php echo display('end_date') ?>" value="">
                                     </div>
 
-                                    <button type="submit" class="btn btn-success"><?php echo display('search') ?></button>
+                                    <button type="button" id="btn-filter" class="btn btn-success"><?php echo display('find') ?></button>
 
-                                    <?php echo form_close() ?>
+                                    <?php echo form_close();
+                                    $_SESSION['redirect_uri'] = 'Corder';
+                                    ?>
                                 </div>
                             </div>
                         </div>

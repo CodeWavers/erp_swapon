@@ -792,7 +792,7 @@ $(function ($) {
 
     ],
   });
-  $("#order_table").DataTable({
+  var order_table=$("#order_table").DataTable({
     responsive: true,
 
     aaSorting: [[1, "asc"]],
@@ -853,8 +853,10 @@ $(function ($) {
     serverMethod: "post",
     ajax: {
       url: base_url + "Corder/CheckOrderList",
-      data: {
-        csrf_test_name: CSRF_TOKEN,
+      data: function (data) {
+        data.fromdate = $("#from_date").val();
+        data.todate = $("#to_date").val();
+        data.csrf_test_name = CSRF_TOKEN;
       },
     },
     columns: [
@@ -872,6 +874,10 @@ $(function ($) {
       { data: "refund" },
       { data: "button" },
     ],
+  });
+
+  $("#btn-filter").click(function () {
+    order_table.ajax.reload();
   });
 });
 
