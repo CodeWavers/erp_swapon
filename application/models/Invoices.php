@@ -2258,7 +2258,7 @@ class Invoices extends CI_Model
         );
         $this->db->from('invoice a');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('product_information d', 'd.product_id = c.product_id');
         $this->db->join('color_list m', 'm.color_id = d.color', 'left');
         $this->db->join('size_list n', 'n.size_id = d.size', 'left');
@@ -2469,10 +2469,10 @@ class Invoices extends CI_Model
     //NUMBER GENERATOR
     public function number_generator()
     {
-        $this->db->select_max('invoice', 'invoice_no');
+        $this->db->select_max('invoice', 'invoice');
         $query = $this->db->get('invoice');
         $result = $query->result_array();
-        $invoice_no = $result[0]['invoice_no'];
+        $invoice_no = $result[0]['invoice'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {

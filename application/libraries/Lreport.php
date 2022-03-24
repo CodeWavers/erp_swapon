@@ -570,6 +570,8 @@ class Lreport extends CI_Model
             'software_info' => $currency_details,
             'company' => $company_info,
         );
+
+     //   echo '<pre>';print_r($sales_report);exit();
         $reportList = $CI->parser->parse('report/sales_report', $data, true);
         return $reportList;
     }
@@ -1716,6 +1718,8 @@ class Lreport extends CI_Model
             'outlet_list' => $outlet_list,
             'cw' => $cw,
         );
+
+       // echo '<pre>';print_r($product_report);exit();
         $reportList = $CI->parser->parse('report/product_report', $data, true);
         return $reportList;
     }

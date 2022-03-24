@@ -96,10 +96,10 @@ class Corder extends CI_Controller
     }
     public function number_generator()
     {
-        $this->db->select_max('invoice', 'invoice_no');
+        $this->db->select_max('invoice', 'invoice');
         $query = $this->db->get('invoice');
         $result = $query->result_array();
-        $invoice_no = $result[0]['invoice_no'];
+        $invoice_no = $result[0]['invoice'];
         if ($invoice_no != '') {
             $invoice_no = $invoice_no + 1;
         } else {

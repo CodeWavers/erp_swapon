@@ -1341,9 +1341,9 @@ class reports extends CI_Model
         if ($outlet_id == 1) {
             $outlet_id = null;
         }
-        $this->db->select("a.*,b.*");
+        $this->db->select("*");
         $this->db->from('invoice a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->where('a.date >=', $from_date);
         $this->db->where('a.date <=', $to_date);
         if ($outlet_id) {
@@ -1792,14 +1792,18 @@ class reports extends CI_Model
     //RETRIEVE DATE WISE SEARCH SINGLE PRODUCT REPORT
     public function retrieve_product_search_sales_report($outlet_id, $start_date, $end_date, $product_id, $perpage = null, $page = null)
     {
-        $this->db->select("a.*,b.product_name,b.product_model,c.invoice,c.date,d.customer_name, sz.size_name, cl.color_name");
+        $this->db->select("a.*,b.product_name,b.sku,c.invoice,c.date,d.customer_name, sz.size_name, cl.color_name");
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
-        $this->db->join('customer_information d', 'd.customer_id = c.customer_id');
-        $this->db->where('b.product_id', $product_id);
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id','left');
+
         if ($outlet_id) {
             $this->db->where('c.outlet_id', $outlet_id);
+        }
+
+        if ($product_id) {
+            $this->db->where('b.product_id', $product_id);
         }
         $this->db->where('c.date >=', $start_date);
         $this->db->where('c.date <=', $end_date);
@@ -1946,7 +1950,7 @@ class reports extends CI_Model
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
-        $this->db->join('customer_information d', 'd.customer_id = c.customer_id');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id','left');
         $this->db->where('b.product_id', $product_id);
         $this->db->where('c.date >=', $start_date);
         $this->db->where('c.date <=', $end_date);

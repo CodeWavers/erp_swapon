@@ -160,9 +160,8 @@
                                         <tr>
                                             <th><?php echo display('sales_date') ?></th>
                                             <th><?php echo display('product_name') ?></th>
-                                            <th><?php echo display('product_model') ?></th>
-                                            <th>Color</th>
-                                            <th>Size</th>
+                                            <th>SKU</th>
+                                            <th>Quantity</th>
                                             <th><?php echo display('invoice_no') ?></th>
                                             <th><?php echo display('customer_name') ?></th>
                                             <th><?php echo display('rate') ?></th>
@@ -177,9 +176,8 @@
                                             <tr>
                                                 <td>{sales_date}</td>
                                                 <td>{product_name}</td>
-                                                <td>{product_model}</td>
-                                                <td>{color_name}</td>
-                                                <td>{size_name}</td>
+                                                <td>{sku}</td>
+                                                <td>{quantity}</td>
                                                 <td>{invoice}</td>
                                                 <td>{customer_name}</td>
                                                 <td class="text-right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?></td>
@@ -192,7 +190,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="8" align="right">&nbsp; <b><?php echo display('total_ammount') ?></b></td>
+                                            <td colspan="7" align="right">&nbsp; <b><?php echo display('total_ammount') ?></b></td>
                                             <td class="text-right"><b><?php echo (($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency") ?></b></td>
                                         </tr>
                                     </tfoot>
@@ -227,27 +225,27 @@
                     {
                         extend: 'copyHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'excelHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'csvHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'pdfHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'print',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     }
                 ]
             });
