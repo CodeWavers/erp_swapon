@@ -84,8 +84,9 @@
                         </div>
 
                         <div style="margin-top: 20px;">
-                            <div class="form-group">
-                                <label class="" for="from_date"><?php echo display('product_name') ?></label>
+                            <label class="" for="from_date"><?php echo display('product_name') ?></label>
+
+                            <div class="form-group" style="width: 10%">
                                 <select name="product_id" class="form-control">
                                     <option value=""></option>
                                     <?php foreach ($product_list as $productss) { ?>

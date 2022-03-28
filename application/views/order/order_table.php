@@ -75,7 +75,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class=" panel-default">
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <?php echo form_open('', array('class' => 'form-inline', 'method' => 'get')) ?>
                                     <?php
 
@@ -89,6 +89,26 @@
                                     <div class="form-group">
                                         <label class="" for="to_date"><?php echo display('end_date') ?></label>
                                         <input type="datetime-local" name="to_date" class="form-control " id="to_date" placeholder="<?php echo display('end_date') ?>" value="">
+                                    </div>
+
+                                    <label for="update_delivery_status">Delivery Status</label>
+
+                                    <div class="form-group" style="width: 10%">
+                                        <select name="delivery_status" id="delivery_status" class="form-control sel_type"  tabindex="3" >
+
+                                            <option value="">Select Option</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Order Confirmed">Order Confirmed</option>
+                                            <option value="Processing">Processing</option>
+                                            <option value="Shipped">Shipped</option>
+                                            <option value="Delivered" >Delivered</option>
+                                            <option value="Returned">Returned</option>
+                                            <option value="Hold">Hold</option>
+                                            <option value="Cancelled">Cancelled</option>
+
+                                        </select>
+
+                                        <!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_delivery_status-container"><span class="select2-selection__rendered" id="select2-update_delivery_status-container" title="Delivered">Delivered</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
                                     </div>
 
                                     <button type="button" id="btn-filter" class="btn btn-success"><?php echo display('find') ?></button>

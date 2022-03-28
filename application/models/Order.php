@@ -204,6 +204,7 @@ class Order extends CI_Model
         $searchValue = $postData['search']['value']; // Search value
         $fromdate = $this->input->post('fromdate', TRUE);
         $todate   = $this->input->post('todate', TRUE);
+        $status   = $this->input->post('status', TRUE);
 //        if (!empty($fromdate)) {
 //            $datbetween = "(a.date BETWEEN '$fromdate' AND '$todate')";
 //        } else {
@@ -264,23 +265,38 @@ class Order extends CI_Model
 
 
             if (!empty($fromdate)){
-                $url = $api_url."order/get_order_by_date/".$rowperpage.'/'.$fromdate.'/'.$todate;
+                if (!empty($status)){
+                    $url = $api_url."order/get_order_by_date_status/".$rowperpage.'/'.$fromdate.'/'.$todate.'/'.$status;
+                    $curl = curl_init($url);
+                    curl_setopt($curl, CURLOPT_URL, $url);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+                    $resp = curl_exec($curl);
+                    curl_close($curl);
+                    $records=json_decode($resp);
+                    //   echo '<pre>';print_r($records);exit();
+                   $total_product = count($records);
+                }else{
+                    $url = $api_url."order/get_order_by_date/".$rowperpage.'/'.$fromdate.'/'.$todate;
+                    $curl = curl_init($url);
+                    curl_setopt($curl, CURLOPT_URL, $url);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+                    $resp = curl_exec($curl);
+                    curl_close($curl);
+
+
+
+                    $records=json_decode($resp);
+                    //   echo '<pre>';print_r($records);exit();
+                    $total_product = count($records);
+                }
                 //echo '<pre>';print_r($url);exit();
-                $curl = curl_init($url);
-                curl_setopt($curl, CURLOPT_URL, $url);
-                curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-//for debug only!
-                curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-                $resp = curl_exec($curl);
-                curl_close($curl);
-
-                //  echo '<pre>';print_r($resp);exit();
-
-                $records=json_decode($resp);
-                $total_product = count($records);
 
 
             }else{

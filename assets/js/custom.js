@@ -856,6 +856,7 @@ $(function ($) {
       data: function (data) {
         data.fromdate = $("#from_date").val();
         data.todate = $("#to_date").val();
+        data.status = $("#delivery_status").val();
         data.csrf_test_name = CSRF_TOKEN;
       },
     },
