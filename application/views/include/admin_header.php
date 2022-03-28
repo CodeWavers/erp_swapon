@@ -1729,6 +1729,23 @@ $birthday = $CI->Reports->birthday_noti();
                   ->access()
               ) { ?>
                   <li class="treeview <?php if (
+                      $this->uri->segment('2') == "product_produce_reports_date_wise"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url(
+                          'Admin_dashboard/product_produce_reports_date_wise'
+                      ); ?>">Production Report(Product Wise)</a></li>
+
+              <?php } ?>
+
+              <?php if (
+              $this->permission1
+                  ->method('product_sales_reports_date_wise', 'read')
+                  ->access()
+              ) { ?>
+                  <li class="treeview <?php if (
                       $this->uri->segment('2') == "product_purchase_reports_date_wise"
                   ) {
                       echo "active";
@@ -1739,6 +1756,8 @@ $birthday = $CI->Reports->birthday_noti();
                       ); ?>">Purchase Report(Product Wise)</a></li>
 
               <?php } ?>
+
+
             <?php if (
               $this->permission1
               ->method('purchase_report_category_wise', 'read')

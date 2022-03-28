@@ -1619,14 +1619,20 @@ class reports extends CI_Model
         }
         return false;
     }
-    public function retrieve_product_purchase_report($perpage, $page)
+    public function retrieve_product_purchase_report($perpage = null, $page = null)
     {
-        $this->db->select("a.*,b.*,c.purchase_date,c.grand_total_amount,c.rn_number");
-        $this->db->from('product_purchase_details a');
+        $user_id = $this->session->userdata('user_id');
+
+        $this->db->select("a.*,b.product_name,b.product_model,c.date,c.invoice,c.total_amount,d.customer_name, sz.size_name, cl.color_name");
+        $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
-        $this->db->join('product_purchase c', 'c.purchase_id = a.purchase_id');
-        // $this->db->join('customer_information d', 'd.customer_id = c.customer_id');
-        //$this->db->order_by('c.date', 'desc');
+        $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id');
+        $this->db->join('outlet_warehouse x', 'x.outlet_id = c.outlet_id');
+        $this->db->join('size_list sz', 'b.size=sz.size_id', 'left');
+        $this->db->join('color_list cl', 'b.color=cl.color_id', 'left');
+        $this->db->where('x.user_id', $user_id);
+        $this->db->order_by('c.date', 'desc');
         $this->db->limit($perpage, $page);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -1818,6 +1824,62 @@ class reports extends CI_Model
         }
         return false;
     }
+    public function retrieve_product_search_purchase_report($outlet_id, $start_date, $end_date, $product_id, $perpage = null, $page = null)
+    {
+        $this->db->select("a.*,b.product_name,b.sku,c.purchase_id,c.purchase_date,d.supplier_name, sz.size_name, cl.color_name");
+        $this->db->from('product_purchase_details a');
+        $this->db->join('product_information b', 'b.product_id = a.product_id');
+        $this->db->join('product_purchase c', 'c.purchase_id = a.purchase_id');
+        $this->db->join('supplier_information d', 'd.supplier_id = c.supplier_id','left');
+
+        if ($outlet_id) {
+            $this->db->where('c.outlet_id', $outlet_id);
+        }
+
+        if ($product_id) {
+            $this->db->where('b.product_id', $product_id);
+        }
+        $this->db->where('c.purchase_date >=', $start_date);
+        $this->db->where('c.purchase_date <=', $end_date);
+        $this->db->join('size_list sz', 'b.size=sz.size_id', 'left');
+        $this->db->join('color_list cl', 'b.color=cl.color_id', 'left');
+        $this->db->order_by('c.purchase_date', 'desc');
+        if ($perpage && $page)
+            $this->db->limit($perpage, $page);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+    public function retrieve_product_search_produce_report($outlet_id, $start_date, $end_date, $product_id, $perpage = null, $page = null)
+    {
+        $this->db->select("a.*,b.product_name,b.sku,c.pro_id,c.base_number,c.date, sz.size_name, cl.color_name");
+        $this->db->from('production_goods a');
+        $this->db->join('product_information b', 'b.product_id = a.product_id');
+        $this->db->join('production c', 'c.pro_id = a.pro_id');
+//        $this->db->join('supplier_information d', 'd.supplier_id = c.supplier_id','left');
+
+//        if ($outlet_id) {
+//            $this->db->where('c.outlet_id', $outlet_id);
+//        }
+
+        if ($product_id) {
+            $this->db->where('b.product_id', $product_id);
+        }
+        $this->db->where('c.date >=', $start_date);
+        $this->db->where('c.date <=', $end_date);
+        $this->db->join('size_list sz', 'b.size=sz.size_id', 'left');
+        $this->db->join('color_list cl', 'b.color=cl.color_id', 'left');
+        $this->db->order_by('c.date', 'desc');
+        if ($perpage && $page)
+            $this->db->limit($perpage, $page);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
     public function retrieve_product_id_search_sales_report($customer_id, $product_id, $perpage, $page)
     {
         $this->db->select("a.*,b.product_name,b.product_model,c.invoice,c.date,d.customer_name");
@@ -1945,6 +2007,22 @@ class reports extends CI_Model
 
     //RETRIEVE DATE WISE SEARCH SINGLE PRODUCT REPORT
     public function retrieve_product_search_sales_report_count($start_date, $end_date, $product_id)
+    {
+        $this->db->select("a.*,b.product_name,b.product_model,c.date,d.customer_name, sz.size_name, cl.color_name");
+        $this->db->from('invoice_details a');
+        $this->db->join('product_information b', 'b.product_id = a.product_id');
+        $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id','left');
+        $this->db->where('b.product_id', $product_id);
+        $this->db->where('c.date >=', $start_date);
+        $this->db->where('c.date <=', $end_date);
+        $this->db->join('size_list sz', 'b.size=sz.size_id', 'left');
+        $this->db->join('color_list cl', 'b.color=cl.color_id', 'left');
+        $this->db->order_by('c.date', 'desc');
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    public function retrieve_product_search_purchase_report_count($start_date, $end_date, $product_id)
     {
         $this->db->select("a.*,b.product_name,b.product_model,c.date,d.customer_name, sz.size_name, cl.color_name");
         $this->db->from('invoice_details a');

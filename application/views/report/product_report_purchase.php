@@ -13,12 +13,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo display('sales_report_product_wise') ?></h1>
-            <small><?php echo display('sales_report_product_wise') ?></small>
+            <h1>Purchase Report Product Wise</h1>
+            <small>Purchase Report Product Wise</small>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url() ?>"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#"><?php echo display('report') ?></a></li>
-                <li class="active"><?php echo display('sales_report_product_wise') ?></li>
+                <li class="active">Purchase Report Product Wise</li>
             </ol>
         </div>
     </section>
@@ -51,7 +51,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <?php echo form_open('Admin_dashboard/product_sales_search_reports', array('class' => 'form-inline', 'method' => 'get')) ?>
+                        <?php echo form_open('Admin_dashboard/product_purchase_search_reports', array('class' => 'form-inline', 'method' => 'get')) ?>
                         <?php
                         $today = date('Y-m-d'); ?>
 
@@ -119,7 +119,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4><?php echo display('sales_report_product_wise') ?></h4>
+                            <h4>Purchase Report Product Wise</h4>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -158,12 +158,12 @@
                                 <table class="table table-bordered table-striped table-hover" id="productWiseSalesReportTable">
                                     <thead>
                                         <tr>
-                                            <th><?php echo display('sales_date') ?></th>
+                                            <th>Purchase Date</th>
                                             <th><?php echo display('product_name') ?></th>
                                             <th>SKU</th>
                                             <th>Quantity</th>
-                                            <th><?php echo display('invoice_no') ?></th>
-                                            <th><?php echo display('customer_name') ?></th>
+                                            <th>Purchase ID</th>
+                                            <th>Supplier Name</th>
                                             <th><?php echo display('rate') ?></th>
                                             <th><?php echo display('total_ammount') ?></th>
                                         </tr>
@@ -174,14 +174,14 @@
                                         ?>
                                             {product_report}
                                             <tr>
-                                                <td>{sales_date}</td>
+                                                <td>{purchase_date}</td>
                                                 <td>{product_name}</td>
                                                 <td>{sku}</td>
                                                 <td>{quantity}</td>
-                                                <td>{invoice}</td>
-                                                <td>{customer_name}</td>
+                                                <td>{purchase_id}</td>
+                                                <td>{supplier_name}</td>
                                                 <td class="text-right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?></td>
-                                                <td class="text-right"><?php echo (($position == 0) ? "$currency {total_price}" : "{total_price} $currency") ?></td>
+                                                <td class="text-right"><?php echo (($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency") ?></td>
                                             </tr>
                                             {/product_report}
                                         <?php

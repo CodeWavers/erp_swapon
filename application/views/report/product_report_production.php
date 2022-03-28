@@ -13,12 +13,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo display('sales_report_product_wise') ?></h1>
-            <small><?php echo display('sales_report_product_wise') ?></small>
+            <h1>Production Report Product Wise</h1>
+            <small>Production Report Product Wise</small>
             <ol class="breadcrumb">
                 <li><a href="<?php echo base_url() ?>"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#"><?php echo display('report') ?></a></li>
-                <li class="active"><?php echo display('sales_report_product_wise') ?></li>
+                <li class="active">Production Report Product Wise</li>
             </ol>
         </div>
     </section>
@@ -51,38 +51,41 @@
             <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <?php echo form_open('Admin_dashboard/product_sales_search_reports', array('class' => 'form-inline', 'method' => 'get')) ?>
+                        <?php echo form_open('Admin_dashboard/product_produce_search_reports', array('class' => 'form-inline', 'method' => 'get')) ?>
                         <?php
                         $today = date('Y-m-d'); ?>
 
                         <div class="col-sm-12">
 
-                            <?php if ($outlet_list) { ?>
+<!--                            --><?php //if ($outlet_list) { ?>
+<!---->
+<!---->
+<!--                                <div class="form-group">-->
+<!---->
+<!--                                    <input type="hidden" name="outlet_id" class="form-control " id="outlet_id" value="--><?php //echo $outlet_list[0]['outlet_id']; ?><!--">-->
+<!--                                </div>-->
+<!---->
+<!--                            --><?php //} elseif ($cw) { ?>
+<!--                                <label class="" for="category">Outlet:</label>-->
+<!--                                <div class="form-group">-->
+<!---->
+<!--                                    <select name="outlet_id" class="form-control" id="outlet">-->
+<!--                                        <option value="">--select one -- </option>-->
+<!--                                        <option value="1">Consolidated</option>-->
+<!--                                        --><?php
+//                                        foreach ($cw as $cw) {
+//                                        ?>
+<!--                                            <option value="--><?php //echo $cw['outlet_id']; ?><!--">--><?php //echo $cw['outlet_name']; ?><!--</option>-->
+<!--                                        --><?php //} ?>
+<!--                                    </select>-->
+<!--                                </div>-->
+<!--                            --><?php //} ?>
 
+                        </div>
 
-                                <div class="form-group">
-
-                                    <input type="hidden" name="outlet_id" class="form-control " id="outlet_id" value="<?php echo $outlet_list[0]['outlet_id']; ?>">
-                                </div>
-
-                            <?php } elseif ($cw) { ?>
-                                <label class="" for="category">Outlet:</label>
-                                <div class="form-group">
-
-                                    <select name="outlet_id" class="form-control" id="outlet">
-                                        <option value="">--select one -- </option>
-                                        <option value="1">Consolidated</option>
-                                        <?php
-                                        foreach ($cw as $cw) {
-                                        ?>
-                                            <option value="<?php echo $cw['outlet_id']; ?>"><?php echo $cw['outlet_name']; ?></option>
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                            <?php } ?>
-                            <label class="" for="from_date"><?php echo display('product_name') ?></label>
+                        <div style="margin-top: 20px;">
                             <div class="form-group">
-
+                                <label class="" for="from_date"><?php echo display('product_name') ?></label>
                                 <select name="product_id" class="form-control">
                                     <option value=""></option>
                                     <?php foreach ($product_list as $productss) { ?>
@@ -92,9 +95,6 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                        </div>
-
-                        <div style="margin-top: 20px;">
                             <div class="form-group">
                                 <label class="" for="from_date"><?php echo display('start_date') ?></label>
                                 <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo (!empty($from_date) ? $from_date : $today) ?>" placeholder="<?php echo display('start_date') ?>">
@@ -119,7 +119,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4><?php echo display('sales_report_product_wise') ?></h4>
+                            <h4>Production Report Product Wise</h4>
                         </div>
                     </div>
                     <div class="panel-body">
@@ -158,14 +158,12 @@
                                 <table class="table table-bordered table-striped table-hover" id="productWiseSalesReportTable">
                                     <thead>
                                         <tr>
-                                            <th><?php echo display('sales_date') ?></th>
+                                            <th>Production Date</th>
                                             <th><?php echo display('product_name') ?></th>
                                             <th>SKU</th>
                                             <th>Quantity</th>
-                                            <th><?php echo display('invoice_no') ?></th>
-                                            <th><?php echo display('customer_name') ?></th>
-                                            <th><?php echo display('rate') ?></th>
-                                            <th><?php echo display('total_ammount') ?></th>
+                                            <th>Base Number</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -174,26 +172,25 @@
                                         ?>
                                             {product_report}
                                             <tr>
-                                                <td>{sales_date}</td>
+                                                <td>{date}</td>
                                                 <td>{product_name}</td>
                                                 <td>{sku}</td>
                                                 <td>{quantity}</td>
-                                                <td>{invoice}</td>
-                                                <td>{customer_name}</td>
-                                                <td class="text-right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?></td>
-                                                <td class="text-right"><?php echo (($position == 0) ? "$currency {total_price}" : "{total_price} $currency") ?></td>
+                                                <td>{base_number}</td>
+<!--                                                <td class="text-right">--><?php //echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?><!--</td>-->
+<!--                                                <td class="text-right">--><?php //echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?><!--</td>-->
                                             </tr>
                                             {/product_report}
                                         <?php
                                         }
                                         ?>
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="7" align="right">&nbsp; <b><?php echo display('total_ammount') ?></b></td>
-                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency") ?></b></td>
-                                        </tr>
-                                    </tfoot>
+<!--                                    <tfoot>-->
+<!--                                        <tr>-->
+<!--                                            <td colspan="7" align="right">&nbsp; <b>--><?php //echo display('total_ammount') ?><!--</b></td>-->
+<!--                                            <td class="text-right"><b>--><?php //echo (($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency") ?><!--</b></td>-->
+<!--                                        </tr>-->
+<!--                                    </tfoot>-->
                                 </table>
                             </div>
                         </div>
