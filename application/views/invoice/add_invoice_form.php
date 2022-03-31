@@ -62,7 +62,49 @@
             </div>
         </div>
 
+        <div class="modal fade modal-warning" id="add_receiver_modal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3 class="modal-title">Add New Receiver</h3>
+                    </div>
 
+                    <?php echo form_open('Cinvoice/add_receiver', array('class' => 'form-vertical', 'id' => 'add_receiver_form')) ?>
+                    <div class="modal-body">
+                        <div id="customeMessage_rec" class="alert hide"></div>
+                        <div class="panel-body">
+                            <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+                            <div class="form-group row">
+                                <label for="receiver_name" class="col-sm-4 col-form-label">Receiver Name<i class="text-danger">*</i></label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="receiver_number" class="col-sm-4 col-form-label">Receiver Mobile No.<i class="text-danger">*</i></label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </div>
+                    <?php echo form_close() ?>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
         <!--Add Invoice -->
         <div class="row">
             <div class="col-sm-12">
@@ -907,49 +949,7 @@
                 </div><!-- /.modal -->
 
                 <!-- Receiver add Modal start-->
-                <div class="modal fade modal-warning" id="add_receiver_modal" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <a href="#" class="close" data-dismiss="modal">&times;</a>
-                                <h3 class="modal-title">Add New Receiver</h3>
-                            </div>
 
-                            <?php echo form_open('Cinvoice/add_receiver', array('class' => 'form-vertical', 'id' => 'add_receiver_form')) ?>
-                            <div class="modal-body">
-                                <div id="customeMessage_rec" class="alert hide"></div>
-                                <div class="panel-body">
-                                    <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
-
-                                    <div class="form-group row">
-                                        <label for="receiver_name" class="col-sm-4 col-form-label">Receiver Name<i class="text-danger">*</i></label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="receiver_number" class="col-sm-4 col-form-label">Receiver Mobile No.<i class="text-danger">*</i></label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                            <div class="modal-footer">
-
-                                <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
-
-                                <input type="submit" class="btn btn-success" value="Submit">
-                            </div>
-                            <?php echo form_close() ?>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div>
                 <!-- Receiver add Modal end-->
 
             </div>

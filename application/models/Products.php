@@ -740,6 +740,8 @@ class Products extends CI_Model
             ->join('supplier_product', 'product_information.product_id = supplier_product.product_id', 'left')
             ->join('product_purchase_details', 'product_information.product_id = product_purchase_details.product_id', 'left')
             ->where('product_information.product_id', $product_id)
+            ->or_where('product_information.sku', $product_id)
+            ->where('product_information.finished_raw', 1)
             ->order_by('product_information.product_name', 'asc')
             ->get();
         if ($query->num_rows() > 0) {

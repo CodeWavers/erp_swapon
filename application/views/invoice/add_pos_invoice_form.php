@@ -86,6 +86,50 @@ $_SESSION['redirect_uri'] = $currentURL;
                         </div>
                     </div>
                     <br>
+
+                    <div class="modal fade modal-warning" id="add_receiver_modal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                    <h3 class="modal-title">Add New Receiver</h3>
+                                </div>
+
+                                <?php echo form_open('Cinvoice/add_receiver', array('class' => 'form-vertical', 'id' => 'add_receiver_form')) ?>
+                                <div class="modal-body">
+                                    <div id="customeMessage_rec" class="alert hide"></div>
+                                    <div class="panel-body">
+                                        <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+                                        <div class="form-group row">
+                                            <label for="receiver_name" class="col-sm-4 col-form-label">Receiver Name<i class="text-danger">*</i></label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="receiver_number" class="col-sm-4 col-form-label">Receiver Mobile No.<i class="text-danger">*</i></label>
+                                            <div class="col-sm-6">
+                                                <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+
+                                    <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+
+                                    <input type="submit" class="btn btn-success" value="Submit">
+                                </div>
+                                <?php echo form_close() ?>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
                     <?php echo form_open_multipart('Cinvoice/manual_sales_insert', array('class' => 'form-vertical', 'id' => 'pos_sale_insert', 'name' => 'insert_pos_invoice')) ?>
 
                     <div class="panel-body">
@@ -245,14 +289,16 @@ $_SESSION['redirect_uri'] = $currentURL;
                                 </div>
                             </div>
 
+
                             <div class="col-sm-6" style="display:none;" id="courier_div">
+
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-6">
 
                                         <select name="courier_id" class="form-control bankpayment" id="">
                                             <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $courier) { ?>
+                                            <?php foreach ($courier_list as $courier) { ?>
                                                 <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
                                             <?php } ?>
                                         </select>
@@ -262,17 +308,57 @@ $_SESSION['redirect_uri'] = $currentURL;
 
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-4 col-form-label">Branch<i class="text-danger">*</i></label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-6">
                                         <select name="branch_id" class="form-control bankpayment" id="">
                                             <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['branch_id']) ?>"><?php echo html_escape($courier['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                            <?php foreach ($branch_list as $b) { ?>
+                                                <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
                                             <?php } ?>
                                         </select>
                                     </div>
 
                                 </div>
+
+                                <div class="form-group row">
+                                    <label for="bank" class="col-sm-4 col-form-label">Condition<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
+                                        <select name="courier_condtion" class="form-control bankpayment" id="" onchange="condition_charge(this.value)">
+                                            <option value="">Select Condition</option>
+                                            <option value="1">Conditional</option>
+                                            <option value="2">Partial</option>
+                                            <option value="3">Unconditional</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="deli_receiver" class="col-sm-4 col-form-label">Receiver</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" name="deli_reciever" id="deli_receiver" placeholder="Select option" onchange="receiver_changed(this)">
+                                            <option value="">Select Receiver</option>
+                                            {receiver_list}
+                                            <option value="{id}">{receiver_name}</option>
+                                            {/receiver_list}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn btn-sm btn-success" id="add_rec_btn" aria-hidden="true" data-toggle="modal" data-target="#add_receiver_modal">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="receiver_num_div" style="display: none;">
+                                    <label for="del_rec_num" class="col-sm-4 col-form-label">Receiver Number</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="del_rec_num" name="del_rec_num">
+                                    </div>
+                                </div>
+
                             </div>
+
                             <div class="col-sm-6" style="display: none" id="bkash_div">
                                 <div class="form-group row">
                                     <label for="bkash" class="col-sm-4 col-form-label">Bkash Number <i class="text-danger">*</i></label>
@@ -363,11 +449,24 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     </tr> -->
 
                                     <tr>
-                                        <td class="text-right" colspan="7"><b><?php echo display('shipping_cost') ?>:</b></td>
+                                        <td class="text-right" colspan="7"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" />
                                         </td>
                                     </tr>
+                                    <tr id="condition_tr" class=" d-none" >
+                                        <td class="text-right" colspan="7"><b>Condition Charge:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
+                                        </td>
+                                    </tr>
+                                    <tr id="commission_tr" class=" d-none">
+                                        <td class="text-right" colspan="8"><b>Commission:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="0.00"  />
+                                        </td>
+                                    </tr>
+
                                     <tr>
                                         <td colspan="7" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
                                         <td class="text-right">
@@ -423,7 +522,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-12" id="payment_div">
                                 <div class="panel panel-bd lobidrag">
                                     <div class="panel-heading">
                                         <div class="panel-title">

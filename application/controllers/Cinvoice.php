@@ -69,6 +69,31 @@ class Cinvoice extends CI_Controller
 
         echo json_encode($data);
     }
+    public function pos_sales_insert()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $invoice_id = $CI->Invoices->pos_invoice_entry();
+        if (!empty($invoice_id)) {
+            $data['status'] = true;
+            $data['invoice_id'] = $invoice_id;
+            $data['message'] = display('save_successfully');
+            // $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
+            // if($mailsetting[0]['isinvoice']==1){
+            //     // $mail = $this->invoice_pdf_generate($invoice_id);
+            //     if($mail == 0){
+            //         $data['message2'] = $this->session->set_userdata(array('error_message' => display('please_config_your_mail_setting')));
+            //     }
+            // }
+            $data['details'] = $this->load->view('invoice/invoice_html', $data, true);
+        } else {
+            $data['status'] = false;
+            $data['error_message'] = 'Sorry';
+        }
+
+        echo json_encode($data);
+    }
 
 
     //    public function add_cheque(){

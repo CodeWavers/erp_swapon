@@ -184,46 +184,7 @@ class Linvoice
         return $invoiceList;
     }
 
-    //Pos invoice add form
-    public function pos_invoice_add_form()
-    {
-        $CI = &get_instance();
-        $CI->load->model('Invoices');
-        $CI->load->model('Web_settings');
-        $CI->load->model('Courier');
-        $CI->load->model('Settings');
-        $CI->load->model('Warehouse');
-        $customer_details = $CI->Invoices->pos_customer_setup();
-        $bank_list        = $CI->Web_settings->bank_list();
-        $bkash_list        = $CI->Web_settings->bkash_list();
-        $branch_list        = $CI->Courier->get_branch_list();
-        $card_list = $CI->Settings->read_all_card();
-        $outlet_user        = $CI->Warehouse->get_outlet_user();
-        $cw = $CI->Warehouse->central_warehouse();
-        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
-        $taxfield = $CI->db->select('tax_name,default_value')
-            ->from('tax_settings')
-            ->get()
-            ->result_array();
-        $tablecolumn = $CI->db->list_fields('tax_collection');
-        $num_column = count($tablecolumn) - 4;
-        $data = array(
-            'title'         => display('pos_invoice'),
-            'customer_name' => $customer_details[0]['customer_name'],
-            'customer_id'   => $customer_details[0]['customer_id'],
-            'discount_type' => $currency_details[0]['discount_type'],
-            'taxes'         => $taxfield,
-            'taxnumber'     => $num_column,
-            'bank_list'     => $bank_list,
-            'bkash_list'     => $bkash_list,
-            'branch_list'     => $branch_list,
-            'card_list'     => $card_list,
-            'outlet_list'     => $outlet_user,
-            'cw'            => $cw
-        );
-        $invoiceForm = $CI->parser->parse('invoice/add_pos_invoice_form', $data, true);
-        return $invoiceForm;
-    }
+
 
     //Retrieve  Invoice List
     public function search_inovoice_item($customer_id)
@@ -305,6 +266,63 @@ class Linvoice
             'cw'            => $cw
         );
         $invoiceForm = $CI->parser->parse('invoice/add_invoice_form', $data, true);
+        return $invoiceForm;
+    }
+    //Pos invoice add form
+    public function pos_invoice_add_form()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Courier');
+        $CI->load->model('Service');
+        $CI->load->model('Settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Aggre');
+        $customer_details = $CI->Invoices->pos_customer_setup();
+        $employee_list    = $CI->Service->employee_list();
+        $card_list = $CI->Settings->read_all_card();
+
+        $bank_list          = $CI->Web_settings->bank_list();
+        $bkash_list        = $CI->Web_settings->bkash_list();
+        $nagad_list        = $CI->Web_settings->nagad_list();
+        $courier_list        = $CI->Courier->get_courier_list();
+        $branch_list        = $CI->Courier->get_branch_list();
+        $outlet_user        = $CI->Warehouse->get_outlet_user();
+        $receiver_list        = $CI->Courier->get_receiver_list();
+
+        $outlet_list = $CI->Warehouse->branch_list_product();
+
+        $cw = $CI->Warehouse->central_warehouse();
+        $aggre_list = $CI->Aggre->aggre_list_product();
+
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $taxfield = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $tablecolumn = $CI->db->list_fields('tax_collection');
+        $num_column = count($tablecolumn) - 4;
+        $data = array(
+            'title'         => display('pos_invoice'),
+            'employee_list' => $employee_list,
+            'discount_type' => $currency_details[0]['discount_type'],
+            'taxes'         => $taxfield,
+            'customer_name' => $customer_details[0]['customer_name'],
+            'customer_id'   => $customer_details[0]['customer_id'],
+            'customer_id_two'   => $customer_details[0]['customer_id_two'],
+            'card_list'     => $card_list,
+            'bank_list'     => $bank_list,
+            'bkash_list'     => $bkash_list,
+            'nagad_list'     => $nagad_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
+            'outlet_list'     => $outlet_user,
+            'receiver_list'    => $receiver_list,
+            'aggre_list'    => $aggre_list,
+            'cw'            => $cw
+        );
+        $invoiceForm = $CI->parser->parse('invoice/add_pos_invoice_form', $data, true);
         return $invoiceForm;
     }
     public function pre_invoice_add_form()
