@@ -470,15 +470,16 @@ function bank_paymet(val, sl){
 
 }
 
-"use strict"
-function calc_paid(){
-    var pt = 0;
-    $(".p_amount").each(function () {
-        isNaN(this.value) || 0 == this.value.length || (pt += parseFloat(this.value))
-    });
+    "use strict"
+    function calc_paid(){
+        var pt = 0;
+        $(".p_amount").each(function () {
+            isNaN(this.value) || 0 == this.value.length || (pt += parseFloat(this.value))
+        });
 
-    $("#paidAmount").val(pt);
-}
+        $("#paidAmount").val(pt);
+        invoice_paidamount();
+    }
 
 //Invoice full paid
     "use strict";
@@ -538,9 +539,7 @@ function deleteRow(t) {
 
     }
 }
-var count = 2,
-        limits = 500;
-            "use strict";
+
     "use strict";
     function customer_autocomplete(sl) {
 
@@ -596,6 +595,9 @@ var count = 2,
         });
 
     }
+var count = 2,
+        limits = 500;
+
 
     "use strict";
     function customer_due(id){

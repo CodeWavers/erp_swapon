@@ -208,28 +208,44 @@ $_SESSION['redirect_uri'] = $currentURL;
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-6" id="payment_from_1">
-                                <div class="form-group row">
-                                    <label for="customer_name1" class="col-sm-3 col-form-label"><?php echo display('customer_name') . '/' . display('phone') ?> <i class="text-danger">*</i></label>
-                                    <div class="col-sm-6">
-                                        <input type="text" size="100" name="customer_name" class="customerSelection form-control" placeholder='<?php echo display('customer_name') . '/' . display('phone') ?>' id="customer_name" value="{customer_name}" tabindex="3" onkeyup="customer_autocomplete()" />
 
-                                        <input id="autocomplete_customer_id" class="customer_hidden_value" type="hidden" name="customer_id" value="{customer_id}">
-                                        <?php
-                                        if (empty($customer_name)) {
-                                        ?>
-                                            <small id="emailHelp" class="text-danger"><?php echo display('please_add_walking_customer_for_default_customer') ?></small>
-                                        <?php
-                                        }
-                                        ?>
+                            <div class="col-sm-6 " id="payment_from_1"  >
+                                <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-3 col-form-label">Customer Name <i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
+                                        <input autocomplete="off"  type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="" />
+
+                                        <input autocomplete="off" id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="">
                                     </div>
                                     <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
-                                        <div class="col-sm-3">
-                                            <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
+                                        <div class=" col-sm-3">
+                                            <a href="#" class="client-add-btn btn btn-success" id="add_customer" onclick="add_customer()" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
                                         </div>
                                     <?php } ?>
                                 </div>
                             </div>
+<!--                            <div class="col-sm-6" id="payment_from_1">-->
+<!--                                <div class="form-group row">-->
+<!--                                    <label for="customer_name1" class="col-sm-3 col-form-label">--><?php //echo display('customer_name') . '/' . display('phone') ?><!-- <i class="text-danger">*</i></label>-->
+<!--                                    <div class="col-sm-6">-->
+<!--                                        <input type="text" size="100" name="customer_name" class="customerSelection form-control" placeholder='--><?php //echo display('customer_name') . '/' . display('phone') ?><!--' id="customer_name" value="{customer_name}" tabindex="3" onkeyup="customer_autocomplete()" />-->
+<!---->
+<!--                                        <input id="autocomplete_customer_id" class="customer_hidden_value" type="hidden" name="customer_id" value="{customer_id}">-->
+<!--                                        --><?php
+//                                        if (empty($customer_name)) {
+//                                        ?>
+<!--                                            <small id="emailHelp" class="text-danger">--><?php //echo display('please_add_walking_customer_for_default_customer') ?><!--</small>-->
+<!--                                        --><?php
+//                                        }
+//                                        ?>
+<!--                                    </div>-->
+<!--                                    --><?php //if ($this->permission1->method('add_customer', 'create')->access()) { ?>
+<!--                                        <div class="col-sm-3">-->
+<!--                                            <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>-->
+<!--                                        </div>-->
+<!--                                    --><?php //} ?>
+<!--                                </div>-->
+<!--                            </div>-->
 
                             <div class="col-sm-6" id="payment_from_2">
                                 <div class="form-group row">
@@ -490,7 +506,7 @@ $_SESSION['redirect_uri'] = $currentURL;
 
                                         <td class="text-right" colspan="7"><b><?php echo display('paid_ammount') ?>:</b></td>
                                         <td class="text-right">
-                                            <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="" />
+                                            <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="" readonly/>
                                         </td>
                                     </tr>
                                     <tr>
