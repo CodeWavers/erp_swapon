@@ -524,7 +524,7 @@
                                         <td colspan="8" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="n_total" class="form-control text-right" name="n_total" value="0" readonly="readonly" placeholder="" />
-                                        </td>
+                                        </td> 
                                     </tr>
                                     <tr>
 
