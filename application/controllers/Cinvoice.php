@@ -781,13 +781,15 @@ class Cinvoice extends CI_Controller
 
     public function invoice_inserted_data_manual()
     {
+//        echo 'Hello';
+//        exit();
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $invoice_id = $this->input->post('invoice_id', TRUE);
-        $chalan_value = $this->input->post('chalan_value', TRUE);
+       // $chalan_value = $this->input->post('chalan_value', TRUE);
         $CI->load->library('linvoice');
 
-        $_SESSION['redirect_uri'] = 'Cinvoice';
+        $_SESSION['redirect_uri'] = 'Cinvoice/manage_invoice';
         //echo '<pre>';print_r($_POST['chalan_value']);exit();
         if (isset($_POST['chalan_value'])) {
             $content = $CI->linvoice->invoice_chalan_html_data_manual($invoice_id);

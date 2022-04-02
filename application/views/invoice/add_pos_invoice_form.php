@@ -171,6 +171,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     <div class="col-sm-7">
                                         <input type="text" name="product_name" class="form-control bq" placeholder='Barcode' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
                                         <input type="hidden" id="product_value" name="">
+                                        <input type="hidden" id="sel_type" name="sel_type" value="2">
                                     </div>
                                 </div>
                             </div>
@@ -728,7 +729,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                         <label for="date" class="col-sm-4 col-form-label">Due Date <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
 
-                                                            <input class="form-control" type="date" size="50" name="cheque_date[]" id="" value="" tabindex="4" autocomplete="off" placeholder="mm/dd/yyyy" />
+                                                            <input class="form-control" type="date" size="50" name="cheque_date[]" id="" value="" tabindex="4" autocomplete="off" placeholder="y-m-d"/>
                                                         </div>
 
                                                         <label for="bank" class="col-sm-4 col-form-label">Amount:
@@ -783,32 +784,40 @@ $_SESSION['redirect_uri'] = $currentURL;
                         </div>
 
                     </div>
+
+                    <?php echo form_close()?>
                 </div>
             </div>
+
             <div class="modal fade" id="printconfirmodal" tabindex="-1" role="dialog" aria-labelledby="printconfirmodal" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <a href="" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                            <h4 class="modal-title" id="myModalLabel"><?php echo display('print') ?></h4>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                            <h4 class="modal-tit le" id="myModalLabel"><?php echo display('print') ?></h4>
                         </div>
+                        <?php echo form_open('Cinvoice/invoice_inserted_data_manual', array('class' => 'form-vertical', 'id' => '', 'name' => '')) ?>
+
                         <div class="modal-body">
-                            <?php echo form_open('Cinvoice/pos_invoice_inserted_data_manual', array('class' => 'form-vertical', 'id' => '', 'name' => '')) ?>
                             <div id="outputs" class="hide alert alert-danger"></div>
-                            <h3> <?php echo display('successfully_inserted') ?> </h3>
+                            <h3> <?php echo display('successfully_inserted') ?></h3>
                             <h4><?php echo display('do_you_want_to_print') ?> ??</h4>
+                            <!-- <label class="ab">With Chalan </label>
+                            <input type="checkbox" name="chalan_value" value=''> -->
+
+
                             <input type="hidden" name="invoice_id" id="inv_id">
-                            <input type="hidden" name="url" value="<?php echo base_url('Cinvoice/pos_invoice'); ?>">
                         </div>
                         <div class="modal-footer">
                             <button type="button" onclick="cancelprint()" class="btn btn-default" data-dismiss="modal"><?php echo display('no') ?></button>
                             <button type="submit" class="btn btn-primary" id="yes"><?php echo display('yes') ?></button>
-                            <?php echo form_close() ?>
+
                         </div>
+                        <?php echo form_close() ?>
                     </div>
                 </div>
-
-
             </div>
 
             <div class="modal fade modal-success" id="cust_info" role="dialog">
@@ -820,22 +829,22 @@ $_SESSION['redirect_uri'] = $currentURL;
                             <h3 class="modal-title"><?php echo display('add_new_customer') ?></h3>
                         </div>
 
+                        <?php echo form_open('Cinvoice/instant_customer', array('class' => 'form-vertical', 'id' => 'newcustomer')) ?>
                         <div class="modal-body">
                             <div id="customeMessage" class="alert hide"></div>
-                            <?php echo form_open('Cinvoice/instant_customer', array('class' => 'form-vertical', 'id' => 'newcustomer')) ?>
                             <div class="panel-body">
                                 <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                <div class="form-group row">
-                                    <label for="customer_id_two" class="col-sm-3 col-form-label">Customer ID <i class="text-danger">*</i></label>
-                                    <div class="col-sm-6">
-                                        <input class="form-control" name="customer_id_two" id="" type="text" placeholder="Customer ID" required="" tabindex="1">
-                                    </div>
-                                </div>
+                                <!--                                    <div class="form-group row">-->
+                                <!--                                        <label for="customer_id_two" class="col-sm-3 col-form-label">Customer ID <i class="text-danger">*</i></label>-->
+                                <!--                                        <div class="col-sm-6">-->
+                                <!--                                            <input class="form-control" name="customer_id_two" id="" type="text" placeholder="Customer ID" required="" tabindex="1">-->
+                                <!--                                        </div>-->
+                                <!--                                    </div>-->
 
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-3 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" name="customer_name" id="" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
+                                        <input class="form-control" name="customer_name" id="m_customer_name" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
                                     </div>
                                 </div>
 
@@ -856,14 +865,14 @@ $_SESSION['redirect_uri'] = $currentURL;
                                 <div class="form-group row">
                                     <label for="customer_id_two" class="col-sm-3 col-form-label">Contact Person</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" name="contact_person" id="" type="text" placeholder="Contact Person" required="" tabindex="1">
+                                        <input class="form-control" name="contact_person" id="" type="text" placeholder="Contact Person" tabindex="1">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label for="customer_id_two" class="col-sm-3 col-form-label">Contact Mobile</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" name="contact" id="" type="number" placeholder="Contact Mobile" required="" tabindex="1">
+                                        <input class="form-control" name="contact" id="" type="number" placeholder="Contact Mobile" tabindex="1">
                                     </div>
                                 </div>
 
@@ -874,10 +883,22 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     </div>
                                 </div>
 
+                                <div class="form-group row">
+                                    <label for="website" class="col-sm-3 col-form-label">Customer Type</label>
+                                    <div class="col-sm-6">
+
+                                        <select name="cus_type" class="form-control" tabindex="3">
+                                            <option value="1">WholeSale Customer</option>
+                                            <option value="2">Retail Customer</option>
+
+                                        </select>
+
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
-
 
                         <div class="modal-footer">
 
@@ -889,6 +910,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+            <!-- /.modal -->
         </div>
 
     </section>

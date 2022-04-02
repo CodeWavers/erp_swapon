@@ -286,7 +286,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                     </div>
 
                     <div class="panel-footer text-left">
-                        <a  class="btn btn-danger" href="<?php echo base_url('Cinvoice'); ?>"><?php echo display('cancel') ?></a>
+                        <a  class="btn btn-danger" href="<?php echo base_url('Cinvoice/manage_invoice'); ?>"><?php echo display('cancel') ?></a>
                         <a  class="btn btn-info" href="#" onclick="printDiv('printableArea')"><span class="fa fa-print"></span></a>
 
                     </div>

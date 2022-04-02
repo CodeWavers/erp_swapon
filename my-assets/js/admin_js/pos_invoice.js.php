@@ -541,51 +541,61 @@ function deleteRow(t) {
 var count = 2,
         limits = 500;
             "use strict";
- function customer_autocomplete(sl) {
+    "use strict";
+    function customer_autocomplete(sl) {
 
-    var customer_id = $('#customer_id').val();
-    // Auto complete
-    var options = {
-        minLength: 0,
-        source: function( request, response ) {
-            var customer_name = $('#customer_name').val();
-            var csrf_test_name = $('[name="csrf_test_name"]').val();
-            var base_url = $("#base_url").val();
 
-        $.ajax( {
-          url: base_url + "Cinvoice/customer_autocomplete",
-          method: 'post',
-          dataType: "json",
-          data: {
-            term: request.term,
-            customer_id:customer_name,
-            csrf_test_name:csrf_test_name,
-          },
-          success: function( data ) {
-            response( data );
 
-          }
+
+
+        var customer_id = $('#customer_id').val();
+
+        // Auto complete
+        var options = {
+            minLength: 0,
+            source: function( request, response ) {
+                var customer_name = $('#customer_name').val();
+                var csrf_test_name = $('[name="csrf_test_name"]').val();
+                var base_url = $("#base_url").val();
+                var sale_type = $('#sel_type').val();
+
+
+                $.ajax( {
+                    url: base_url + "Cinvoice/customer_autocomplete",
+                    method: 'post',
+                    dataType: "json",
+                    data: {
+                        term: request.term,
+                        customer_id:customer_name,
+                        sale_type:sale_type,
+                        csrf_test_name:csrf_test_name,
+                    },
+                    success: function( data ) {
+                        response( data );
+
+                    }
+                });
+            },
+            focus: function( event, ui ) {
+                $(this).val(ui.item.label);
+                return false;
+            },
+            select: function( event, ui ) {
+                $(this).parent().parent().find("#autocomplete_customer_id").val(ui.item.value.id);
+                $("#customer_mobile_two").val(ui.item.value.mobile);
+                var customer_id          = ui.item.value.id;
+                customer_due(customer_id);
+
+                $(this).unbind("change");
+                return false;
+            }
+        }
+
+        $('body').on('keypress.autocomplete', '#customer_name', function() {
+            $(this).autocomplete(options);
         });
-      },
-       focus: function( event, ui ) {
-           $(this).val(ui.item.label);
-           return false;
-       },
-       select: function( event, ui ) {
-            $(this).parent().parent().find("#autocomplete_customer_id").val(ui.item.value);
-            var customer_id          = ui.item.value;
-            customer_due(customer_id);
 
-            $(this).unbind("change");
-            return false;
-       }
-   }
-
-   $('body').on('keypress.autocomplete', '#customer_name', function() {
-       $(this).autocomplete(options);
-   });
-
-}
+    }
 
     "use strict";
     function customer_due(id){
@@ -659,7 +669,21 @@ var count = 2,
 
 
 
+    "use strict";
 
+    function add_customer() {
+
+        var name=$('#customer_name').val();
+
+        if ($.isNumeric(name) == true){
+            $('#mobile').val(name);
+        }else{
+            $('#m_customer_name').val(name);
+        }
+
+
+
+    }
 
     "use strict";
  function onselectimage(id){
@@ -947,28 +971,39 @@ $(document).ready(function() {
       });
     frm.on('submit', function(e) {
         e.preventDefault();
+        $(".page-loader-wrapper").css('display', 'block');
+
+        //    var formData = new FormData(this);
         $.ajax({
             url : $(this).attr('action'),
             method : $(this).attr('method'),
-            dataType : 'json',
+            // dataType : 'json',
             data: new FormData(this),
             processData: false,
             contentType: false,
-            success: function(data)
+            success: function(d)
             {
+                var data = JSON.parse(d);
+
+                 console.log(data);
+                $(".page-loader-wrapper").css('display', 'none');
+
+
                 if (data.status == true) {
                     output.empty().html(data.message).addClass('alert-success').removeClass('alert-danger').removeClass('hide');
+
                     $("#inv_id").val(data.invoice_id);
-                  $('#printconfirmodal').modal('show');
-                   $('#pos_sale_insert').trigger("reset");
-                   if(data.status == true && event.keyCode == 13) {
-                     }
+                    $('#printconfirmodal').modal('show');
+                    if(data.status == true && event.keyCode == 13) {
+                    }
                 } else {
                     output.empty().html(data.exception).addClass('alert-danger').removeClass('alert-success').removeClass('hide');
                 }
             },
             error: function(xhr)
             {
+                $(".page-loader-wrapper").css('display', 'none');
+
                 alert('failed!');
             }
         });

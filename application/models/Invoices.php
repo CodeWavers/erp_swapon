@@ -458,6 +458,8 @@ class Invoices extends CI_Model
 
 
         $product_information = $this->Products->get_single_pr_details($product_id, true);
+
+        $p_id=$this->db->select('product_id')->from('product_information')->where('product_id',$product_id)->or_where('sku',$product_id)->get()->row()->product_id;
         // echo '<pre>';
         // print_r($product_information);
         // exit();
@@ -475,10 +477,10 @@ class Invoices extends CI_Model
             $total_sale = $this->db->get()->row();
 
             if ($outlet_id == 'HK7TGDT69VFMXB7') {
-                $available_quantity = $this->Reports->getCheckList(null, $product_id)['central_stock'];
+                $available_quantity = $this->Reports->getCheckList(null, $p_id)['central_stock'];
              //   $available_quantity = $this->Reports->current_stock($product_id,1);
             } else {
-                $available_quantity = $this->Rqsn->outlet_stock(null, $product_id)['outlet_stock'];
+                $available_quantity = $this->Rqsn->outlet_stock(null, $p_id)['outlet_stock'];
             }
 
             $data2 = (object) array(
