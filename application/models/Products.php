@@ -735,8 +735,6 @@ class Products extends CI_Model
         $query = $this->db->select('*, product_information.finished_raw as pr_status')
             ->from('product_information')
             ->join('product_category', 'product_information.category_id=product_category.category_id', 'left')
-            ->join('size_list', 'product_information.size=size_list.size_id', 'left')
-            ->join('color_list', 'product_information.color=color_list.color_id', 'left')
             ->join('supplier_product', 'product_information.product_id = supplier_product.product_id', 'left')
             ->join('product_purchase_details', 'product_information.product_id = product_purchase_details.product_id', 'left')
             ->where('product_information.product_id', $product_id)

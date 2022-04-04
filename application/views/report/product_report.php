@@ -92,6 +92,20 @@
                                     <?php } ?>
                                 </select>
                             </div>
+
+                            <label class="" for="from_date">Category:</label>
+                            <div class="form-group">
+
+                                <select name="cat_id" class="form-control">
+                                    <option value=""></option>
+                                    <?php foreach ($category_list as $cat) { ?>
+                                        <option value="<?php echo  $cat['id'] ?>" <?php if ($cat['name'] == $cat) {
+                                            echo 'selected';
+                                        } ?>><?php echo  $cat['name']?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
                         </div>
 
                         <div style="margin-top: 20px;">

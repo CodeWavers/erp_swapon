@@ -1778,8 +1778,10 @@ class Lreport extends CI_Model
         $CI->load->model('Warehouse');
         $CI->load->model('Reports');
         $CI->load->model('Web_settings');
+        $CI->load->model('Categories');
         $CI->load->library('occational');
         $outlet_list = $CI->Warehouse->get_outlet_user();
+        $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
         $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id);
@@ -1806,6 +1808,7 @@ class Lreport extends CI_Model
             'sub_total'      => number_format($sub_total, 2, '.', ','),
             'product_report' => $product_report,
             'product_list'   => $product_list,
+            'category_list'   => $category_list,
             'product_id'     => $product_id,
             'from_date'      => $from_date,
             'to_date'        => $to_date,

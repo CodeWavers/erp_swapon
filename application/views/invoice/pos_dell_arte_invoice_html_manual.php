@@ -58,7 +58,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             @media print {
 
                                 .subt {
-                                    font-size: 8px !important;
+                                    font-size: 11px !important;
                                     line-height: 1 !important;
                                 }
 
@@ -77,7 +77,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 }
 
                                 .com-name {
-                                    font-size: 8px !important;
+                                    font-size: 11px !important;
                                 }
 
                                 /*
@@ -99,7 +99,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 table#tbl {
                                     width: 58mm !important;
-                                    font-size: 8px !important;
+                                    font-size: 11px !important;
                                     border-collapse: collapse !important;
                                     /* white-space: nowrap; */
                                     table-layout: auto;
@@ -141,7 +141,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 /*Setting the width of column 3.*/
 
                                 /* table.item-table>tr>td {
-                                    font-size: 8px !important;
+                                    font-size: 11px !important;
                                     word-break: break-word !important;
                                 } */
 
@@ -161,10 +161,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             <div style="width: 100%;" class="text-center">
                                 <img src="<?= $inv_logo ?>" style="width: 20mm; height: auto;">
                             </div>
-                            <div>
-                                <div align="" style="line-height: 1; border: 0; padding:0">
+                            <div  class="text-center">
+                                <div align=""  style="line-height: 1; border: 0; padding:0">
                                     {company_info}
-                                    <span style="font-size: 12px !important;">
+                                    <span style="font-size: 11px !important;">
                                         <strong>{company_name}</strong>
                                     </span><br>
                                     <span class="subt">{address}</span><br>
@@ -175,7 +175,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             </div>
 
 
-                            <div align="" style="font-size: 8px; margin-top: 0.2cm !important">
+                            <div  class="text-center" align="" style="font-size: 11px; margin-top: 0.2cm !important">
                                 <div><b>{customer_name}</b><br>
                                     <?php if ($customer_address) { ?>
                                         {customer_address}<br>
@@ -185,8 +185,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <?php } ?>
                                 </div>
                             </div>
-                            <div>
-                                <div style="margin-top: 0.3cm !important; font-size: 10px !important">
+                            <div  class="text-center">
+                                <div style="margin-top: 0.3cm !important; font-size: 11px !important">
                                     <nobr>
                                         <date>
                                             Date: <?php
@@ -198,7 +198,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 <div>
                                     <div>
-                                        <nobr style="font-size: 10px;">
+                                        <nobr style="font-size: 11px;">
                                             <strong><?php echo display('invoice_no'); ?> : {invoice_no}</strong>
                                         </nobr>
                                     </div>
@@ -228,7 +228,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <nobr><?php echo $sl; ?></nobr>
                                             </td> -->
                                             <td align="center">
-                                                <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['product_model']) . ')'; ?>
+                                                <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
                                             </td>
                                             <!-- <td align="center" class="td-style">
                                                 <nobr><?php echo html_escape($invoice_data['unit']); ?></nobr>
@@ -441,7 +441,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 </table>
 
-                                <div style="text-align:center; margin-top: 0.5cm; font-size: 8px">
+                                <div style="text-align:center; margin-top: 0.5cm; font-size: 11px">
                                     <td>Powered by <strong>Webcoders</strong></a></td>
 
                                 </div>

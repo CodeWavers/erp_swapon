@@ -398,7 +398,7 @@
                                             <input type="date" style="width: 110px" id="expiry_date" class="form-control expiry_date_1" name="expiry_date[]" value="" />
                                         </td>
                                         <td class="invoice_fields"  width="100">
-                                            <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0" readonly />
+                                            <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0"  />
                                         </td>
                                         <!-- Discount -->
                                         <td  width="200" class="text-center">
@@ -524,7 +524,7 @@
                                         <td colspan="8" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="n_total" class="form-control text-right" name="n_total" value="0" readonly="readonly" placeholder="" />
-                                        </td> 
+                                        </td>
                                     </tr>
                                     <tr>
 

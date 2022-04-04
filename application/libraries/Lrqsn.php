@@ -295,7 +295,7 @@ class Lrqsn
         }
 
         $data = array(
-            'title'     => 'Requsition Report',
+            'title'     => 'Requisition Report',
             'rqsn_list' => $new_rq
         );
 

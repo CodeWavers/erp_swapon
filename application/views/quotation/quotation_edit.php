@@ -23,7 +23,7 @@
             ?>
             <div class="alert alert-info alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <?php echo $message ?>                    
+                <?php echo $message ?>
             </div>
             <?php
             $this->session->unset_userdata('message');
@@ -33,7 +33,7 @@
             ?>
             <div class="alert alert-danger alert-dismissable">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <?php echo $error_message ?>                    
+                <?php echo $error_message ?>
             </div>
             <?php
             $this->session->unset_userdata('error_message');
@@ -73,7 +73,7 @@
                                                     echo 'selected';
                                                 }
                                                 ?>>
-                                                            <?php echo $customer['customer_name'] ?>
+                                                    <?php echo $customer['customer_name'] ?>
                                                 </option>
                                             <?php } ?>
                                         </select>
@@ -158,49 +158,49 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="labour_table">
                                         <thead>
-                                            <tr>
-                                                <th width="200">Labour</th>
-                                                <th><?php echo display('notes'); ?></th>    
-                                                <th class="text-right"><?php echo display('rate'); ?></th>     
-                                                <th class="text-center">
-                                                    <button type="button" class="btn btn-success" onClick="addLabour('labourdive');"><i class="fa fa-plus"></i></button>
-                                                </th>      
-                                            </tr>
+                                        <tr>
+                                            <th width="200">Labour</th>
+                                            <th><?php echo display('notes'); ?></th>
+                                            <th class="text-right"><?php echo display('rate'); ?></th>
+                                            <th class="text-center">
+                                                <button type="button" class="btn btn-success" onClick="addLabour('labourdive');"><i class="fa fa-plus"></i></button>
+                                            </th>
+                                        </tr>
                                         </thead>
                                         <tbody id="labourdive">
-                                            <?php
-                                            $sl = 1;
-                                            foreach ($quot_labour as $labours) {
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                                        <select name="job_type_id[]" id="job_type_id_<?php echo $sl ?>" class="form-control select2" onchange="labour_data(this.value, '<?php echo $sl ?>')">
-                                                            <option value=""></option>
-                                                            <?php foreach ($get_jobtypelist as $jobtype) { ?>
-                                                                <option value='<?php echo $jobtype->job_type_id ?>' <?php
-                                                                if ($jobtype->job_type_id == $labours['job_type_id']) {
-                                                                    echo 'selected';
-                                                                }
-                                                                ?>><?php echo $jobtype->job_type_name; ?></option>
-                                                                    <?php }
-                                                                    ?>
-                                                        </select>    
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="form-control" placeholder="Notes" name="lnotes[]" value="<?php echo $labours['note'] ?>">
-                                                    </td>
-
-                                                    <td>
-                                                        <input type="text" class="form-control itemtotal text-right" placeholder="Rate" id="lrate_<?php echo $sl ?>" name="lrate[]" readonly value="<?php echo $labours['rate'] ?>">
-                                                    </td>
-
-                                                    <td></td>
-
-                                                </tr>
-                                                <?php
-                                                $sl++;
-                                            }
+                                        <?php
+                                        $sl = 1;
+                                        foreach ($quot_labour as $labours) {
                                             ?>
+                                            <tr>
+                                                <td>
+                                                    <select name="job_type_id[]" id="job_type_id_<?php echo $sl ?>" class="form-control select2" onchange="labour_data(this.value, '<?php echo $sl ?>')">
+                                                        <option value=""></option>
+                                                        <?php foreach ($get_jobtypelist as $jobtype) { ?>
+                                                            <option value='<?php echo $jobtype->job_type_id ?>' <?php
+                                                            if ($jobtype->job_type_id == $labours['job_type_id']) {
+                                                                echo 'selected';
+                                                            }
+                                                            ?>><?php echo $jobtype->job_type_name; ?></option>
+                                                        <?php }
+                                                        ?>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" placeholder="Notes" name="lnotes[]" value="<?php echo $labours['note'] ?>">
+                                                </td>
+
+                                                <td>
+                                                    <input type="text" class="form-control itemtotal text-right" placeholder="Rate" id="lrate_<?php echo $sl ?>" name="lrate[]" readonly value="<?php echo $labours['rate'] ?>">
+                                                </td>
+
+                                                <td></td>
+
+                                            </tr>
+                                            <?php
+                                            $sl++;
+                                        }
+                                        ?>
                                         </tbody>
 
                                     </table>
@@ -213,75 +213,75 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="item_table">
                                         <thead>
-                                            <tr>
-                                                <th width="200"> Item </th>
-                                                <th class="text-center"><?php echo display('available_qty'); ?></th>
-                                                <th class='text-center'> Qty </th>   
-                                                <th class='text-right'> <?php echo display('price'); ?> </th> 
-                                                <th class='text-right'><?php echo display('total'); ?></th>    
-                                                <th class="text-center">
-                                                    <button type="button" class="btn btn-success" onClick="addItem('itmetable');"><i class="fa fa-plus"></i></button>
-                                                </th>      
-                                            </tr>
+                                        <tr>
+                                            <th width="200"> Item </th>
+                                            <th class="text-center"><?php echo display('available_qty'); ?></th>
+                                            <th class='text-center'> Qty </th>
+                                            <th class='text-right'> <?php echo display('price'); ?> </th>
+                                            <th class='text-right'><?php echo display('total'); ?></th>
+                                            <th class="text-center">
+                                                <button type="button" class="btn btn-success" onClick="addItem('itmetable');"><i class="fa fa-plus"></i></button>
+                                            </th>
+                                        </tr>
                                         </thead>
                                         <tbody id="itmetable">
-                                            <?php
-                                            $x = 1;
-                                            foreach ($quot_product as $products) {
-                                                ?>
-                                                <tr>
-                                                    <td>
-                                            
-                                                        <select name="product_id[]" id="product_id" class="form-control select2" onchange="product_data(this.value, '<?php echo $x ?>')">
-                                                            <option value="">Select One</option>
-                                                            <?php foreach ($get_productlist as $product) { ?>
-                                                                <option value='<?php echo $product->product_id; ?>' <?php
-                                                                if ($products['product_id'] == $product->product_id) {
-                                                                    echo 'selected';
-                                                                }
-                                                                ?>><?php echo $product->product_name; ?></option>
-                                                                    <?php } ?>
-                                                                    <?php foreach ($get_groupprice as $groupprice) { ?>
-                                                                <option value='<?php echo $groupprice->group_price_id; ?>' <?php
-                                                                if ($products['product_id'] == $groupprice->group_price_id) {
-                                                                    echo 'selected';
-                                                                }
-                                                                ?>>
-                                                                            <?php echo $groupprice->group_name; ?>
-                                                                </option>
-                                                            <?php } ?>
-                                                        </select>         
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" name="available_qty[]" id="available_qty_<?php echo $x ?>" class="form-control text-center" value="<?php echo $products['available_qty']; ?>" readonly>   
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <input type="text" name="qty[]" class="form-control text-center" placeholder="Quantity" id="qty_<?php echo $x ?>" onkeyup="item_total_price('<?php echo $x ?>')" onchange="item_total_price('<?php echo $x ?>')" value="<?php echo $products['used_qty'] ?>">    
-                                                    </td>
-                                                    <td class='text-right'> <input type="text" name="price[]" class="form-control text-right" placeholder="Price" id="item_price_<?php echo $x ?>" readonly value="<?php echo $products['rate'] ?>"> </td>
-                                                    <td class='text-right'> <input type="text" name="item_total" class="form-control itemtotal text-right" placeholder="Total" id="item_total_<?php echo $x ?>" readonly value="<?php echo $products['rate'] * $products['used_qty'] ?>"> </td>
-                                                    <td></td>
-
-                                                </tr>
-                                                <?php
-                                                $x++;
-                                            }
+                                        <?php
+                                        $x = 1;
+                                        foreach ($quot_product as $products) {
                                             ?>
+                                            <tr>
+                                                <td>
+
+                                                    <select name="product_id[]" id="product_id" class="form-control select2" onchange="product_data(this.value, '<?php echo $x ?>')">
+                                                        <option value="">Select One</option>
+                                                        <?php foreach ($get_productlist as $product) { ?>
+                                                            <option value='<?php echo $product->product_id; ?>' <?php
+                                                            if ($products['product_id'] == $product->product_id) {
+                                                                echo 'selected';
+                                                            }
+                                                            ?>><?php echo $product->product_name; ?></option>
+                                                        <?php } ?>
+                                                        <?php foreach ($get_groupprice as $groupprice) { ?>
+                                                            <option value='<?php echo $groupprice->group_price_id; ?>' <?php
+                                                            if ($products['product_id'] == $groupprice->group_price_id) {
+                                                                echo 'selected';
+                                                            }
+                                                            ?>>
+                                                                <?php echo $groupprice->group_name; ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="available_qty[]" id="available_qty_<?php echo $x ?>" class="form-control text-center" value="<?php echo $products['available_qty']; ?>" readonly>
+                                                </td>
+                                                <td class="text-center">
+                                                    <input type="text" name="qty[]" class="form-control text-center" placeholder="Quantity" id="qty_<?php echo $x ?>" onkeyup="item_total_price('<?php echo $x ?>')" onchange="item_total_price('<?php echo $x ?>')" value="<?php echo $products['used_qty'] ?>">
+                                                </td>
+                                                <td class='text-right'> <input type="text" name="price[]" class="form-control text-right" placeholder="Price" id="item_price_<?php echo $x ?>" readonly value="<?php echo $products['rate'] ?>"> </td>
+                                                <td class='text-right'> <input type="text" name="item_total" class="form-control itemtotal text-right" placeholder="Total" id="item_total_<?php echo $x ?>" readonly value="<?php echo $products['rate'] * $products['used_qty'] ?>"> </td>
+                                                <td></td>
+
+                                            </tr>
+                                            <?php
+                                            $x++;
+                                        }
+                                        ?>
                                         </tbody>
                                         <tfoot>
-                                            <tr>
-                                                <td colspan="4" class="text-right"> <b>Sub Total</b></td>
-                                                <td><input type="text" name="grandtotal" id="grandtotal" readonly="" class="form-control text-right" value="<?php echo $quot_main[0]['totalamount'] - $quot_main[0]['total_discount'] ?>"></td>
-                                                <td></td>
+                                        <tr>
+                                            <td colspan="4" class="text-right"> <b>Sub Total</b></td>
+                                            <td><input type="text" name="grandtotal" id="grandtotal" readonly="" class="form-control text-right" value="<?php echo $quot_main[0]['totalamount'] - $quot_main[0]['total_discount'] ?>"></td>
+                                            <td></td>
+                                        </tr>
+                                        <?php if ($user_type != 3) { ?>
+                                            <tr> <td colspan="4" class="text-right"> <b>Discount(%)</b></td>
+                                                <td><input type="text" name="dis_per" id="dis_per"  class="form-control text-right" onkeyup="totalcalculation()" value="<?php echo $quot_main[0]['dis_per'] ?>"></td>
                                             </tr>
-                                            <?php if ($user_type != 3) { ?>
-                                                <tr> <td colspan="4" class="text-right"> <b>Discount(%)</b></td>
-                                                    <td><input type="text" name="dis_per" id="dis_per"  class="form-control text-right" onkeyup="totalcalculation()" value="<?php echo $quot_main[0]['dis_per'] ?>"></td>
-                                                </tr>                                                
-                                                <tr> <td colspan="4" class="text-right"> <b>Total Discount</b></td>
-                                                    <td><input type="text" name="total_dis" id="total_dis"  class="form-control text-right" readonly="" value="<?php echo $quot_main[0]['total_discount'] ?>"></td>
-                                                </tr>
-                                            <?php } else { ?>
+                                            <tr> <td colspan="4" class="text-right"> <b>Total Discount</b></td>
+                                                <td><input type="text" name="total_dis" id="total_dis"  class="form-control text-right" readonly="" value="<?php echo $quot_main[0]['total_discount'] ?>"></td>
+                                            </tr>
+                                        <?php } else { ?>
                                             <input type="hidden" name="dis_per" id="dis_per"  class="form-control text-right">
                                             <input type="hidden" name="total_dis" id="total_dis"  class="form-control text-right">
                                         <?php } ?>
@@ -317,7 +317,7 @@
                                 <?php } ?>
                             </div>
                         </div>
-                    </div>               
+                    </div>
                     <?php echo form_close() ?>
                 </div>
             </div>

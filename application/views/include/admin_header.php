@@ -314,12 +314,19 @@ $birthday = $CI->Reports->birthday_noti();
         }
         ?>">
             <a href="#">
-                <i class="glyphicon glyphicon-circle-arrow-down"></i><span>Transfer</span>
+                <i class="glyphicon glyphicon-circle-arrow-down"></i><span>Requisition</span>
                 <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
             <ul class="treeview-menu">
+                <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                    <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url('Crqsn/rqsn_form') ?>">Requisition Form</a></li>
+                <?php } ?>
                 <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
                     <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
                         echo "active";
@@ -353,12 +360,56 @@ $birthday = $CI->Reports->birthday_noti();
 
 
                 <?php } ?>
+                <?php if ($this->permission1->method('approval', 'create')->access() || $this->permission1->method('aprove_rqsn', 'create')->access() || $this->permission1->method('aprove_rqsn_outlet', 'create')->access() || $this->permission1->method('aprove_rqsn_purchase', 'create')->access()) { ?>
+                    <li class="treeview <?php
+                    if ($this->uri->segment('2') == ("index") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn") || $this->uri->segment('2') == ("Crqsn")) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    }
+                    ?>">
+                        <a href="#">
+                            <span>Approval</span>
+                            <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                        </a>
+                        <ul class="treeview-menu">
+
+                            <?php if ($this->permission1->method('aprove_rqsn', 'create')->access()) { ?>
+                                <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                                    echo "active";
+                                } else {
+                                    echo " ";
+                                } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn') ?>">Approve Requisition CW</a></li>
+                            <?php } ?>
+
+                            <!-- <?php if ($this->permission1->method('aprove_rqsn_outlet', 'create')->access()) { ?>
+              <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                                echo "active";
+                            } else {
+                                echo " ";
+                            } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn_outlet') ?>">Approve Requisition Outlet</a></li>
+            <?php } ?> -->
+                            <?php if ($this->permission1->method('aprove_rqsn_purchase', 'create')->access()) { ?>
+                                <li class="treeview <?php if ($this->uri->segment('2') == ("aprove_rqsn_purchase")) {
+                                    echo "active";
+                                } else {
+                                    echo " ";
+                                } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn_purchase') ?>">Purchase Requisition Approve </a></li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                <?php } ?>
 
 
             </ul>
         </li>
         <?php } ?>
         <!-- Requisition menu end -->
+
+
+
       <!-- Discount menu start -->
       <!-- <?php if (
               $this->permission1->method('new_discount', 'create')->access() ||

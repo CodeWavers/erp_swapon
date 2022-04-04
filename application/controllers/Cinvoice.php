@@ -702,9 +702,9 @@ class Cinvoice extends CI_Controller
             }
 
             $tr .= "<tr id=\"row_" . $product_details->product_id . "\">
-						<td class=\"\" style=\"\">
+						<td class=\"\" style=\"width: 30%\">
 
-							<input type=\"text\" name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . $product_details->product_name . "- (" . $product_details->product_model . ") - (" . $product_details->product_color . ") - (" . $product_details->product_size . ")" . "' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
+							<input type=\"text\"  size='100' name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . html_escape($product_details->product_name)."(" . $product_details->sku . ")' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
 
 							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
 
@@ -736,7 +736,7 @@ class Cinvoice extends CI_Controller
 
 
 						<td style=\"width:85px\">
-							<input type=\"text\" name=\"product_rate[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" value='" . $product_details->price . "' id=\"price_item_" . $product_details->product_id . "\" class=\"price_item1 form-control text-right\" required readonly placeholder=\"0.00\" min=\"0\"/>
+							<input type=\"text\" name=\"product_rate[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" value='" . $product_details->price . "' id=\"price_item_" . $product_details->product_id . "\" class=\"price_item1 form-control text-right\" required  placeholder=\"0.00\" min=\"0\"/>
 						</td>
 
 						<td class=\"\">
@@ -991,7 +991,7 @@ class Cinvoice extends CI_Controller
         if ($customer_info) {
             $json_customer[''] = '';
             foreach ($customer_info as $value) {
-                $json_customer[] = array('label' => $value['customer_name'] . ' (' . $value['customer_mobile'] . ')', 'value' => ["id" => $value['customer_id'], "mobile" => $value['customer_mobile']]);
+                $json_customer[] = array('label' => $value['customer_name'] . ' (' . $value['customer_mobile'] . ')'.' (' . $value['customer_address'] . ')', 'value' => ["id" => $value['customer_id'], "mobile" => $value['customer_mobile']]);
             }
         } else {
             $json_customer[] = 'No Record found';
