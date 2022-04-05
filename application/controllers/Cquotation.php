@@ -27,41 +27,80 @@ class Cquotation extends CI_Controller
     public function index()
     {
         $CI = &get_instance();
-        $CI->load->model('Web_settings');
-        $CI->load->model('Settings');
         $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Courier');
+        $CI->load->model('Service');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Settings');
+        $CI->load->model('Aggre');
+
         $card_list = $CI->Settings->get_real_card_data();
-        $bank_list          = $CI->Web_settings->bank_list();
-        $bkash_list        = $CI->Web_settings->bkash_list();
-        $nagad_list        = $CI->Web_settings->nagad_list();
+        $employee_list    = $CI->Service->employee_list();
         $customer_details = $CI->Invoices->pos_customer_setup();
-
-
-        $data['title']    = display('add_quotation');
-        $currency_details = $this->Web_settings->retrieve_setting_editdata();
-        $taxfield = $this->db->select('tax_name,default_value')
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $taxfield = $CI->db->select('tax_name,default_value')
             ->from('tax_settings')
             ->get()
             ->result_array();
-        $data['quotation_no']    = $this->quot_number_generator();
-        $data['outlet_id']    = $this->warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        $data['card_list']     = $card_list;
-        $data['bank_list']     = $bank_list;
-        $data['bkash_list']    = $bkash_list;
-        $data['nagad_list']    = $nagad_list;
-        $data['taxes']           = $taxfield;
-        $data['discount_type']   = $currency_details[0]['discount_type'];
-        $data['customers']       = $this->Quotation_model->get_allcustomer();
-        $data['get_productlist'] = $this->Quotation_model->get_allproduct();
-        $data['isAdd'] = 1;
-        $data['customer_name'] = $customer_details[0]['customer_name'];
-        $data['customer_id']   = $customer_details[0]['customer_id'];
+        $bank_list          = $CI->Web_settings->bank_list();
+        $bkash_list        = $CI->Web_settings->bkash_list();
+        $nagad_list        = $CI->Web_settings->nagad_list();
+        $courier_list        = $CI->Courier->get_courier_list();
+        $branch_list        = $CI->Courier->get_branch_list();
+        $outlet_user        = $CI->Warehouse->get_outlet_user();
+        $receiver_list        = $CI->Courier->get_receiver_list();
+
+        $outlet_list = $CI->Warehouse->branch_list_product();
+
+        $cw = $CI->Warehouse->central_warehouse();
+        $aggre_list = $CI->Aggre->aggre_list_product();
+
+        $data = array(
+            'title'         => display('add_new_invoice'),
+            'employee_list' => $employee_list,
+            'discount_type' => $currency_details[0]['discount_type'],
+            'taxes'         => $taxfield,
+            'customer_name' => $customer_details[0]['customer_name'],
+            'customer_id'   => $customer_details[0]['customer_id'],
+            'customer_id_two'   => $customer_details[0]['customer_id_two'],
+            'card_list'     => $card_list,
+            'bank_list'     => $bank_list,
+            'bkash_list'     => $bkash_list,
+            'nagad_list'     => $nagad_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
+            'outlet_list'     => $outlet_user,
+            'receiver_list'    => $receiver_list,
+            'aggre_list'    => $aggre_list,
+            'cw'            => $cw
+        );
         $content = $this->parser->parse('quotation/quotation_form', $data, true);
         $this->template->full_admin_html_view($content);
     }
 
+    public function pre_order(){
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Quotation_model');
+        $invoice_id = $CI->Quotation_model->pre_order_entry();
+        if (!empty($invoice_id)) {
+            $this->session->set_userdata(array('message' => display('quotation_successfully_added')));
+            redirect(base_url('Cquotation/manage_quotation'));
+        } else {
+            $this->session->set_userdata(array('error_message' => display('already_inserted')));
+            redirect(base_url('Cquotation'));
+        }
+
+
+
+    }
+
+
+
+
     //    ========== its for  insert_quotation =============
-    public function insert_quotation()
+    public function  insert_quotation()
     {
         $quot_id = $this->auth->generator(15);
         $tablecolumn = $this->db->list_fields('quotation_taxinfo');
@@ -276,7 +315,7 @@ class Cquotation extends CI_Controller
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $limit = $config["per_page"];
-        $data['quotation_list'] = $this->Quotation_model->quotation_list($limit, $page);
+        $data['quotation_list'] = $this->Quotation_model->pre_order_list($limit, $page);
         $data['links'] = $this->pagination->create_links();
         $data['pagenum'] = $page;
 
@@ -311,6 +350,15 @@ class Cquotation extends CI_Controller
             $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect(base_url('Cquotation/manage_quotation'));
+    }
+
+    public function invoice_update_form($invoice_id)
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('linvoice');
+        $content = $CI->linvoice->pre_invoice_edit_data($invoice_id);
+        $this->template->full_admin_html_view($content);
     }
 
     //    ========= its for available quantity check  only job performed===========
@@ -395,6 +443,65 @@ class Cquotation extends CI_Controller
 
         $content = $this->parser->parse('quotation/quotation_to_sales', $data, true);
         $this->template->full_admin_html_view($content);
+    }
+    public function pre_to_sales($invoice_id = null)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Courier');
+        $CI->load->model('Invoices');
+        $CI->load->model('Rqsn');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Settings');
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+
+        $inv_details=$this->db->from('invoice')->where('invoice_id',$invoice_id)->get()->row();
+
+
+        $Vdate = $this->input->post('invoice_date', TRUE);
+
+        $this->db->set('is_pre',1);
+        $this->db->where('invoice_id',$invoice_id);
+        $this->db->update('invoice');
+
+        $this->db->set('pre_order',1);
+        $this->db->where('invoice_id',$invoice_id);
+        $this->db->update('invoice_details');
+
+        $coscr = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  10204,
+            'Narration'      =>  'Inventory credit For Invoice No' . $inv_details->invoice,
+            'Debit'          =>  0,
+            'Credit'         =>  $inv_details->total_amount, //purchase price asbe
+            'IsPosted'       => 1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+
+
+
+        $pro_sale_income = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INVOICE',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  303,
+            'Narration'      =>  'Sale Income For Invoice ID - ' . $invoice_id . ' Customer ' .$cs_name,
+            'Debit'          =>  0,
+            'Credit'         => (!empty($courier_pay) ? $courier_pay : null),
+            'IsPosted'       => 1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $pro_sale_income);
+
+        $this->session->set_userdata(array('message' => 'Added to Invoice'));
+        redirect(base_url('Cquotation/manage_quotation'));
+
     }
 
     // Edit quotation

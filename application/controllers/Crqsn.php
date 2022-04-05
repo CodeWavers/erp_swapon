@@ -81,6 +81,30 @@ class Crqsn extends CI_Controller
         if ($rqsn == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));
 
+            redirect(base_url('Crqsn/rqsn_form'));
+        } else {
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Crqsn/rqsn_form'));
+        }
+    }
+    public function insert_transfer()
+    {
+        $CI = &get_instance();
+
+        //echo "Ok";exit();
+
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Rqsn');
+
+        $rqsn = $CI->Rqsn->transfer_entry();
+
+
+
+        //   echo "ok";exit();
+
+        if ($rqsn == TRUE) {
+            $this->session->set_userdata(array('message' => display('successfully_added')));
+
             redirect(base_url('Crqsn/transfer_form'));
         } else {
             $this->session->set_userdata(array('error_message' => display('please_try_again')));

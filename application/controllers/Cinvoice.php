@@ -54,13 +54,7 @@ class Cinvoice extends CI_Controller
             $data['status'] = true;
             $data['invoice_id'] = $invoice_id;
             $data['message'] = display('save_successfully');
-            // $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
-            // if($mailsetting[0]['isinvoice']==1){
-            //     // $mail = $this->invoice_pdf_generate($invoice_id);
-            //     if($mail == 0){
-            //         $data['message2'] = $this->session->set_userdata(array('error_message' => display('please_config_your_mail_setting')));
-            //     }
-            // }
+
             $data['details'] = $this->load->view('invoice/invoice_html', $data, true);
         } else {
             $data['status'] = false;

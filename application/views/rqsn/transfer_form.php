@@ -78,7 +78,7 @@
 
 
                     <div class="rqsn_panel" >
-                        <?php echo form_open_multipart('Crqsn/insert_rqsn',array('class' => 'form-vertical', 'id' => 'insert_rqsn'))?>
+                        <?php echo form_open_multipart('Crqsn/insert_transfer',array('class' => 'form-vertical', 'id' => 'insert_rqsn'))?>
                         <div class="row">
 
                             <div class="col-sm-8" id="payment_from_2">

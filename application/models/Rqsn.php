@@ -111,6 +111,58 @@ class Rqsn extends CI_Model
             'rqsn_id'     => $rqsn_id,
             'date'            => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
             'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Requisition'),
+            'from_id' => $this->input->post('from_id', true),
+            'to_id'  => $this->input->post('to_id', true),
+          //  'user_id'  => $user_id,
+            'status'   => 1,
+        );
+
+          // echo "<pre>";print_r($datarq);exit();
+        $this->db->insert('rqsn', $datarq);
+
+
+        $quantity            = $this->input->post('product_quantity', true);
+        $p_id             = $this->input->post('product_id', true);
+        $unit             = $this->input->post('unit', true);
+        $qty_price             = $this->input->post('qty_price', true);
+
+
+        for ($i = 0, $n   = count($p_id); $i < $n; $i++) {
+            $qty  = $quantity[$i];
+            $un  = $unit[$i];
+            $product_id   = $p_id[$i];
+            $rate   = $qty_price[$i];
+
+
+            $rqsn_details = array(
+                'rqsn_detail_id'     => mt_rand(),
+                'rqsn_id'     => $rqsn_id,
+                'product_id'         => $product_id,
+                'quantity'                => $qty,
+                'unit'                => $un,
+                'status'                => 1,
+
+            );
+          //  echo "<pre>";print_r($rqsn_details);exit();
+            if (!empty($quantity)) {
+                $this->db->insert('rqsn_details', $rqsn_details);
+            }
+        }
+
+        return $rqsn_id;
+    }
+    public function transfer_entry()
+    {
+        $this->load->model('Web_settings');
+        $rqsn_id = mt_rand();
+        $user_id = $this->session->userdata('user_id');
+        //    echo "Ok";exit();
+
+        //Data inserting into invoice table
+        $datarq = array(
+            'rqsn_id'     => $rqsn_id,
+            'date'            => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
+            'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Requisition'),
             'from_id' => $this->input->post('to_id', true),
             'to_id'  => $this->input->post('from_id', true),
             'user_id'  => $user_id,
@@ -904,6 +956,8 @@ class Rqsn extends CI_Model
             ->where('a.to_id', 'HK7TGDT69VFMXB7')
             ->get()
             ->result();
+
+       // echo '<pre>';print_r($records);exit();
 
         // $data = array();
 

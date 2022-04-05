@@ -109,9 +109,9 @@ function quantity_calculate(item) {
 
    // alert(comm_item)
 
-    //if (comm_item != ''){
-    //    var comm=0
-    //}
+    if (comm_item != ''){
+        var comm_item=0;
+    }
 
     var just_tot = quantity * price_item;
     var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));

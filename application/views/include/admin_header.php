@@ -391,13 +391,13 @@ $birthday = $CI->Reports->birthday_noti();
                                 echo " ";
                             } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn_outlet') ?>">Approve Requisition Outlet</a></li>
             <?php } ?> -->
-                            <?php if ($this->permission1->method('aprove_rqsn_purchase', 'create')->access()) { ?>
-                                <li class="treeview <?php if ($this->uri->segment('2') == ("aprove_rqsn_purchase")) {
-                                    echo "active";
-                                } else {
-                                    echo " ";
-                                } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn_purchase') ?>">Purchase Requisition Approve </a></li>
-                            <?php } ?>
+<!--                            --><?php //if ($this->permission1->method('aprove_rqsn_purchase', 'create')->access()) { ?>
+<!--                                <li class="treeview --><?php //if ($this->uri->segment('2') == ("aprove_rqsn_purchase")) {
+//                                    echo "active";
+//                                } else {
+//                                    echo " ";
+//                                } ?><!--"><a href="--><?php //echo base_url('Crqsn/aprove_rqsn_purchase') ?><!--">Purchase Requisition Approve </a></li>-->
+<!--                            --><?php //} ?>
                         </ul>
                     </li>
                 <?php } ?>

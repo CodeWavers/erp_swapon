@@ -7,12 +7,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo display('invoice_edit') ?></h1>
-            <small><?php echo display('invoice_edit') ?></small>
+            <h1>Add to Sales</h1>
+            <small>Add to Sales</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#"><?php echo display('invoice') ?></a></li>
-                <li class="active"><?php echo display('invoice_edit') ?></li>
+                <li class="active">Add to Sales</li>
             </ol>
         </div>
     </section>
@@ -46,7 +46,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4><?php echo display('invoice_edit') ?></h4>
+                            <h4>Add to Sales</h4>
                         </div>
                     </div>
                     <?php echo form_open('Cinvoice/invoice_update', array('class' => 'form-vertical', 'id' => 'invoice_update')) ?>
@@ -82,32 +82,32 @@
                             </div>
 
                             <?php  if ($deliver_type == 2){?>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label for="customer_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
-                                        <div class="col-sm-8">
-                                            <select name="courier_id" id="" class="form-control"  tabindex="3">
-                                                <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+                                        <select name="courier_id" id="" class="form-control"  tabindex="3">
+                                            <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
 
-                                                <?php foreach ($courier_list as $courier) { ?>
-                                                    <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
+                                            <?php foreach ($courier_list as $courier) { ?>
+                                                <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="customer_name" class="col-sm-4 col-form-label">Branch Name <i class="text-danger">*</i></label>
-                                        <div class="col-sm-8">
-                                            <select name="branch_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
-                                                <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
-                                                <?php foreach ($branch_list as $b) { ?>
-                                                    <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-
                                 </div>
+                            <div class="form-group row">
+                                    <label for="customer_name" class="col-sm-4 col-form-label">Branch Name <i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+                                    <select name="branch_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                        <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
+                                        <?php foreach ($branch_list as $b) { ?>
+                                            <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
+                                        <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
 
                             <?php } ?>
                         </div>
@@ -124,8 +124,8 @@
                             <div class="col-sm-6" id="bank_div">
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-4 col-form-label"><?php
-                                        echo display('bank');
-                                        ?> <i class="text-danger">*</i></label>
+                                                                                        echo display('bank');
+                                                                                        ?> <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
 
                                         <input type="text" name="bank_id" class="form-control" id="bank_id" value="<?php echo html_escape($bank) ?>" placeholder="Bank">
@@ -180,7 +180,7 @@
                                                 <option value="<?php echo html_escape($bkash['bkash_id']) ?>" <?php if ($bkash['bkash_id'] == $bkash_id) {
                                                     echo 'selected';
                                                 } ?>>
-                                                    <?php echo html_escape($bkash['bkash_no']) . ' (' . html_escape($bkash['ac_name']) . ')'; ?></option>
+                                                <?php echo html_escape($bkash['bkash_no']) . ' (' . html_escape($bkash['ac_name']) . ')'; ?></option>
                                             <?php } ?>
                                         </select>
                                         <input type="hidden" id="editpayment_type" value="<?php echo $paytype; ?>" name="">
@@ -193,142 +193,142 @@
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover" id="normalinvoice">
                                 <thead>
-                                <tr>
-                                    <th class="text-center " width="9%"><?php echo display('item_information ') ?> <i class="text-danger">*</i></th>
-                                    <!-- <th class="text-center" width="9%">Warehouse</th>
+                                    <tr>
+                                        <th class="text-center " width="9%"><?php echo display('item_information ') ?> <i class="text-danger">*</i></th>
+                                        <!-- <th class="text-center" width="9%">Warehouse</th>
                                         <th class="text-center"><?php echo display('available_qnty') ?></th> -->
-                                    <th class="text-center"><?php echo display('unit') ?></th>
-                                    <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
-                                    <th class="text-center">Warrenty Date</th>
-                                    <th class="text-center">Expiry Date</th>
+                                        <th class="text-center"><?php echo display('unit') ?></th>
+                                        <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
+                                        <th class="text-center">Warrenty Date</th>
+                                        <th class="text-center">Expiry Date</th>
 
-                                    <th class="text-center"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
-                                    <th class="text-center">Discount</th>
-                                    <th class="text-center"><?php echo display('total') ?></th>
-                                    <th class="text-center"><?php echo display('action') ?></th>
-                                </tr>
+                                        <th class="text-center"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
+                                        <th class="text-center">Discount</th>
+                                        <th class="text-center"><?php echo display('total') ?></th>
+                                        <th class="text-center"><?php echo display('action') ?></th>
+                                    </tr>
                                 </thead>
                                 <tbody id="addinvoiceItem">
-                                {invoice_all_data}
-                                <tr>
-                                    <td class="product_field">
-                                        <input type="text" name="product_name" onkeypress="invoice_productList({sl});" value="{product_name}-({product_model})" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_name_{sl}" tabindex="3">
+                                    {invoice_all_data}
+                                    <tr>
+                                        <td class="product_field">
+                                            <input type="text" name="product_name" onkeypress="invoice_productList({sl});" value="{product_name}-({product_model})" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_name_{sl}" tabindex="3">
 
-                                        <input type="hidden" class="product_id_{sl} autocomplete_hidden_value" name="product_id[]" value="{product_id}" id="SchoolHiddenId" />
-                                    </td>
+                                            <input type="hidden" class="product_id_{sl} autocomplete_hidden_value" name="product_id[]" value="{product_id}" id="SchoolHiddenId" />
+                                        </td>
 
 
-                                    <!-- <td class="invoice_fields">
-                                    <select name="warehouse[]" style="width: 110px" id="warehouse_1" class="form-control text-right" required="" tabindex="1">
-                                        <option value="{warehouse}">{warehouse}</option>
-                                    </select>
-                                </td> -->
+                                        <!-- <td class="invoice_fields">
+                                        <select name="warehouse[]" style="width: 110px" id="warehouse_1" class="form-control text-right" required="" tabindex="1">
+                                            <option value="{warehouse}">{warehouse}</option>
+                                        </select>
+                                    </td> -->
 
-                                    <!--                                         <td>-->
-                                    <!--                                         <select class="form-control invoice_fields" id="serial_no_{sl}" name="serial_no[]" >-->
-                                    <!---->
-                                    <!--                                        <option value="{serial_no}">{serial_no}</option>-->
-                                    <!--                                            </select>-->
-                                    <!--                                        </td>-->
-                                    <!-- <td>
-                                     <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
-                                 </td> -->
-                                    <td>
-                                        <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
-                                        <input type="text" name="unit[]" class="form-control text-right " readonly="" value="{unit}" />
-                                    </td>
-                                    <td>
-                                        <input type="text" name="product_quantity[]" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" value="{sum_quantity}" class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" min="0" placeholder="0.00" tabindex="4" required="required" />
-                                    </td>
-                                    <td class="invoice_fields">
+                                        <!--                                         <td>-->
+                                        <!--                                         <select class="form-control invoice_fields" id="serial_no_{sl}" name="serial_no[]" >-->
+                                        <!---->
+                                        <!--                                        <option value="{serial_no}">{serial_no}</option>-->
+                                        <!--                                            </select>-->
+                                        <!--                                        </td>-->
+                                        <!-- <td>
+                                         <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
+                                     </td> -->
+                                        <td>
+                                            <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
+                                            <input type="text" name="unit[]" class="form-control text-right " readonly="" value="{unit}" />
+                                        </td>
+                                        <td>
+                                            <input type="text" name="product_quantity[]" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" value="{sum_quantity}" class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" min="0" placeholder="0.00" tabindex="4" required="required" />
+                                        </td>
+                                        <td class="invoice_fields">
 
-                                        <input type="date" style="width: 110px" id="warrenty_date" class="form-control warrenty_date_1" name="warrenty_date[]" value="{warrenty_date}" id="date" />
-                                    </td>
+                                            <input type="date" style="width: 110px" id="warrenty_date" class="form-control warrenty_date_1" name="warrenty_date[]" value="{warrenty_date}" id="date" />
+                                        </td>
 
-                                    <td class="invoice_fields">
-                                        <?php $date = date('Y-m-d'); ?>
-                                        <input type="date" style="width: 110px" id="expiry_date" class="form-control  expiry_date_1" name="expiry_date[]" value="{expiry_date}" />
-                                    </td>
+                                        <td class="invoice_fields">
+                                            <?php $date = date('Y-m-d'); ?>
+                                            <input type="date" style="width: 110px" id="expiry_date" class="form-control  expiry_date_1" name="expiry_date[]" value="{expiry_date}" />
+                                        </td>
 
-                                    <td>
-                                        <input type="text" name="product_rate[]" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" value="{rate}" id="price_item_{sl}" class="price_item{sl} form-control text-right" min="0" tabindex="5" required="" placeholder="0.00" readonly />
-                                    </td>
-                                    <!-- Discount -->
-                                    <td>
-                                        <input type="text" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
+                                        <td>
+                                            <input type="text" name="product_rate[]" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" value="{rate}" id="price_item_{sl}" class="price_item{sl} form-control text-right" min="0" tabindex="5" required="" placeholder="0.00" readonly />
+                                        </td>
+                                        <!-- Discount -->
+                                        <td>
+                                            <input type="text" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
 
-                                        <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
-                                    </td>
+                                            <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
+                                        </td>
 
-                                    <td>
-                                        <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{total_price}" readonly="readonly" />
+                                        <td>
+                                            <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{total_price}" readonly="readonly" />
 
-                                        <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
-                                    </td>
-                                    <td>
+                                            <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
+                                        </td>
+                                        <td>
 
-                                        <!-- Tax calculate start-->
-                                        <?php $x = 0;
-                                        foreach ($taxes as $taxfldt) { ?>
-                                            <input id="total_tax<?php echo $x; ?>_{sl}" class="total_tax<?php echo $x; ?>_{sl}" value="{tax<?php echo $x; ?>}" type="hidden">
-                                            <input id="all_tax<?php echo $x; ?>_{sl}" class="total_tax<?php echo $x; ?>" type="hidden" name="tax[]">
+                                            <!-- Tax calculate start-->
+                                            <?php $x = 0;
+                                            foreach ($taxes as $taxfldt) { ?>
+                                                <input id="total_tax<?php echo $x; ?>_{sl}" class="total_tax<?php echo $x; ?>_{sl}" value="{tax<?php echo $x; ?>}" type="hidden">
+                                                <input id="all_tax<?php echo $x; ?>_{sl}" class="total_tax<?php echo $x; ?>" type="hidden" name="tax[]">
                                             <?php $x++;
-                                        } ?>
-                                        <!-- Tax calculate end-->
-                                        <!-- Discount calculate start-->
-                                        <input type="hidden" id="total_discount_{sl}" class="" value="{discount}" />
+                                            } ?>
+                                            <!-- Tax calculate end-->
+                                            <!-- Discount calculate start-->
+                                            <input type="hidden" id="total_discount_{sl}" class="" value="{discount}" />
 
-                                        <input type="hidden" id="all_discount_{sl}" class="total_discount" value="{discount}" name="discount_amount[]" />
-                                        <!-- Discount calculate end -->
+                                            <input type="hidden" id="all_discount_{sl}" class="total_discount" value="{discount}" name="discount_amount[]" />
+                                            <!-- Discount calculate end -->
 
-                                    </td>
-                                </tr>
-                                {/invoice_all_data}
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="6" rowspan="2">
-                                        <center><label sclass="text-center" for="details" class="  col-form-label"><?php echo display('invoice_details') ?></label></center>
-                                        <textarea name="inva_details" class="form-control" placeholder="<?php echo display('invoice_details') ?>">{invoice_details}</textarea>
-                                    </td>
-                                    <td class="text-right" colspan="1"><b><?php echo display('invoice_discount') ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="invoice_discount" class="form-control text-right total_discount" name="invoice_discount" placeholder="0.00" value="{invoice_discount}" />
-                                        <input type="hidden" id="txfieldnum" value="<?php echo count($taxes); ?>">
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
-                                    </td>
-                                </tr>
-                                <?php $x = 0;
-                                foreach ($taxes as $taxfldt) { ?>
-                                    <tr class="hideableRow hiddenRow">
-
-                                        <td class="text-right" colspan="9"><b><?php echo html_escape($taxfldt['tax_name']) ?></b></td>
-                                        <td class="text-right">
-                                            <input id="total_tax_ammount<?php echo $x; ?>" tabindex="-1" class="form-control text-right valid totalTax" name="total_tax<?php echo $x; ?>" value="<?php $txval = 'tax' . $x;
-                                            echo html_escape($taxvalu[0][$txval]) ?>" readonly="readonly" aria-invalid="false" type="text">
                                         </td>
                                     </tr>
-                                    <?php $x++;
-                                } ?>
+                                    {/invoice_all_data}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="6" rowspan="2">
+                                            <center><label sclass="text-center" for="details" class="  col-form-label"><?php echo display('invoice_details') ?></label></center>
+                                            <textarea name="inva_details" class="form-control" placeholder="<?php echo display('invoice_details') ?>">{invoice_details}</textarea>
+                                        </td>
+                                        <td class="text-right" colspan="1"><b><?php echo display('invoice_discount') ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="invoice_discount" class="form-control text-right total_discount" name="invoice_discount" placeholder="0.00" value="{invoice_discount}" />
+                                            <input type="hidden" id="txfieldnum" value="<?php echo count($taxes); ?>">
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
+                                        </td>
+                                    </tr>
+                                    <?php $x = 0;
+                                    foreach ($taxes as $taxfldt) { ?>
+                                        <tr class="hideableRow hiddenRow">
 
-                                <tr>
-                                <tr>
-                                    <td class="text-right" colspan="7"><b><?php echo display('total_tax') ?>:</b></td>
-                                    <td class="text-right">
-                                        <input id="total_tax_amount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="{total_tax}" readonly="readonly" aria-invalid="false" type="text">
-                                    </td>
-                                    <td><button type="button" class="toggle btn-warning">
-                                            <i class="fa fa-angle-double-down"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <?php  if ($deliver_type == 2){?>
+                                            <td class="text-right" colspan="9"><b><?php echo html_escape($taxfldt['tax_name']) ?></b></td>
+                                            <td class="text-right">
+                                                <input id="total_tax_ammount<?php echo $x; ?>" tabindex="-1" class="form-control text-right valid totalTax" name="total_tax<?php echo $x; ?>" value="<?php $txval = 'tax' . $x;
+                                                                                                                                                                                                        echo html_escape($taxvalu[0][$txval]) ?>" readonly="readonly" aria-invalid="false" type="text">
+                                            </td>
+                                        </tr>
+                                    <?php $x++;
+                                    } ?>
+
+                                    <tr>
+                                    <tr>
+                                        <td class="text-right" colspan="7"><b><?php echo display('total_tax') ?>:</b></td>
+                                        <td class="text-right">
+                                            <input id="total_tax_amount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="{total_tax}" readonly="readonly" aria-invalid="false" type="text">
+                                        </td>
+                                        <td><button type="button" class="toggle btn-warning">
+                                                <i class="fa fa-angle-double-down"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php  if ($deliver_type == 2){?>
                                     <tr>
                                         <td class="text-right" colspan="7"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
@@ -336,67 +336,67 @@
                                         </td>
                                     </tr>
                                     <?php  if ($condition == 1 || 2){?>
-                                        <tr id="condition_tr" class=" " >
-                                            <td class="text-right" colspan="7"><b>Condition Charge:</b></td>
-                                            <td class="text-right">
-                                                <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{condition_cost}" tabindex="14" />
-                                            </td>
-                                        </tr>
+                                    <tr id="condition_tr" class=" " >
+                                        <td class="text-right" colspan="7"><b>Condition Charge:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{condition_cost}" tabindex="14" />
+                                        </td>
+                                    </tr>
+                                        <?php } ?>
                                     <?php } ?>
-                                <?php } ?>
 
-                                <tr id="commission_tr" class=" ">
-                                    <td class="text-right" colspan="7"><b>Commission:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="{commission}"  />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="{total_amount}" readonly="readonly" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7" class="text-right"><b><?php echo display('previous'); ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="previous" class="form-control text-right" name="previous" value="{prev_due}" readonly="readonly" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="7" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="n_total" class="form-control text-right" name="n_total" value="{net_total}" readonly="readonly" placeholder="" />
-                                    </td>
-                                </tr>
-                                <tr>
+                                    <tr id="commission_tr" class=" ">
+                                        <td class="text-right" colspan="7"><b>Commission:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="{commission}"  />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="{total_amount}" readonly="readonly" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="text-right"><b><?php echo display('previous'); ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="previous" class="form-control text-right" name="previous" value="{prev_due}" readonly="readonly" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="7" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="n_total" class="form-control text-right" name="n_total" value="{net_total}" readonly="readonly" placeholder="" />
+                                        </td>
+                                    </tr>
+                                    <tr>
 
-                                    <td class="text-right" colspan="7"><b><?php echo display('paid_ammount') ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="{paid_amount}" />
-                                    </td>
-                                </tr>
-                                <tr>
-
-
-                                    <td class="text-right" colspan="7">
-                                        <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
-                                        <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
-                                        <input type="hidden" name="invoice" id="invoice" value="{invoice}" />
-                                        <b><?php echo display('due') ?>:</b>
-                                    </td>
-                                    <td class="text-right">
-                                        <input type="text" id="dueAmmount" class="form-control text-right" name="due_amount" value="{due_amount}" readonly="readonly" />
-                                    </td>
-                                </tr>
-                                <tr>
+                                        <td class="text-right" colspan="7"><b><?php echo display('paid_ammount') ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="{paid_amount}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
 
 
-                                    <td class="text-right" colspan="7"><b><?php echo display('change') ?>:</b></td>
-                                    <td class="text-right">
-                                        <input type="text" id="change" class="form-control text-right" name="change" value="0" readonly="readonly" />
-                                    </td>
-                                </tr>
+                                        <td class="text-right" colspan="7">
+                                            <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
+                                            <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
+                                            <input type="hidden" name="invoice" id="invoice" value="{invoice}" />
+                                            <b><?php echo display('due') ?>:</b>
+                                        </td>
+                                        <td class="text-right">
+                                            <input type="text" id="dueAmmount" class="form-control text-right" name="due_amount" value="{due_amount}" readonly="readonly" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+
+                                        <td class="text-right" colspan="7"><b><?php echo display('change') ?>:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="change" class="form-control text-right" name="change" value="0" readonly="readonly" />
+                                        </td>
+                                    </tr>
                                 </tfoot>
                             </table>
                         </div>
@@ -417,44 +417,44 @@
                                             <div class="table-responsive">
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
-                                                    <tr>
-                                                        <th class="text-center">Payment Type </th>
-                                                        <th class="text-center">Account</th>
-                                                        <th width="15%" class="text-center">Amount</th>
-                                                        <!-- <th class="text-center">Action</th> -->
-                                                    </tr>
+                                                        <tr>
+                                                            <th class="text-center">Payment Type </th>
+                                                            <th class="text-center">Account</th>
+                                                            <th width="15%" class="text-center">Amount</th>
+                                                            <!-- <th class="text-center">Action</th> -->
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <?php foreach ($payment_info as $pay) { ?>
-                                                        <tr>
-                                                            <?php if ($pay['pay_type'] == 1) { ?>
-                                                                <td class="text-center"><?php echo display('cash_payment') ?></td>
-                                                            <?php } else if ($pay['pay_type'] == 2) { ?>
-                                                                <td class="text-center">Cheque Payment</td>
-                                                            <?php } else if ($pay['pay_type'] == 3) { ?>
-                                                                <td class="text-center">Bkash Payment</td>
-                                                            <?php } else if ($pay['pay_type'] == 4) { ?>
-                                                                <td class="text-center"><?php echo display('bank_payment') ?></td>
-                                                            <?php } else if ($pay['pay_type'] == 5) { ?>
-                                                                <td class="text-center">Nagad Payment</td>
-                                                            <?php } else if ($pay['pay_type'] == 6) { ?>
-                                                                <td class="text-center">Card Payment</td>
-                                                            <?php } ?>
+                                                        <?php foreach ($payment_info as $pay) { ?>
+                                                            <tr>
+                                                                <?php if ($pay['pay_type'] == 1) { ?>
+                                                                    <td class="text-center"><?php echo display('cash_payment') ?></td>
+                                                                <?php } else if ($pay['pay_type'] == 2) { ?>
+                                                                    <td class="text-center">Cheque Payment</td>
+                                                                <?php } else if ($pay['pay_type'] == 3) { ?>
+                                                                    <td class="text-center">Bkash Payment</td>
+                                                                <?php } else if ($pay['pay_type'] == 4) { ?>
+                                                                    <td class="text-center"><?php echo display('bank_payment') ?></td>
+                                                                <?php } else if ($pay['pay_type'] == 5) { ?>
+                                                                    <td class="text-center">Nagad Payment</td>
+                                                                <?php } else if ($pay['pay_type'] == 6) { ?>
+                                                                    <td class="text-center">Card Payment</td>
+                                                                <?php } ?>
 
-                                                            <td class="text-center">
-                                                                <?php echo $pay['account'] ?>
-                                                                <input type="hidden" name="row_id[]" value="<?= $pay['id'] ?>">
-                                                            </td>
-                                                            <td class="text-right">
-                                                                <input type="text" class="form-control text-right" name="pay_amount[]" id=" amount_<?= $pay['amount'] ?>" value="<?= $pay['amount'] ?>" readonly>
-                                                            </td>
-                                                            <!-- <td class="text-center">
+                                                                <td class="text-center">
+                                                                    <?php echo $pay['account'] ?>
+                                                                    <input type="hidden" name="row_id[]" value="<?= $pay['id'] ?>">
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <input type="text" class="form-control text-right" name="pay_amount[]" id=" amount_<?= $pay['amount'] ?>" value="<?= $pay['amount'] ?>" readonly>
+                                                                </td>
+                                                                <!-- <td class="text-center">
                                                                     <button type="button" onclick="delete_payment(this, <?php echo $pay['id'] ?>)" class="btn btn-danger btn-sm">
                                                                         <i class="fa fa-trash"></i>
                                                                     </button>
                                                                 </td> -->
-                                                        </tr>
-                                                    <?php } ?>
+                                                            </tr>
+                                                        <?php } ?>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -468,7 +468,7 @@
                                                 <div class="col-sm-4">
                                                     <label for="payment_type" class="col-sm-5 col-form-label"><?php
                                                         echo display('payment_type');
-                                                        ?> <i class="text-danger">*</i></label>
+                                                            ?> <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
                                                         <select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
                                                             <option value="1"><?php echo display('cash_payment') ?></option>
@@ -487,8 +487,8 @@
                                                 <div class="col-sm-4" id="bank_div_1" style="display:none;">
                                                     <div class="form-group row">
                                                         <label for="bank" class="col-sm-3 col-form-label"><?php
-                                                            echo display('bank');
-                                                            ?> <i class="text-danger">*</i></label>
+                                                                                                            echo display('bank');
+                                                                                                            ?> <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
 
                                                             <input type="text" name="bank_id[]" class="form-control" id="bank_id_1" placeholder="Bank">
@@ -507,8 +507,8 @@
                                                 <div class="col-sm-4" id="bank_div_m_1" style="display:none;">
                                                     <div class="form-group row">
                                                         <label for="bank" class="col-sm-5 col-form-label"><?php
-                                                            echo display('bank');
-                                                            ?> <i class="text-danger">*</i></label>
+                                                                                                            echo display('bank');
+                                                                                                            ?> <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
                                                             <select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_1">
                                                                 <option value="">Select One</option>
@@ -643,7 +643,7 @@
                                                         <div class="col-sm-6">
                                                             <input type="text" name="cheque_type[]" class=" form-control" placeholder="" autocomplete="off" />
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                            ?>
+                                                                                                                                                                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -652,7 +652,7 @@
                                                         <div class="col-sm-6">
                                                             <input type="number" name="cheque_no[]" class=" form-control" placeholder="" autocomplete="off" />
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                            ?>
+                                                                                                                                                                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -669,7 +669,7 @@
                                                         <div class="col-sm-6">
                                                             <input type="number" name="amount[]" class=" form-control" placeholder="" autocomplete="off" />
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                            ?>
+                                                                                                                                                                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -679,7 +679,7 @@
                                                         <div class="col-sm-6" style="padding-bottom:10px ">
                                                             <input type="file" name="image" class="form-control" id="image" tabindex="4">
                                                             <!-- <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                            ?>
+                                                                                                                                                                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 

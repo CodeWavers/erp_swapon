@@ -433,6 +433,8 @@ class Linvoice
             'prev_due'        => $invoice_detail[0]['prevous_due'],
             'net_total'       => $invoice_detail[0]['prevous_due'] + $invoice_detail[0]['total_amount'],
             'shipping_cost'   => $invoice_detail[0]['shipping_cost'],
+            'condition_cost'   => $invoice_detail[0]['condition_cost'],
+            'commission'   => $invoice_detail[0]['commission'],
             'total_tax'       => $invoice_detail[0]['taxs'],
             'invoice_all_data' => $invoice_detail,
             'taxvalu'         => $taxinfo,
@@ -459,6 +461,102 @@ class Linvoice
         );
     //   echo "<pre>" ;print_r($data);exit();
         $chapterList = $CI->parser->parse('invoice/edit_invoice_form', $data, true);
+        return $chapterList;
+    }
+
+    public function pre_invoice_edit_data($invoice_id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Courier');
+        $CI->load->model('Service');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Settings');
+
+        $employee_list    = $CI->Service->employee_list();
+        $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
+
+      //  echo '<pre>';print_r($invoice_detail);exit();
+        $payment_info = $CI->Invoices->payment_details($invoice_id);
+        $courier_list        = $CI->Courier->get_courier_list();
+        $bank_list      = $CI->Web_settings->bank_list();
+        $bkash_list     = $CI->Web_settings->bkash_list();
+        $branch_list    = $CI->Courier->get_branch_list();
+        $taxinfo        = $CI->Invoices->service_invoice_taxinfo($invoice_id);
+        $taxfield       = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $i = 0;
+        if (!empty($invoice_detail)) {
+            foreach ($invoice_detail as $k => $v) {
+                $i++;
+                $invoice_detail[$k]['sl'] = $i;
+                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
+                $invoice_detail[$k]['stock_qty'] = $stock + $invoice_detail[$k]['quantity'];
+            }
+        }
+
+        $nagad_list        = $CI->Web_settings->nagad_list();
+        $card_list = $CI->Settings->get_real_card_data();
+
+        $outlet = $CI->Warehouse->branch_search_item($invoice_detail[0]['outlet_id']);
+
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $data = array(
+            'title'           => 'Due Invoice View',
+            'invoice_id'      => $invoice_detail[0]['invoice_id'],
+            'customer_id'     => $invoice_detail[0]['customer_id'],
+            'customer_name'   => $invoice_detail[0]['customer_name'],
+            'customer_name_two'   => $invoice_detail[0]['customer_name_two'],
+            'customer_mobile_two'   => $invoice_detail[0]['customer_mobile_two'],
+            'date'            => $invoice_detail[0]['date'],
+            'invoice_details' => $invoice_detail[0]['invoice_details'],
+            'outlet_name'     => $outlet[0]['outlet_name'],
+            'invoice'         => $invoice_detail[0]['invoice'],
+            'total_amount'    => $invoice_detail[0]['total_amount'],
+            'paid_amount'     => $invoice_detail[0]['p_amnt'],
+            'due_amount'      => $invoice_detail[0]['due_amnt'],
+            'invoice_discount' => $invoice_detail[0]['invoice_discount'],
+            'total_discount'  => $invoice_detail[0]['total_discount'],
+            'rr'            => $invoice_detail[0]['unit'],
+            'warrenty_date'   => $invoice_detail[0]['warrenty_date'],
+            'sn'              => $invoice_detail[0]['sn'],
+            'bank'             => $invoice_detail[0]['bank_id'],
+            'tax'             => $invoice_detail[0]['tax'],
+            'taxes'          => $taxfield,
+            'prev_due'        => $invoice_detail[0]['prevous_due'],
+            'net_total'       => $invoice_detail[0]['prevous_due'] + $invoice_detail[0]['total_amount'],
+            'shipping_cost'   => $invoice_detail[0]['shipping_cost'],
+            'condition_cost'   => $invoice_detail[0]['condition_cost'],
+            'commission'   => $invoice_detail[0]['commission'],
+            'total_tax'       => $invoice_detail[0]['taxs'],
+            'invoice_all_data' => $invoice_detail,
+            'taxvalu'         => $taxinfo,
+            'discount_type'   => $currency_details[0]['discount_type'],
+            'bank_list'       => $bank_list,
+            'bkash_list'      => $bkash_list,
+            'employee_list' => $employee_list,
+            'bank_id'         => $invoice_detail[0]['bank_id'],
+            'bkash_id'        => $invoice_detail[0]['bkash_id'],
+            'nagad_list'     => $nagad_list,
+            'card_list'     => $card_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
+            'courier_id'      => $invoice_detail[0]['courier_id'],
+            'courier_name'      => $invoice_detail[0]['courier_name'],
+            'branch_name'      => $invoice_detail[0]['branch_name'],
+            'branch_id'       => $invoice_detail[0]['branch_id'],
+            'paytype'         => $invoice_detail[0]['payment_type'],
+            'delivery_type'   => $invoice_detail[0]['delivery_type'],
+            'payment_info'    => $payment_info,
+            //'sales_by'   => $invoice_detail[0]['sales_by'],
+            'sales_first_name'   => $invoice_detail[0]['customer_name'],
+            // 'sales_last_name'   => $invoice_detail[0]['last_name'],
+        );
+    //   echo "<pre>" ;print_r($data);exit();
+        $chapterList = $CI->parser->parse('quotation/edit_invoice_form', $data, true);
         return $chapterList;
     }
 
