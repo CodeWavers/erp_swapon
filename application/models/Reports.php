@@ -1601,7 +1601,7 @@ class reports extends CI_Model
 
         $user_id = $this->session->userdata('user_id');
 
-        $this->db->select("a.*,b.product_name,b.product_model,c.date,c.invoice,c.total_amount,d.customer_name, sz.size_name, cl.color_name");
+        $this->db->select("a.*,b.product_name,b.product_model,b.sku,c.date,c.invoice,c.total_amount,d.customer_name, sz.size_name, cl.color_name");
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
@@ -1796,9 +1796,9 @@ class reports extends CI_Model
 
 
     //RETRIEVE DATE WISE SEARCH SINGLE PRODUCT REPORT
-    public function retrieve_product_search_sales_report($outlet_id, $start_date, $end_date, $product_id, $perpage = null, $page = null)
+    public function retrieve_product_search_sales_report($outlet_id, $start_date, $end_date, $product_id,$cat_id, $perpage = null, $page = null)
     {
-        $this->db->select("a.*,b.product_name,b.sku,c.invoice,c.date,d.customer_name, sz.size_name, cl.color_name");
+        $this->db->select("a.*,b.product_name,b.sku,b.category_id,c.invoice,c.date,d.customer_name, sz.size_name, cl.color_name");
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
@@ -1810,6 +1810,9 @@ class reports extends CI_Model
 
         if ($product_id) {
             $this->db->where('b.product_id', $product_id);
+        }
+        if ($cat_id) {
+            $this->db->like('b.category_id', $cat_id);
         }
         $this->db->where('c.date >=', $start_date);
         $this->db->where('c.date <=', $end_date);

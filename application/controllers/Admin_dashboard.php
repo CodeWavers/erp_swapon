@@ -1885,6 +1885,7 @@ class Admin_dashboard extends CI_Controller
         $to_date = $this->input->get('to_date');
         $product_id = $this->input->get('product_id');
         $outlet_id = $this->input->get('outlet_id');
+        $cat_id = $this->input->get('cat_id');
         #
         #pagination starts
         #
@@ -1917,7 +1918,7 @@ class Admin_dashboard extends CI_Controller
         #
         #pagination ends
         #
-        $content = $this->lreport->get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $config["per_page"], $page);
+        $content = $this->lreport->get_products_search_report($outlet_id, $from_date, $to_date, $product_id,$cat_id, $links, $config["per_page"], $page);
 
         $this->template->full_admin_html_view($content);
     }

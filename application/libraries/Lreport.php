@@ -1336,10 +1336,12 @@ class Lreport extends CI_Model
         $CI = &get_instance();
         $CI->load->model('Reports');
         $CI->load->model('Warehouse');
+        $CI->load->model('Categories');
         $CI->load->model('Web_settings');
         $CI->load->library('occational');
         $product_report = $CI->Reports->retrieve_product_sales_report();
         $outlet_list = $CI->Warehouse->get_outlet_user();
+        $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
 
@@ -1366,6 +1368,7 @@ class Lreport extends CI_Model
             'product_report' => $product_report,
             'links'          => $links,
             'product_list'   => $product_list,
+            'category_list'   => $category_list,
             'product_id'     => '',
             'from_date'      => '',
             'to_date'        => '',
@@ -1769,7 +1772,7 @@ class Lreport extends CI_Model
 
 
     //Get Product Report Search
-    public function get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $per_page, $page)
+    public function get_products_search_report($outlet_id, $from_date, $to_date, $product_id,$cat_id, $links, $per_page, $page)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
@@ -1784,7 +1787,7 @@ class Lreport extends CI_Model
         $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
-        $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id);
+        $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id,$cat_id);
         $product_list = $CI->Reports->product_list();
 
         if (!empty($product_report)) {
@@ -1810,6 +1813,7 @@ class Lreport extends CI_Model
             'product_list'   => $product_list,
             'category_list'   => $category_list,
             'product_id'     => $product_id,
+            'cat_id'     => $cat_id,
             'from_date'      => $from_date,
             'to_date'        => $to_date,
             'links'          => $links,
@@ -1822,7 +1826,7 @@ class Lreport extends CI_Model
             'cw' => $cw,
         );
 
-       // echo '<pre>';print_r($product_report);exit();
+     //   echo '<pre>';print_r($product_report);exit();
         $reportList = $CI->parser->parse('report/product_report', $data, true);
         return $reportList;
     }
