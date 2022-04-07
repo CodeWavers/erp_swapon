@@ -361,7 +361,7 @@
                                 <tbody id="addinvoiceItem">
                                 <tr>
                                     <td class="product_field" >
-                                        <input type="text" required name="product_name" onkeypress="invoice_productList(1)" id="product_name_1" class="form-control productSelection" placeholder="<?php echo display('product_name') ?>" tabindex="5">
+                                        <input type="text" required name="product_name" onkeypress="invoice_productList_pre(1)" id="product_name_1" class="form-control productSelection" placeholder="<?php echo display('product_name') ?>" tabindex="5">
 
                                         <input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" />
 

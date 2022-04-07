@@ -3604,7 +3604,7 @@ class Invoices extends CI_Model
 
         $CI = &get_instance();
         $CI->load->model('Web_settings');
-        $this->load->model('reports');
+        $this->load->model('Reports');
         $this->load->model('Rqsn');
 
         $this->db->select('a.*');
@@ -3628,7 +3628,7 @@ class Invoices extends CI_Model
         $data2['supplier_price'] = 0;
         // $data2['category_id'] = $product_information->category_id;
         $data2['customer_id'] = $customer_id;
-        $data2['stock']     = ($available_quantity ? $available_quantity : 0);
+        $data2['stock']     = number_format($available_quantity,2);
         // $data2['discount'] = $discount->discount_percentage;
         //  $data2['warehouse']      = $product_information->warehouse;
         $data2['price']          = $product_information->price;

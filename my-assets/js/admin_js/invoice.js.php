@@ -121,6 +121,35 @@ function quantity_calculate(item) {
     calculateSum();
     invoice_paidamount();
 }
+function quantity_calculate_pre(item) {
+    var quantity = $("#total_qntt_" + item).val();
+    var available_quantity = $(".available_quantity_" + item).val();
+    var price_item = $("#price_item_" + item).val();
+    var invoice_discount = $("#invoice_discount").val();
+    var warrenty_date=$("#warrenty_date_"+item).val();
+    var warehouse=$(".warehouse_"+item).val();
+    var discount = $("#discount_" + item).val();
+    var total_tax = $("#total_tax_" + item).val();
+    var total_discount = $("#total_discount_" + item).val();
+    var comm_item = $("#comm_" + item).val();
+    var taxnumber = $("#txfieldnum").val();
+    var dis_type = $("#discount_type_" + item).val();
+
+
+   // alert(comm_item)
+
+    if (comm_item != ''){
+        var comm_item=0;
+    }
+
+    var just_tot = quantity * price_item;
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
+
+    $("#total_price_" + item).val(row_tot.toFixed(2, 2));
+
+    calculateSum();
+    invoice_paidamount();
+}
 //Calculate Sum
 "use strict";
 function calculateSum() {
@@ -849,6 +878,102 @@ function invoice_productList(sl) {
                     $('#' + discount).val(obj.discount);
                     $("#stock_"+sl).val(obj.stock);
                     quantity_calculate(sl);
+
+                }
+            });
+
+            $(this).unbind("change");
+            return false;
+        }
+    }
+
+    $('body').on('keypress.autocomplete', '.productSelection', function() {
+        $(this).autocomplete(options);
+    });
+
+}
+function invoice_productList_pre(sl) {
+
+    var outlet_id = $("#outlet_name").val();
+
+    var priceClass = 'price_item'+sl;
+
+    var available_quantity = 'available_quantity_'+sl;
+    var unit = 'unit_'+sl;
+    var tax = 'total_tax_'+sl;
+    var serial_no = 'serial_no_'+sl;
+    var warehouse = 'warehouse_'+sl;
+    var warrenty_date='warrenty_date_'+sl;
+    var expiry_date='expiry_date_'+sl;
+    var discount_type = 'discount_type_'+sl;
+    var discount = 'discount_'+sl;
+    var csrf_test_name = $('[name="csrf_test_name"]').val();
+    var base_url = $("#base_url").val();
+
+
+
+    // Auto complete
+    var options = {
+        minLength: 0,
+        source: function( request, response ) {
+            var product_name = $('#product_name_'+sl).val();
+            $.ajax( {
+                url: base_url + "Cinvoice/autocompleteproductsearch",
+                method: 'post',
+                dataType: "json",
+                data: {
+                    term: request.term,
+                    product_name:product_name,
+                    pr_status: 1,
+                    csrf_test_name:csrf_test_name,
+                },
+                success: function( data ) {
+                    response( data );
+
+                }
+            });
+        },
+        focus: function( event, ui ) {
+            $(this).val(ui.item.label);
+            return false;
+        },
+        select: function( event, ui ) {
+            $(this).parent().parent().find(".autocomplete_hidden_value").val(ui.item.value);
+            $(this).val(ui.item.label);
+            var id=ui.item.value;
+            var dataString = 'pro duct_id='+ id;
+            var base_url = $('.baseUrl').val();
+            var  customer_id=$('#autocomplete_customer_id').val();
+            console.log(id);
+            $.ajax
+            ({
+                type: "POST",
+                url: base_url+"Cinvoice/retrieve_product_data_inv",
+                data: {product_id:id,customer_id:customer_id,outlet_id: outlet_id,csrf_test_name:csrf_test_name},
+                cache: false,
+                success: function(data)
+                {
+                    var obj = jQuery.parseJSON(data);
+                    for (var i = 0; i < (obj.txnmber); i++) {
+                        var txam = obj.taxdta[i];
+                        var txclass = 'total_tax'+i+'_'+sl;
+                        $('.'+txclass).val(obj.taxdta[i]);
+                    }
+
+                    console.log(obj)
+                    $('.'+priceClass).val(obj.price ? obj.price : 0.00);
+                    $('.'+available_quantity).val(obj.stock ? obj.stock : 0.00);
+                    $('.'+unit).val(obj.unit);
+                    $('.'+warrenty_date).val(obj.warrenty_date);
+                    $('.'+expiry_date).val(obj.expired_date);
+                    $('#'+warehouse).html(obj.warehouse);
+                    $('.'+tax).val(obj.tax);
+                    $('#txfieldnum').val(obj.txnmber);
+                    // $('#'+serial_no).html(obj.serial);
+                    // $('#'+discount_type).val(obj.discount_type);
+                    $('#' + discount).val(obj.discount);
+                    $("#stock_"+sl).val(obj.stock);
+                    quantity_calculate_pre(sl);
 
                 }
             });
