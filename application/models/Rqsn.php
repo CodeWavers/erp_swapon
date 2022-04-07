@@ -1456,9 +1456,11 @@ class Rqsn extends CI_Model
         $response = array();
 
         $outlet_id = $this->input->post('outlet_id', TRUE);
-
-        if (!$outlet_id && $outlet_id != '')
+        //$user_id = $this->session->userdata('user_id');
+//        if (!$outlet_id && $outlet_id != '') {
             $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+//        }
+        //    $outlet_id ='JBK6ZR8HF99SUSB';
 
 
 
@@ -1524,9 +1526,9 @@ class Rqsn extends CI_Model
         $this->db->where('b.isrcv', 1);
         //$this->db->where('b.isaprv',1);
         $this->db->where('a.from_id', $outlet_id);
-        $this->db->join('size_list sz', 'd.size=sz.size_id', 'left');
-        $this->db->join('color_list cl', 'd.color=cl.color_id', 'left');
-        $this->db->join('product_category cat', 'd.category_id=cat.category_id', 'left');
+       // $this->db->join('size_list sz', 'd.size=sz.size_id', 'left');
+       // $this->db->join('color_list cl', 'd.color=cl.color_id', 'left');
+       // $this->db->join('product_category cat', 'd.category_id=cat.category_id', 'left');
 
         if (!$post_product_id && $searchValue != '')
             $this->db->where($searchQuery);
@@ -1575,7 +1577,7 @@ class Rqsn extends CI_Model
 
             $sprice = (!empty($record->price) ? $record->price : 0);
             $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-            $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
+           // $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
 
 
 
@@ -1647,7 +1649,7 @@ class Rqsn extends CI_Model
             );
         } else {
             $response = array(
-                "outlet_stock"     => $stock
+                "outlet_stock"     => sprintf('%0.2f', $stock)
             );
         }
 

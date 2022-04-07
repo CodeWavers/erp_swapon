@@ -484,6 +484,8 @@ class Invoices extends CI_Model
              //   $available_quantity = $this->Reports->current_stock($product_id,1);
             } else {
                 $available_quantity = $this->Rqsn->outlet_stock(null, $p_id)['outlet_stock'];
+
+               // echo '<pre>';print_r($available_quantity);exit();
             }
 
             $data2 = (object) array(
@@ -3603,6 +3605,7 @@ class Invoices extends CI_Model
         $CI = &get_instance();
         $CI->load->model('Web_settings');
         $this->load->model('reports');
+        $this->load->model('Rqsn');
 
         $this->db->select('a.*');
         $this->db->from('discount a');
@@ -3611,8 +3614,15 @@ class Invoices extends CI_Model
         $discount = $this->db->get()->row();
 
 
+        if ($outlet_id == 'HK7TGDT69VFMXB7') {
+            $available_quantity = $this->Reports->getCheckList(null, $product_id)['central_stock'];
+            //   $available_quantity = $this->Reports->current_stock($product_id,1);
+        } else {
+            $available_quantity = $this->Rqsn->outlet_stock(null, $product_id)['outlet_stock'];
 
-        $available_quantity = $this->reports->current_stock($product_id,1);
+            // echo '<pre>';print_r($available_quantity);exit();
+        }
+      //  $available_quantity = $this->reports->current_stock($product_id,1);
 
         $data2['total_product']  = $available_quantity;
         $data2['supplier_price'] = 0;
