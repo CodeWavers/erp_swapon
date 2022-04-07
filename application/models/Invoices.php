@@ -3632,6 +3632,7 @@ class Invoices extends CI_Model
         // $data2['discount'] = $discount->discount_percentage;
         //  $data2['warehouse']      = $product_information->warehouse;
         $data2['price']          = $product_information->price;
+        $data2['purchase_price']          = $product_information->purchase_price;
         $data2['supplier_id']    = '';
 
         // $data2['warrenty_date']  = $product_information->warrenty_date;

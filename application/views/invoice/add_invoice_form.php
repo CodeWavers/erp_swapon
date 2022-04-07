@@ -397,8 +397,9 @@
                                             <?php $date = date('Y-m-d'); ?>
                                             <input type="date" style="width: 110px" id="expiry_date" class="form-control expiry_date_1" name="expiry_date[]" value="" />
                                         </td>
-                                        <td class="invoice_fields"  width="100">
-                                            <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0"  />
+                                        <td class="text-center"  width="200">
+                                            <input style="width: 120px; display:inline-block" type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0"  />
+                                            <s id="purchase_price_1" class="purchase_price1 text-right" style="width: 100px ;"><?php echo '৳0.00'?></s>
                                         </td>
                                         <!-- Discount -->
                                         <td  width="200" class="text-center">
@@ -406,13 +407,14 @@
                                                     <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
                                                     <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0.00" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
 
-                                            <input type="hidden" value="" name="discount_type" id="discount_type_1">
+
 
                                         </td>
 
 
                                         <td class="invoice_fields"  width="100">
                                             <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
+                                            <input type="hidden" value="" name="discount_type" id="discount_type_1">
                                         </td>
 
 <!--                                        <td class="invoice_fields comm_th">-->

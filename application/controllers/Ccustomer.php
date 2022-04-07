@@ -400,7 +400,8 @@ class Ccustomer extends CI_Controller
             $data2['brand_id']  = '';
             $data2['product_name'] = $r->name;
             $data2['finished_raw']  = 1;
-            $data2['price']        = $r->base_price;
+            $data2['price']        = $r->unit_price;
+            $data2['purchase_price']        = $r->purchase_price;
             $data2['unit']         = $r->unit;
             $data2['sku']  = $r->sku;
             $data2['tax']          = 0;
