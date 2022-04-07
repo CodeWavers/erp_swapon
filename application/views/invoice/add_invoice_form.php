@@ -405,7 +405,7 @@
                                         <td  width="200" class="text-center">
 
                                                     <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
-                                                    <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0.00" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
+                                                    <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
 
 
 

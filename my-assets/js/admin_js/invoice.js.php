@@ -127,7 +127,7 @@ function addInputField_pre(t) {
             "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
             "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
             "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  expiry_date_" + count + "' name='expiry_date[]' value=''/></td>" +
-            "<td><input type='text' name='product_rate[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/></td>" +
+            "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
@@ -185,9 +185,9 @@ function quantity_calculate(item) {
 
    // alert(comm_item)
 
-    if (comm_item != ''){
-        var comm_item=0;
-    }
+    //if (comm_item != ''){
+    //    var comm_item=0;
+    //}
 
     var just_tot = quantity * price_item;
     var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
@@ -214,9 +214,9 @@ function quantity_calculate_pre(item) {
 
    // alert(comm_item)
 
-    if (comm_item != ''){
-        var comm_item=0;
-    }
+    //if (comm_item != ''){
+    //    var comm_item=0;
+    //}
 
     var just_tot = quantity * price_item;
     var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
@@ -244,7 +244,7 @@ function calculateSum() {
         c_cost =  $("#condition_cost").val(),
         commission =  $("#commission").val();
 
-   // alert(s_cost);
+   // alert(commission);
 
 
     //Total Tax
@@ -975,7 +975,7 @@ function invoice_productList_pre(sl) {
     var outlet_id = $("#outlet_name").val();
 
     var priceClass = 'price_item'+sl;
-
+    var purchase_price = 'purchase_price_'+sl;
     var available_quantity = 'available_quantity_'+sl;
     var unit = 'unit_'+sl;
     var tax = 'total_tax_'+sl;
@@ -1039,7 +1039,8 @@ function invoice_productList_pre(sl) {
                     }
 
                     console.log(obj)
-                    $('.'+priceClass).val(obj.price ? obj.price : 0.00);
+                    $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
+                    $('#'+purchase_price).html('৳'+obj.price);
                     $('.'+available_quantity).val(obj.stock ? obj.stock : 0.00);
                     $('.'+unit).val(obj.unit);
                     $('.'+warrenty_date).val(obj.warrenty_date);

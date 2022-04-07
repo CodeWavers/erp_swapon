@@ -492,6 +492,7 @@ class Invoices extends CI_Model
                 'total_product'  => $available_quantity,
                 'supplier_price' => $product_information->supplier_price,
                 'price'          => $product_information->price,
+                'purchase_price'          => $product_information->purchase_price,
                 'supplier_id'    => $product_information->supplier_id,
                 'product_id'     => $product_information->product_id,
                 'product_name'   => $product_information->product_name,

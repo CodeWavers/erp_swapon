@@ -729,8 +729,10 @@ class Cinvoice extends CI_Controller
 
 
 
-						<td style=\"width:85px\">
-							<input type=\"text\" name=\"product_rate[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" value='" . $product_details->price . "' id=\"price_item_" . $product_details->product_id . "\" class=\"price_item1 form-control text-right\" required  placeholder=\"0.00\" min=\"0\"/>
+						<td class=\"text-center\"  width=\"200\">
+							<input style=\"width: 120px; display:inline-block\" type=\"text\" name=\"product_rate[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" value='" . $product_details->purchase_price . "' id=\"price_item_" . $product_details->product_id . "\" class=\"price_item1 form-control text-right\" required  placeholder=\"0.00\" min=\"0\"/>
+						                                            <s id=\"purchase_price_1\" class=\"purchase_price1 text-right\" style=\"width: 100px ;\">৳" . $product_details->price . "</s>
+
 						</td>
 
 						<td class=\"\">

@@ -11,7 +11,6 @@ $db['default'] = array(
     'username' => 'root',
     'password' => '',
     'database' => 'erp_swapon',
-    //'database' => 'gmebd_test',
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
