@@ -193,7 +193,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('pos_invoice', 'create')->access() ||
         $this->permission1->method('gui_pos', 'create')->access()
       ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice") {
+        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice" || "Cquotation") {
                               echo "active";
                             } else {
                               echo " ";
@@ -298,6 +298,43 @@ $birthday = $CI->Reports->birthday_noti();
                                                     'Admin_dashboard/sales_cheque_report'
                                                   ); ?>">Manage Cheque</a></li>
             <?php } ?>
+
+
+
+              <?php if (
+                  $this->permission1->method('add_quotation', 'create')->access() ||
+                  $this->permission1->method('manage_quotation', 'read')->access()
+              ) { ?>
+                  <li class="treeview <?php if ($this->uri->segment('1') == "Cquotation") {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>">
+                      <a href="#">
+                          <span><?php echo display('quotation'); ?></span>
+                          <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                      </a>
+                      <ul class="treeview-menu">
+                          <?php if (
+                          $this->permission1->method('add_quotation', 'create')->access()
+                          ) { ?>
+                              <li><a href="<?php echo base_url('Cquotation'); ?>"><?php echo display(
+                                          'add_quotation'
+                                      ); ?></a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1->method('manage_quotation', 'read')->access()
+                          ) { ?>
+                              <li><a href="<?php echo base_url(
+                                      'Cquotation/manage_quotation'
+                                  ); ?>"><?php echo display('manage_quotation'); ?></a></li>
+                          <?php } ?>
+                      </ul>
+                  </li>
+              <?php } ?>
+
 
 
           </ul>
@@ -409,97 +446,6 @@ $birthday = $CI->Reports->birthday_noti();
         <!-- Requisition menu end -->
 
 
-
-      <!-- Discount menu start -->
-      <!-- <?php if (
-              $this->permission1->method('new_discount', 'create')->access() ||
-              $this->permission1->method('manage_invoice', 'read')->access() ||
-              $this->permission1->method('pos_invoice', 'create')->access() ||
-              $this->permission1->method('gui_pos', 'create')->access()
-            ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Cdiscount") {
-                              echo "active";
-                            } else {
-                              echo " ";
-                            } ?>">
-          <a href="#">
-            <i class="fa fa-percent"></i><span>Discount</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <?php if (
-                $this->permission1->method('new_invoice', 'create')->access()
-              ) { ?>
-              <li class="treeview <?php if (
-                                    $this->uri->segment('1') == "Cdiscount" &&
-                                    $this->uri->segment('2') == ""
-                                  ) {
-                                    echo "active";
-                                  } else {
-                                    echo " ";
-                                  } ?>"><a href="<?php echo base_url(
-                                                    'Cdiscount/add_discount'
-                                                  ); ?>">Add Discount</a></li>
-            <?php } ?>
-
-
-            <?php if ($this->permission1->method('manage_invoice', 'read')->access()) { ?>
-              <li class="treeview <?php if (
-                                    $this->uri->segment('2') == "manage_invoice"
-                                  ) {
-                                    echo "active";
-                                  } else {
-                                    echo " ";
-                                  } ?>"><a href="<?php echo base_url(
-                                                    'Cdiscount/manage_discount'
-                                                  ); ?>">Manage Discount</a></li>
-            <?php } ?>
-            <!-- <?php if (
-                    $this->permission1->method('pos_invoice', 'create')->access()
-                  ) { ?>
-                            <li class="treeview <?php if (
-                                                  $this->uri->segment('2') == "pos_invoice"
-                                                ) {
-                                                  echo "active";
-                                                } else {
-                                                  echo " ";
-                                                } ?>"><a href="<?php echo base_url(
-                                                                  'Cinvoice/pos_invoice'
-                                                                ); ?>"><?php echo display('pos_invoice'); ?></a></li>
-                        <?php } ?> -->
-      <!--                   <?php if (
-                                $this->permission1->method('gui_pos', 'create')->access()
-                              ) { ?>
-                            <li class="treeview <?php if ($this->uri->segment('2') == "gui_pos") {
-                                                  echo "active";
-                                                } else {
-                                                  echo " ";
-                                                } ?>"><a href="<?php echo base_url(
-                                                                  'Cinvoice/gui_pos'
-                                                                ); ?>"><?php echo display('gui_pos'); ?></a></li>
-                        <?php } ?> -->
-
-      <!--                 <?php if (
-                              $this->permission1->method('sales_cheque_report', 'create')->access()
-                            ) { ?>
-                            <li class="treeview <?php if (
-                                                  $this->uri->segment('2') == "sales_cheque_report"
-                                                ) {
-                                                  echo "active";
-                                                } else {
-                                                  echo " ";
-                                                } ?>"><a href="<?php echo base_url(
-                                                                  'Admin_dashboard/sales_cheque_report'
-                                                                ); ?>">Manage Cheque</a></li>
-                        <?php } ?> -->
-
-
-      <!-- </ul>
-    </li> -->
-      <!-- <?php } ?> -->
-      <!-- discount menu end -->
 
       <!-- Customer menu start -->
       <?php if (
@@ -1132,41 +1078,6 @@ $birthday = $CI->Reports->birthday_noti();
       <!-- Purchase menu end -->
 
 
-      <!-- Quotation Menu Start -->
-      <?php if (
-        $this->permission1->method('add_quotation', 'create')->access() ||
-        $this->permission1->method('manage_quotation', 'read')->access()
-      ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Cquotation") {
-                              echo "active";
-                            } else {
-                              echo " ";
-                            } ?>">
-          <a href="#">
-            <i class="fa fa-book"></i><span><?php echo display('quotation'); ?></span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <?php if (
-              $this->permission1->method('add_quotation', 'create')->access()
-            ) { ?>
-              <li><a href="<?php echo base_url('Cquotation'); ?>"><?php echo display(
-                                                                    'add_quotation'
-                                                                  ); ?></a></li>
-            <?php } ?>
-            <?php if (
-              $this->permission1->method('manage_quotation', 'read')->access()
-            ) { ?>
-              <li><a href="<?php echo base_url(
-                              'Cquotation/manage_quotation'
-                            ); ?>"><?php echo display('manage_quotation'); ?></a></li>
-            <?php } ?>
-          </ul>
-        </li>
-      <?php } ?>
-      <!-- quotation Menu end -->
 
       <!-- Production menu start -->
       <?php if ($this->permission1->method('add_production', 'create')->access()) { ?>

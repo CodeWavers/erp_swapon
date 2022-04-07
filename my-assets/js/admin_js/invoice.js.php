@@ -80,6 +80,82 @@ function addInputField(t) {
         count++
     }
 }
+function addInputField_pre(t) {
+
+    var row = $("#normalinvoice tbody tr").length;
+    var count = row + 1;
+    var  tab1 = 0;
+    var  tab2 = 0;
+    var  tab3 = 0;
+    var  tab4 = 0;
+    var  tab5 = 0;
+    var  tab6 = 0;
+    var  tab7 = 0;
+    var  tab8 = 0;
+    var  tab9 = 0;
+    var  tab10 = 0;
+    var  tab11 = 0;
+    var  tab12 = 0;
+    var limits = 500;
+    var taxnumber = $("#txfieldnum").val();
+    var tbfild ='';
+    for(var i=0;i<taxnumber;i++){
+        var taxincrefield = '<input id="total_tax'+i+'_'+count+'" class="total_tax'+i+'_'+count+'" type="hidden"><input id="all_tax'+i+'_'+count+'" class="total_tax'+i+'" type="hidden" name="tax[]">';
+        tbfild +=taxincrefield;
+    }
+    if (count == limits)
+        alert("You have reached the limit of adding " + count + " inputs");
+    else {
+        var a = "product_name_" + count,
+            tabindex = count * 6,
+            e = document.createElement("tr");
+        tab1 = tabindex + 1;
+        tab2 = tabindex + 2;
+        tab3 = tabindex + 3;
+        tab4 = tabindex + 4;
+        tab5 = tabindex + 5;
+        tab6 = tabindex + 6;
+        tab7 = tabindex + 7;
+        tab8 = tabindex + 8;
+        tab9 = tabindex + 9;
+        tab10 = tabindex + 10;
+        tab11 = tabindex + 11;
+        tab12 = tabindex + 12;
+        e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList_pre(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
+        "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
+            " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
+            "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
+            "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
+            "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  expiry_date_" + count + "' name='expiry_date[]' value=''/></td>" +
+            "<td><input type='text' name='product_rate[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/></td>" +
+            "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
+            "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
+            "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
+        document.getElementById(t).appendChild(e),
+        document.getElementById(a).focus(),
+        document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
+        document.getElementById("details").setAttribute("tabindex", tab7);
+        document.getElementById("invoice_discount").setAttribute("tabindex", tab8);
+        document.getElementById("shipping_cost").setAttribute("tabindex", tab9);
+        document.getElementById("paidAmount").setAttribute("tabindex", tab10);
+        // document.getElementById("full_paid_tab").setAttribute("tabindex", tab11);
+        document.getElementById("add_invoice").setAttribute("tabindex", tab12);
+        var commision_type=$('#commission_type').val()
+
+        if (commision_type==1 ) {
+            $('.comm_th').removeClass('d-none')
+            $('.comm_th').addClass('d-inline')
+
+        }
+
+        if (commision_type==2 ) {
+            $('.comm_th').removeClass('d-inline')
+            $('.comm_th').addClass('d-none')
+        }
+
+        count++
+    }
+}
 //Quantity calculat
 "use strict";
 function quantity_calculate(item) {

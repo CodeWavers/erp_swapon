@@ -311,7 +311,7 @@
                             <label for="example-text-input" class="col-sm-4 col-form-label"></label>
                             <div class="col-sm-6">
 
-                                <input type="submit" id="add-quotation" class="btn btn-primary btn-large" name="add-quotation" value="<?php echo display('save_changes') ?>" />
+                                <input type="submit" id="add-quotation" class="btn btn-primary btn-large" name="add-quotation" value="Approve" />
                                 <?php if ($quot_main[0]['cust_show'] == 0) { ?>
                                     <input type="submit" value="<?php echo display('send_to_customer') ?>" name="customer_sent" class="btn btn-large btn-success" id="customer_sent" >
                                 <?php } ?>

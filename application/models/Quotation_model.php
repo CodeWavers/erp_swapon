@@ -91,12 +91,7 @@ class Quotation_model extends CI_Model
         $currency_details = $this->Web_settings->retrieve_setting_editdata();
 
         $result = array();
-        foreach ($available_quantity as $k => $v) {
-            if ($v < $quantity[$k]) {
-                $this->session->set_userdata(array('error_message' => display('you_can_not_buy_greater_than_available_qnty')));
-                redirect('Cinvoice');
-            }
-        }
+
 
 
 
@@ -972,12 +967,12 @@ class Quotation_model extends CI_Model
             //     'status'             => 1
             // );
 
-            if (!empty($quantity)) {
+
                 //echo '<pre>';print_r($data1);exit();
                 $this->db->insert('invoice_details', $data1);
                 //$this->db->insert('product_purchase_details', $data2);
                 // $this->db->insert('product_purchase_details', $data2);
-            }
+
         }
 
 
