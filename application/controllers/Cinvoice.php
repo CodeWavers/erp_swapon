@@ -698,7 +698,7 @@ class Cinvoice extends CI_Controller
             $tr .= "<tr id=\"row_" . $product_details->product_id . "\">
 						<td class=\"\" style=\"width: 30%\">
 
-							<input type=\"text\"  size='100' name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . html_escape($product_details->product_name)."(" . $product_details->sku . ")' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
+							<input type=\"text\"  size='100' name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . html_escape($product_details->sku)."-" . html_escape($product_details->product_name) . "' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
 
 							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
 
@@ -894,7 +894,7 @@ class Cinvoice extends CI_Controller
         if (!empty($product_info)) {
             $list[''] = '';
             foreach ($product_info as $value) {
-                $json_product[] = array('label' => $value['product_name'] . '(' . $value['sku'] . ')', 'value' => $value['product_id']);
+                $json_product[] = array('label' => $value['sku'] . '-' . $value['product_name'] . '', 'value' => $value['product_id']);
             }
         } else {
             $json_product[] = 'No Product Found';

@@ -193,7 +193,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('pos_invoice', 'create')->access() ||
         $this->permission1->method('gui_pos', 'create')->access()
       ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice" || "Cquotation") {
+        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice") {
                               echo "active";
                             } else {
                               echo " ";
@@ -1818,6 +1818,7 @@ $birthday = $CI->Reports->birthday_noti();
                                                   ); ?>">Re-order Level Report</a></li>
 
             <?php } ?>
+
             <?php if (
               $this->permission1
               ->method('product_sales_reports_date_wise', 'read')
@@ -1834,6 +1835,24 @@ $birthday = $CI->Reports->birthday_noti();
                                                   ); ?>"><?php echo display('sales_report_product_wise'); ?></a></li>
 
             <?php } ?>
+
+              <?php if (
+              $this->permission1
+                  ->method('product_sales_reports_date_wise', 'read')
+                  ->access()
+              ) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('2') == "product_sales_reports_date_wise"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url(
+                          'Admin_dashboard/product_sales_reports_date_wise'
+                      ); ?>">Pre Sale Report(Product Wise)</a></li>
+
+              <?php } ?>
+
             <?php if (
               $this->permission1->method('sales_report_category_wise', 'read')->access()
             ) { ?>
