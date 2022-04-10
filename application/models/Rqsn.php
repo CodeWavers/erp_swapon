@@ -1603,6 +1603,7 @@ class Rqsn extends CI_Model
             $this->db->join('invoice d', 'd.invoice_id=b.invoice_id');
             $this->db->where('b.product_id', $record->product_id);
             $this->db->where('d.outlet_id', $outlet_id);
+            $this->db->where('b.pre_order', 1);
             $total_sale = $this->db->get()->row();
 
             $out_qty = (!empty($total_sale->total_sale) ? $total_sale->total_sale : 0);

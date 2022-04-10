@@ -1619,6 +1619,28 @@ class reports extends CI_Model
         }
         return false;
     }
+    public function retrieve_product_pre_sales_report($perpage = null, $page = null)
+    {
+
+        $user_id = $this->session->userdata('user_id');
+
+        $this->db->select("a.*,b.product_name,b.product_model,b.sku,c.date,c.invoice,c.total_amount");
+        $this->db->from('invoice_details a');
+        $this->db->join('product_information b', 'b.product_id = a.product_id');
+        $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
+        $this->db->join('outlet_warehouse x', 'x.outlet_id = c.outlet_id');
+        $this->db->where('x.user_id', $user_id);
+        $this->db->order_by('c.date', 'desc');
+        $this->db->group_by('a.product_id');
+        $this->db->where('a.pre_order', 2);
+        if ($perpage && $page)
+            $this->db->limit($perpage, $page);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
     public function retrieve_product_purchase_report($perpage = null, $page = null)
     {
         $user_id = $this->session->userdata('user_id');
@@ -1819,6 +1841,36 @@ class reports extends CI_Model
         $this->db->join('size_list sz', 'b.size=sz.size_id', 'left');
         $this->db->join('color_list cl', 'b.color=cl.color_id', 'left');
         $this->db->order_by('c.date', 'desc');
+        if ($perpage && $page)
+            $this->db->limit($perpage, $page);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+    public function retrieve_product_search_pre_sales_report($outlet_id, $start_date, $end_date, $product_id,$cat_id, $perpage = null, $page = null)
+    {
+        $this->db->select("a.*,b.product_name,b.sku,b.category_id,c.invoice,c.date");
+        $this->db->from('invoice_details a');
+        $this->db->join('product_information b', 'b.product_id = a.product_id');
+        $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
+
+        if ($outlet_id) {
+            $this->db->where('c.outlet_id', $outlet_id);
+        }
+
+        if ($product_id) {
+            $this->db->where('b.product_id', $product_id);
+        }
+        if ($cat_id) {
+            $this->db->like('b.category_id', $cat_id);
+        }
+        $this->db->where('c.date >=', $start_date);
+        $this->db->where('c.date <=', $end_date);
+        $this->db->where('a.pre_order', 2);
+        $this->db->order_by('c.date', 'desc');
+        $this->db->group_by('a.product_id');
         if ($perpage && $page)
             $this->db->limit($perpage, $page);
         $query = $this->db->get();
