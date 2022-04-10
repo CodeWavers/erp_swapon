@@ -14,12 +14,14 @@ class Lrqsn
         $CI->load->model('Rqsn');
         $CI->load->model('Web_settings');
         $CI->load->model('Reports');
+        $CI->load->model('Products');
         $CI->load->model('categories');
         $CI->load->model('Warehouse');
 
         $cat_list = $CI->categories->category_list(1);
         $outlet_list    = $CI->Warehouse->get_outlet_user();
         $cw_list    = $CI->Rqsn->cw_list();
+        $sku_list = $CI->Products->sku_list();
 
         $cw = $CI->Warehouse->branch_list_product();
 
@@ -33,6 +35,7 @@ class Lrqsn
             'outlet_list' => $outlet_list,
             'cw'    => $cw,
             'cat_list'  => $cat_list,
+            'sku_list'  => $sku_list,
             'discount_type' => $currency_details[0]['discount_type'],
             'currency' => $currency_details[0]['currency'],
             'totalnumber' => $CI->Reports->totalnumberof_product(),
@@ -40,8 +43,8 @@ class Lrqsn
         );
 
 
-        //        echo print_r($data);
-        //        die();
+//                echo print_r($sku_list);
+//                die();
         $invoiceForm = $CI->parser->parse('rqsn/outlet_stock', $data, true);
         return $invoiceForm;
     }

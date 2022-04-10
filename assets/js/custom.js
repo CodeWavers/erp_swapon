@@ -905,6 +905,10 @@ $(document).ready(function () {
     table.ajax.reload();
   });
 
+  $("#product_sku").on("change", function (e) {
+
+    table.ajax.reload();
+  });
   var table = $("#checkListStockOutlet").DataTable({
     responsive: true,
 
@@ -952,16 +956,17 @@ $(document).ready(function () {
       data: function (d) {
         d.csrf_test_name = CSRF_TOKEN;
         d.cat_id = cat_id;
+        d.product_sku = $('.product_sku').val();
         d.outlet_id = outlet_id;
       },
     },
     columns: [
       { data: "sl" },
       { data: "product_name" },
-      { data: "product_model", class: "text-center" },
       { data: "category", class: "text-center" },
-      { data: "color", class: "text-center" },
-      { data: "size", class: "text-center" },
+      { data: "sku", class: "text-center" },
+      { data: "product_model", class: "text-center" },
+
       {
         data: "sales_price",
         class: "text-right",
@@ -1214,12 +1219,18 @@ $(document).ready(function () {
   var currency = $("#currency").val();
   var total_stock = $("#total_stock").val();
   var product_status = $("#product_status").val();
+  var product_sku = $("#product_sku").val();
 
   var pr_status = $("#pr_status").val();
 
   $("#product_status").on("change", function (e) {
     var valueSelected = this.value;
     product_status = valueSelected;
+
+    table.ajax.reload();
+  });
+
+  $("#product_sku").on("change", function (e) {
 
     table.ajax.reload();
   });
@@ -1301,6 +1312,7 @@ $(document).ready(function () {
         d.csrf_test_name = CSRF_TOKEN;
         d.pr_status = pr_status;
         d.product_status = product_status;
+        d.product_sku = $('.product_sku').val();
       },
     },
     columns: [

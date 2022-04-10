@@ -232,6 +232,9 @@ class reports extends CI_Model
         $response = array();
 
         $p_s = $this->input->post('product_status', TRUE);
+        $product_sku = $this->input->post('product_sku', TRUE);
+
+
 
         ## Read value
         if (!$post_product_id) {
@@ -264,6 +267,11 @@ class reports extends CI_Model
             $this->db->from('product_information a');
             $this->db->join('cats b','a.category_id=b.id','left');
 
+            if ($product_sku != '') {
+                $this->db->where_in('a.sku',$product_sku);
+            }
+
+
 
 
             if (isset($p_s) && $p_s != '') {
@@ -282,6 +290,16 @@ class reports extends CI_Model
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information a');
             $this->db->join('cats b','a.category_id=b.id','left');
+            if ($product_sku != '') {
+                $this->db->where_in('a.sku',$product_sku);
+            }
+
+//            if ($product_sku != '') {
+//                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+//                    $this->db->or_where('a.sku',$product_sku[$i]);
+//                }
+//            }
+
 
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
@@ -303,7 +321,15 @@ class reports extends CI_Model
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->group_by('a.product_id');
         $this->db->limit($rowperpage, $start);
+        if ($product_sku != '') {
+            $this->db->where_in('a.sku',$product_sku);
+        }
 
+//        if ($product_sku != '') {
+//            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+//                $this->db->or_where('a.sku',$product_sku[$i]);
+//            }
+//        }
 
 
         if (!$post_product_id && $searchValue != '')

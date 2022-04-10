@@ -765,4 +765,9 @@ class Products extends CI_Model
         $itemlist = $query->result();
         return $itemlist;
     }
+
+    public function sku_list(){
+
+        return $this->db->select('sku')->from('product_information')->get()->result();
+    }
 }

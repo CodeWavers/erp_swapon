@@ -112,10 +112,12 @@ class Lreport extends CI_Model
     {
         $CI = &get_instance();
         $CI->load->model('Reports');
+        $CI->load->model('Products');
         $CI->load->model('categories');
         $data['title'] = 'Stock Report';
 
         $cat_list = $this->categories->category_list(1);
+        $sku_list = $this->Products->sku_list();
         $company_info = $CI->Reports->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $data['currency'] = $currency_details[0]['currency'];
@@ -123,6 +125,7 @@ class Lreport extends CI_Model
         $data['company_info'] = $company_info;
         $data['pr_status'] = 1;
         $data['cat_list'] = $cat_list;
+        $data['sku_list'] = $sku_list;
         $data['heading_text'] = "Stock Report";
         $reportList = $CI->parser->parse('report/stock_report', $data, true);
         return $reportList;

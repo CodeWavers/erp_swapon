@@ -52,15 +52,32 @@
                     </div>
                     <div class="panel-body">
                         <input type="hidden" name="" id="pr_status" value="<?= $pr_status ?>">
-                        <div class="" style="margin-bottom: 10px;">
-                            <label for="cat_list" class="col-form-label">Product Type : </label>
-                            <select name="product_status" id="product_status" class="form-control"  >
-                                <option value="">Select One</option>
-                                <option value="1">Finished Goods</option>
-                                <option value="2">Raw Materials</option>
-                                <option value="3">Tools</option>
-                            </select>
+
+                        <div class="row">
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="cat_list" class="col-form-label">Product Type : </label>
+                                <select name="product_status" id="product_status" class="form-control"  >
+                                    <option value="">Select One</option>
+                                    <option value="1">Finished Goods</option>
+                                    <option value="2">Raw Materials</option>
+                                    <option value="3">Tools</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="product_sku" class="col-form-label">SKU: </label>
+                                <select name="product_sku" id="product_sku" class="form-control product_sku"   multiple>
+                                    <option value="">Select SKU</option>
+                                    {sku_list}
+                                    <option value="{sku}">{sku}</option>
+                                    {/sku_list}
+                                </select>
+
+                            </div>
+
                         </div>
+
                         <div>
 
                             <div class="table-responsive" id="printableArea">

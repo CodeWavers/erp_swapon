@@ -1455,14 +1455,11 @@ class Rqsn extends CI_Model
         $this->load->model('warehouse');
         $response = array();
 
-        $outlet_id = $this->input->post('outlet_id', TRUE);
-        //$user_id = $this->session->userdata('user_id');
-//        if (!$outlet_id && $outlet_id != '') {
+
             $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
-//        }
-        //    $outlet_id ='JBK6ZR8HF99SUSB';
 
 
+        $product_sku = $this->input->post('product_sku', TRUE);
 
         $cat_id = $this->input->post('cat_id', TRUE);
 
@@ -1480,7 +1477,7 @@ class Rqsn extends CI_Model
             ## Search
             $searchQuery = "";
             if ($searchValue != '') {
-                $searchQuery = " (d.product_name like '%" . $searchValue . "%' or d.product_model like '%" . $searchValue . "%') ";
+                $searchQuery = " (d.product_name like '%" . $searchValue . "%' or d.product_model like '%" . $searchValue . "%'  or d.sku like '%" . $searchValue . "%') ";
             }
 
             ## Total number of records without filtering
@@ -1489,6 +1486,11 @@ class Rqsn extends CI_Model
             $this->db->join('rqsn_details b', 'd.product_id=b.product_id');
             $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id');
             $this->db->where('c.from_id', $outlet_id);
+            if ($product_sku != '') {
+                $this->db->where_in('d.sku', $product_sku);
+            }
+
+
 
             if (isset($cat_id) && $cat_id != '') {
                 $this->db->where('d.category_id', $cat_id);
@@ -1496,6 +1498,11 @@ class Rqsn extends CI_Model
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
+
+//                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+//                    $this->db->or_where('d.sku',$product_sku[$i]);
+//                }
+
             $this->db->group_by('d.product_id');
             $records = $this->db->get()->num_rows();
             $totalRecords = $records;
@@ -1506,12 +1513,21 @@ class Rqsn extends CI_Model
             $this->db->join('rqsn_details b', 'd.product_id=b.product_id');
             $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id');
             $this->db->where('c.from_id', $outlet_id);
+            if ($product_sku != '') {
+                $this->db->where_in('d.sku', $product_sku);
+            }
             if (isset($cat_id) && $cat_id != '') {
                 $this->db->where('d.category_id', $cat_id);
             }
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
+
+//                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+//                    $this->db->or_where('d.sku',$product_sku[$i]);
+//                }
+
+
             $this->db->group_by('d.product_id');
             $records = $this->db->get()->num_rows();
             $totalRecordwithFilter = $records;
@@ -1526,9 +1542,9 @@ class Rqsn extends CI_Model
         $this->db->where('b.isrcv', 1);
         //$this->db->where('b.isaprv',1);
         $this->db->where('a.from_id', $outlet_id);
-       // $this->db->join('size_list sz', 'd.size=sz.size_id', 'left');
-       // $this->db->join('color_list cl', 'd.color=cl.color_id', 'left');
-       // $this->db->join('product_category cat', 'd.category_id=cat.category_id', 'left');
+        if ($product_sku != '') {
+            $this->db->where_in('d.sku', $product_sku);
+        }
 
         if (!$post_product_id && $searchValue != '')
             $this->db->where($searchQuery);
@@ -1540,6 +1556,11 @@ class Rqsn extends CI_Model
         if (isset($cat_id) && $cat_id != '') {
             $this->db->where('d.category_id', $cat_id);
         }
+
+//            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+//                $this->db->or_where('d.sku',$product_sku[$i]);
+//            }
+
 
         if (!$post_product_id) {
             $this->db->order_by($columnName, $columnSortOrder);
@@ -1553,9 +1574,7 @@ class Rqsn extends CI_Model
 
         $sl = 1;
 
-        // echo '<pre>';
-        // print_r($records);
-        // exit();
+
 
         $closing_inventory = '';
 
@@ -1615,9 +1634,8 @@ class Rqsn extends CI_Model
                 'product_model' =>  $record->product_model,
                 'sales_price'   =>  sprintf('%0.2f', $sprice),
                 'purchase_p'    =>  $pprice,
-                'size'          => $record->size_name,
-                'color'          => $record->color_name,
-                'category'  => ($record->category_name ? $record->category_name : ''),
+                'sku'          => $record->sku,
+                'category'  => (!empty($record->category_name) ? $record->category_name : ''),
                 'totalPurchaseQnty' => sprintf('%0.2f', $total_purchase->total_purchase),
                 'totalSalesQnty' => sprintf('%0.2f', $out_qty),
                 'dispatch' => $total_sale->total_sale,

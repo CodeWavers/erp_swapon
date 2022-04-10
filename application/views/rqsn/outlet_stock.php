@@ -71,16 +71,34 @@
                                 </select>
                             </div>
                         <?php } ?>
-                        <div class="" style="margin-bottom: 10px;">
-                            <label for="cat_list" class="col-form-label">Category : </label>
-                            <div class="form-group">
-                                <select id="cat_list" class="form-control" name="cat_list">
-                                    <option value="">Select One</option>
-                                    {cat_list}
-                                    <option value="{category_id}">{category_name}</option>
-                                    {/cat_list}
-                                </select>
+
+
+                        <div class="row">
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="cat_list" class="col-form-label">Category : </label>
+                                <div class="form-group">
+                                    <select id="cat_list" class="form-control" name="cat_list">
+                                        <option value="">Select One</option>
+                                        {cat_list}
+                                        <option value="{category_id}">{category_name}</option>
+                                        {/cat_list}
+                                    </select>
+                                </div>
+
                             </div>
+
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="product_sku" class="col-form-label">SKU: </label>
+                                <select name="product_sku" id="product_sku" class="form-control product_sku"   multiple>
+                                    <option value="">Select SKU</option>
+                                    {sku_list}
+                                    <option value="{sku}">{sku}</option>
+                                    {/sku_list}
+                                </select>
+
+
+                            </div>
+
                         </div>
                         <div>
 
@@ -90,10 +108,10 @@
                                         <tr>
                                             <th class="text-center"><?php echo display('sl') ?></th>
                                             <th class="text-center"><?php echo display('product_name') ?></th>
-                                            <th class="text-center"><?php echo display('product_model') ?></th>
                                             <th class="text-center">Category</th>
-                                            <th class="text-center">Color</th>
-                                            <th class="text-center">Size</th>
+                                            <th class="text-center">SKU</th>
+                                            <th class="text-center"><?php echo display('product_model') ?></th>
+
                                             <th class="text-center"><?php echo display('sell_price') ?></th>
                                             <th class="text-center"><?php echo display('purchase_price') ?></th>
                                             <th class="text-center"><?php echo display('in_qnty') ?></th>
@@ -107,7 +125,7 @@
                                     <tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="9" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th colspan="8" class="text-right"><?php echo display('total') ?> :</th>
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>
