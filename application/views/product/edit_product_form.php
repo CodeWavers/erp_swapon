@@ -271,7 +271,7 @@
                                     <label for="unit" class="col-sm-4 col-form-label">Base Unit</label>
                                     <div class="col-sm-8">
                                         <select class="form-control" id="unit" name="unit" tabindex="-1" aria-hidden="true">
-                                            <option value="">Select One</option>
+                                            <option value="{unit}">{unit}</option>
                                             <?php
 
                                             foreach ($unit_list as $single) {
@@ -331,57 +331,31 @@
                                 <div class="form-group row">
                                     <label for="sell_price" class="col-sm-4 col-form-label">Sales Price<i class="text-danger">*</i> </label>
                                     <div class="col-sm-8">
-                                        <input class="form-control text-right" name="sell_price" type="text" required="" placeholder="0.00" tabindex="5" min="0" value="{price}">
+                                        <input class="form-control text-right" id="sell_price" name="sell_price" type="text" required="" placeholder="0.00" tabindex="5" min="0" value="{price}">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-6">
-                                <div class="col-sm-6">
-                                    <div class="form-group row" class="display: <?php echo $finished_raw == 1 ? 'block' : 'none' ?>">
-                                        <label for="category_id" class="col-sm-4 col-form-label">Brand Name</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="brand_id" name="brand_id" tabindex="3">
-                                                <option value=""></option>
-                                                <?php if ($brand_list) { ?>
-                                                    {brand_list}
-                                                    <option value="{id}">{brand_name}</option>
-                                                    {/brand_list}
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<!--                            <div class="col-sm-6">-->
+<!--                                <div class="col-sm-6">-->
+<!--                                    <div class="form-group row" class="display: --><?php //echo $finished_raw == 1 ? 'block' : 'none' ?><!--">-->
+<!--                                        <label for="category_id" class="col-sm-4 col-form-label">Brand Name</label>-->
+<!--                                        <div class="col-sm-8">-->
+<!--                                            <select class="form-control" id="brand_id" name="brand_id" tabindex="3">-->
+<!--                                                <option value="{brand_id}">{brand_name}</option>-->
+<!--                                                --><?php //if ($brand_list) { ?>
+<!--                                                    {brand_list}-->
+<!--                                                    <option value="{id}">{brand_name}</option>-->
+<!--                                                    {/brand_list}-->
+<!--                                                --><?php //} ?>
+<!--                                            </select>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
 
                         </div>
-                        <div class="row">
 
-
-                            <div class="col-sm-12">
-                                <div class="form-group row">
-                                    <label for="image" class="col-sm-2 col-form-label">Meta Image </label>
-                                    <div class="col-sm-10">
-                                        <!-- <input type="file" name="meta_image" class="form-control" id="meta_image" tabindex="4"> -->
-                                        <div id="meta_photo">
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- <div class="row">
-                            <div class="col-sm-6">
-
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="col-sm-4"></div>
-                                <div class="col-sm-8">
-                                    <img class="img img-responsive text-center" src="{image}" height="80" width="80">
-                                </div>
-                            </div>
-                        </div> -->
 
                         <div class="pr_code_div" style="display: <?php echo $finished_raw == 1 ? 'block' : 'none' ?>">
 
@@ -392,7 +366,15 @@
                                         <label for="category_id" class="col-sm-4 col-form-label"><?php echo display('category') ?></label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="category_id" multiple name="category_id[]" tabindex="3">
-                                                <option value=""></option>
+                                                {selected_category_list}
+                                                <option value="{id}" selected>{name}</option>
+
+                                                {/selected_category_list}
+
+                                                {allcats}
+                                                <option value="{id}">{name}</option>
+
+                                                {/allcats}
                                             </select>
                                         </div>
                                     </div>
@@ -401,7 +383,7 @@
                                     <div class="form-group row">
                                         <label for="sku" class="col-sm-4 col-form-label">SKU</label>
                                         <div class="col-sm-8">
-                                            <input type="text" tabindex="" class="form-control" id="sku" name="sku" placeholder="SKU" />
+                                            <input type="text" tabindex="" class="form-control" id="sku" name="sku" value="{sku}" placeholder="SKU" />
                                         </div>
                                     </div>
                                 </div>
@@ -411,7 +393,7 @@
                                     <div class="form-group row">
                                         <label for="category_id" class="col-sm-4 col-form-label">Minimum Quantity</label>
                                         <div class="col-sm-8">
-                                            <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity" />
+                                            <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity"  value="{min_qty}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -419,7 +401,7 @@
                                     <div class="form-group row">
                                         <label for="sku" class="col-sm-4 col-form-label">Tags</label>
                                         <div class="col-sm-8">
-                                            <input type="text" tabindex="" class="form-control" id="tags" name="tags" placeholder="Tags" />
+                                            <input type="text" tabindex="" class="form-control" id="tags" name="tags" value="{tags}" placeholder="Tags" />
                                         </div>
                                     </div>
                                 </div>
@@ -431,12 +413,16 @@
                                         <label for="color" class="col-sm-4 col-form-label">Color </label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="color" multiple name="color[]" tabindex="3">
-                                                <option value=""></option>
+                                                {selected_color_list}
+                                                <option value="{code}" selected>{name}</option>
+
+                                                {/selected_color_list}
                                                 <?php if ($color_list) {
                                                     foreach ($color_list as $color) { ?>
                                                         <option value="<?= $color['code'] ?>"> <?= $color['color_name'] ?></option>
-                                                <?php }
+                                                    <?php }
                                                 } ?>
+
                                             </select>
                                         </div>
                                     </div>
@@ -466,6 +452,12 @@
                                         <label for="color" class="col-sm-4 col-form-label">Attributes </label>
                                         <div class="col-sm-8">
                                             <select name="choice_attributes[]" id="choice_attributes" class="form-control demo-select2" multiple data-placeholder="Attributes">
+
+                                                {selected_at_list}
+                                                <option value="{id}" selected>{name}</option>
+
+                                                {/selected_at_list}
+
                                                 <?php if ($size_list) { ?>
                                                     {size_list}
                                                     <option value="{id}">{name}</option>
@@ -486,6 +478,48 @@
                                         <div class="col-sm-8">
                                             <div class="customer_choice_options" id="customer_choice_options">
 
+                                                <?php foreach (json_decode($choice_options) as $key => $choice_option) { ?>
+
+                                                    <?php
+
+                                                    $api_url=api_url();
+                                                    $url = $api_url."products/attributes/".$choice_option->attribute_id;
+
+
+                                                    $curl = curl_init($url);
+                                                    curl_setopt($curl, CURLOPT_URL, $url);
+                                                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+                                                    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+                                                    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+                                                    $choice_name =json_decode(curl_exec($curl));
+                                                    curl_close($curl);
+
+       // echo '<pre>';print_r( implode(',', $choice_option->values));exit();
+
+
+
+
+                                                    ?>
+
+
+                                                <div class="form-group row">
+                                                    <div class="col-sm-4">
+                                                        <input type="hidden" name="choice_no[]" value=""<?php echo $choice_option->attribute_id ?>">
+                                                        <input type="text" class="form-control" name="choice[]" value="<?php echo $choice_name->name ?>" placeholder="" disabled>
+                                                    </div>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" class="form-control" name="choice_options_<?php echo $choice_option->attribute_id ?>[]" placeholder="" value="<?php echo implode(',', $choice_option->values) ?>" data-role="tagsinput" ">
+                                                    </div>
+                                                    <div class="col-sm-1">
+                                                        <button onclick="delete_row(this)" class="btn btn-danger btn-icon"><i class="fa fa-close"></i></button>
+                                                    </div>
+                                                </div>
+                                                    <br>
+                                               <?php } ?>
+
                                             </div>
                                         </div>
 
@@ -500,7 +534,7 @@
                                     <div class="form-group row">
                                         <label for="color" class="col-sm-2 col-form-label">Product Description </label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" name="description" id="description" rows="2" placeholder="<?php echo display('product_details') ?>" tabindex="2"></textarea>
+                                            <textarea class="form-control"  name="description" id="description" rows="2" placeholder="<?php echo display('product_details') ?>"  tabindex="2">{description}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -519,8 +553,45 @@
                                         <label for="image" class="col-sm-2 col-form-label">Thumbnail Image </label>
                                         <div class="col-sm-10">
                                             <!--                                        <input type="file" name="meta_image" class="form-control" id="meta_image" tabindex="4">-->
-                                            <div id="photos">
+                                            <div id="thumbnail_img">
+<!--                                                --><?php //echo ecom_url().'/public/'.$thumbnail_img?>
 
+                                              <?php if($thumbnail_img != null) {?>
+                                                <div class="col-md-3 col-sm-3 col-xs-6">
+                                                    <div class="img-upload-preview">
+                                                        <img loading="lazy"  src="<?php echo ecom_url().'/public/'.$thumbnail_img?>" alt="" class="img-responsive">
+                                                        <input type="hidden" name="previous_thumbnail_img" value="<?php echo $thumbnail_img?>">
+                                                        <button type="button" class="btn btn-danger close-btn remove-files"><i class="fa fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                                <?php }?>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row ">
+
+
+                                <div class="col-sm-12">
+                                    <div class="form-group row">
+                                        <label for="image" class="col-sm-2 col-form-label">Gallery Image </label>
+                                        <div class="col-sm-10">
+                                            <!--                                        <input type="file" name="meta_image" class="form-control" id="meta_image" tabindex="4">-->
+                                            <div id="photos">
+                                                <?php if(is_array(json_decode($photos))) { ?>
+                                                 <?php foreach (json_decode($photos) as $key => $photo) {?>
+                                                <div class="col-md-3 col-sm-3 col-xs-6">
+                                                    <div class="img-upload-preview">
+                                                        <img loading="lazy"  src="<?php echo ecom_url().'/public/'.$photo?>" alt="" class="img-responsive">
+                                                        <input type="hidden" name="previous_photos[]" value="<?php echo $photo?>">
+                                                        <button type="button" class="btn btn-danger close-btn remove-files"><i class="fa fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                                 <?php }?>
+                                                <?php }?>
                                             </div>
                                         </div>
                                     </div>
@@ -533,6 +604,7 @@
                                         <label for="category_id" class="col-sm-4 col-form-label">Video Provider</label>
                                         <div class="col-sm-8">
                                             <select name="video_provider" id="video_provider" class="form-control" required onchange="pr_status_changed(this.value)">
+                                                <option value="">{video_provider}</option>
                                                 <option value="1">Vimeo</option>
                                                 <option value="2">Youtube</option>
                                                 <option value="3">Dailymotion</option>
@@ -546,7 +618,7 @@
                                         <label for="product_model" class="col-sm-4 col-form-label">Video Link</label>
                                         <div class="col-sm-8">
 
-                                            <input type="text" tabindex="" class="form-control" id="video_link" name="video_link" placeholder="Video Link" />
+                                            <input type="text" tabindex="" class="form-control" id="video_link" name="video_link" placeholder="Video Link" value="{video_link}"/>
 
                                         </div>
                                     </div>
@@ -561,7 +633,7 @@
                                     <div class="form-group row">
                                         <label for="color" class="col-sm-2 col-form-label">Product Summery </label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" name="summery" id="summery" rows="2" placeholder="Product Summery" tabindex="2"></textarea>
+                                            <textarea class="form-control" name="summery" id="summery" rows="2" placeholder="Product Summery" tabindex="2">{product_summary}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -573,7 +645,7 @@
                                     <div class="form-group row">
                                         <label for="color" class="col-sm-2 col-form-label">Additional Information </label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" name="additional_information" id="additional_information" rows="2" placeholder="Product Summery" tabindex="2"></textarea>
+                                            <textarea class="form-control" name="additional_information" id="additional_information" rows="2" placeholder="Product Summery" tabindex="2">{information}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -585,7 +657,7 @@
                                     <div class="form-group row">
                                         <label for="color" class="col-sm-2 col-form-label">Additional Terms & Condition </label>
                                         <div class="col-sm-10">
-                                            <textarea class="form-control" name="additional_terms" id="additional_terms" rows="1" placeholder="Product Summery" tabindex="2"></textarea>
+                                            <textarea class="form-control" name="additional_terms" id="additional_terms" rows="1" placeholder="Product Summery" tabindex="2">{tc}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -593,15 +665,15 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group row">
-                                        <label for="category_id" class="col-sm-4 col-form-label">Refundable</label>
-                                        <div class="col-sm-8">
-                                            <!--                                        <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity" />-->
-                                            <input style="" type="checkbox" name="refund" class="refund" id="refund" checked />
-                                        </div>
-                                    </div>
-                                </div>
+<!--                                <div class="col-sm-6">-->
+<!--                                    <div class="form-group row">-->
+<!--                                        <label for="category_id" class="col-sm-4 col-form-label">Refundable</label>-->
+<!--                                        <div class="col-sm-8">-->
+<!--                                                                                    <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity" />-->-->
+<!--                                            <input style="" type="checkbox" name="refund" class="refund" id="refund"  value="{refundable}"/>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
 
 
 
@@ -612,7 +684,7 @@
                                     <div class="form-group row">
                                         <label for="category_id" class="col-sm-4 col-form-label">Meta Title</label>
                                         <div class="col-sm-8">
-                                            <input type="text" tabindex="" class="form-control" id="meta_title" name="meta_title" placeholder="Meta Title" />
+                                            <input type="text" tabindex="" class="form-control" id="meta_title" name="meta_title" value="{meta_title}" placeholder="Meta Title" />
 
                                         </div>
                                     </div>
@@ -621,7 +693,7 @@
                                     <div class="form-group row">
                                         <label for="product_model" class="col-sm-4 col-form-label">Meta Description</label>
                                         <div class="col-sm-8">
-                                            <textarea class="form-control" name="meta_description" id="meta_description" rows="2" placeholder="Meta Description" tabindex="2"></textarea>
+                                            <textarea class="form-control" name="meta_description" id="meta_description" rows="4" placeholder="Meta Description" tabindex="2">{meta_description}</textarea>
 
                                         </div>
                                     </div>
@@ -639,7 +711,15 @@
                                         <div class="col-sm-10">
                                             <!-- <input type="file" name="meta_image" class="form-control" id="meta_image" tabindex="4"> -->
                                             <div id="meta_photo">
-
+                                                <?php if($meta_img != null) {?>
+                                                    <div class="col-md-3 col-sm-3 col-xs-6">
+                                                        <div class="img-upload-preview">
+                                                            <img loading="lazy"  src="<?php echo ecom_url().'/public/'.$meta_img?>" alt="" class="img-responsive">
+                                                            <input type="hidden" name="previous_meta_img" value="<?php echo $meta_img?>">
+                                                            <button type="button" class="btn btn-danger close-btn remove-files"><i class="fa fa-times"></i></button>
+                                                        </div>
+                                                    </div>
+                                                <?php }?>
                                             </div>
                                         </div>
                                     </div>
@@ -647,32 +727,10 @@
                             </div>
 
                         </div>
-                        <?php
-                        $i = 0;
-                        foreach ($taxfield as $txs) {
-                            $tax = 'tax' . $i;
-                        ?>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group row">
-                                        <label for="tax" class="col-sm-4 col-form-label"><?php echo $txs['tax_name']; ?> <i class="text-danger"></i></label>
-                                        <div class="col-sm-7">
-                                            <input type="text" name="tax<?php echo $i; ?>" class="form-control" value="<?php echo  number_format($pr_details[0][$tax] * 100, 2, '.', ','); ?>">
-                                        </div>
-                                        <div class="col-sm-1"> <i class="text-success">%</i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php $i++;
-                        } ?>
 
 
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <center><label for="description" class="col-form-label"><?php echo display('product_details') ?></label></center>
-                                <textarea class="form-control" name="description" id="description" rows="3" placeholder="<?php echo display('product_details') ?>" tabindex="2">{product_details}</textarea>
-                            </div>
-                        </div><br>
+
+
                         <div class="form-group row">
                             <div class="col-sm-6">
 
@@ -711,6 +769,10 @@
         });
 
     }
+
+    $('.remove-files').on('click', function(){
+        $(this).parents(".col-md-3").remove();
+    });
 </script>
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 <!--<script src="https://swaponsworld.com/public/js/spartan-multi-image-picker-min.js"></script>-->
@@ -778,90 +840,100 @@
             }
         });
 
-        $("#add-producttttt").on("click", function() {
+        $( "#add-product" ).on("click", function(  ) {
 
+            var product_status=$('#product_status').val();
+            var product_name=$('#product_name').val(),
+                product_id=$('#product_id').val(),
+                sell_price=$('#sell_price').val(),
+                category_id=$('#category_id').val(),
+                brand_id=$('#brand_id').val(),
+                sku=$('#sku').val(),
+                min_qty=$('#min_qty').val(),
+                tags=$('#tags').val(),
+                color=$('#color').val(),
 
+                description=CKEDITOR. instances['description']. getData(),
+                video_provider=$('#video_provider').val(),
+                video_link=$('#video_link').val(),
+                summery=CKEDITOR. instances['summery']. getData(),
+                additional_information=CKEDITOR. instances['additional_information']. getData(),
+                additional_terms=CKEDITOR. instances['additional_terms']. getData(),
+                refund=$('#refund').val(),
+                unit=$('#unit').val(),
+                meta_title=$('#meta_title').val(),
+                meta_description=$('#meta_description').val(),
+                previous_thumbnail_img=document.getElementsByName("previous_thumbnail_img")[0].value,
+                previous_meta_img=document.getElementsByName("previous_meta_img")[0].value,
+                //previous_photos=document.getElementsByName("previous_photos[]")[0].value,
 
-            var product_status = $('#product_status').val();
-            var product_name = $('#product_name').val(),
-                product_id = $('#product_id').val(),
-                sell_price = $('#sell_price').val(),
-                category_id = $('#category_id').val(),
-                brand_id = $('#brand_id').val(),
-                sku = $('#sku').val(),
-                min_qty = $('#min_qty').val(),
-                tags = $('#tags').val(),
-                color = $('#color').val(),
+                choice  = $("input[name='choice[]']")
+                    .map(function(){return $(this).val();}).get(),
 
-                description = CKEDITOR.instances['description'].getData(),
-                video_provider = $('#video_provider').val(),
-                video_link = $('#video_link').val(),
-                summery = CKEDITOR.instances['summery'].getData(),
-                additional_information = CKEDITOR.instances['additional_information'].getData(),
-                additional_terms = CKEDITOR.instances['additional_terms'].getData(),
-                refund = $('#refund').val(),
-                unit = $('#unit').val(),
-                meta_title = $('#meta_title').val(),
-                meta_description = $('#meta_description').val(),
+            previous_photos  = $("input[name='previous_photos[]']")
+                    .map(function(){return $(this).val();}).get();
 
+            // console.log(previous_photos)
+            // return
 
-                // color  = $("input[name='color[]']")
-                // .map(function(){return $(this).val();}).get(),
-
-                choice_no = $("input[name='choice_no[]']")
-                .map(function() {
-                    return $(this).val();
-                }).get(),
-
-                choice = $("input[name='choice[]']")
-                .map(function() {
-                    return $(this).val();
-                }).get();
-
-            if (product_status == '1') {
+            if (product_status == '1'){
                 var form = new FormData();
 
-                // console.log( document.getElementsByName("photos[]")[0].files[0])
-                //
-                //     return
+                var choice_no  = $("input[name='choice_no[]']")
+                    .map(function(){
+
+                        var value=$(this).val();
+
+                        var cho=$('.choice_options_'+value);
+                        var  choice_options  = cho.map(function(){
+                                var v=$(this).val();
+                            var myarr = v.split(",");
+                            // return $(this).val();
+                            myObj = {attribute_id: value, values: myarr};
+                            return myJSON = JSON.stringify(myObj);
+
+                        }).get();
+
+                        form.append("choice_options[]", choice_options);
+
+                        console.log(choice_options)
+
+                        return value;
+
+
+
+                    }).get();
+
+               // console.log(choice_no)
+              //  return
 
 
 
                 document.getElementsByName("photos[]").forEach((el) => {
-                        // if ($(el)[0].files[0] != undefined)
-                        form.append('photos', $(el)[0].files[0]);
 
-                        // console.log($(el)[0].files[0])
-                    }
+                    form.append('photos[]', $(el)[0].files[0]);
 
-                );
+                });
 
 
 
 
-                //  var thumbnail_img = document.getElementsByName("thumbnail_img");
-                //  console.log(thumbnail_img)
-                //
-                // return
-                // form.append("thumbnail_img", thumbnail_img.files[0]);
+                var thumbnail_img = document.getElementsByName("thumbnail_img");
+
+                if ( thumbnail_img.length > 0) {
+                    form.append("thumbnail_img", thumbnail_img[0].files[0]);
+                }
 
 
-                // var fileInput_t_img = document.getElementsByName("thumbnail_img");
-                //
-                //     form.append("thumbnail_img",fileInput_t_img.files[0]);
 
-                // var fileInput_photos = document.getElementById("photos");
-                // if (fileInput_photos.files.length > 0) {
-                //     form.append("photos", fileInput_photos.files[0]);
-                // }
-
-                // var meta_photo = document.getElementById("meta_photo");
-                // if (meta_photo.files.length > 0) {
-                //     form.append("meta_photo", meta_photo.files[0]);
-                // }
+                var meta_photo = document.getElementsByName("meta_photo");
+                if (meta_photo.length > 0) {
+                    form.append("meta_photo", meta_photo[0].files[0]);
+                }
 
                 form.append("name", product_name);
                 form.append("barcode", product_id);
+                form.append("id", product_id);
                 form.append("unit_price", sell_price)
                 form.append("cats", category_id);
                 form.append("brand_id", brand_id);
@@ -878,18 +950,16 @@
                 form.append("refundable", refund);
                 form.append("meta_title", meta_title);
                 form.append("meta_description", meta_description);
-                form.append("color", color);
-                form.append("choice_no", choice_no);
+                form.append("colors", JSON.stringify(color));
+                form.append("choice_no", JSON.stringify(choice_no));
+                form.append("previous_thumbnail_img", previous_thumbnail_img);
+                form.append("previous_meta_img", previous_meta_img);
+                form.append("previous_photos[]", previous_photos);
                 form.append("choice", choice);
 
-                //   console.log(form)
-
-                // alert('Ok')
-                // return;
-                // form.append("logo", fileInput.files[0], logo);
 
                 var settings = {
-                    "url": "https://swaponsworld.com/api/v1/products/store",
+                    "url": '<?= api_url() ?>'+'products/update',
                     "method": "POST",
                     "timeout": 0,
                     "processData": false,
@@ -898,7 +968,7 @@
                     "data": form
                 };
 
-                $.ajax(settings).done(function(response) {
+                $.ajax(settings).done(function (response) {
                     console.log(response);
                 });
             }
@@ -909,7 +979,10 @@
         });
 
     });
+    function delete_row(em){
+        $(em).closest('.form-group').remove();
 
+    }
 
 
     function validate_pr_code() {
@@ -934,8 +1007,8 @@
 
     }
 
-    function add_more_customer_choice_option(i, name) {
-        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input type="hidden" name="choice_no[]" value="' + i + '"><input type="text" class="form-control " name="choice[]" value="' + name + '" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control" name="choice_options_' + i + '[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
+    function add_more_customer_choice_option(i, name){
+        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input class="choice_no" type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control choice_options_'+i+' " name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
 
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
     }

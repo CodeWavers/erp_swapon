@@ -410,13 +410,39 @@ class Products extends CI_Model
     public function retrieve_product_editdata($product_id)
     {
         $this->db->select('*');
-        $this->db->from('product_information');
-        $this->db->where('product_id', $product_id);
+        $this->db->from('product_information a');
+        $this->db->join('product_brand b','a.brand_id=b.id','left');
+        $this->db->join('cats c','a.category_id=c.id','left');
+        $this->db->where('a.product_id', $product_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
         return false;
+    }
+
+    public function ecom_product_edit_data($product_id){
+        $api_url=api_url();
+        $url = $api_url."products/show/".$product_id;
+
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $product_details =json_decode(curl_exec($curl));
+        curl_close($curl);
+
+//        echo '<pre>';print_r($product_details->product->name);exit();
+
+        return $product_details;
+
+
+
     }
 
     // Supplier product information

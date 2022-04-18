@@ -139,7 +139,7 @@
                                     <div class="form-group row">
                                         <label for="sell_price" class="col-sm-4 col-form-label">Sales Price<i class="text-danger">*</i> </label>
                                         <div class="col-sm-8">
-                                            <input class="form-control text-right" id="sell_price" name="sell_price" type="text" required="" placeholder="0.00" tabindex="5" min="0">
+                                            <input class="form-control text-right" id="sell_price" name="sell_price" type="text" required placeholder="0.00" tabindex="5" min="0" >
                                         </div>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@
                                 <div class="form-group row">
                                     <label for="category_id" class="col-sm-4 col-form-label">Minimum Quantity</label>
                                     <div class="col-sm-8">
-                                        <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity" />
+                                        <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity" value="1" required />
                                     </div>
                                 </div>
                             </div>
@@ -518,14 +518,15 @@
             maxCount:         1,
             rowHeight:        '200px',
             groupClassName:   'col-md-3 col-sm-3 col-xs-6 thumbnail_img',
-            maxFileSize:      '',
+            allowedExt:       'png|jpg',
             dropFileLabel : "Drop Here",
-            onExtensionErr : function(index, file){
-                console.log(index, file,  'extension err');
-                alert('Please only input png or jpg type file')
+
+            onExtensionErr : function(){
+                console.log('extension error');
+                alert('Please only input png or jpg type file');
             },
-            onSizeErr : function(index, file){
-                console.log(index, file,  'file size too big');
+            onSizeErr : function(){
+                console.log('file size too big');
                 alert('File size too big');
             }
         });
@@ -546,9 +547,7 @@
             }
         });
 
-        $( "#add-producttttt" ).on("click", function(  ) {
-
-
+        $( "#add-product" ).on("click", function(  ) {
 
             var product_status=$('#product_status').val();
             var product_name=$('#product_name').val(),
@@ -572,57 +571,64 @@
                 meta_title=$('#meta_title').val(),
                 meta_description=$('#meta_description').val(),
 
-
-                // color  = $("input[name='color[]']")
-                // .map(function(){return $(this).val();}).get(),
-
-                choice_no  = $("input[name='choice_no[]']")
-                    .map(function(){return $(this).val();}).get(),
-
                 choice  = $("input[name='choice[]']")
+                    .map(function(){return $(this).val();}).get();
+
+            color  = $("input[name='color[]']")
                     .map(function(){return $(this).val();}).get();
 
                 if (product_status == '1'){
                 var form = new FormData();
 
-                // console.log( document.getElementsByName("photos[]")[0].files[0])
-                //
-                //     return
+                   var choice_no  = $("input[name='choice_no[]']")
+                        .map(function(){
+
+                            var value=$(this).val();
+
+                            var cho=$('.choice_options_'+value);
+                            var  choice_options  = cho.map(function(){
+
+                                var v=$(this).val();
+                                var myarr = v.split(",");
+                                // return $(this).val();
+                                myObj = {attribute_id: value, values: myarr};
+                                return myJSON = JSON.stringify(myObj);
+
+                            }).get();
+
+                            form.append("choice_options[]", choice_options);
+
+                            //console.log(choice_options)
+
+                            return value;
 
 
 
-                document.getElementsByName("photos[]").forEach((el) => {
-                        // if ($(el)[0].files[0] != undefined)
-                            form.append('photos', $(el)[0].files[0]);
+                        }).get();
 
-                            // console.log($(el)[0].files[0])
+
+
+                    document.getElementsByName("photos[]").forEach((el) => {
+
+                        form.append('photos[]', $(el)[0].files[0]);
+
+                    });
+
+
+
+
+                         var thumbnail_img = document.getElementsByName("thumbnail_img");
+
+                    if ( thumbnail_img.length > 0) {
+                        form.append("thumbnail_img", thumbnail_img[0].files[0]);
                     }
 
-                );
 
 
-
-
-                        //  var thumbnail_img = document.getElementsByName("thumbnail_img");
-                        //  console.log(thumbnail_img)
-                        //
-                        // return
-                        // form.append("thumbnail_img", thumbnail_img.files[0]);
-
-
-                // var fileInput_t_img = document.getElementsByName("thumbnail_img");
-                //
-                //     form.append("thumbnail_img",fileInput_t_img.files[0]);
-
-                // var fileInput_photos = document.getElementById("photos");
-                // if (fileInput_photos.files.length > 0) {
-                //     form.append("photos", fileInput_photos.files[0]);
-                // }
-
-                // var meta_photo = document.getElementById("meta_photo");
-                // if (meta_photo.files.length > 0) {
-                //     form.append("meta_photo", meta_photo.files[0]);
-                // }
+                var meta_photo = document.getElementsByName("meta_photo");
+                if (meta_photo.length > 0) {
+                    form.append("meta_photo", meta_photo[0].files[0]);
+                }
 
                 form.append("name", product_name);
                 form.append("barcode", product_id);
@@ -642,18 +648,13 @@
                 form.append("refundable", refund);
                 form.append("meta_title", meta_title);
                 form.append("meta_description", meta_description);
-                form.append("color", color);
-                form.append("choice_no", choice_no);
+                form.append("colors", JSON.stringify(color));
+                form.append("choice_no", JSON.stringify(choice_no));
                 form.append("choice", choice);
 
-             //   console.log(form)
-
-                // alert('Ok')
-                // return;
-                // form.append("logo", fileInput.files[0], logo);
 
                 var settings = {
-                    "url": "https://swaponsworld.com/api/v1/products/store",
+                    "url": '<?= api_url() ?>'+'products/store',
                     "method": "POST",
                     "timeout": 0,
                     "processData": false,
@@ -699,7 +700,7 @@
     }
 
     function add_more_customer_choice_option(i, name){
-        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control" name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
+        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input class="choice_no" type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control choice_options_'+i+' " name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
 
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
     }

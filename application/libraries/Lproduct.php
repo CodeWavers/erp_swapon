@@ -119,11 +119,6 @@ class Lproduct
         $CI->load->model('Brands');
         $CI->load->model('Ptype');
         $CI->load->model('Units');
-
-        $product_detail = $CI->Products->retrieve_product_editdata($product_id);
-        // echo '<pre>';
-        // print_r($product_detail);
-        // exit();
         $supplier_product_detail = $CI->Products->supplier_product_editdata($product_id);
         @$supplier_id = $product_detail[0]['supplier_id'];
 
@@ -161,6 +156,83 @@ class Lproduct
             $i++;
         }
 
+        $product_detail = $CI->Products->retrieve_product_editdata($product_id);
+
+        if ($product_detail[0]['finished_raw'] == 1) {
+            $product_detail = $CI->Products->ecom_product_edit_data($product_id);
+            //echo '<pre>'; print_r($product_detail); exit();
+            $data['title']            = display('edit_your_product');
+            $data['product_id']       = $product_detail->product->id;
+            $data['product_name']     = $product_detail->product->name;
+            $data['price']            = $product_detail->product->unit_price;
+            $data['sku']            =   $product_detail->product->sku;
+            $data['tags']            = $product_detail->product->tags;
+            $data['min_qty']            = $product_detail->product->min_qty;
+            $data['photos']            = $product_detail->product->photos;
+            $data['thumbnail_img']            = $product_detail->product->thumbnail_img;
+            $data['video_provider']            = $product_detail->product->video_provider;
+            $data['video_link']            = $product_detail->product->video_link;
+            $data['description']            = $product_detail->product->description;
+            $data['video_link']            = $product_detail->product->video_link;
+            $data['product_summary']            = $product_detail->product->product_summary;
+            $data['meta_title']            = $product_detail->product->meta_title;
+            $data['meta_description']            = $product_detail->product->meta_description;
+            $data['meta_img']            = $product_detail->product->meta_img;
+            $data['colors']            = $product_detail->product->colors;
+            $data['unit']            = $product_detail->product->unit;
+            $data['finished_raw']      = 1;
+            $data['unit_list']        = $unit_list;
+            $data['selected_category_list']        = $product_detail->category_list;
+            $data['allcats']        = $product_detail->allcats;
+            //$data['all_color']        = $product_detail->all_color;
+            $data['selected_color_list']        = $product_detail->color_list;
+            $data['selected_at_list']        = $product_detail->at_list;
+            $data['choice_options']        = $product_detail->product->choice_options;
+//            $data['meta_img']            = $product_detail->product->meta_img;
+
+//            $choice_options=json_decode($product_detail->product->choice_options);
+          //  echo '<pre>'; print_r( $product_detail); exit();
+
+//
+//            $data['serial_no']        = $product_detail[0]['serial_no'];
+//            $data['product_model']    = $product_detail[0]['product_model'];
+//            $data['product_details']  = $product_detail[0]['product_details'];
+//            $data['pr_details']       = $product_detail;
+//            $data['image']            = $product_detail[0]['image'];
+//            $data['unit']             = $product_detail[0]['unit'];
+//            $data['trxn_unit']             = $product_detail[0]['trxn_unit'];
+//            $data['multiplier']             = $product_detail[0]['unit_multiplier'];
+//            $data['product_code']             = $product_detail[0]['product_code'];
+//            $data['size']             = $product_detail[0]['size'];
+//            $data['color']             = $product_detail[0]['color'];
+//            $data['brand_name']             = $product_detail[0]['brand_name'];
+//            $data['brand_id']             = $product_detail[0]['brand_id'];
+
+//            $data['category_list']    = $category_list;
+//            $data['brand_list']    = $brand_list;
+//            $data['ptype_list']    = $ptype_list;
+            $data['size_list']    = $size_list;
+            $data['color_list']    = $color_list;
+//            $data['category_selected'] = $category_selected;
+//            $data['brand_selected'] = $brand_selected;
+//            $data['ptype_selected'] = $ptype_selected;
+//            $data['tax_selecete']     = $product_detail[0]['tax'] * 100;
+//            $data['supplier_product_data'] = $supplier_product_detail;
+//            $data['taxfield']         = $taxfield;
+
+
+            $chapterList = $CI->parser->parse('product/edit_product_form', $data, true);
+
+            return $chapterList;
+
+        }
+
+
+        // echo '<pre>';
+        // print_r($product_detail);
+        // exit();
+
+
 
 
         $data['title']            = display('edit_your_product');
@@ -168,6 +240,9 @@ class Lproduct
         $data['product_id_two']       = $product_detail[0]['product_id_two'];
         $data['product_name']     = $product_detail[0]['product_name'];
         $data['price']            = $product_detail[0]['price'];
+        $data['sku']            = $product_detail[0]['sku'];
+        $data['tags']            = $product_detail[0]['tags'];
+      //  $data['price']            = $product_detail[0]['price'];
         $data['re_order_level']            = $product_detail[0]['re_order_level'];
         $data['serial_no']        = $product_detail[0]['serial_no'];
         $data['product_model']    = $product_detail[0]['product_model'];
@@ -180,6 +255,8 @@ class Lproduct
         $data['product_code']             = $product_detail[0]['product_code'];
         $data['size']             = $product_detail[0]['size'];
         $data['color']             = $product_detail[0]['color'];
+        $data['brand_name']             = $product_detail[0]['brand_name'];
+        $data['brand_id']             = $product_detail[0]['brand_id'];
         $data['finished_raw']      = $product_detail[0]['finished_raw'];
         $data['supplier_list']    = $supplier_list;
         $data['supplier_selected'] = $supplier_selected;

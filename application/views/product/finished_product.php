@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="total_product" value="<?php echo $total_product; ?>" name="">
-                <input type="hidden" id="api_url" value="https://swaponsworld.com/api/v1/" name="">
+                <input type="hidden" id="api_url" value="<?php echo api_url() ?>" name="">
             </div>
         </div>
     </section>
