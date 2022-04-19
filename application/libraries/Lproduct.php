@@ -184,6 +184,7 @@ class Lproduct
             $data['unit_list']        = $unit_list;
             $data['selected_category_list']        = $product_detail->category_list;
             $data['allcats']        = $product_detail->allcats;
+           // $data['attributes']        = json_encode($product_detail->product->choice_options);
             //$data['all_color']        = $product_detail->all_color;
             $data['selected_color_list']        = $product_detail->color_list;
             $data['selected_at_list']        = $product_detail->at_list;
@@ -191,7 +192,7 @@ class Lproduct
 //            $data['meta_img']            = $product_detail->product->meta_img;
 
 //            $choice_options=json_decode($product_detail->product->choice_options);
-          //  echo '<pre>'; print_r( $product_detail); exit();
+         //   echo '<pre>'; print_r( $product_detail->product->attributes); exit();
 
 //
 //            $data['serial_no']        = $product_detail[0]['serial_no'];

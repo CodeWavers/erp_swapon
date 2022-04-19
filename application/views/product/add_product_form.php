@@ -574,33 +574,40 @@
                 choice  = $("input[name='choice[]']")
                     .map(function(){return $(this).val();}).get();
 
-            color  = $("input[name='color[]']")
-                    .map(function(){return $(this).val();}).get();
+            // color  = $("input[name='color[]']")
+            //         .map(function(){return $(this).val();}).get();
 
                 if (product_status == '1'){
                 var form = new FormData();
 
-                   var choice_no  = $("input[name='choice_no[]']")
+                    var choice_no  = $("input[name='choice_no[]']")
                         .map(function(){
 
-                            var value=$(this).val();
+                            var x=$(this).val();
 
-                            var cho=$('.choice_options_'+value);
+                            var cho=$('.choice_options_'+x);
                             var  choice_options  = cho.map(function(){
-
                                 var v=$(this).val();
+
+
                                 var myarr = v.split(",");
+
+                                // const valueWrappedInQuotes = myarr.map(myarr => `'${myarr}'`);
+                                // const withCommasInBetween = valueWrappedInQuotes.join(',')
                                 // return $(this).val();
-                                myObj = {attribute_id: value, values: myarr};
+                                //  console.log(withCommasInBetween)
+                                myObj = {attribute_id: x, values: myarr};
                                 return myJSON = JSON.stringify(myObj);
 
                             }).get();
-
+                            //   console.log(choice_options)
                             form.append("choice_options[]", choice_options);
 
-                            //console.log(choice_options)
 
-                            return value;
+
+                            //  return
+
+                            return x;
 
 
 

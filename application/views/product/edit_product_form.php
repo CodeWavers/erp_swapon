@@ -478,6 +478,9 @@
                                         <div class="col-sm-8">
                                             <div class="customer_choice_options" id="customer_choice_options">
 
+
+
+
                                                 <?php foreach (json_decode($choice_options) as $key => $choice_option) { ?>
 
                                                     <?php
@@ -603,7 +606,7 @@
                                     <div class="form-group row">
                                         <label for="category_id" class="col-sm-4 col-form-label">Video Provider</label>
                                         <div class="col-sm-8">
-                                            <select name="video_provider" id="video_provider" class="form-control" required onchange="pr_status_changed(this.value)">
+                                            <select name="video_provider" id="video_provider" class="form-control"  >
                                                 <option value="">{video_provider}</option>
                                                 <option value="1">Vimeo</option>
                                                 <option value="2">Youtube</option>
@@ -664,20 +667,7 @@
 
 
                             </div>
-                            <div class="row">
-<!--                                <div class="col-sm-6">-->
-<!--                                    <div class="form-group row">-->
-<!--                                        <label for="category_id" class="col-sm-4 col-form-label">Refundable</label>-->
-<!--                                        <div class="col-sm-8">-->
-<!--                                                                                    <input type="number" tabindex="" class="form-control" id="min_qty" name="min_qty" placeholder="Minimum Quantity" />-->-->
-<!--                                            <input style="" type="checkbox" name="refund" class="refund" id="refund"  value="{refundable}"/>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
 
-
-
-                            </div>
 
                             <div class="row">
                                 <div class="col-sm-6">
@@ -734,7 +724,7 @@
                         <div class="form-group row">
                             <div class="col-sm-6">
 
-                                <input type="submit" id="add-product" class="btn btn-primary btn-large" name="add-product" value="<?php echo display('save_changes') ?>" tabindex="10" />
+                                <input type="button" id="add-product" class="btn btn-primary btn-large" name="add-product" value="<?php echo display('save_changes') ?>" tabindex="10" />
 
                             </div>
                         </div>
@@ -842,16 +832,24 @@
 
         $( "#add-product" ).on("click", function(  ) {
 
+
+
             var product_status=$('#product_status').val();
-            var product_name=$('#product_name').val(),
-                product_id=$('#product_id').val(),
-                sell_price=$('#sell_price').val(),
+
+            var product_name=$('#product_name').val();
+
+
+               var product_id=$('#product_id').val() ,
+                   sell_price=$('#sell_price').val(),
                 category_id=$('#category_id').val(),
                 brand_id=$('#brand_id').val(),
                 sku=$('#sku').val(),
                 min_qty=$('#min_qty').val(),
                 tags=$('#tags').val(),
+
                 color=$('#color').val(),
+
+
 
                 description=CKEDITOR. instances['description']. getData(),
                 video_provider=$('#video_provider').val(),
@@ -873,8 +871,12 @@
             previous_photos  = $("input[name='previous_photos[]']")
                     .map(function(){return $(this).val();}).get();
 
-            // console.log(previous_photos)
-            // return
+               // alert('ehhhj');
+               // return;
+
+
+
+
 
             if (product_status == '1'){
                 var form = new FormData();
@@ -882,30 +884,34 @@
                 var choice_no  = $("input[name='choice_no[]']")
                     .map(function(){
 
-                        var value=$(this).val();
+                        var x=$(this).val();
 
-                        var cho=$('.choice_options_'+value);
+                        var cho=$('.choice_options_'+x);
                         var  choice_options  = cho.map(function(){
                                 var v=$(this).val();
+
+
                             var myarr = v.split(",");
+
+                            // const valueWrappedInQuotes = myarr.map(myarr => `'${myarr}'`);
+                            // const withCommasInBetween = valueWrappedInQuotes.join(',')
                             // return $(this).val();
-                            myObj = {attribute_id: value, values: myarr};
+                           //  console.log(withCommasInBetween)
+                            myObj = {attribute_id: x, values: myarr};
                             return myJSON = JSON.stringify(myObj);
 
                         }).get();
-
+                    //   console.log(choice_options)
                         form.append("choice_options[]", choice_options);
 
-                        console.log(choice_options)
 
-                        return value;
+                        return x;
 
 
 
                     }).get();
 
-               // console.log(choice_no)
-              //  return
+
 
 
 
@@ -1008,7 +1014,7 @@
     }
 
     function add_more_customer_choice_option(i, name){
-        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input class="choice_no" type="hidden" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control choice_options_'+i+' " name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
+        $('#customer_choice_options').append('<br><div class="form-group"><div class="col-sm-4"><input class="choice_no" type="text" name="choice_no[]" value="'+i+'"><input type="text" class="form-control " name="choice[]" value="'+name+'" placeholder="Choice" readonly></div><div class="col-sm-8"><input type="text" class="form-control choice_options_'+i+' " name="choice_options_'+i+'[]" placeholder="Enter choice" data-role="tagsinput" ></div></div><br>');
 
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
     }

@@ -624,7 +624,7 @@ $(function ($) {
       { data: "sl" },
       { data: "product_name" },
       { data: "product_status" },
-      { data: "product_model" },
+      { data: "sku" },
       // { data: "product_category" },
       
       // { data: "supplier_name" },

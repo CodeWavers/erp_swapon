@@ -117,6 +117,28 @@ class Cproduct extends CI_Controller
             $colordata = json_encode([]);
         }
 
+        $finished_raw=$this->input->post('product_status', TRUE);
+
+        if ($finished_raw == 1){
+            $api_url=api_url();
+            $url = $api_url."products/last_id";
+
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $last_id =json_decode(curl_exec($curl));
+            curl_close($curl);
+
+            $product_id=$last_id+1;
+
+        }
+
         $data2['product_id']   = $product_id;
         $data2['category_id']  = $catsdata;
         $data2['brand_id']  = $this->input->post('brand_id', TRUE);
@@ -181,6 +203,8 @@ class Cproduct extends CI_Controller
     //Product Update Form
     public function product_update_form($product_id)
     {
+
+
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->library('lproduct');
