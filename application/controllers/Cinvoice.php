@@ -742,7 +742,7 @@ class Cinvoice extends CI_Controller
 						</td>
 
 						<td class=\"text-right\" style=\"width:100px\">
-							<input class=\"total_price form-control text-right\" type=\"text\" name=\"total_price[]\" id=\"total_price_" . $product_details->product_id . "\" value='" . $product_details->price . "' tabindex=\"-1\" readonly=\"readonly\"/>
+							<input class=\"total_price form-control text-right\" type=\"text\" name=\"total_price[]\" id=\"total_price_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
 						</td>
 
 						<td>";
@@ -750,7 +750,7 @@ class Cinvoice extends CI_Controller
             foreach ($taxfield as $taxes) {
                 $txs = 'tax' . $sl;
                 $tr .= "<input type=\"hidden\" id=\"total_tax" . $sl . "_" . $product_details->product_id . "\" class=\"total_tax" . $sl . "_" . $product_details->product_id . "\" value='" . $prinfo[0][$txs] . "'/>
-                            <input type=\"hidden\" id=\"all_tax" . $sl . "_" . $product_details->product_id . "\" class=\" total_tax" . $sl . "\" value='" . $prinfo[0][$txs] * $product_details->price . "' name=\"tax[]\"/>";
+                            <input type=\"hidden\" id=\"all_tax" . $sl . "_" . $product_details->product_id . "\" class=\" total_tax" . $sl . "\" value='" . $prinfo[0][$txs] * $product_details->purchase_price . "' name=\"tax[]\"/>";
                 $sl++;
             }
 

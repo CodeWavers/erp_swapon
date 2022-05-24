@@ -191,7 +191,7 @@ class Order extends CI_Model
     }
     public function getOrderList($postData = null)
     {
-
+        date_default_timezone_set('Asia/Dhaka');
         $response = array();
 
         ## Read value
@@ -389,7 +389,7 @@ class Order extends CI_Model
                 'sl'               => $sl,
                 'order_code'     =>  $record->code,
                 'check'     =>  $check,
-                'date'            =>  date('m/d/Y H:i:s', $record->date),
+                'date'            =>  date('m/d/Y h:i:s A', $record->date),
                 'num_of_product'   =>  $no_of_product,
                 'customer_name'      =>  $shipping_address->name,
                 'customer_number'   =>  $shipping_address->phone,

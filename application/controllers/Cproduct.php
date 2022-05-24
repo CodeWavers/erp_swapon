@@ -1214,12 +1214,12 @@ class Cproduct extends CI_Controller
     public function get_statuswise_category($status)
     {
         $this->load->model('categories');
-        $cat_list = $this->categories->category_list($status);
+        $cat_list = $this->categories->cates();
 
         $html = "<option value=''></option>";
 
         foreach ($cat_list as $ct) {
-            $html .= '<option value="' . $ct['id'] . '">' . $ct['category_name'] . '</option>';
+            $html .= '<option value="' . $ct['id'] . '">' . $ct['name'] . '</option>';
         }
 
         echo $html;
