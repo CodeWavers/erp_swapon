@@ -383,7 +383,7 @@
                                     <div class="form-group row">
                                         <label for="sku" class="col-sm-4 col-form-label">SKU</label>
                                         <div class="col-sm-8">
-                                            <input type="text" tabindex="" class="form-control" id="sku" name="sku" value="{sku}" placeholder="SKU" />
+                                            <input type="text" tabindex="" class="form-control" id="sku" name="sku" value="{sku}" placeholder="SKU"  readonly />
                                         </div>
                                     </div>
                                 </div>
@@ -586,14 +586,17 @@
                                             <div id="photos">
                                                 <?php if(is_array(json_decode($photos))) { ?>
                                                  <?php foreach (json_decode($photos) as $key => $photo) {?>
+                                                     <?php if ($photo) {?>
                                                 <div class="col-md-3 col-sm-3 col-xs-6">
                                                     <div class="img-upload-preview">
+
                                                         <img loading="lazy"  src="<?php echo ecom_url().'/public/'.$photo?>" alt="" class="img-responsive">
                                                         <input type="hidden" name="previous_photos[]" value="<?php echo $photo?>">
                                                         <button type="button" class="btn btn-danger close-btn remove-files"><i class="fa fa-times"></i></button>
                                                     </div>
                                                 </div>
                                                  <?php }?>
+                                                    <?php }?>
                                                 <?php }?>
                                             </div>
                                         </div>
@@ -724,7 +727,7 @@
                         <div class="form-group row">
                             <div class="col-sm-6">
 
-                                <input type="button" id="add-product" class="btn btn-primary btn-large" name="add-product" value="<?php echo display('save_changes') ?>" tabindex="10" />
+                                <input type="submit" id="add-product" class="btn btn-primary btn-large" name="add-product" value="<?php echo display('save_changes') ?>" tabindex="10" />
 
                             </div>
                         </div>
@@ -902,7 +905,11 @@
 
                         }).get();
                     //   console.log(choice_options)
-                        form.append("choice_options[]", choice_options);
+
+                        if (choice_options != ''){
+                            form.append("choice_options[]", choice_options);
+
+                        }
 
 
                         return x;
@@ -917,7 +924,7 @@
 
                 document.getElementsByName("photos[]").forEach((el) => {
 
-                    form.append('photos[]', $(el)[0].files[0]);
+                        form.append('photos[]', $(el)[0].files[0]);
 
                 });
 

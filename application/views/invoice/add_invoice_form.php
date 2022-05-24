@@ -828,7 +828,7 @@
                         <?php echo form_close() ?>
                     </div>
                 </div>
-                <div class="modal fade" id="printconfirmodal" tabindex="-1" role="dialog" aria-labelledby="printconfirmodal" aria-hidden="true">
+                <div class="modal fade" id="printconfirmodal" tabindex="-1" role="dialog" aria-labelledby="printconfirmodal" aria-hidden="true" >
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header">

@@ -99,9 +99,9 @@
                                 <div class="col-lg-3">
                                     <label for="update_delivery_status">Delivery Status</label>
 
-                                    deliver
+
                                     <select name="delivery_status" id="sel_type" class="form-control sel_type" onchange="shipped_status(this.value)" tabindex="3" required>
-                                        <option value="<?php echo $order[0]->y_status?>" selected ><?php echo $order[0]->delivery_status?></option>
+                                        <option value="<?php echo $order[0]->delivery_status?>" selected ><?php echo $order[0]->delivery_status?></option>
 
                                         <option value="Pending">Pending</option>
                                         <option value="Order Confirmed">Order Confirmed</option>

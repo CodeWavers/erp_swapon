@@ -293,8 +293,8 @@ class Products extends CI_Model
             $button = '';
 //            https://swaponsworld.com/public/uploads/products/thumbnail/7nKgZ7HuR0f0qB4dwtxKCQ1CxFe37Qmnrulzjzp0.jpeg
             if ($this->permission1->method('manage_product', 'update')->access()) {
-                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                $button .= ' <a href="'  . 'product_update_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                $button .= ' <a href="'  . 'product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
             }
 
             $image = '<img src="https://dev.swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
@@ -490,8 +490,8 @@ class Products extends CI_Model
     {
         $this->db->where('product_id', $product_id);
         $this->db->update('product_information', $data);
-        $this->db->where('barcode', $product_id);
-        $this->db->update('products', $data2);
+//        $this->db->where('barcode', $product_id);
+//        $this->db->update('products', $data2);
         $this->db->select('*');
         $this->db->from('product_information');
         $this->db->where('status', 1);

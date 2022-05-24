@@ -211,7 +211,7 @@
                                 <div class="form-group row">
                                     <label for="sku" class="col-sm-4 col-form-label">SKU</label>
                                     <div class="col-sm-8">
-                                        <input type="text" tabindex="" class="form-control" id="sku" name="sku" placeholder="SKU" />
+                                        <input type="text" tabindex="" class="form-control" id="sku" name="sku" placeholder="SKU" required/>
                                     </div>
                                 </div>
                             </div>
@@ -577,7 +577,7 @@
             // color  = $("input[name='color[]']")
             //         .map(function(){return $(this).val();}).get();
 
-                if (product_status == '1'){
+                if (product_status == '1' && sku != ''){
                 var form = new FormData();
 
                     var choice_no  = $("input[name='choice_no[]']")

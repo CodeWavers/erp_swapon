@@ -118,7 +118,7 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4><?php echo display('customer_ledger') ?></h4>
+                            <h4>Aggregators Ledger</h4>
                         </div>
                     </div>
                     <div class="panel-body">

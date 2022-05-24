@@ -125,7 +125,7 @@ class Warehouse extends CI_Model
     //customer List
     public function branch_list()
     {
-        $this->db->select('a.*,b.*, d.*');
+        $this->db->select('a.*,b.*, d.*,a.outlet_id as out_id');
         $this->db->from('outlet_warehouse a');
         $this->db->join('central_warehouse b ', 'b.warehouse_id = a.warehouse_id', 'left');
         $this->db->join('users d', 'd.user_id = a.user_id');

@@ -395,7 +395,7 @@ class Ccustomer extends CI_Controller
         $data2=array();
         foreach ($records->data as $r){
             $image_url = ecom_url() . 'public/'.$r->thumbnail_image;
-            $data2['product_id']   = $r->id;
+            $data2['product_id']   = $r->sku;
             $data2['category_id']  = $r->cats;
             $data2['brand_id']  = '';
             $data2['product_name'] = $r->name;

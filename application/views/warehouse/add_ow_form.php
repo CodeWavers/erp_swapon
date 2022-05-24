@@ -90,10 +90,10 @@
                                                             <center>
                                                                 <?php echo form_open() ?>
                                                                 <?php if ($this->permission1->method('manage_category', 'update')->access()) { ?>
-                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_update_form/{outlet_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_update_form/{out_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                                 <?php } ?>
                                                                 <?php if ($this->permission1->method('manage_category', 'delete')->access()) { ?>
-                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_delete/{outlet_id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_delete/{out_id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                                 <?php } ?>
                                                                 <?php echo form_close() ?>
                                                             </center>
