@@ -57,10 +57,18 @@
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Product Type : </label>
                                 <select name="product_status" id="product_status" class="form-control"  >
-                                    <option value="">Select One</option>
+<!--                                    <option value="">Select One</option>-->
+                                    <?php if ($this->permission1->method('finished_goods', 'create')->access() ) { ?>
                                     <option value="1">Finished Goods</option>
+                                    <?php } ?>
+                                    <?php if ($this->permission1->method('raw_materials', 'create')->access() ) { ?>
+
                                     <option value="2">Raw Materials</option>
+                                    <?php } ?>
+                                    <?php if ($this->permission1->method('tools', 'create')->access() ) { ?>
+
                                     <option value="3">Tools</option>
+                                    <?php } ?>
                                 </select>
 
                             </div>

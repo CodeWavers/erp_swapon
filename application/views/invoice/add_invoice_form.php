@@ -156,10 +156,15 @@
 
                                         <select name="sel_type" id="sel_type" class="form-control sel_type" onchange="sale_type(this.value)" tabindex="3">
                                             <option value="">Select One</option>
+                                            <?php if ($this->permission1->method('whole_sale', 'create')->access() ) { ?>
                                             <option value="1">Whole Sale</option>
+                                            <?php } ?>
+                                            <?php if ($this->permission1->method('retail_sale', 'create')->access() ) { ?>
                                             <option value="2">Retail</option>
+                                            <?php } ?>
+                                            <?php if ($this->permission1->method('aggregator_sale', 'create')->access() ) { ?>
                                             <option value="3">Aggregators</option>
-
+                                            <?php } ?>
 
                                         </select>
                                     </div>
