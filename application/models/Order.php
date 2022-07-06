@@ -362,7 +362,7 @@ class Order extends CI_Model
             if ($this->permission1->method('manage_product', 'update')->access()) {
                 $button .= ' <a href="'  . 'Corder/order_status_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
 //                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-                $button .= '  <a href="' . 'Corder/invoice_inserted_data/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+                $button .= '  <a href="' . 'Corder/invoice_inserted_data/' . $record->id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="Print"><i class="fa fa-print" aria-hidden="true"></i></a>';
 
             }
 

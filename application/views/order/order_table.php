@@ -43,19 +43,19 @@
         }
         ?>
 
-        <div class="row">
-            <div class="col-sm-12">
-
-                <?php if ($this->permission1->method('create_product', 'create')->access()) { ?>
-                    <a href="<?php echo base_url('Cproduct') ?>" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> <?php echo display('add_product') ?> </a>
-                <?php } ?>
-                <?php if ($this->permission1->method('add_product_csv', 'create')->access()) { ?>
-                    <a href="<?php echo base_url('Cproduct/add_product_csv') ?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-plus"> </i> <?php echo display('add_product_csv') ?> </a>
-                <?php } ?>
-
-
-            </div>
-        </div>
+<!--        <div class="row">-->
+<!--            <div class="col-sm-12">-->
+<!---->
+<!--                --><?php //if ($this->permission1->method('create_product', 'create')->access()) { ?>
+<!--                    <a href="--><?php //echo base_url('Cproduct') ?><!--" class="btn btn-info m-b-5 m-r-2"><i class="ti-plus"> </i> --><?php //echo display('add_product') ?><!-- </a>-->
+<!--                --><?php //} ?>
+<!--                --><?php //if ($this->permission1->method('add_product_csv', 'create')->access()) { ?>
+<!--                    <a href="--><?php //echo base_url('Cproduct/add_product_csv') ?><!--" class="btn btn-primary m-b-5 m-r-2"><i class="ti-plus"> </i> --><?php //echo display('add_product_csv') ?><!-- </a>-->
+<!--                --><?php //} ?>
+<!---->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
 
 
 
@@ -123,7 +123,10 @@
                     <div class="panel-body">
                         <div class="table-responsive">
                             <?php echo form_open('Corder/print_order', array('class' => 'form-vertical', 'id' => 'invoice_update')) ?>
+                            <hr>
+                            <p><input name="submit" class="btn btn-info" type="submit" value="Print"></p>
 
+                            <br>
                             <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="order_table">
                                 <thead>
                                     <tr>
@@ -151,10 +154,10 @@
                                 </tbody>
                             </table>
 
-                                <hr>
-                                <p><input name="submit" class="btn btn-info" type="submit" value="Print"></p>
-
-                                <br>
+<!--                                <hr>-->
+<!--                                <p><input name="submit" class="btn btn-info" type="submit" value="Print"></p>-->
+<!---->
+<!--                                <br>-->
                                 <pre id="example-console">
 </pre>
                             <?php echo form_close() ?>

@@ -92,6 +92,7 @@ if(isset($convert))
 <html>
 <head>
     <title>Conver Number to Words in PHP</title>
+
 </head>
 <body>
 <form method="post">
