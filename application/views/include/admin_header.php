@@ -867,7 +867,7 @@ $birthday = $CI->Reports->birthday_noti();
                                   } else {
                                     echo " ";
                                   } ?>"><a href="<?php echo base_url(
-                                                    'Ccwarehouse/branch'
+                                                    'Ccwarehouse/bf'
                                                   ); ?>">Outlet Warehouse </a></li>
             <?php } ?>
 

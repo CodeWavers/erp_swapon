@@ -2562,12 +2562,13 @@ class Invoices extends CI_Model
     //Retrieve invoice Edit Data
     public function retrieve_invoice_editdata($invoice_id)
     {
-        $this->db->select('a.*,cr.*,br.*, a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity, a.total_tax as taxs,a. prevous_due,b.customer_name,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
+        $this->db->select('a.*,cr.*,br.*,rr.receiver_name ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity, a.total_tax as taxs,a. prevous_due,b.customer_name,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
         $this->db->join('courier_name cr', 'cr.courier_id = a.courier_id','left');
         $this->db->join('branch_name br', 'br.branch_id = a.branch_id','left');
+        $this->db->join('receiever_info rr', 'rr.id = a.reciever_id','left');
 
         // $this->db->join('employee_history u', 'a.sales_by = u.id');
 

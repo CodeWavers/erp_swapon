@@ -28,6 +28,8 @@ class Lreturn
         $CI->load->model('Invoices');
         $CI->load->model('Web_settings');
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
+
+//        echo '<pre>';print_r($invoice_detail);exit();
         $CI->load->model('Warehouse');
         $outlet_user        = $CI->Warehouse->get_outlet_user();
 
@@ -46,6 +48,12 @@ class Lreturn
             'customer_id'   => $invoice_detail[0]['customer_id'],
             'customer_name' => $invoice_detail[0]['customer_name'],
             'date'          => $invoice_detail[0]['date'],
+            'receiver_number'          => $invoice_detail[0]['receiver_number'],
+            'courier_condtion'          => $invoice_detail[0]['courier_condtion'],
+            'delivery_type'          => $invoice_detail[0]['delivery_type'],
+            'courier_name'          => $invoice_detail[0]['courier_name'],
+            'branch_name'          => $invoice_detail[0]['branch_name'],
+            'receiver_name'          => $invoice_detail[0]['receiver_name'],
             'total_amount'  => $invoice_detail[0]['total_amount'],
             'paid_amount'   => $invoice_detail[0]['paid_amount'],
             'due_amount'    => $invoice_detail[0]['due_amount'],
@@ -56,6 +64,8 @@ class Lreturn
             'discount_type' => $currency_details[0]['discount_type'],
 //            'outlet_id'     => $outlet_user[0]['outlet_id'],
         );
+
+//        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();
         $chapterList = $CI->parser->parse('return/return_data_form', $data, true);
         return $chapterList;
     }

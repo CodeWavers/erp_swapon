@@ -77,6 +77,57 @@
                              </div>
                          </div>
 
+                         <?php if($delivery_type==2){?>
+
+                         <div class="row">
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" tabindex="2" class="form-control" name="invoice_date" value="{courier_name}" required readonly="" />
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label">Courier Branch <i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" tabindex="2" class="form-control" name="branch_name" value="{branch_name}" required readonly="" />
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div class="row">
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label">Courier Condition<i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['courier_condtion']==1){echo 'Conditional ';}elseif($invoice_all_data[0]['courier_condtion']==2){echo 'Partial';}elseif($invoice_all_data[0]['courier_condtion']==3){echo 'Unconditional';} ?>"  readonly/>
+
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label">Receiver Name <i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" tabindex="2" class="form-control" name="receiver_name" value="{receiver_name}" required readonly="" />
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label">Receiver Mobile  <i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" tabindex="2" class="form-control" name="receiver_number" value="{receiver_number}" required readonly="" />
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                         <?php } ?>
+
                          <input type="hidden" name="outlet_id" id="outlet_name" value="{outlet_id}">
 
                          <div class="panel-body">
