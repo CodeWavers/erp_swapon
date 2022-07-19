@@ -90,51 +90,7 @@ class Returnse extends CI_Model
                 $this->db->insert('acc_transaction', $expense);
             }
 
-            // if ($rep_cus_return > 0) {
-            //     $cos = array(
-            //         'VNo'            => $invoice_id,
-            //         'Vtype'          => 'Return',
-            //         'VDate'          => $date,
-            //         'COAID'          => $customer_headcode,
-            //         'Narration'      => 'Customer Debit For Return ' . $cusifo->customer_name,
-            //         'Debit'          => abs($rep_cus_return),
-            //         'Credit'         => 0,
-            //         'IsPosted'       => 1,
-            //         'CreateBy'       => $createby,
-            //         'CreateDate'     => $createdate,
-            //         'IsAppove'       => 1
-            //     );
 
-            //     $coscr = array(
-            //         'VNo'            => $invoice_id,
-            //         'Vtype'          => 'Return',
-            //         'VDate'          => $date,
-            //         'COAID'          => $customer_headcode,
-            //         'Narration'      => 'Customer credit (Cash In Hand) For Return ' . $cusifo->customer_name,
-            //         'Debit'          => 0,
-            //         'Credit'         => abs($rep_cus_return),
-            //         'IsPosted'       => 1,
-            //         'CreateBy'       => $createby,
-            //         'CreateDate'     => $createdate,
-            //         'IsAppove'       => 1
-            //     );
-
-            //     $this->db->insert('acc_transaction', $coscr);
-            // } else {
-            //     $cos = array(
-            //         'VNo'            => $invoice_id,
-            //         'Vtype'          => 'Return',
-            //         'VDate'          => $date,
-            //         'COAID'          => $customer_headcode,
-            //         'Narration'      => 'Customer Credit For Return ' . $cusifo->customer_name,
-            //         'Debit'          => 0,
-            //         'Credit'         => abs($rep_cus_return),
-            //         'IsPosted'       => 1,
-            //         'CreateBy'       => $createby,
-            //         'CreateDate'     => $createdate,
-            //         'IsAppove'       => 1
-            //     );
-            // }
 
             $cash = array(
                 'VNo'            => $invoice_id,
@@ -195,21 +151,7 @@ class Returnse extends CI_Model
                 'CreateDate'     => $createdate,
                 'IsAppove'       => 1
             );
-            // } else {
-            //     $cash = array(
-            //         'VNo'            => $invoice_id,
-            //         'Vtype'          => 'Return',
-            //         'VDate'          => $date,
-            //         'COAID'          => 1020101,
-            //         'Narration'      => 'Cash Debit For Return',
-            //         'Debit'          => abs($rep_grand_total),
-            //         'Credit'         => 0,
-            //         'IsPosted'       => 1,
-            //         'CreateBy'       => $createby,
-            //         'CreateDate'     => $createdate,
-            //         'IsAppove'       => 1
-            //     );
-            // }
+
 
 
 
@@ -318,33 +260,7 @@ class Returnse extends CI_Model
                     );
                     $this->db->insert('acc_transaction', $expense);
                 }
-                // $cosdr = array(
-                //     'VNo'            => $invoice_id,
-                //     'Vtype'          => 'Return',
-                //     'VDate'          => $date,
-                //     'COAID'          => $customer_headcode,
-                //     'Narration'      => 'Customer debit For Return ' . $cusifo->customer_name,
-                //     'Debit'          => $cus_tot,
-                //     'Credit'         => 0,
-                //     'IsPosted'       => 1,
-                //     'CreateBy'       => $createby,
-                //     'CreateDate'     => $createdate,
-                //     'IsAppove'       => 1
-                // );
 
-                // $coscr = array(
-                //     'VNo'            => $invoice_id,
-                //     'Vtype'          => 'Return',
-                //     'VDate'          => $date,
-                //     'COAID'          => $customer_headcode,
-                //     'Narration'      => 'Customer credit (Cash In Hand) For Return ' . $cusifo->customer_name,
-                //     'Debit'          => 0,
-                //     'Credit'         => $cus_tot,
-                //     'IsPosted'       => 1,
-                //     'CreateBy'       => $createby,
-                //     'CreateDate'     => $createdate,
-                //     'IsAppove'       => 1
-                // );
 
                 $cash = array(
                     'VNo'            => $invoice_id,
@@ -374,9 +290,9 @@ class Returnse extends CI_Model
                     'CreateDate'     => $createdate,
                     'IsAppove'       => 1
                 );
-                // $this->db->insert('acc_transaction', $cash);
+
                 $this->db->insert('acc_transaction', $sale_income_dr);
-                // $this->db->insert('acc_transaction', $coscr);
+
             } else {
                 if ($add_cost > 0) {
                     $expense = array(

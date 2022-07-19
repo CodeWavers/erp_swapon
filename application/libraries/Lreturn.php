@@ -62,7 +62,7 @@ class Lreturn
             'total_tax'     => $invoice_detail[0]['total_tax'],
             'invoice_all_data' => $invoice_detail,
             'discount_type' => $currency_details[0]['discount_type'],
-//            'outlet_id'     => $outlet_user[0]['outlet_id'],
+            'outlet_id'     => $invoice_detail[0]['outlet_id'],
         );
 
 //        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();

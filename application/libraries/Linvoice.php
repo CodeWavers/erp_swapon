@@ -459,7 +459,7 @@ class Linvoice
             'sales_first_name'   => $invoice_detail[0]['customer_name'],
             // 'sales_last_name'   => $invoice_detail[0]['last_name'],
         );
-    //   echo "<pre>" ;print_r($data);exit();
+//      echo "<pre>" ;print_r($invoice_detail[0]['sum_amount']);exit();
         $chapterList = $CI->parser->parse('invoice/edit_invoice_form', $data, true);
         return $chapterList;
     }

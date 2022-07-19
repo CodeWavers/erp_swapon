@@ -81,6 +81,24 @@
                                 </div>
                             </div>
 
+                            <?php  if ($invoice_all_data[0]['sale_type']==1){?>
+                                <div class="col-sm-6 commission_check " id="commission_check" >
+                                    <div class="form-group row">
+                                        <label for="date" class="col-sm-4 col-form-label">Commission<i class="text-danger">*</i></label>
+                                        <div class="col-sm-8">
+                                            <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
+                                                <option value="">Select Commission</option>
+                                                <option value="1">Product Wise</option>
+                                                <option value="2">Overall</option>
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            <?php } ?>
+
                             <?php  if ($deliver_type == 2){?>
                                 <div class="col-md-6">
                                     <div class="form-group row">
@@ -169,6 +187,8 @@
 
                             </div>
 
+
+
                             <div class="col-sm-6" style="display: none" id="bkash_div">
                                 <div class="form-group row">
                                     <label for="bkash" class="col-sm-4 col-form-label">Bkash
@@ -244,9 +264,17 @@
 
                                         <input type="date" style="width: 110px" id="warrenty_date" class="form-control warrenty_date_1" name="warrenty_date[]" value="{warrenty_date}" id="date" />
                                     </td>
+                                    <?php
+                                    $date = date('Y-m-d');
 
+//                                    $total_amount='{rate}' * '{sum_quantity}';
+
+
+
+
+                                    ?>
                                     <td class="invoice_fields">
-                                        <?php $date = date('Y-m-d'); ?>
+
                                         <input type="date" style="width: 110px" id="expiry_date" class="form-control  expiry_date_1" name="expiry_date[]" value="{expiry_date}" />
                                     </td>
 
@@ -254,14 +282,16 @@
                                         <input type="text" name="product_rate[]" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" value="{rate}" id="price_item_{sl}" class="price_item{sl} form-control text-right" min="0" tabindex="5" required="" placeholder="0.00" readonly />
                                     </td>
                                     <!-- Discount -->
-                                    <td>
-                                        <input type="text" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
+                                    <td width="200" class="text-center">
+                                        <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
 
                                         <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
+                                        <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
+
                                     </td>
 
                                     <td>
-                                        <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{total_price}" readonly="readonly" />
+                                        <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{sum_amount}" readonly="readonly" />
 
                                         <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
                                     </td>

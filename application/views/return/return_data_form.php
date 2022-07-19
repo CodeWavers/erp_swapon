@@ -84,7 +84,7 @@
                                  <div class="form-group row">
                                      <label for="product_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger"></i></label>
                                      <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="invoice_date" value="{courier_name}" required readonly="" />
+                                         <input type="text" tabindex="2" class="form-control" name="courier_name" value="{courier_name}" required readonly="" />
                                      </div>
                                  </div>
                              </div>
@@ -150,11 +150,11 @@
                                              {invoice_all_data}
                                              <tr>
                                                  <td class="product_field">
-                                                     <input type="text" name="product_name" onclick="invoice_productList({sl});" value="{product_name}-({product_model})" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_names" tabindex="3" readonly="">
+                                                     <input type="text"   name="product_name" onclick="invoice_productList({sl});" value="{sku}-{product_name}" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_names" tabindex="3" readonly="">
 
                                                      <input type="hidden" class="product_id_{sl} autocomplete_hidden_value" value="{product_id}" id="product_id_{sl}" />
                                                  </td>
-                                                 <td>
+                                                 <td >
                                                      <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{sum_quantity}" readonly="" />
                                                  </td>
                                                  <td>
@@ -208,7 +208,7 @@
 
                                                      <div class="form-group row">
                                                          <input type="hidden" name="base_total" id="base_total" value="0">
-                                                         <label class="text-right col-form-label col-sm-4">Cash Refund:
+                                                         <label class="text-right col-form-label col-sm-4">Return:
                                                          </label>
                                                          <div class="col-sm-2 ">
                                                              <input id="cash_return" type="checkbox" name="cash_return" value="cash_ret" onclick="quantity_calculate(1)" onchange="quantity_calculate(1)">
@@ -225,6 +225,16 @@
 
 
                                                      </div>
+
+<!--                                                     <div class="form-group row">-->
+<!--                                                         <label class="text-right col-form-label col-sm-4">Wastage:-->
+<!--                                                         </label>-->
+<!--                                                         <div class="col-sm-2 ">-->
+<!--                                                             <input id="rep_toggle" type="checkbox" name="wastage" onchange="quantity_calculate(1)">-->
+<!--                                                         </div>-->
+<!---->
+<!---->
+<!--                                                     </div>-->
 
 
 
