@@ -97,7 +97,8 @@ class Cretrun_m extends CI_Controller
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->model('Returnse');
-        $invoice_id = $CI->Returnse->return_invoice_entry();
+//        $invoice_id = $CI->Returnse->return_invoice_entry();
+        $invoice_id = $CI->Returnse->return_invoice_entry_new();
         $this->session->set_userdata(array('message' => display('successfully_added')));
 
         redirect("Cretrun_m/invoice_inserted_data/" . $invoice_id);

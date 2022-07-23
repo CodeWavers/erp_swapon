@@ -50,12 +50,17 @@ function quantity_calculate(item) {
   });
 
   $("#base_total").val(a);
-  var gr_tot = parseFloat(a) + parseFloat(add_cost);
 
+  var gr_tot = parseFloat(a);
   if ($("#cash_return").is(":checked") || $("#rep_toggle").is(":checked")) {
-    $("#grandTotal").val(gr_tot.toFixed(2, 2));
+    var gr_total = parseFloat(a) + parseFloat(add_cost);
+    if ($("#pay_person").is(":checked")) {
+      $("#grandTotal").val(gr_total.toFixed(2, 2));
+    }else{
+      $("#grandTotal").val(parseFloat(gr_tot).toFixed(2, 2));
+    }
   } else {
-    $("#grandTotal").val(parseFloat(add_cost).toFixed(2, 2));
+      $("#grandTotal").val(parseFloat(gr_tot).toFixed(2, 2));
   }
 
   // if ($("#rep_toggle").is(":checked")) {

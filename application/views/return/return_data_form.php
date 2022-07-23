@@ -85,6 +85,8 @@
                                      <label for="product_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger"></i></label>
                                      <div class="col-sm-8">
                                          <input type="text" tabindex="2" class="form-control" name="courier_name" value="{courier_name}" required readonly="" />
+                                         <input type="text" tabindex="2" class="form-control" name="courier_id" value="{courier_id}" required readonly="" />
+                                         <input type="text" tabindex="2" class="form-control" name="invoice" value="{invoice}" required readonly="" />
                                      </div>
                                  </div>
                              </div>
@@ -148,6 +150,7 @@
                                          </thead>
                                          <tbody id="addinvoiceItem">
                                              {invoice_all_data}
+
                                              <tr>
                                                  <td class="product_field">
                                                      <input type="text"   name="product_name" onclick="invoice_productList({sl});" value="{sku}-{product_name}" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_names" tabindex="3" readonly="">
@@ -195,6 +198,8 @@
 
                                                  </td>
                                              </tr>
+
+
                                              {/invoice_all_data}
                                          </tbody>
 
@@ -251,9 +256,17 @@
                                                  </td>
                                              </tr>
                                              <tr>
-                                                 <td class="text-right" colspan="1"><b>Additional Cost:</b></td>
+                                                 <td class="text-right" colspan="1"><b>Delivery Charge:</b></td>
                                                  <td class="text-right">
                                                      <input id="total_tax_ammount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" aria-invalid="false" type="text">
+
+                                                 </td>
+                                                 <td class="">
+
+                                                         <input id="pay_person" type="checkbox" onchange="quantity_calculate(1);" name="pay_person" value="pay_person" >
+                                                     <label class=" col-form-label">Customer Pay
+                                                     </label>
+
                                                  </td>
                                              </tr>
                                              <tr>
@@ -342,7 +355,7 @@
                                                  </tr>
                                                  <tr>
                                                      <td colspan="4" class="text-right">
-                                                         <strong>Additional Cost: </strong>
+                                                         <strong>Delivery Charge: </strong>
                                                      </td>
                                                      <td>
                                                          <input class="form-control text-right" type="text" name="rep_deduction" id="rep_deduction" readonly>

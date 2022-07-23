@@ -52,8 +52,11 @@ class Lreturn
             'courier_condtion'          => $invoice_detail[0]['courier_condtion'],
             'delivery_type'          => $invoice_detail[0]['delivery_type'],
             'courier_name'          => $invoice_detail[0]['courier_name'],
+            'courier_id'          => $invoice_detail[0]['courier_id'],
+            'branch_id'          => $invoice_detail[0]['branch_id'],
             'branch_name'          => $invoice_detail[0]['branch_name'],
             'receiver_name'          => $invoice_detail[0]['receiver_name'],
+            'reciever_id'          => $invoice_detail[0]['reciever_id'],
             'total_amount'  => $invoice_detail[0]['total_amount'],
             'paid_amount'   => $invoice_detail[0]['paid_amount'],
             'due_amount'    => $invoice_detail[0]['due_amount'],
@@ -63,6 +66,7 @@ class Lreturn
             'invoice_all_data' => $invoice_detail,
             'discount_type' => $currency_details[0]['discount_type'],
             'outlet_id'     => $invoice_detail[0]['outlet_id'],
+            'invoice'     => $invoice_detail[0]['invoice'],
         );
 
 //        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();

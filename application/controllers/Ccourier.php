@@ -54,7 +54,7 @@ class Ccourier extends CI_Controller {
         $createdate = date('Y-m-d H:i:s');
 
 
-        $courier_coa = [
+        $courier_coa = array(
             'HeadCode'         => $headcode,
             'HeadName'         => $c_acc,
             'PHeadName'        => 'Courier Ledger',
@@ -69,7 +69,9 @@ class Ccourier extends CI_Controller {
             'DepreciationRate' => '0',
             'CreateBy'         => $createby,
             'CreateDate'       => $createdate,
-        ];
+        );
+
+    //    echo '<pre>';print_r($courier_coa);exit();
 
         $this->db->insert('acc_coa', $courier_coa);
 
