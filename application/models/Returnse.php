@@ -392,9 +392,11 @@ class Returnse extends CI_Model
                     'usablity'      => 1
                 );
 
-                $this->db->insert('invoice_details', $data1);
+
 
                 $this->db->insert('product_return', $returns);
+
+                $this->db->insert('invoice_details', $data1);
             }
         }
         return $invoice_id;
@@ -411,6 +413,7 @@ class Returnse extends CI_Model
         $CI->load->model('Invoices');
 
         $invoice_id = $this->input->post('invoice_id', TRUE);
+        $delivery_type = $this->input->post('delivery_type', TRUE);
         $total          = $this->input->post('grand_total_price', TRUE);
         $add_cost = (!empty($this->input->post('total_tax', TRUE))) ? $this->input->post('total_tax', TRUE) : 0;
         $customer_id    = $this->input->post('customer_id', TRUE);
@@ -439,6 +442,7 @@ class Returnse extends CI_Model
         $discount_rate = $this->input->post('discount', TRUE);
         $tax_amount   = $this->input->post('tax', TRUE);
         $soldqty      = $this->input->post('sold_qty', TRUE);
+        $courier_condtion      = $this->input->post('courier_condtion', TRUE);
 
         $is_cash_return = $this->input->post('cash_return', TRUE);
         $pay_person = $this->input->post('pay_person', TRUE);
@@ -454,6 +458,7 @@ class Returnse extends CI_Model
         $rep_add_cost = $this->input->post('rep_deduction', TRUE);
         $rep_grand_total = $this->input->post('rep_total_cost', TRUE);
         $rep_base_total = $this->input->post('rep_total', TRUE);
+
         $invoice = $this->input->post('invoice', TRUE);
 
         $courier_id = $this->input->post('courier_id', TRUE);
@@ -462,6 +467,31 @@ class Returnse extends CI_Model
         $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
         $courier_headcode = $coainfo_cor->HeadCode;
         $courier_name= $corifo->courier_name;
+
+
+        $returns = array(
+            'outlet_id'     => $this->input->post('outlet_id', TRUE),
+            'return_id'     => $this->generator(15),
+            'invoice_id'    => $invoice_id,
+            'product_id'    => $product_id,
+            'customer_id'   => $this->input->post('customer_id', TRUE),
+            'ret_qty'       => $product_quantity,
+            'byy_qty'       => $sqty,
+            'date_purchase' => $this->input->post('invoice_date', TRUE),
+            'date_return'   => $date,
+            'product_rate'  => $product_rate,
+            'deduction'     => $discount,
+            'total_deduct'  => $this->input->post('total_discount', TRUE),
+            'total_tax'     => $this->input->post('total_tax', TRUE),
+            'total_ret_amount' => $total_price,
+            'net_total_amount' => $this->input->post('grand_total_price', TRUE),
+            'reason'        => $this->input->post('details', TRUE),
+            'usablity'      => 1
+        );
+
+
+
+        $this->db->insert('product_return', $returns);
 
             if ($is_cash_return  == 1) {
 
@@ -546,64 +576,348 @@ class Returnse extends CI_Model
                     'IsAppove'       => 1
                 );
 
-                $this->db->insert('acc_transaction', $sale_income_dr);
 
-                for ($i = 0; $i < count($p_id); $i++) {
-
-                    $product_quantity = $quantity[$i];
-                    $product_rate     = $rate[$i];
-                    $product_id       = $p_id[$i];
-                    $sqty             = $soldqty[$i];
-                    $total_price      = $total_amount[$i];
-                    $supplier_rate    = $this->supplier_rate($product_id);
-                    $discount         = $discount_rate[$i];
-                    $tax              = -$tax_amount[$i];
-
-                    $data1 = array(
-                        'invoice_details_id' => $this->generator(15),
-                        'invoice_id'        => $invoice_id,
-                        'product_id'        => $product_id,
-                        'quantity'          => -$product_quantity,
-                        'rate'              => $product_rate,
-                        'discount'          => -is_numeric($discount),
-                        'tax'               => $tax,
-                        'supplier_rate'     => $supplier_rate[0]['supplier_price'],
-                        'paid_amount'       => -$total,
-                        'total_price'       => -$total_price,
-                        'status'            => 2
-                    );
-
-
-                    $returns = array(
-                        'outlet_id'     => $this->input->post('outlet_id', TRUE),
-                        'return_id'     => $this->generator(15),
-                        'invoice_id'    => $invoice_id,
-                        'product_id'    => $product_id,
-                        'customer_id'   => $this->input->post('customer_id', TRUE),
-                        'ret_qty'       => $product_quantity,
-                        'byy_qty'       => $sqty,
-                        'date_purchase' => $this->input->post('invoice_date', TRUE),
-                        'date_return'   => $date,
-                        'product_rate'  => $product_rate,
-                        'deduction'     => $discount,
-                        'total_deduct'  => $this->input->post('total_discount', TRUE),
-                        'total_tax'     => $this->input->post('total_tax', TRUE),
-                        'total_ret_amount' => $total_price,
-                        'net_total_amount' => $this->input->post('grand_total_price', TRUE),
-                        'reason'        => $this->input->post('details', TRUE),
-                        'usablity'      => 1
-                    );
-
-                    $this->db->insert('invoice_details', $data1);
-
-                    $this->db->insert('product_return', $returns);
-                }
 
             }
+        $this->db->insert('acc_transaction', $sale_income_dr);
+
+        for ($i = 0; $i < count($p_id); $i++) {
+
+            $product_quantity = $quantity[$i];
+            $product_rate     = $rate[$i];
+            $product_id       = $p_id[$i];
+            $sqty             = $soldqty[$i];
+            $total_price      = $total_amount[$i];
+            $supplier_rate    = $this->supplier_rate($product_id);
+            $discount         = $discount_rate[$i];
+            $tax              = -$tax_amount[$i];
+
+            $data1 = array(
+                'invoice_details_id' => $this->generator(15),
+                'invoice_id'        => $invoice_id,
+                'product_id'        => $product_id,
+                'quantity'          => -$product_quantity,
+                'rate'              => $product_rate,
+                'discount'          => -is_numeric($discount),
+                'tax'               => $tax,
+                'supplier_rate'     => $supplier_rate[0]['supplier_price'],
+                'paid_amount'       => -$total,
+                'total_price'       => -$total_price,
+                'status'            => 2
+            );
+
+
+            $returns = array(
+                'outlet_id'     => $this->input->post('outlet_id', TRUE),
+                'return_id'     => $this->generator(15),
+                'invoice_id'    => $invoice_id,
+                'product_id'    => $product_id,
+                'customer_id'   => $this->input->post('customer_id', TRUE),
+                'ret_qty'       => $product_quantity,
+                'byy_qty'       => $sqty,
+                'date_purchase' => $this->input->post('invoice_date', TRUE),
+                'date_return'   => $date,
+                'product_rate'  => $product_rate,
+                'deduction'     => $discount,
+                'total_deduct'  => $this->input->post('total_discount', TRUE),
+                'total_tax'     => $this->input->post('total_tax', TRUE),
+                'total_ret_amount' => $total_price,
+                'net_total_amount' => $this->input->post('grand_total_price', TRUE),
+                'reason'        => $this->input->post('details', TRUE),
+                'usablity'      => 1
+            );
+
+            $this->db->insert('invoice_details', $data1);
+
+            $this->db->insert('product_return', $returns);
+        }
 
             if ($is_replace == 1){
 
-                
+                $invoice_id_new = $this->generator(10);
+                $invoice_no_generated = $this->number_generator();
+
+                $datainv = array(
+                    'invoice_id'      => $invoice_id_new,
+                    'customer_id'     => $customer_id,
+                    'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
+                    'date'            => $date,
+                    'total_amount'    => $rep_grand_total,
+                    'invoice'         => $invoice_no_generated,
+                    'paid_amount'     => $this->input->post('paid_amount', TRUE),
+                    'due_amount'      => $this->input->post('due_amount', TRUE),
+//                    'prevous_due'     => $this->input->post('previous', TRUE),
+                    'shipping_cost'   =>  (!empty($add_cost) ? $add_cost : null),
+//                    'condition_cost'   => $this->input->post('condition_cost', TRUE),
+                    'sale_type'   => $this->input->post('sale_type', TRUE),
+                    'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
+                    'sales_by'        => $createby,
+                    'status'          => 2,
+                     'payment_type'    =>  1,
+                    'delivery_type'    =>  $delivery_type,
+                    // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
+                    // 'bkash_id'         => (!empty($this->input->post('bkash_id', TRUE)) ? $this->input->post('bkash_id', TRUE) : null),
+                    // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),
+                    'courier_id'         => (!empty($this->input->post('courier_id', TRUE)) ? $this->input->post('courier_id', TRUE) : null),
+                    'branch_id'         => (!empty($this->input->post('branch_id', TRUE)) ? $this->input->post('branch_id', TRUE) : null),
+                    'outlet_id'       =>  $this->input->post('outlet_id', TRUE),
+                    'reciever_id'       => $this->input->post('reciever_id', TRUE),
+                    'receiver_number'     => $this->input->post('receiver_number', TRUE),
+                    'courier_status'     => $this->input->post('courier_status', TRUE),
+
+
+                );
+
+
+                // echo '<pre>'; print_r($datainv); exit();
+           $inv=     $this->db->insert('invoice', $datainv);
+
+
+                for ($i = 0; $i < count($rep_p_id); $i++) {
+
+                    $product_quantity = $rep_quantity[$i];
+                    $product_rate     = $rep_rate[$i];
+                    $product_id       = $rep_p_id[$i];
+                    $total_price      = $rep_item_total[$i];
+                    $supplier_rate    = $this->supplier_rate($product_id);
+                    // $discount         = $discount_rate[$i];
+                    // $tax              = -$tax_amount[$i];
+
+                    $data1 = array(
+                        'invoice_details_id' => $this->generator(15),
+                        'invoice_id'        => $invoice_id_new,
+                        'product_id'        => $product_id,
+                        'quantity'          => $product_quantity,
+                        'rate'              => $product_rate,
+                        // 'discount'          => is_numeric($discount),
+                        // 'tax'               => $tax,
+                        'supplier_rate'     => $supplier_rate[0]['supplier_price'],
+                        'paid_amount'       => $total_price,
+                        'total_price'       => $total_price,
+                        'status'            => 2
+                    );
+
+                 $inv_dt=   $this->db->insert('invoice_details', $data1);
+                }
+
+                $cc = array(
+                    'VNo'            =>  $invoice_id_new,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $date,
+                    'COAID'          =>  1020101,
+                    'Narration'      =>  'Cash in Hand in Sale for Invoice ID - ' . $invoice_id_new . ' customer- ' . $cusifo->customer_name,
+                    'Debit'          =>  $this->input->post('paid_amount', TRUE),
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       =>  $createby,
+                    'CreateDate'     =>  $createdate,
+                    'IsAppove'       =>  1,
+
+                );
+                $this->db->insert('acc_transaction', $cc);
+
+                $cuscredit = array(
+                    'VNo'            =>  $invoice_id_new,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $date,
+                    'COAID'          =>  $customer_headcode,
+                    'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id_new . ' Customer- ' . $cusifo->customer_namr,
+                    'Debit'          =>  0,
+                    'Credit'         => $this->input->post('paid_amount', TRUE),
+                    'IsPosted'       => 1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $cuscredit);
+
+
+
+
+                if ( $courier_condtion ==  1){
+                    $corcr = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INV-CC',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  $courier_headcode,
+                        'Narration'      =>  'Courier Credit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                        'Debit'          => 0,
+                        'Credit'         =>   (!empty($total) ? $total : null),
+                        'IsPosted'       =>  1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $corcr);
+                    $sale_income_dr = array(
+                        'VNo'            => $invoice_id,
+                        'Vtype'          => 'Return',
+                        'VDate'          => $date,
+                        'COAID'          => 303,
+                        'Narration'      => 'Sale Income Debit for return',
+                        'Debit'          => $base_total,
+                        'Credit'         => 0,
+                        'IsPosted'       => 1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+
+                    $this->db->insert('acc_transaction', $sale_income_dr);
+
+                    $dc = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INV-CC',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  4040104,
+                        'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                        'Debit'          =>   (!empty($add_cost) ? $add_cost : null),
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $dc);
+
+
+                }
+
+                if ( $courier_condtion ==  2){
+
+                    $sale_income_dr = array(
+                        'VNo'            => $invoice_id,
+                        'Vtype'          => 'Return',
+                        'VDate'          => $date,
+                        'COAID'          => 303,
+                        'Narration'      => 'Sale Income Debit for return',
+                        'Debit'          => $base_total,
+                        'Credit'         => 0,
+                        'IsPosted'       => 1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+
+                    $this->db->insert('acc_transaction', $sale_income_dr);
+
+
+                    $cordr = array(
+                        'VNo'            =>  $invoice_id_new,
+                        'Vtype'          =>  'INV-CC',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  $courier_headcode,
+                        'Narration'      =>  'Courier Debit For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                        'Debit'          =>  (!empty($this->input->post('due_amount', TRUE)) ? $this->input->post('due_amount', TRUE) : null),
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $cordr);
+
+                    $corcc = array(
+                        'VNo'            =>  $invoice_id_new,
+                        'Vtype'          =>  'INV-CC',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  $courier_headcode,
+                        'Narration'      =>  'Delivery Charge and Condition Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                        'Credit'          => (!empty($add_cost) ? $add_cost : null),
+                        'Debit'         =>   0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $corcc);
+
+                    $dc = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INV-CC',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  4040104,
+                        'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                        'Debit'          =>  (!empty($add_cost) ? $add_cost : null),
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $dc);
+
+
+
+                }
+
+                if($courier_condtion == 3){
+
+
+                    $dc = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INV-CC',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  4040104,
+                        'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+                        'Debit'          =>  (!empty($add_cost) ? $add_cost : null),
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $dc);
+
+
+                    $sale_income_dr = array(
+                        'VNo'            => $invoice_id,
+                        'Vtype'          => 'Return',
+                        'VDate'          => $date,
+                        'COAID'          => 303,
+                        'Narration'      => 'Sale Income Debit for return',
+                        'Debit'          => $base_total,
+                        'Credit'         => 0,
+                        'IsPosted'       => 1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+
+                    $this->db->insert('acc_transaction', $sale_income_dr);
+
+
+                    $cuscredit = array(
+                        'VNo'            =>  $invoice_id_new,
+                        'Vtype'          =>  'INV',
+                        'VDate'          =>  $date,
+                        'COAID'          =>  $customer_headcode,
+                        'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id_new . ' Customer- ' . $cusifo->customer_namr,
+                        'Debit'          =>  0,
+                        'Credit'         => $this->input->post('paid_amount', TRUE),
+                        'IsPosted'       => 1,
+                        'CreateBy'       => $createby,
+                        'CreateDate'     => $createdate,
+                        'IsAppove'       => 1
+                    );
+                    $this->db->insert('acc_transaction', $cuscredit);
+
+//                $this->db->set('courier_paid',1);
+//                $this->db->where('invoice_id',$invoice_id);
+//                $this->db->update('invoice');
+
+                }
+
+
+
+
+                redirect('Cinvoice/invoice_inserted_data/'.$invoice_id_new);
+
+
+
             }
 
 //        echo '<pre>';print_r($cash);
@@ -728,6 +1042,20 @@ class Returnse extends CI_Model
         $this->db->insert('acc_transaction', $supplierledger);
 
         return $purchase_id;
+    }
+
+    public function number_generator()
+    {
+        $this->db->select_max('invoice', 'invoice');
+        $query = $this->db->get('invoice');
+        $result = $query->result_array();
+        $invoice_no = $result[0]['invoice'];
+        if ($invoice_no != '') {
+            $invoice_no = $invoice_no + 1;
+        } else {
+            $invoice_no = 1000;
+        }
+        return $invoice_no;
     }
 
     // return list count

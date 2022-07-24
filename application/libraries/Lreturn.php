@@ -67,6 +67,8 @@ class Lreturn
             'discount_type' => $currency_details[0]['discount_type'],
             'outlet_id'     => $invoice_detail[0]['outlet_id'],
             'invoice'     => $invoice_detail[0]['invoice'],
+            'courier_status'     => $invoice_detail[0]['courier_status'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
         );
 
 //        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();

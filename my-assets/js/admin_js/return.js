@@ -53,11 +53,14 @@ function quantity_calculate(item) {
 
   var gr_tot = parseFloat(a);
   if ($("#cash_return").is(":checked") || $("#rep_toggle").is(":checked")) {
-    var gr_total = parseFloat(a) + parseFloat(add_cost);
+    var gr_total = parseFloat(a) - parseFloat(add_cost);
     if ($("#pay_person").is(":checked")) {
       $("#grandTotal").val(gr_total.toFixed(2, 2));
+
+      replace_calculate(1)
     }else{
       $("#grandTotal").val(parseFloat(gr_tot).toFixed(2, 2));
+      replace_calculate(1)
     }
   } else {
       $("#grandTotal").val(parseFloat(gr_tot).toFixed(2, 2));
@@ -253,19 +256,29 @@ function replace_calculate(sl) {
   var add_cost = $("#total_tax_ammount").val();
   $("#rep_deduction").val(add_cost);
 
-  var x = ret_tot - a - add_cost;
+  var x = a-ret_tot ;
 
   $("#rep_grand").val(x.toFixed(2, 2));
+  var grand =a-ret_tot;
+  var paid_amount =parseFloat($("#paid_amount").val());
+  var due_amount =grand-paid_amount;
+  $('#due_amount').val(due_amount.toFixed(2,2))
+  // if ($("#pay_person").is(":checked")) {
+  //   var grand = x+add_cost;
+  // }else{
+  //   var grand = ret_tot;
+  //
+  // }
 
-  var grand = ret_tot - a;
 
-  $("#rep_total_cost").val(grand.toFixed(2, 2));
+  $("#rep_total_cost").val(grand.toFixed(2,2));
 
-  if (parseFloat($("#rep_grand").val()) < 0) {
-    toastr.error("Customer will pay " + Math.abs(parseFloat($("#rep_grand").val())));
-  } else {
-    toastr.warning("Customer will get " + Math.abs(parseFloat($("#rep_grand").val())));
-  }
+
+  // if (parseFloat($("#rep_grand").val()) < 0) {
+  //   toastr.error("Customer will pay " + Math.abs(parseFloat($("#rep_grand").val())));
+  // } else {
+  //   toastr.warning("Customer will get " + Math.abs(parseFloat($("#rep_grand").val())));
+  // }
 }
 
 $(document).ready(function () {

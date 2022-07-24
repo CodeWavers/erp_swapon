@@ -85,8 +85,12 @@
                                      <label for="product_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger"></i></label>
                                      <div class="col-sm-8">
                                          <input type="text" tabindex="2" class="form-control" name="courier_name" value="{courier_name}" required readonly="" />
-                                         <input type="text" tabindex="2" class="form-control" name="courier_id" value="{courier_id}" required readonly="" />
-                                         <input type="text" tabindex="2" class="form-control" name="invoice" value="{invoice}" required readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="courier_id" value="{courier_id}" required readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="courier_status" value="{courier_status}" required readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="courier_condtion" value="{courier_condtion}" required readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="sale_type" value="{sale_type}" required readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="invoice" value="{invoice}" required readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="delivery_type" value="<?= $delivery_type?>" required readonly="" />
                                      </div>
                                  </div>
                              </div>
@@ -94,7 +98,7 @@
                                  <div class="form-group row">
                                      <label for="product_name" class="col-sm-4 col-form-label">Courier Branch <i class="text-danger"></i></label>
                                      <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="branch_name" value="{branch_name}" required readonly="" />
+                                         <input type="text" tabindex="2" class="form-control" name="branch_name" value="{branch_name}"  readonly="" />
                                      </div>
                                  </div>
                              </div>
@@ -114,7 +118,8 @@
                                  <div class="form-group row">
                                      <label for="product_name" class="col-sm-4 col-form-label">Receiver Name <i class="text-danger"></i></label>
                                      <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="receiver_name" value="{receiver_name}" required readonly="" />
+                                         <input type="text" tabindex="2" class="form-control" name="receiver_name" value="{receiver_name}"  readonly="" />
+                                         <input type="hidden" tabindex="2" class="form-control" name="receiver_id" value="{reciever_id}"  readonly="" />
                                      </div>
                                  </div>
                              </div>
@@ -123,7 +128,7 @@
                                  <div class="form-group row">
                                      <label for="product_name" class="col-sm-4 col-form-label">Receiver Mobile  <i class="text-danger"></i></label>
                                      <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="receiver_number" value="{receiver_number}" required readonly="" />
+                                         <input type="text" tabindex="2" class="form-control" name="receiver_number" value="{receiver_number}"  readonly="" />
                                      </div>
                                  </div>
                              </div>
@@ -264,13 +269,16 @@
                                                  <td class="">
 
                                                          <input id="pay_person" type="checkbox" onchange="quantity_calculate(1);" name="pay_person" value="pay_person" >
-                                                     <label class=" col-form-label">Customer Pay
+                                                     <label class=" col-form-label text-right">Customer Pay
                                                      </label>
 
                                                  </td>
                                              </tr>
+
+
+
                                              <tr>
-                                                 <td colspan="1" class="text-right"><b>Total Cost:</b></td>
+                                                 <td colspan="1" class="text-right"><b> Total:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="" readonly="readonly" />
                                                  </td>
@@ -361,9 +369,25 @@
                                                          <input class="form-control text-right" type="text" name="rep_deduction" id="rep_deduction" readonly>
                                                      </td>
                                                  </tr>
+
+                                                 <tr>
+                                                     <td colspan="4" class="text-right"><b>Paid Amount:</b></td>
+                                                     <td class="text-right">
+                                                         <input type="text" id="paid_amount" onkeyup="replace_calculate(1);" onchange="replace_calculate(1);" class="form-control text-right" name="paid_amount" value="0" placeholder="0.00" />
+                                                     </td>
+
+                                                 </tr>
+
+                                                 <tr>
+                                                     <td colspan="4" class="text-right"><b>Due Amount:</b></td>
+                                                     <td class="text-right">
+                                                         <input type="text" id="due_amount" class="form-control text-right" name="due_amount" value="0" placeholder="0.00" readonly/>
+                                                     </td>
+
+                                                 </tr>
                                                  <tr>
                                                      <td colspan="4" class="text-right">
-                                                         <strong>Total Cost: </strong>
+                                                         <strong>Grand Total: </strong>
                                                      </td>
                                                      <td>
                                                          <input class="form-control text-right" type="text" name="rep_total_cost" id="rep_total_cost" readonly>
