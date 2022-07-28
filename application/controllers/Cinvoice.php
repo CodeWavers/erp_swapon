@@ -505,7 +505,7 @@ class Cinvoice extends CI_Controller
 
         );
 
-        $dompdf = new Dompdf\DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $page = $this->load->view('invoice/invoice_pdf', $data, true);
 
         $dompdf->loadHTml($page, 'UTF-8');

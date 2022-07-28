@@ -485,7 +485,7 @@
                                     } ?>
 
                                     <tr>
-                                    <tr>
+                                    <tr hidden>
                                         <td class="text-right" colspan="8"><b><?php echo display('total_tax') ?>:</b></td>
                                         <td class="text-right">
                                             <input id="total_tax_amount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="0.00" readonly="readonly" aria-invalid="false" type="text">
