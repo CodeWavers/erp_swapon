@@ -6,8 +6,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 <style>
     table {
-        border-collapse: collapse;
+        /*border-collapse: collapse;*/
         width: 50%;
+        border: none !important;
     }
 
     th {
@@ -118,7 +119,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     height: 99%;
                                     page-break-after: avoid;
                                     page-break-before: avoid;
-                                    background-color: rgba(217, 236, 241, 0.9) !important;
+                                    /*background-color: rgba(217, 236, 241, 0.9) !important;*/
                                 }
 
                                 h4 {
@@ -129,21 +130,22 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 table,
                                 td,
                                 th {
-                                    border: 1px solid black;
+                                    /*border: 1px solid black;*/
+                                    border: none !important;
                                 }
 
 
                                 .table td {
-                                    border: 1px solid black !important;
+                                    /*border: 1px solid black !important;*/
                                     background-color: #fff0 !important;
                                     font-size: 14px !important;
                                 }
 
                                 .table th {
                                     font-size: 16px !important;
-                                    border: 1px solid black !important;
-                                    background-color: #365f91 !important;
-                                    color: white !important;
+                                    /*border: 1px solid black !important;*/
+                                    background-color: #eceff4!important;
+                                    /*color: white !important;*/
                                 }
 
                                 table, tr, td{
@@ -155,86 +157,96 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                         <div class="watermark" style="position:absolute; opacity: 0.8; width:100vw; height:100vh; z-index: -1; background-image: url('<?php echo base_url() ?>my-assets/image/logo/logo.jpg') !important; background-repeat: no-repeat !important; background-size: 7.45in auto !important;-webkit-print-color-adjust: exact ; background-position: 0.4in 5in !important;">
                         </div>
 
-                        <div class="panel-body" style="margin: 0 0.2in">
+                        <div class="panel-body">
 
                             <div>
-                                <table cellspacing="0" cellpadding="0">
+                                <table>
 
-                                    <tr>
+                                    <tr style="background: #eceff4!important;">
+                                        <td>
+                                            <img style="height: 80px;" src="<?php
+                                            if (isset($Web_settings[0]['invoice_logo'])) {
+                                                echo html_escape($Web_settings[0]['invoice_logo']);
+                                            }
+                                            ?>" class="img-bottom-m" alt="">
+                                        </td>
+                                        <td></td>
+                                        <td align="right">
+                                            <div class="invoice_name">
 
+                                                INVOICE
 
+                                            </div>
+                                        </td>
 
+                                    </tr>
 
-                                <td><div class="col-sm-3 company-content " style="margin-top: 0.2in">
+                                    <tr style="background:#fcfbfb !important;margin-top: 10px">
 
-                                    {company_info}
-                                    <img style="height: 80px;" src="<?php
-                                                                    if (isset($Web_settings[0]['invoice_logo'])) {
-                                                                        echo html_escape($Web_settings[0]['invoice_logo']);
-                                                                    }
-                                                                    ?>" class="img-bottom-m" alt="">
+                                        <td align="left">
 
+                                            <div class="company-content">
 
-
-                                        <address style="margin-top: 0;">
-                                            <nobr><strong class="company_name_p">{company_name}</strong></nobr><br>
-                                            <abbr>{address}</abbr><br>
-                                            <nobr><abbr><?php echo display('email') ?>
-                                                    :</abbr>  {email}</nobr><br>
-                                            <nobr><abbr><nobr><?php echo display('mobile') ?>
-                                                        :</abbr> {mobile}</nobr><br>
-
-                                            <abbr><b>
-                                                    {/company_info}
-
-                                        </address>
-
-
-
-                                </div></td>
-
-                                <td>
-
-                                    <div class="col-sm-3 " style="margin-top: 0.7in" >
+                                                {company_info}
+                                                <!--                                                <img style="height: 80px;" src="--><?php
+                                                //                                                if (isset($Web_settings[0]['invoice_logo'])) {
+                                                //                                                    echo html_escape($Web_settings[0]['invoice_logo']);
+                                                //                                                }
+                                                //                                                ?><!--" class="img-bottom-m" alt="">-->
 
 
 
+                                                <address >
+                                                    <nobr><strong class="company_name_p">{company_name}</strong></nobr><br>
+                                                    <abbr>{address}</abbr><br>
+                                                    <nobr><abbr><?php echo display('email') ?>
+                                                            :</abbr>  {email}</nobr><br>
+                                                    <nobr><abbr><nobr><?php echo display('mobile') ?>
+                                                                :</abbr> {mobile}</nobr><br>
 
-                                        <address>
-                                            <h4><b>Shipped To:</b></h4>
-                                            <abbr <nobr>Name: {customer_name}</nobr></abbr><br>
-                                            <abbr <nobr>Mobile: {customer_mobile}</nobr></abbr><br>
-                                            <abbr>Address: {customer_address}</abbr><br>
-                                        </address>
-                                    </div>
-
-                                </td>
-
-                                        <td><div class="col-sm-3  text-right" style="margin-top: 0" >
-
-
-                                                <div style="margin-bottom: 0.5in">
-                                                    <strong  class="company_name_p text-right">INVOICE</strong><br>
-
-                                               </div>
-
-
-
-
-                                                <address style="margin-top:0;" >
-                                                    <h4><b>Order Information:</b></h4>
-                                                    <abbr><nobr>Order No: {invoice_no}</nobr></abbr><br>
-                                                    <abbr><nobr>Date: {final_date}</nobr></abbr><br>
-                                                    <abbr><nobr>Payment Method: {pt}</nobr></abbr><br>
-                                                    <abbr><nobr>Shipping Method: {dt}</nobr></abbr><br>
-                                                    <abbr><nobr><b>Sale Type: {st}</b></nobr></abbr><br>
-
+                                                    <abbr><b>
+                                                            {/company_info}
 
                                                 </address>
 
 
 
                                             </div></td>
+
+                                        <td align="">
+
+                                            <div  class="company-content" style="margin-top: 0">
+
+                                                <address>
+                                                    <u><h4><b>Ship To:</b></h4></u>
+                                                    <abbr><nobr>Name: <?php echo $customer_name?></nobr></abbr><br>
+                                                    <abbr><nobr>Mobile: <?php echo $phone?></nobr></abbr><br>
+                                                    <abbr><nobr>Address: <?php echo $address?></nobr></abbr><br>
+                                                </address>
+                                            </div>
+
+                                        </td>
+
+                                        <td align="right">
+
+                                            <div class=" text-right"  style="margin-top:0;">
+
+                                                <address  >
+                                                    <u><h4><b>Order Information:</b></h4></u>
+                                                    <abbr><nobr>Order No: <?php echo $order[0]->code?></nobr></abbr><br>
+                                                    <abbr><nobr>Date: <?php echo  date('m/d/Y',$order[0]->date)?></nobr></abbr><br>
+                                                    <abbr><nobr>Payment Method: <?php echo $order[0]->payment_type ?></nobr></abbr><br>
+                                                    <abbr><nobr>Shipping Method: <?php echo $shipping_method?></nobr></abbr><br>
+                                                    <!--                                                    <abbr><b>Sale Type:{st}</b></abbr><br>-->
+
+
+                                                </address>
+
+
+
+                                            </div>
+
+                                        </td>
 
 
 
@@ -311,30 +323,30 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             </div>
 
 
-                            <div class="footer" style="padding: 0.5in;">
-
-                                <div class="row">
-                                    <div class="col-sm-4">
-
-                                        <div class="inv-footer-l">
-                                            <span style="display: block;"><?php echo display('authorised_by') ?>:<span>
-                                                    <span class="text-center" style="display: block;border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-sm-4">
-
-                                        <div class="inv-footer-r">
-                                            <span style="display: block;"><?php echo display('received_by') ?>:</span>
-                                            <span class="text-center" style="display: block; border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
+<!--                            <div class="footer" style="padding: 0.5in;">-->
+<!---->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-sm-4">-->
+<!---->
+<!--                                        <div class="inv-footer-l">-->
+<!--                                            <span style="display: block;">--><?php //echo display('authorised_by') ?><!--:<span>-->
+<!--                                                    <span class="text-center" style="display: block;border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!---->
+<!--                                    <div class="col-sm-4">-->
+<!---->
+<!--                                        <div class="inv-footer-r">-->
+<!--                                            <span style="display: block;">--><?php //echo display('received_by') ?><!--:</span>-->
+<!--                                            <span class="text-center" style="display: block; border-top: 1px solid black; margin-top:0.5in">(Sign with Date)</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!---->
+<!---->
+<!--                                </div>-->
+<!---->
+<!---->
+<!--                            </div>-->
 
                         </div>
                     </div>

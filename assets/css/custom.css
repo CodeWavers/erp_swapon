@@ -41,6 +41,12 @@ html {
     padding: 0;
 }
 
+.invoice_name{
+
+    font-size:50px;
+    /*font-weight: bold;*/
+}
+
 
 
 .chat_list .chat-avatar i,

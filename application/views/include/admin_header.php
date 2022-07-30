@@ -193,7 +193,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('pos_invoice', 'create')->access() ||
         $this->permission1->method('gui_pos', 'create')->access()
       ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice" || $this->uri->segment('1') == "Corder"  ) {
+        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice" || $this->uri->segment('1') == "Corder" || $this->uri->segment('1') == "Admin_dashboard"  || $this->uri->segment('1') == "Cquotation" ) {
                               echo "active";
                             } else {
                               echo " ";

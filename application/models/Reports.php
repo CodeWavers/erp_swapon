@@ -2389,6 +2389,7 @@ class reports extends CI_Model
             //            $data[] = $nestedData;
             $image = '<img src="' . $r->image . '" class="img img-responsive" height="100" width="150">';
             $data[] = array(
+                'sl'  =>   $sl++,
                 'invoice_id'  =>   $r->invoice_id,
                 'customer_name' =>   $r->customer_name,
                 'bank_id'  => $r->bank_name,

@@ -207,6 +207,8 @@
 .company-content{
 	display: inline-block;
 	width: 64%;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .img-bottom-m{

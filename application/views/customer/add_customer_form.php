@@ -73,9 +73,9 @@
                     <div class="panel-body">
                      <div class="col-sm-6">
                         <div class="form-group row">
-                            <label for="customer_id_two" class="col-sm-4 col-form-label">Customer ID: <i class="text-danger">*</i></label>
+                            <label for="customer_id_two" class="col-sm-4 col-form-label">Customer ID:</label>
                             <div class="col-sm-8">
-                                <input class="form-control" name ="customer_id_two" id="" type="text" placeholder="Customer ID"  required="" tabindex="1">
+                                <input class="form-control" name ="customer_id_two" id="" type="text" placeholder="Customer ID"  tabindex="1">
                             </div>
                         </div>
 

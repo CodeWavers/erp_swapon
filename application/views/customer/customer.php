@@ -78,7 +78,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
-                                        <th>Organization ID</th>
+                                        <th>Customer ID</th>
                                         <th><?php echo display('customer_name') ?></th>
                                         <th>Address</th>
                                         <th>District</th>

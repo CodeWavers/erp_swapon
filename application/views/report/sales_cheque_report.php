@@ -404,6 +404,7 @@
                                     <table id="editable_table" class="table table-bordered table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>Invoice ID</th>
 
                                                 <th><?php echo display('customer_name') ?></th>
@@ -540,7 +541,11 @@
                 }
             },
 
-            "columns": [{
+            "columns": [
+                {
+                    data: "sl"
+                },
+                {
                     data: "invoice_id"
                 },
                 {

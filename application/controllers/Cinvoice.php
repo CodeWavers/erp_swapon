@@ -1181,6 +1181,8 @@ class Cinvoice extends CI_Controller
     {
         $this->load->model('Customers');
 
+       // echo '<pre>';print_r($_POST);exit();
+
         $data = array(
             'customer_id_two'    => $this->input->post('customer_id_two', TRUE),
             'contact_person'    => $this->input->post('contact_person', TRUE),
@@ -1192,6 +1194,8 @@ class Cinvoice extends CI_Controller
             'cus_type'   => $this->input->post('cus_type', TRUE),
             'status'           => 1
         );
+
+
 
         $result = $this->Customers->customer_entry($data);
         if ($result) {

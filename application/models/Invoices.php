@@ -675,6 +675,7 @@ class Invoices extends CI_Model
             $cheque_date = $this->input->post('cheque_date', TRUE);
             $cheque_no = $this->input->post('cheque_no', TRUE);
             $cheque_type = $this->input->post('cheque_type', TRUE);
+            $bank_name = $this->input->post('bank_id', TRUE);
             $amount = $this->input->post('amount', TRUE);
 
 
@@ -727,11 +728,12 @@ class Invoices extends CI_Model
                     $data['cheque_id'] = $this->generator(10);
                     $data['cheque_type'] = $cheque_type[$key];
                     $data['cheque_date'] = $cheque_date[$key];
+                    $data['bank_name'] = $bank_name;
                     $data['amount'] = $amount[$key];
                     $data['image'] = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
                     $data['status'] = 2;
 
-                    //  echo '<pre>';print_r($data);
+                     // echo '<pre>';print_r($data);
                     // $this->ProductModel->add_products($data);
                     if (!empty($data)) {
                         $this->db->insert('cus_cheque', $data);
@@ -744,6 +746,7 @@ class Invoices extends CI_Model
             $cheque_date = $this->input->post('cheque_date', TRUE);
             $cheque_no = $this->input->post('cheque_no', TRUE);
             $cheque_type = $this->input->post('cheque_type', TRUE);
+            $bank_name = $this->input->post('bank_id', TRUE);
             $amount = $this->input->post('amount', TRUE);
 
 
@@ -795,12 +798,13 @@ class Invoices extends CI_Model
                     $data['invoice_id'] = $invoice_id;
                     $data['cheque_id'] = $this->generator(10);
                     $data['cheque_type'] = $cheque_type[$key];
+                    $data['bank_name'] = $bank_name;
                     $data['cheque_date'] = $cheque_date[$key];
                     $data['amount'] = $amount[$key];
                     $data['image'] = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
                     $data['status'] = 2;
 
-                    //  echo '<pre>';print_r($data);
+                    // echo '<pre>';print_r($data);
                     // $this->ProductModel->add_products($data);
                     if (!empty($data)) {
                         $this->db->insert('cus_cheque', $data);
