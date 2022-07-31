@@ -218,6 +218,8 @@
 
                                                      <div class="form-group row">
                                                          <input type="hidden" name="base_total" id="base_total" value="0">
+                                                         <input type="hidden" name="total_amount" id="total_amount" value="{total_amount}">
+                                                         <input type="hidden" name="old_paid" id="old_paid" value="{paid_amount}">
                                                          <label class="text-right col-form-label col-sm-4">Return:
                                                          </label>
                                                          <div class="col-sm-2 ">
@@ -264,6 +266,9 @@
                                                  <td class="text-right" colspan="1"><b>Delivery Charge:</b></td>
                                                  <td class="text-right">
                                                      <input id="total_tax_ammount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" aria-invalid="false" type="text">
+                                                     <input id="shipping_cost" tabindex="-1" class="form-control text-right valid" name="total_amount" value="{total_amount}" aria-invalid="false" type="hidden">
+                                                     <input id="condition_cost" tabindex="-1" class="form-control text-right valid" name="condition_cost" value="{condition_cost}" aria-invalid="false" type="hidden">
+                                                     <input id="condition_cost" tabindex="-1" class="form-control text-right valid" name="condition_cost" value="{condition_cost}" aria-invalid="false" type="hidden">
 
                                                  </td>
                                                  <td class="">

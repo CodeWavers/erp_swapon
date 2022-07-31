@@ -140,24 +140,19 @@ function invoice_productList(sl) {
         success: function (data) {
           var obj = jQuery.parseJSON(data);
           console.log(obj);
-          // for (var i = 0; i < obj.txnmber; i++) {
-          //   var txam = obj.taxdta[i];
-          //   var txclass = "total_tax" + i + "_" + sl;
-          //   $("." + txclass).val(obj.taxdta[i]);
-          // }
-          $("#replace_price_" + sl).val(obj.price);
-          // $("." + available_quantity).val(obj.total_product.toFixed(2, 2));
-          // $("." + unit).val(obj.unit);
-          // $("." + warrenty_date).val(obj.warrenty_date);
-          // $("." + expiry_date).val(obj.expired_date);
-          // $("#" + warehouse).html(obj.warehouse);
-          // $("." + tax).val(obj.tax);
-          // $("#txfieldnum").val(obj.txnmber);
-          // $('#'+serial_no).html(obj.serial);
-          // $('#'+discount_type).val(obj.discount_type);
-          $("#" + discount).val(obj.discount);
-          $("#stock_" + sl).val(obj.stock);
-          // quantity_calculate(sl);
+
+          if (parseFloat(obj.stock) == 0){
+
+            toastr.error('This product is out of stock!!')
+            return
+          }else {
+            $("#replace_price_" + sl).val(obj.purchase_price);
+            $("#" + discount).val(obj.discount);
+            $("#stock_" + sl).val(obj.stock);
+
+          }
+
+
         },
       });
 

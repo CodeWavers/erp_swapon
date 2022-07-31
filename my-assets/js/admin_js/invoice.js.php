@@ -282,7 +282,7 @@ function calculateSum() {
         tx = f.toFixed(2, 2),
         ds = p.toFixed(2, 2);
 
-    var test = +tx + +s_cost + +e + -ds + + ad + + c_cost  - commission;
+    var test = +tx + +s_cost + +e + -ds + + ad  - commission;
     var test2 = +tx + +s_cost + +e + -ds + + ad ;
 
     if(c_cost == undefined || commission ==undefined){

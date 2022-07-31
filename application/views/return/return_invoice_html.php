@@ -13,13 +13,23 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo display('return_details') ?></h1>
-            <small><?php echo display('return_details') ?></small>
+            <?php if ($invoice_all_data[0]['usablity'] == 2) { ?>
+            <h1>Replacement Details</h1>
+            <small>Replacement Details</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
-                <li><a href="#"><?php echo display('return') ?></a></li>
-                <li class="active"><?php echo display('return_details') ?></li>
+                <li><a href="#">Replacement</a></li>
+                <li class="active">Replacement Details</li>
             </ol>
+            <?php }else{ ?>
+                <h1><?php echo display('return_details') ?></h1>
+                <small><?php echo display('return_details') ?></small>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
+                    <li><a href="#"><?php echo display('return') ?></a></li>
+                    <li class="active"><?php echo display('return_details') ?></li>
+                </ol>
+            <?php } ?>
         </div>
     </section>
 
@@ -71,10 +81,21 @@
 	                            </div>
 	                            {/company_info}
 	                            <div class="col-sm-4 text-left invoice-details-billing">
-	                                <h2 class="m-t-0"><?php echo display('return') ?></h2>
-	                                <div><?php echo display('return_id') ?>: {invoice_no}</div>
-	                                 <div><?php echo display('invoice_id') ?>: {invoice_id}</div>
-	                                <div class="m-b-15"><?php echo display('billing_date') ?>: {final_date}</div>
+
+                                    <?php if ($invoice_all_data[0]['usablity'] == 2) { ?>
+	                                <h2 class="m-t-0">Replacement</h2>
+                                        <div>Replacement ID: {return_id}</div>
+                                        <div>Old Invice ID: {invoice_id}</div>
+                                        <div>New Invoice ID: {invoice_id_new}</div>
+                                        <div class="m-b-15"><?php echo display('billing_date') ?>: {final_date}</div>
+                                    <?php }else{ ?>
+                                        <h2 class="m-t-0"><?php echo display('return') ?></h2>
+                                        <div>Return: {return_id}</div>
+                                        <div><?php echo display('invoice_id') ?>: {invoice_id}</div>
+                                        <div class="m-b-15"><?php echo display('billing_date') ?>: {final_date}</div>
+
+                                    <?php } ?>
+
 
 	                                <span class="label label-success-outline m-r-15"><?php echo display('billing_to') ?></span>
 
@@ -98,9 +119,9 @@
 	                        </div> <hr>
 
 	                        <div class="table-responsive m-b-20">
-	                            <table class="table table-striped table-bordered">
+	                            <table class="table table-bordered">
 	                                <thead>
-	                                    <tr>
+	                                    <tr >
 	                                        <th class="text-center"><?php echo display('sl') ?></th>
 	                                        <th class="text-center"><?php echo display('product_name') ?></th>
 	                                        <th class="text-center"><?php echo display('quantity') ?></th>
@@ -119,7 +140,7 @@
 	                                </thead>
 	                                <tbody>
 										{invoice_all_data}
-										<tr>
+										<tr class="bg-danger">
 	                                    	<td class="text-center">{sl}</td>
 	                                        <td class="text-center"><div><strong>{product_name} - ({product_model})</strong></div></td>
 	                                        <td align="center">{ret_qty}</td>
@@ -157,7 +178,7 @@
 		                            </div>
 		                            <div class="col-xs-4 inline-block">
 
-				                        <table class="table">
+				                        <table class="table ">
 				                            <?php
 			                                	if ($invoice_all_data[0]['total_deduct'] != 0) {
 			                                ?>
@@ -180,12 +201,76 @@
 				                            	
 			                            </table>
 		                   
-		                                <div class="sig_div">
-												<?php echo display('authorised_by') ?>
-										</div>
+
 		                            
 		                        </div>
 	                        </div>
+
+                            <?php if ($invoice_all_data[0]['usablity'] == 2) { ?>
+
+                            <div class="table-responsive m-b-20">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center"><?php echo display('sl') ?></th>
+                                        <th class="text-center"><?php echo display('product_name') ?></th>
+                                        <th class="text-center"><?php echo display('quantity') ?></th>
+
+                                        <th class="text-center"><?php echo display('rate') ?></th>
+                                        <th class="text-center"><?php echo display('ammount') ?></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {replace_all_data}
+                                    <tr class="bg-success">
+                                        <td class="text-center">{sl}</td>
+                                        <td class="text-center"><div><strong>{product_name} - ({product_model})</strong></div></td>
+                                        <td align="center">{quantity}</td>
+
+
+                                        <td align="center"><?php echo (($position==0)?"$currency {rate}":"{rate} $currency") ?></td>
+                                        <td align="center"><?php echo (($position==0)?"$currency {total_price}":"{total_price} $currency") ?></td>
+                                    </tr>
+                                    {/replace_all_data}
+                                    </tbody>
+                                    <tfoot>
+                                    <td align="center" colspan="1"><b><?php echo display('grand_total')?>:</b></td>
+                                    <td></td>
+                                    <td align="center" ><b>{subTotal_quantity_replace}</b></td>
+                                    <td></td>
+
+                                    <td align="center" ><b><?php echo (($position==0)?"$currency {subTotal_ammount_replace}":"{subTotal_ammount_replace} $currency") ?></b></td>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-xs-8 invoicefooter-content">
+<!--                                    <p><strong>--><?php //echo display('note') ?><!-- : </strong>{note}</p>-->
+
+                                    <div  class="">
+
+                                    </div>
+                                </div>
+                                <div class="col-xs-4 inline-block">
+
+                                    <table class="table">
+
+                                        <tr>
+                                            <th class="grand_total"><?php echo display('grand_total') ?> :</th>
+                                            <td class="grand_total"><?php echo (($position==0)?"$currency {totalnamount_replace}":"{totalnamount_replace} $currency") ?></td>
+                                        </tr>
+
+                                    </table>
+
+                                    <div class="sig_div">
+                                        <?php echo display('authorised_by') ?>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <?php } ?>
 	                    </div>
 	                </div>
 

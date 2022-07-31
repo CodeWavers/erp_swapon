@@ -40,7 +40,7 @@ class Laggre {
             }
         }
         $data = array(
-            'title'         => 'Aggre',
+            'title'         => 'Aggregators',
             'aggre_list' => $aggre_list,
         );
         $aggreForm = $CI->parser->parse('aggre/add_aggre', $data, true);

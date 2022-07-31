@@ -89,6 +89,8 @@ class Cretrun_m extends CI_Controller
         $CI->auth->check_admin_auth();
         $CI->load->library('lreturn');
         $content = $CI->lreturn->supplier_return_data($purchase_id);
+
+
         $this->template->full_admin_html_view($content);
     }
 

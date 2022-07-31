@@ -58,7 +58,7 @@ class Lreturn
             'receiver_name'          => $invoice_detail[0]['receiver_name'],
             'reciever_id'          => $invoice_detail[0]['reciever_id'],
             'total_amount'  => $invoice_detail[0]['total_amount'],
-            'paid_amount'   => $invoice_detail[0]['paid_amount'],
+            'paid_amount'   => $invoice_detail[0]['p_amnt'],
             'due_amount'    => $invoice_detail[0]['due_amount'],
             'total_discount' => $invoice_detail[0]['total_discount'],
             'tax'           => $invoice_detail[0]['tax'],
@@ -68,6 +68,8 @@ class Lreturn
             'outlet_id'     => $invoice_detail[0]['outlet_id'],
             'invoice'     => $invoice_detail[0]['invoice'],
             'courier_status'     => $invoice_detail[0]['courier_status'],
+            'shipping_cost'     => $invoice_detail[0]['shipping_cost'],
+            'condition_cost'     => $invoice_detail[0]['condition_cost'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
         );
 
@@ -104,6 +106,7 @@ class Lreturn
             'purchase_all_data' => $purchase_detail,
             'discount_type' => $currency_details[0]['discount_type'],
         );
+        //echo '<pre>';print_r($purchase_detail);exit();
         $chapterList = $CI->parser->parse('return/supplier_return_form', $data, true);
         return $chapterList;
     }
@@ -220,12 +223,17 @@ class Lreturn
         $CI->load->model('Web_settings');
         $CI->load->library('occational');
         $invoice_detail = $CI->Returnse->retrieve_invoice_html_data($invoice_id);
+        $replace_details = $CI->Invoices->retrieve_invoice_editdata($invoice_detail[0]['invoice_id_new']);
+
+//        echo '<pre>';print_r($replace_details);exit();
+
 
 
         $subTotal_quantity = 0;
+        $subTotal_quantity_replace = 0;
         $subTotal_cartoon = 0;
         $subTotal_discount = 0;
-        $subTotal_ammount = 0;
+        $subTotal_ammount_replace = 0;
         if (!empty($invoice_detail)) {
             foreach ($invoice_detail as $k => $v) {
                 $invoice_detail[$k]['final_date'] = $CI->occational->dateConvert($invoice_detail[$k]['date_return']);
@@ -240,12 +248,26 @@ class Lreturn
             }
         }
 
+        if (!empty($replace_details)) {
+            foreach ($replace_details as $m => $n) {
+                $subTotal_quantity_replace = $subTotal_quantity_replace + $replace_details[$m]['quantity'];
+                $subTotal_ammount_replace = $subTotal_ammount_replace + $replace_details[$m]['total_price'];
+            }
+
+            $z = 0;
+            foreach ($replace_details as $m => $n) {
+                $z++;
+                $replace_details[$m]['sl'] = $z;
+            }
+        }
+
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Invoices->retrieve_company();
         $data = array(
             'title'            => display('invoice_return'),
             'invoice_id'       => $invoice_detail[0]['invoice_id'],
-            'invoice_no'       => $invoice_detail[0]['return_id'],
+            'invoice_id_new'       => $invoice_detail[0]['invoice_id_new'],
+            'return_id'       => $invoice_detail[0]['return_id'],
             'customer_name'    => $invoice_detail[0]['customer_name'],
             'customer_address' => $invoice_detail[0]['customer_address'],
             'customer_mobile'  => $invoice_detail[0]['customer_mobile'],
@@ -253,13 +275,17 @@ class Lreturn
             'final_date'       => $invoice_detail[0]['final_date'],
             'total_amount'     => number_format($invoice_detail[0]['net_total_amount'], 2, '.', ','),
             'subTotal_quantity' => $subTotal_quantity,
+            'subTotal_quantity_replace' => $subTotal_quantity_replace,
             'deduction'        => number_format($invoice_detail[0]['deduction'], 2, '.', ','),
             'total_deduct'     => number_format($invoice_detail[0]['total_deduct'], 2, '.', ','),
             'total_tax'        => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
             'subTotal_ammount' => number_format($subTotal_ammount, 2, '.', ','),
+            'subTotal_ammount_replace' => number_format($subTotal_ammount_replace, 2, '.', ','),
             'totalnamount'     => number_format(($subTotal_ammount + $invoice_detail[0]['total_tax']) - $invoice_detail[0]['total_deduct'], 2, '.', ','),
+            'totalnamount_replace'     =>number_format($subTotal_ammount_replace,2),
             'note'             => $invoice_detail[0]['reason'],
             'invoice_all_data' => $invoice_detail,
+            'replace_all_data' => $replace_details,
             'company_info'     => $company_info,
             'currency'         => $currency_details[0]['currency'],
             'position'         => $currency_details[0]['currency_position'],

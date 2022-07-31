@@ -16,391 +16,392 @@ class Returnse extends CI_Model
         $this->auth->check_admin_auth();
     }
 
-    public function return_invoice_entry()
-    {
-        // echo '<pre>';
-        // print_r($_POST);
-        // exit;
-        $CI = &get_instance();
-
-        $CI->load->model('Invoices');
-
-        $invoice_id = $this->input->post('invoice_id', TRUE);
-        $total          = $this->input->post('grand_total_price', TRUE);
-        $add_cost = (!empty($this->input->post('total_tax', TRUE))) ? $this->input->post('total_tax', TRUE) : 0;
-        $customer_id    = $this->input->post('customer_id', TRUE);
-        $isrtn          = $this->input->post('rtn', TRUE);
-        $cus_tot = (float)$total - (float)$add_cost;
-
-        $invoice_details =
-
-            $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
-        $headn = $customer_id . '-' . $cusifo->customer_name;
-        $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
-        $customer_headcode = $coainfo->HeadCode;
-
-        $base_total = $this->input->post('base_total', TRUE);
-        $date      = date('Y-m-d');
-        $createby  = $this->session->userdata('user_id');
-        $createdate = date('Y-m-d H:i:s');
-
-        $ads      = $this->input->post('radio', TRUE);
-        $quantity = $this->input->post('product_quantity', TRUE);
-        $available_quantity = $this->input->post('available_quantity', TRUE);
-
-        $rate         = $this->input->post('product_rate', TRUE);
-        $p_id         = $this->input->post('product_id', TRUE);
-        $total_amount = $this->input->post('total_price', TRUE);
-        $discount_rate = $this->input->post('discount', TRUE);
-        $tax_amount   = $this->input->post('tax', TRUE);
-        $soldqty      = $this->input->post('sold_qty', TRUE);
-
-        $is_cash_return = $this->input->post('cash_return', TRUE);
-        $is_replace = $this->input->post('is_replace', TRUE);
-
-        $rep_quantity = $this->input->post('rep_qty', TRUE);
-        $rep_rate         = $this->input->post('replace_rate', TRUE);
-        $rep_p_id         = $this->input->post('rep_pr_id', TRUE);
-        $rep_item_total = $this->input->post('rep_item_total', TRUE);
-
-        $rep_cus_return = $this->input->post('rep_grand', TRUE);
-        $rep_cash_cost = '';
-        $rep_add_cost = $this->input->post('rep_deduction', TRUE);
-        $rep_grand_total = $this->input->post('rep_total_cost', TRUE);
-        $rep_base_total = $this->input->post('rep_total', TRUE);
-
-
-
-        if ($is_replace == 1) {
-
-            if ($add_cost > 0) {
-                $expense = array(
-                    'VNo'            => $invoice_id,
-                    'Vtype'          => 'Return',
-                    'VDate'          => $date,
-                    'COAID'          => 40405,
-                    'Narration'      => 'Additional Cost Debit For Return',
-                    'Debit'          => abs($add_cost),
-                    'Credit'         => 0,
-                    'IsPosted'       => 1,
-                    'CreateBy'       => $createby,
-                    'CreateDate'     => $createdate,
-                    'IsAppove'       => 1
-                );
-                $this->db->insert('acc_transaction', $expense);
-            }
-
-
-
-            $cash = array(
-                'VNo'            => $invoice_id,
-                'Vtype'          => 'Return',
-                'VDate'          => $date,
-                'COAID'          => 1020101,
-                'Narration'      => 'Cash credit For Return',
-                'Debit'          => 0,
-                'Credit'         => $total,
-                'IsPosted'       => 1,
-                'CreateBy'       => $createby,
-                'CreateDate'     => $createdate,
-                'IsAppove'       => 1
-            );
-            $this->db->insert('acc_transaction', $cash);
-
-            $sale_income_dr = array(
-                'VNo'            => $invoice_id,
-                'Vtype'          => 'Return',
-                'VDate'          => $date,
-                'COAID'          => 303,
-                'Narration'      => 'Sale Income Debit for return',
-                'Debit'          => $base_total,
-                'Credit'         => 0,
-                'IsPosted'       => 1,
-                'CreateBy'       => $createby,
-                'CreateDate'     => $createdate,
-                'IsAppove'       => 1
-            );
-            // $this->db->insert('acc_transaction', $cash);
-            $this->db->insert('acc_transaction', $sale_income_dr);
-
-
-            // if ($rep_grand_total > 0) {
-            $cash = array(
-                'VNo'            => $invoice_id,
-                'Vtype'          => 'Return',
-                'VDate'          => $date,
-                'COAID'          => 1020101,
-                'Narration'      => 'Cash Credit For Return',
-                'Debit'          => abs($rep_base_total),
-                'Credit'         => 0,
-                'IsPosted'       => 1,
-                'CreateBy'       => $createby,
-                'CreateDate'     => $createdate,
-                'IsAppove'       => 1
-            );
-            $sale_income = array(
-                'VNo'            => $invoice_id,
-                'Vtype'          => 'Return',
-                'VDate'          => $date,
-                'COAID'          => 303,
-                'Narration'      => 'Sale Income Credit for return',
-                'Debit'          => 0,
-                'Credit'         => abs($rep_base_total),
-                'IsPosted'       => 1,
-                'CreateBy'       => $createby,
-                'CreateDate'     => $createdate,
-                'IsAppove'       => 1
-            );
-
-
-
-
-
-            // if (is_array($p_id))
-            for ($i = 0; $i < count($rep_p_id); $i++) {
-
-                $product_quantity = $rep_quantity[$i];
-                $product_rate     = $rep_rate[$i];
-                $product_id       = $rep_p_id[$i];
-                $total_price      = $rep_item_total[$i];
-                $supplier_rate    = $this->supplier_rate($product_id);
-                // $discount         = $discount_rate[$i];
-                // $tax              = -$tax_amount[$i];
-
-                $data1 = array(
-                    'invoice_details_id' => $this->generator(15),
-                    'invoice_id'        => $invoice_id,
-                    'product_id'        => $product_id,
-                    'quantity'          => $product_quantity,
-                    'rate'              => $product_rate,
-                    // 'discount'          => is_numeric($discount),
-                    // 'tax'               => $tax,
-                    'supplier_rate'     => $supplier_rate[0]['supplier_price'],
-                    'paid_amount'       => $total_price,
-                    'total_price'       => $total_price,
-                    'status'            => 2
-                );
-
-                $this->db->insert('invoice_details', $data1);
-            }
-
-            $this->db->insert('acc_transaction', $cash);
-            $this->db->insert('acc_transaction', $sale_income);
-
-            for ($i = 0; $i < count($p_id); $i++) {
-
-                $product_quantity = $quantity[$i];
-                $product_rate     = $rate[$i];
-                $product_id       = $p_id[$i];
-                $sqty             = $soldqty[$i];
-                $total_price      = $total_amount[$i];
-                $supplier_rate    = $this->supplier_rate($product_id);
-                $discount         = $discount_rate[$i];
-                $tax              = -$tax_amount[$i];
-
-                $data1 = array(
-                    'invoice_details_id' => $this->generator(15),
-                    'invoice_id'        => $invoice_id,
-                    'product_id'        => $product_id,
-                    'quantity'          => -$product_quantity,
-                    'rate'              => $product_rate,
-                    'discount'          => -is_numeric($discount),
-                    'tax'               => $tax,
-                    'supplier_rate'     => $supplier_rate[0]['supplier_price'],
-                    'paid_amount'       => -$total,
-                    'total_price'       => -$total_price,
-                    'status'            => 1
-                );
-
-
-                $returns = array(
-                    'outlet_id'     => $this->input->post('outlet_id', TRUE),
-                    'return_id'     => $this->generator(15),
-                    'invoice_id'    => $invoice_id,
-                    'product_id'    => $product_id,
-                    'customer_id'   => $this->input->post('customer_id', TRUE),
-                    'ret_qty'       => $product_quantity,
-                    'byy_qty'       => $sqty,
-                    'date_purchase' => $this->input->post('invoice_date', TRUE),
-                    'date_return'   => $date,
-                    'product_rate'  => $product_rate,
-                    'deduction'     => $discount,
-                    'total_deduct'  => $this->input->post('total_discount', TRUE),
-                    'total_tax'     => $this->input->post('total_tax', TRUE),
-                    'total_ret_amount' => $total_price,
-                    'net_total_amount' => $this->input->post('grand_total_price', TRUE),
-                    'reason'        => $this->input->post('details', TRUE),
-                    'usablity'      => 2
-                );
-
-                $this->db->insert('invoice_details', $data1);
-
-                $this->db->insert('product_return', $returns);
-            }
-
-
-            // $this->db->insert('acc_transaction', $cos);
-        } else {
-
-            if ($is_cash_return  == 1) {
-
-                if ($add_cost > 0) {
-                    $expense = array(
-                        'VNo'            => $invoice_id,
-                        'Vtype'          => 'Return',
-                        'VDate'          => $date,
-                        'COAID'          => 40405,
-                        'Narration'      => 'Additional Cost Debit For Return',
-                        'Debit'          => abs($add_cost),
-                        'Credit'         => 0,
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
-                    $this->db->insert('acc_transaction', $expense);
-                }
-
-
-                $cash = array(
-                    'VNo'            => $invoice_id,
-                    'Vtype'          => 'Return',
-                    'VDate'          => $date,
-                    'COAID'          => 1020101,
-                    'Narration'      => 'Cash credit For Return',
-                    'Debit'          => 0,
-                    'Credit'         => $total,
-                    'IsPosted'       => 1,
-                    'CreateBy'       => $createby,
-                    'CreateDate'     => $createdate,
-                    'IsAppove'       => 1
-                );
-                $this->db->insert('acc_transaction', $cash);
-
-                $sale_income_dr = array(
-                    'VNo'            => $invoice_id,
-                    'Vtype'          => 'Return',
-                    'VDate'          => $date,
-                    'COAID'          => 303,
-                    'Narration'      => 'Sale Income Debit for return',
-                    'Debit'          => $base_total,
-                    'Credit'         => 0,
-                    'IsPosted'       => 1,
-                    'CreateBy'       => $createby,
-                    'CreateDate'     => $createdate,
-                    'IsAppove'       => 1
-                );
-
-                $this->db->insert('acc_transaction', $sale_income_dr);
-
-            } else {
-                if ($add_cost > 0) {
-                    $expense = array(
-                        'VNo'            => $invoice_id,
-                        'Vtype'          => 'Return',
-                        'VDate'          => $date,
-                        'COAID'          => 40405,
-                        'Narration'      => 'Additional Cost Debit For Return',
-                        'Debit'          => abs($add_cost),
-                        'Credit'         => 0,
-                        'IsPosted'       => 1,
-                        'CreateBy'       => $createby,
-                        'CreateDate'     => $createdate,
-                        'IsAppove'       => 1
-                    );
-                    $this->db->insert('acc_transaction', $expense);
-                }
-
-                $cash = array(
-                    'VNo'            => $invoice_id,
-                    'Vtype'          => 'Return',
-                    'VDate'          => $date,
-                    'COAID'          => 1020101,
-                    'Narration'      => 'Cash credit For Return',
-                    'Debit'          => 0,
-                    'Credit'         => $total,
-                    'IsPosted'       => 1,
-                    'CreateBy'       => $createby,
-                    'CreateDate'     => $createdate,
-                    'IsAppove'       => 1
-                );
-
-                $this->db->insert('acc_transaction', $cash);
-
-                $sale_income_dr = array(
-                    'VNo'            => $invoice_id,
-                    'Vtype'          => 'Return',
-                    'VDate'          => $date,
-                    'COAID'          => 303,
-                    'Narration'      => 'Sale Income Debit for return',
-                    'Debit'          => $base_total,
-                    'Credit'         => 0,
-                    'IsPosted'       => 1,
-                    'CreateBy'       => $createby,
-                    'CreateDate'     => $createdate,
-                    'IsAppove'       => 1
-                );
-                $this->db->insert('acc_transaction', $sale_income_dr);
-
-            }
-
-
-            // if (is_array($p_id))
-            for ($i = 0; $i < count($p_id); $i++) {
-
-                $product_quantity = $quantity[$i];
-                $product_rate     = $rate[$i];
-                $product_id       = $p_id[$i];
-                $sqty             = $soldqty[$i];
-                $total_price      = $total_amount[$i];
-                $supplier_rate    = $this->supplier_rate($product_id);
-                $discount         = $discount_rate[$i];
-                $tax              = -$tax_amount[$i];
-
-                $data1 = array(
-                    'invoice_details_id' => $this->generator(15),
-                    'invoice_id'        => $invoice_id,
-                    'product_id'        => $product_id,
-                    'quantity'          => -$product_quantity,
-                    'rate'              => $product_rate,
-                    'discount'          => -is_numeric($discount),
-                    'tax'               => $tax,
-                    'supplier_rate'     => $supplier_rate[0]['supplier_price'],
-                    'paid_amount'       => -$total,
-                    'total_price'       => -$total_price,
-                    'status'            => 2
-                );
-
-
-                $returns = array(
-                    'outlet_id'     => $this->input->post('outlet_id', TRUE),
-                    'return_id'     => $this->generator(15),
-                    'invoice_id'    => $invoice_id,
-                    'product_id'    => $product_id,
-                    'customer_id'   => $this->input->post('customer_id', TRUE),
-                    'ret_qty'       => $product_quantity,
-                    'byy_qty'       => $sqty,
-                    'date_purchase' => $this->input->post('invoice_date', TRUE),
-                    'date_return'   => $date,
-                    'product_rate'  => $product_rate,
-                    'deduction'     => $discount,
-                    'total_deduct'  => $this->input->post('total_discount', TRUE),
-                    'total_tax'     => $this->input->post('total_tax', TRUE),
-                    'total_ret_amount' => $total_price,
-                    'net_total_amount' => $this->input->post('grand_total_price', TRUE),
-                    'reason'        => $this->input->post('details', TRUE),
-                    'usablity'      => 1
-                );
-
-
-
-                $this->db->insert('product_return', $returns);
-
-                $this->db->insert('invoice_details', $data1);
-            }
-        }
-        return $invoice_id;
-    }
+//    public function return_invoice_entry()
+//    {
+//        // echo '<pre>';
+//        // print_r($_POST);
+//        // exit;
+//        $CI = &get_instance();
+//
+//        $CI->load->model('Invoices');
+//
+//        $invoice_id = $this->input->post('invoice_id', TRUE);
+//        $total          = $this->input->post('grand_total_price', TRUE);
+//        $add_cost = (!empty($this->input->post('total_tax', TRUE))) ? $this->input->post('total_tax', TRUE) : 0;
+//        $customer_id    = $this->input->post('customer_id', TRUE);
+//        $isrtn          = $this->input->post('rtn', TRUE);
+//        $cus_tot = (float)$total - (float)$add_cost;
+//
+//        $invoice_details =
+//
+//            $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+//        $headn = $customer_id . '-' . $cusifo->customer_name;
+//        $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+//        $customer_headcode = $coainfo->HeadCode;
+//
+//        $base_total = $this->input->post('base_total', TRUE);
+//        $old_total = $this->input->post('total_amount', TRUE);
+//        $date      = date('Y-m-d');
+//        $createby  = $this->session->userdata('user_id');
+//        $createdate = date('Y-m-d H:i:s');
+//
+//        $ads      = $this->input->post('radio', TRUE);
+//        $quantity = $this->input->post('product_quantity', TRUE);
+//        $available_quantity = $this->input->post('available_quantity', TRUE);
+//
+//        $rate         = $this->input->post('product_rate', TRUE);
+//        $p_id         = $this->input->post('product_id', TRUE);
+//        $total_amount = $this->input->post('total_price', TRUE);
+//        $discount_rate = $this->input->post('discount', TRUE);
+//        $tax_amount   = $this->input->post('tax', TRUE);
+//        $soldqty      = $this->input->post('sold_qty', TRUE);
+//
+//        $is_cash_return = $this->input->post('cash_return', TRUE);
+//        $is_replace = $this->input->post('is_replace', TRUE);
+//
+//        $rep_quantity = $this->input->post('rep_qty', TRUE);
+//        $rep_rate         = $this->input->post('replace_rate', TRUE);
+//        $rep_p_id         = $this->input->post('rep_pr_id', TRUE);
+//        $rep_item_total = $this->input->post('rep_item_total', TRUE);
+//
+//        $rep_cus_return = $this->input->post('rep_grand', TRUE);
+//        $rep_cash_cost = '';
+//        $rep_add_cost = $this->input->post('rep_deduction', TRUE);
+//        $rep_grand_total = $this->input->post('rep_total_cost', TRUE);
+//        $rep_base_total = $this->input->post('rep_total', TRUE);
+//
+//
+//
+//        if ($is_replace == 1) {
+//
+//            if ($add_cost > 0) {
+//                $expense = array(
+//                    'VNo'            => $invoice_id,
+//                    'Vtype'          => 'Return',
+//                    'VDate'          => $date,
+//                    'COAID'          => 40405,
+//                    'Narration'      => 'Additional Cost Debit For Return',
+//                    'Debit'          => abs($add_cost),
+//                    'Credit'         => 0,
+//                    'IsPosted'       => 1,
+//                    'CreateBy'       => $createby,
+//                    'CreateDate'     => $createdate,
+//                    'IsAppove'       => 1
+//                );
+//                $this->db->insert('acc_transaction', $expense);
+//            }
+//
+//
+//
+//            $cash = array(
+//                'VNo'            => $invoice_id,
+//                'Vtype'          => 'Return',
+//                'VDate'          => $date,
+//                'COAID'          => 1020101,
+//                'Narration'      => 'Cash credit For Return',
+//                'Debit'          => 0,
+//                'Credit'         => $total,
+//                'IsPosted'       => 1,
+//                'CreateBy'       => $createby,
+//                'CreateDate'     => $createdate,
+//                'IsAppove'       => 1
+//            );
+//            $this->db->insert('acc_transaction', $cash);
+//
+//            $sale_income_dr = array(
+//                'VNo'            => $invoice_id,
+//                'Vtype'          => 'Return',
+//                'VDate'          => $date,
+//                'COAID'          => 303,
+//                'Narration'      => 'Sale Income Debit for return',
+//                'Debit'          => $base_total,
+//                'Credit'         => 0,
+//                'IsPosted'       => 1,
+//                'CreateBy'       => $createby,
+//                'CreateDate'     => $createdate,
+//                'IsAppove'       => 1
+//            );
+//            // $this->db->insert('acc_transaction', $cash);
+//            $this->db->insert('acc_transaction', $sale_income_dr);
+//
+//
+//            // if ($rep_grand_total > 0) {
+//            $cash = array(
+//                'VNo'            => $invoice_id,
+//                'Vtype'          => 'Return',
+//                'VDate'          => $date,
+//                'COAID'          => 1020101,
+//                'Narration'      => 'Cash Credit For Return',
+//                'Debit'          => abs($rep_base_total),
+//                'Credit'         => 0,
+//                'IsPosted'       => 1,
+//                'CreateBy'       => $createby,
+//                'CreateDate'     => $createdate,
+//                'IsAppove'       => 1
+//            );
+//            $sale_income = array(
+//                'VNo'            => $invoice_id,
+//                'Vtype'          => 'Return',
+//                'VDate'          => $date,
+//                'COAID'          => 303,
+//                'Narration'      => 'Sale Income Credit for return',
+//                'Debit'          => 0,
+//                'Credit'         => abs($rep_base_total),
+//                'IsPosted'       => 1,
+//                'CreateBy'       => $createby,
+//                'CreateDate'     => $createdate,
+//                'IsAppove'       => 1
+//            );
+//
+//
+//
+//
+//
+//            // if (is_array($p_id))
+//            for ($i = 0; $i < count($rep_p_id); $i++) {
+//
+//                $product_quantity = $rep_quantity[$i];
+//                $product_rate     = $rep_rate[$i];
+//                $product_id       = $rep_p_id[$i];
+//                $total_price      = $rep_item_total[$i];
+//                $supplier_rate    = $this->supplier_rate($product_id);
+//                // $discount         = $discount_rate[$i];
+//                // $tax              = -$tax_amount[$i];
+//
+//                $data1 = array(
+//                    'invoice_details_id' => $this->generator(15),
+//                    'invoice_id'        => $invoice_id,
+//                    'product_id'        => $product_id,
+//                    'quantity'          => $product_quantity,
+//                    'rate'              => $product_rate,
+//                    // 'discount'          => is_numeric($discount),
+//                    // 'tax'               => $tax,
+//                    'supplier_rate'     => $supplier_rate[0]['supplier_price'],
+//                    'paid_amount'       => $total_price,
+//                    'total_price'       => $total_price,
+//                    'status'            => 2
+//                );
+//
+//                $this->db->insert('invoice_details', $data1);
+//            }
+//
+//            $this->db->insert('acc_transaction', $cash);
+//            $this->db->insert('acc_transaction', $sale_income);
+//
+//            for ($i = 0; $i < count($p_id); $i++) {
+//
+//                $product_quantity = $quantity[$i];
+//                $product_rate     = $rate[$i];
+//                $product_id       = $p_id[$i];
+//                $sqty             = $soldqty[$i];
+//                $total_price      = $total_amount[$i];
+//                $supplier_rate    = $this->supplier_rate($product_id);
+//                $discount         = $discount_rate[$i];
+//                $tax              = -$tax_amount[$i];
+//
+//                $data1 = array(
+//                    'invoice_details_id' => $this->generator(15),
+//                    'invoice_id'        => $invoice_id,
+//                    'product_id'        => $product_id,
+//                    'quantity'          => -$product_quantity,
+//                    'rate'              => $product_rate,
+//                    'discount'          => -is_numeric($discount),
+//                    'tax'               => $tax,
+//                    'supplier_rate'     => $supplier_rate[0]['supplier_price'],
+//                    'paid_amount'       => -$total,
+//                    'total_price'       => -$total_price,
+//                    'status'            => 1
+//                );
+//
+//
+//                $returns = array(
+//                    'outlet_id'     => $this->input->post('outlet_id', TRUE),
+//                    'return_id'     => $this->generator(15),
+//                    'invoice_id'    => $invoice_id,
+//                    'product_id'    => $product_id,
+//                    'customer_id'   => $this->input->post('customer_id', TRUE),
+//                    'ret_qty'       => $product_quantity,
+//                    'byy_qty'       => $sqty,
+//                    'date_purchase' => $this->input->post('invoice_date', TRUE),
+//                    'date_return'   => $date,
+//                    'product_rate'  => $product_rate,
+//                    'deduction'     => $discount,
+//                    'total_deduct'  => $this->input->post('total_discount', TRUE),
+//                    'total_tax'     => $this->input->post('total_tax', TRUE),
+//                    'total_ret_amount' => $total_price,
+//                    'net_total_amount' => $this->input->post('grand_total_price', TRUE),
+//                    'reason'        => $this->input->post('details', TRUE),
+//                    'usablity'      => 2
+//                );
+//
+//                $this->db->insert('invoice_details', $data1);
+//
+//                $this->db->insert('product_return', $returns);
+//            }
+//
+//
+//            // $this->db->insert('acc_transaction', $cos);
+//        } else {
+//
+//            if ($is_cash_return  == 1) {
+//
+//                if ($add_cost > 0) {
+//                    $expense = array(
+//                        'VNo'            => $invoice_id,
+//                        'Vtype'          => 'Return',
+//                        'VDate'          => $date,
+//                        'COAID'          => 40405,
+//                        'Narration'      => 'Additional Cost Debit For Return',
+//                        'Debit'          => abs($add_cost),
+//                        'Credit'         => 0,
+//                        'IsPosted'       => 1,
+//                        'CreateBy'       => $createby,
+//                        'CreateDate'     => $createdate,
+//                        'IsAppove'       => 1
+//                    );
+//                    $this->db->insert('acc_transaction', $expense);
+//                }
+//
+//
+//                $cash = array(
+//                    'VNo'            => $invoice_id,
+//                    'Vtype'          => 'Return',
+//                    'VDate'          => $date,
+//                    'COAID'          => 1020101,
+//                    'Narration'      => 'Cash credit For Return',
+//                    'Debit'          => 0,
+//                    'Credit'         => $total,
+//                    'IsPosted'       => 1,
+//                    'CreateBy'       => $createby,
+//                    'CreateDate'     => $createdate,
+//                    'IsAppove'       => 1
+//                );
+//                $this->db->insert('acc_transaction', $cash);
+//
+//                $sale_income_dr = array(
+//                    'VNo'            => $invoice_id,
+//                    'Vtype'          => 'Return',
+//                    'VDate'          => $date,
+//                    'COAID'          => 303,
+//                    'Narration'      => 'Sale Income Debit for return',
+//                    'Debit'          => $base_total,
+//                    'Credit'         => 0,
+//                    'IsPosted'       => 1,
+//                    'CreateBy'       => $createby,
+//                    'CreateDate'     => $createdate,
+//                    'IsAppove'       => 1
+//                );
+//
+//                $this->db->insert('acc_transaction', $sale_income_dr);
+//
+//            } else {
+//                if ($add_cost > 0) {
+//                    $expense = array(
+//                        'VNo'            => $invoice_id,
+//                        'Vtype'          => 'Return',
+//                        'VDate'          => $date,
+//                        'COAID'          => 40405,
+//                        'Narration'      => 'Additional Cost Debit For Return',
+//                        'Debit'          => abs($add_cost),
+//                        'Credit'         => 0,
+//                        'IsPosted'       => 1,
+//                        'CreateBy'       => $createby,
+//                        'CreateDate'     => $createdate,
+//                        'IsAppove'       => 1
+//                    );
+//                    $this->db->insert('acc_transaction', $expense);
+//                }
+//
+//                $cash = array(
+//                    'VNo'            => $invoice_id,
+//                    'Vtype'          => 'Return',
+//                    'VDate'          => $date,
+//                    'COAID'          => 1020101,
+//                    'Narration'      => 'Cash credit For Return',
+//                    'Debit'          => 0,
+//                    'Credit'         => $total,
+//                    'IsPosted'       => 1,
+//                    'CreateBy'       => $createby,
+//                    'CreateDate'     => $createdate,
+//                    'IsAppove'       => 1
+//                );
+//
+//                $this->db->insert('acc_transaction', $cash);
+//
+//                $sale_income_dr = array(
+//                    'VNo'            => $invoice_id,
+//                    'Vtype'          => 'Return',
+//                    'VDate'          => $date,
+//                    'COAID'          => 303,
+//                    'Narration'      => 'Sale Income Debit for return',
+//                    'Debit'          => $base_total,
+//                    'Credit'         => 0,
+//                    'IsPosted'       => 1,
+//                    'CreateBy'       => $createby,
+//                    'CreateDate'     => $createdate,
+//                    'IsAppove'       => 1
+//                );
+//                $this->db->insert('acc_transaction', $sale_income_dr);
+//
+//            }
+//
+//
+//            // if (is_array($p_id))
+//            for ($i = 0; $i < count($p_id); $i++) {
+//
+//                $product_quantity = $quantity[$i];
+//                $product_rate     = $rate[$i];
+//                $product_id       = $p_id[$i];
+//                $sqty             = $soldqty[$i];
+//                $total_price      = $total_amount[$i];
+//                $supplier_rate    = $this->supplier_rate($product_id);
+//                $discount         = $discount_rate[$i];
+//                $tax              = -$tax_amount[$i];
+//
+//                $data1 = array(
+//                    'invoice_details_id' => $this->generator(15),
+//                    'invoice_id'        => $invoice_id,
+//                    'product_id'        => $product_id,
+//                    'quantity'          => -$product_quantity,
+//                    'rate'              => $product_rate,
+//                    'discount'          => -is_numeric($discount),
+//                    'tax'               => $tax,
+//                    'supplier_rate'     => $supplier_rate[0]['supplier_price'],
+//                    'paid_amount'       => -$total,
+//                    'total_price'       => -$total_price,
+//                    'status'            => 2
+//                );
+//
+//
+//                $returns = array(
+//                    'outlet_id'     => $this->input->post('outlet_id', TRUE),
+//                    'return_id'     => $this->generator(15),
+//                    'invoice_id'    => $invoice_id,
+//                    'product_id'    => $product_id,
+//                    'customer_id'   => $this->input->post('customer_id', TRUE),
+//                    'ret_qty'       => $product_quantity,
+//                    'byy_qty'       => $sqty,
+//                    'date_purchase' => $this->input->post('invoice_date', TRUE),
+//                    'date_return'   => $date,
+//                    'product_rate'  => $product_rate,
+//                    'deduction'     => $discount,
+//                    'total_deduct'  => $this->input->post('total_discount', TRUE),
+//                    'total_tax'     => $this->input->post('total_tax', TRUE),
+//                    'total_ret_amount' => $total_price,
+//                    'net_total_amount' => $this->input->post('grand_total_price', TRUE),
+//                    'reason'        => $this->input->post('details', TRUE),
+//                    'usablity'      => 1
+//                );
+//
+//
+//
+//                $this->db->insert('product_return', $returns);
+//
+//                $this->db->insert('invoice_details', $data1);
+//            }
+//        }
+//        return $invoice_id;
+//    }
 
 
     public function return_invoice_entry_new()
@@ -411,6 +412,9 @@ class Returnse extends CI_Model
         $CI = &get_instance();
 
         $CI->load->model('Invoices');
+
+        $invoice_id_new = $this->generator(10);
+        $invoice_no_generated = $this->number_generator();
 
         $invoice_id = $this->input->post('invoice_id', TRUE);
         $delivery_type = $this->input->post('delivery_type', TRUE);
@@ -428,6 +432,8 @@ class Returnse extends CI_Model
         $customer_headcode = $coainfo->HeadCode;
 
         $base_total = $this->input->post('base_total', TRUE);
+        $old_total = $this->input->post('total_amount', TRUE);
+        $old_paid = $this->input->post('old_paid', TRUE);
         $date      = date('Y-m-d');
         $createby  = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
@@ -468,30 +474,6 @@ class Returnse extends CI_Model
         $courier_headcode = $coainfo_cor->HeadCode;
         $courier_name= $corifo->courier_name;
 
-
-        $returns = array(
-            'outlet_id'     => $this->input->post('outlet_id', TRUE),
-            'return_id'     => $this->generator(15),
-            'invoice_id'    => $invoice_id,
-            'product_id'    => $product_id,
-            'customer_id'   => $this->input->post('customer_id', TRUE),
-            'ret_qty'       => $product_quantity,
-            'byy_qty'       => $sqty,
-            'date_purchase' => $this->input->post('invoice_date', TRUE),
-            'date_return'   => $date,
-            'product_rate'  => $product_rate,
-            'deduction'     => $discount,
-            'total_deduct'  => $this->input->post('total_discount', TRUE),
-            'total_tax'     => $this->input->post('total_tax', TRUE),
-            'total_ret_amount' => $total_price,
-            'net_total_amount' => $this->input->post('grand_total_price', TRUE),
-            'reason'        => $this->input->post('details', TRUE),
-            'usablity'      => 1
-        );
-
-
-
-        $this->db->insert('product_return', $returns);
 
             if ($is_cash_return  == 1) {
 
@@ -605,12 +587,22 @@ class Returnse extends CI_Model
                 'total_price'       => -$total_price,
                 'status'            => 2
             );
+            $this->db->insert('invoice_details', $data1);
+            $usabilty='';
+            if ($is_cash_return == 1){
+                $usabilty=1;
+            }
+            if ($is_replace == 1){
+                $usabilty=2;
+            }
+
 
 
             $returns = array(
                 'outlet_id'     => $this->input->post('outlet_id', TRUE),
                 'return_id'     => $this->generator(15),
                 'invoice_id'    => $invoice_id,
+                'invoice_id_new'    => $is_replace == 1 ? $invoice_id_new : null,
                 'product_id'    => $product_id,
                 'customer_id'   => $this->input->post('customer_id', TRUE),
                 'ret_qty'       => $product_quantity,
@@ -620,28 +612,35 @@ class Returnse extends CI_Model
                 'product_rate'  => $product_rate,
                 'deduction'     => $discount,
                 'total_deduct'  => $this->input->post('total_discount', TRUE),
-                'total_tax'     => $this->input->post('total_tax', TRUE),
+//                'total_tax'     => $this->input->post('total_tax', TRUE),
                 'total_ret_amount' => $total_price,
                 'net_total_amount' => $this->input->post('grand_total_price', TRUE),
                 'reason'        => $this->input->post('details', TRUE),
-                'usablity'      => 1
+                'usablity'      => $usabilty
             );
 
-            $this->db->insert('invoice_details', $data1);
+
 
             $this->db->insert('product_return', $returns);
+
+            $after_return_total= $old_total-$base_total;
+            $due_amount= $after_return_total-$old_paid;
+
+            $this->db->set('total_amount',$after_return_total);
+            $this->db->set('due_amount', $due_amount);
+            $this->db->where('invoice_id',$invoice_id);
+            $this->db->update('invoice');
         }
 
             if ($is_replace == 1){
 
-                $invoice_id_new = $this->generator(10);
-                $invoice_no_generated = $this->number_generator();
+
 
                 $datainv = array(
                     'invoice_id'      => $invoice_id_new,
                     'customer_id'     => $customer_id,
+                    'date'      =>date('Y-m-d'),
                     'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
-                    'date'            => $date,
                     'total_amount'    => $rep_grand_total,
                     'invoice'         => $invoice_no_generated,
                     'paid_amount'     => $this->input->post('paid_amount', TRUE),
@@ -655,9 +654,6 @@ class Returnse extends CI_Model
                     'status'          => 2,
                      'payment_type'    =>  1,
                     'delivery_type'    =>  $delivery_type,
-                    // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
-                    // 'bkash_id'         => (!empty($this->input->post('bkash_id', TRUE)) ? $this->input->post('bkash_id', TRUE) : null),
-                    // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),
                     'courier_id'         => (!empty($this->input->post('courier_id', TRUE)) ? $this->input->post('courier_id', TRUE) : null),
                     'branch_id'         => (!empty($this->input->post('branch_id', TRUE)) ? $this->input->post('branch_id', TRUE) : null),
                     'outlet_id'       =>  $this->input->post('outlet_id', TRUE),
@@ -905,6 +901,8 @@ class Returnse extends CI_Model
                     );
                     $this->db->insert('acc_transaction', $cuscredit);
 
+
+
 //                $this->db->set('courier_paid',1);
 //                $this->db->where('invoice_id',$invoice_id);
 //                $this->db->update('invoice');
@@ -919,6 +917,15 @@ class Returnse extends CI_Model
 
 
             }
+
+
+//            if ($is_cash_return == 1){
+//
+//                $this->db->set('total_amount', $old_total-$base_total);
+//                $this->db->where('invoice_id',$invoice_id);
+//                $this->db->update('invoice');
+//
+//            }
 
 //        echo '<pre>';print_r($cash);
 
@@ -1081,6 +1088,7 @@ class Returnse extends CI_Model
         $this->db->from('product_return a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->where('usablity', 1);
+        $this->db->or_where('usablity', 2);
         $this->db->group_by('a.invoice_id', 'desc');
         $this->db->limit($perpage, $page);
         $query = $this->db->get();
@@ -1156,6 +1164,16 @@ class Returnse extends CI_Model
             return $query->result_array();
         }
         return false;
+    }
+
+    public function retrieve_replace_html_data($invoice_id)
+    {
+        return $this->db->select('a.*,b.product_name,b.product_model')
+            ->from('invoice_details a')
+            ->join('product_information b','a.product_id=b.product_id')
+            ->where('invoice_id',$invoice_id)->get()->result();
+
+
     }
 
     // supplier return html data
@@ -1248,15 +1266,15 @@ class Returnse extends CI_Model
     /////////// supplier returns form data
     public function supplier_return($purchase_id)
     {
-        $this->db->select('c.*,a.*,b.*,a.product_id,d.product_name,d.product_model,e.supplier_id');
+        $this->db->select('c.*,a.*,b.*,a.product_id,d.product_name,d.product_model,');
         $this->db->from('product_purchase c');
         $this->db->join('product_purchase_details a', 'a.purchase_id = c.purchase_id');
         $this->db->join('product_information d', 'd.product_id = a.product_id');
-        $this->db->join('supplier_product e', 'e.product_id = d.product_id');
-        $this->db->join('supplier_information b', 'b.supplier_id = e.supplier_id');
+      //  $this->db->join('supplier_product e', 'e.product_id = d.product_id');
+        $this->db->join('supplier_information b', 'b.supplier_id = c.supplier_id');
 
         $this->db->where('c.purchase_id', $purchase_id);
-        $this->db->group_by('d.product_id', 'desc');
+        $this->db->group_by('d.product_id');
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {

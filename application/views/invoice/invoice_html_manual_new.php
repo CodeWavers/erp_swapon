@@ -183,7 +183,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                     <tr style="background:#fcfbfb !important;margin-top: 10px">
 
-                                        <td align="left">
+                                        <td align="left" width="450px">
 
                                             <div class="company-content">
 
@@ -213,31 +213,31 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             </div></td>
 
-                                        <td align="">
+                                        <td align="left"  width="300px">
 
-                                            <div  class="company-content" style="margin-top: 0">
+                                            <div  class="company-content" style="margin-top: 0; text-align: justify;">
 
-                                                <address>
+                                                <address style=" text-align: justify;">
                                                     <u><h4><b>Ship To:</b></h4></u>
-                                                    <abbr><nobr>Name: <?php echo $customer_name?></nobr></abbr><br>
-                                                    <abbr><nobr>Mobile: <?php echo $phone?></nobr></abbr><br>
-                                                    <abbr><nobr>Address: <?php echo $address?></nobr></abbr><br>
+                                                    <abbr><nobr>Name: {customer_name} </nobr></abbr><br>
+                                                    <abbr><nobr>Mobile: {customer_mobile}</nobr></abbr><br>
+                                                    <abbr><nobr>Address: {customer_address}</nobr></abbr><br>
                                                 </address>
                                             </div>
 
                                         </td>
 
-                                        <td align="right">
+                                        <td align="right"  width="300px">
 
                                             <div class=" text-right"  style="margin-top:0;">
 
                                                 <address  >
                                                     <u><h4><b>Order Information:</b></h4></u>
-                                                    <abbr><nobr>Order No: <?php echo $order[0]->code?></nobr></abbr><br>
-                                                    <abbr><nobr>Date: <?php echo  date('m/d/Y',$order[0]->date)?></nobr></abbr><br>
-                                                    <abbr><nobr>Payment Method: <?php echo $order[0]->payment_type ?></nobr></abbr><br>
-                                                    <abbr><nobr>Shipping Method: <?php echo $shipping_method?></nobr></abbr><br>
-                                                    <!--                                                    <abbr><b>Sale Type:{st}</b></abbr><br>-->
+                                                    <abbr><nobr>Order No: {invoice_no}</nobr></abbr><br>
+                                                    <abbr><nobr>Date:{final_date}</nobr></abbr><br>
+                                                    <abbr><nobr>Payment Method: {pt}</nobr></abbr><br>
+                                                    <abbr><nobr>Shipping Method: {dt}</nobr></abbr><br>
+                            <abbr><b>Sale Type:{st}</b></abbr><br>
 
 
                                                 </address>
@@ -258,7 +258,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                             <div class="">
 
-                                <table class="table table-bordered" style="width: 100%;">
+                                <table class="table " style="width: 100%;">
                                     <thead>
                                         <tr>
                                             <th class="text-center">Sl. No.</th>
@@ -288,22 +288,22 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <tr>
                                             <td></td>
                                             <td></td>
-                                            <td style="background-color: #cad1dba1 !important;" class="text-right" colspan="3"><b>Sub-Total:</b></td>
+                                            <td  class="text-right" colspan="3"><b>Sub-Total:</b></td>
 
-                                            <td style="background-color: #cad1dba1 !important;" align="right"><b><?php echo (($position == 0) ? "$currency {subTotal_ammount}" : "{subTotal_ammount} $currency") ?></b></td>
+                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {subTotal_ammount}" : "{subTotal_ammount} $currency") ?></b></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" rowspan="2" style="background-color: #cad1dba1 !important;">
-                                                <strong>Notes:</strong>
+                                            <td colspan="3" rowspan="2" >
+<!--                                                <strong>Notes:</strong>-->
                                             </td>
                                             <td colspan="2" class="text-right"><b>Discount:</b></td>
 
                                             <td align="right"><b><?php echo (($position == 0) ? "$currency {total_discount}" : "{total_discount} $currency") ?></b></td>
                                         </tr>
                                         <tr>
-                                            <td style="background-color: #cad1dba1 !important;" colspan="2" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                            <td  colspan="2" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
 
-                                            <td style="background-color: #cad1dba1 !important;" align="right"><b><?php echo (($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency") ?></b></td>
+                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency") ?></b></td>
                                         </tr>
                                     </tbody>
 
