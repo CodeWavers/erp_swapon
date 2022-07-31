@@ -904,8 +904,9 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     <div class="col-sm-6">
 
                                         <select name="cus_type" class="form-control" tabindex="3">
-                                            <option value="1">WholeSale Customer</option>
+
                                             <option value="2">Retail Customer</option>
+                                            <option value="1">WholeSale Customer</option>
 
                                         </select>
 
