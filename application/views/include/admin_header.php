@@ -596,10 +596,10 @@ $birthday = $CI->Reports->birthday_noti();
 
         <!-- Customer menu start -->
         <?php if (
-        $this->permission1->method('add_customer', 'create')->access() ||
-        $this->permission1->method('manage_customer', 'read')->access() ||
-        $this->permission1->method('credit_customer', 'read')->access() ||
-        $this->permission1->method('paid_customer', 'read')->access()
+        $this->permission1->method('add_aggregator', 'create')->access() ||
+        $this->permission1->method('aggre_ledger_report', 'create')->access() ||
+        $this->permission1->method('manage_aggregator', 'read')->access()
+
         ) { ?>
         <li class="treeview <?php if ($this->uri->segment('1') == "Caggre") {
             echo "active";
@@ -607,26 +607,26 @@ $birthday = $CI->Reports->birthday_noti();
             echo " ";
         } ?>">
             <a href="#">
-                <i class="fa fa-handshake-o"></i><span>Aggregators</span>
+                <i class="fa fa-dashboard"></i><span>Aggregators</span>
                 <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
             </a>
             <ul class="treeview-menu">
                 <?php if (
-                    $this->permission1->method('manage_brand', 'create')->access() ||
-                    $this->permission1->method('manage_category', 'read')->access() ||
-                    $this->permission1->method('manage_category', 'update')->access() ||
-                    $this->permission1->method('manage_category', 'delete')->access()
+                    $this->permission1->method('add_aggregator', 'create')->access() ||
+                    $this->permission1->method('manage_aggre', 'read')->access() ||
+                    $this->permission1->method('manage_aggre', 'update')->access() ||
+                    $this->permission1->method('manage_aggre', 'delete')->access()
                 ) { ?>
-                    <li class="treeview <?php if ($this->uri->segment('1') == "Cbrand") {
+                    <li class="treeview <?php if ($this->uri->segment('1') == "Caggre") {
                         echo "active";
                     } else {
                         echo " ";
                     } ?>"><a href="<?php echo base_url('Caggre'); ?>">Aggregators</a></li>
                 <?php } ?>
                 <?php if (
-                $this->permission1->method('customer_ledger', 'read')->access()
+                $this->permission1->method('aggre_ledger_report', 'read')->access()
                 ) { ?>
                     <li class="treeview <?php if (
                         $this->uri->segment('2') == "aggre_ledger_report"
@@ -638,9 +638,6 @@ $birthday = $CI->Reports->birthday_noti();
                             'Caggre/aggre_ledger_report'
                         ); ?>">Aggregators Ledger</a></li>
                 <?php } ?>
-
-
-
 
             </ul>
         </li>

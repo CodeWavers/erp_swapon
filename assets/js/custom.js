@@ -156,6 +156,7 @@ $(function ($) {
     buttons: [
       {
         extend: "copy",
+        title: "CustomerList",
         className: "btn-sm prints",
       },
       {
@@ -731,6 +732,7 @@ $(function ($) {
     buttons: [
       {
         extend: "copy",
+        title: "Customer List",
         exportOptions: {
           columns: [0, 1, 2, 3, 4], //Your Colume value those you want
         },
@@ -738,7 +740,7 @@ $(function ($) {
       },
       {
         extend: "csv",
-        title: "ProductList",
+        title: "Customer List",
         exportOptions: {
           columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
         },
@@ -749,7 +751,7 @@ $(function ($) {
         exportOptions: {
           columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
         },
-        title: "ProductList",
+        title: "Customer List",
         className: "btn-sm prints",
       },
       {
@@ -757,7 +759,7 @@ $(function ($) {
         exportOptions: {
           columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
         },
-        title: "ProductList",
+        title: "Customer List",
         className: "btn-sm prints",
       },
       {
@@ -765,7 +767,7 @@ $(function ($) {
         exportOptions: {
           columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
         },
-        title: "<center>ProductList</center>",
+        title: "<center>Customer List</center>",
         className: "btn-sm prints",
       },
     ],
