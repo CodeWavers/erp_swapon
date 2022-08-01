@@ -1668,6 +1668,7 @@ class Rqsn extends CI_Model
             );
         } else {
             $response = array(
+                "draw" => intval($draw),
                 "outlet_stock"     => sprintf('%0.2f', $stock)
             );
         }
