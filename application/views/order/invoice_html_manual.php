@@ -184,7 +184,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                     <tr style="background:#fcfbfb !important;margin-top: 10px">
 
-                                        <td align="left">
+                                        <td align="left" width="450px">
 
                                             <div class="company-content">
 
@@ -214,7 +214,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             </div></td>
 
-                                        <td align="">
+                                        <td align="left" width="300px">
 
                                             <div  class="company-content" style="margin-top: 0">
 
@@ -228,7 +228,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                         </td>
 
-                                        <td align="right">
+                                        <td align="right" width="300px">
 
                                             <div class=" text-right"  style="margin-top:0;">
 
@@ -287,7 +287,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <tr>
                                         <td class="text-center"> <?php echo $sl++ ?></td>
 <!--                                        <td class="text-center"><img height="50" src="--><?php //echo api_url()?><!--/public/--><?php //echo $od->thumbnail_img?><!--"></td>-->
-                                        <td class="text-center"><img height="50" src="<?=  api_url()."public/$od->thumbnail_img"?>"></td>
+                                        <td class="text-center"><img height="50" src="https://dev.swaponsworld.com/public/<?php echo $od->thumbnail_img?>"></td>
+
 
                                         <td>
                                             <strong><?php echo $od->name?></strong>

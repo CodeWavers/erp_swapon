@@ -1,0 +1,82 @@
+
+
+
+
+if(cc == conditional){
+
+courier account=>Dr(total -(dc+cc))
+delivery ledger=> Dr (dc)
+condition ledger => Dr (cc)
+
+courier account=>Cr(dc+cc)
+
+sale income(303) =>Cr(total -(dc+cc))
+}
+
+if(cc == partial{
+
+courier account=>Dr(due amount-(dc+cc))
+delivery ledger=> Dr (dc)
+condition ledger => Dr (cc)
+
+courier account=>Cr(dc+cc)
+sale income(303) =>Cr(total -(dc+cc))
+}
+
+if(cc == unconditional{
+
+customer account=>Dr(total)
+delivery ledger=> Dr (dc)
+
+
+courier account=>Cr(dc)
+sale income(303) =>Cr(total -(dc))
+}
+
+
+
+if(pay){
+
+payment type account => Dr
+customer account => Cr
+
+}
+
+
+
+
+//Return
+
+courier charge =>credit(delivery charge)
+
+delivery charge ledger => debit(if company pay)
+
+customer ledger => total debit
+
+cash ledger => total credit
+
+sale income ledger(303) => debit(without delivery charge)
+
+
+//Replacement (new invoice)
+
+if(conditional){
+courier ledger => Cr(total)
+sale income => Dr(product price total)
+delivery ledger => Dr(delivery charge)
+}
+
+
+if(partial){
+courier ledger => Cr(total)
+sale income => Dr(product price total)
+delivery ledger => Dr(delivery charge)
+customer ledger => Cr(paid amount)
+}
+
+if(uncondtional){
+courier ledger => Cr(total)
+sale income => Dr(product price total)
+delivery ledger => Dr(delivery charge)
+customer ledger => Cr(total)
+}

@@ -1,0 +1,41 @@
+
+
+if(cc == conditional){
+
+courier account=>Dr(total -(dc+cc))
+delivery ledger=> Dr (dc)
+condition ledger => Dr (cc)
+
+courier account=>Cr(dc+cc)
+
+sale income(303) =>Cr(total -(dc+cc))
+}
+
+if(cc == partial{
+
+courier account=>Dr(due amount-(dc+cc))
+delivery ledger=> Dr (dc)
+condition ledger => Dr (cc)
+
+courier account=>Cr(dc+cc)
+sale income(303) =>Cr(total -(dc+cc))
+}
+
+if(cc == unconditional{
+
+customer account=>Dr(total)
+delivery ledger=> Dr (dc)
+
+
+courier account=>Cr(dc)
+sale income(303) =>Cr(total -(dc))
+}
+
+
+
+if(pay){
+
+payment type account => Dr
+customer account => Cr
+
+}

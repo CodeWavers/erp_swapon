@@ -1,0 +1,35 @@
+//Return
+
+courier charge =>credit(delivery charge)
+
+delivery charge ledger => debit(if company pay)
+
+customer ledger => total debit
+
+cash ledger => total credit
+
+sale income ledger(303) => debit(without delivery charge)
+
+
+//Replacement (new invoice)
+
+if(conditional){
+courier ledger => Cr(total)
+sale income => Dr(product price total)
+delivery ledger => Dr(delivery charge)
+}
+
+
+if(partial){
+courier ledger => Cr(total)
+sale income => Dr(product price total)
+delivery ledger => Dr(delivery charge)
+customer ledger => Cr(paid amount)
+}
+
+if(uncondtional){
+courier ledger => Cr(total)
+sale income => Dr(product price total)
+delivery ledger => Dr(delivery charge)
+customer ledger => Cr(total)
+}

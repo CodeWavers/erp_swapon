@@ -6,8 +6,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 <style>
     table {
-        border-collapse: collapse;
+        /*border-collapse: collapse;*/
         width: 50%;
+        border: none !important;
     }
 
     th {
@@ -120,7 +121,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     height: 99%;
                                     page-break-after: avoid;
                                     page-break-before: avoid;
-                                    background-color: rgba(217, 236, 241, 0.9) !important;
+                                    /*background-color: rgba(217, 236, 241, 0.9) !important;*/
                                 }
 
                                 h4 {
@@ -131,21 +132,22 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 table,
                                 td,
                                 th {
-                                    border: 1px solid black;
+                                    /*border: 1px solid black;*/
+                                    border: none !important;
                                 }
 
 
                                 .table td {
-                                    border: 1px solid black !important;
+                                    /*border: 1px solid black !important;*/
                                     background-color: #fff0 !important;
                                     font-size: 14px !important;
                                 }
 
                                 .table th {
                                     font-size: 16px !important;
-                                    border: 1px solid black !important;
-                                    background-color: #365f91 !important;
-                                    color: white !important;
+                                    /*border: 1px solid black !important;*/
+                                    background-color: #eceff4!important;
+                                    /*color: white !important;*/
                                 }
 
                                 table, tr, td{
@@ -181,25 +183,46 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 //                                $shipping_method=json_decode($resp);
                                 ?>
-                                <table cellspacing="0" cellpadding="0">
-
-                                    <tr>
 
 
 
+                                <table>
 
-                                        <td><div class="col-sm-3 company-content " style="margin-top: 0.2in">
+                                    <tr style="background: #eceff4!important;">
+                                        <td>
+                                            <img style="height: 80px;" src="<?php
+                                            if (isset($Web_settings[0]['invoice_logo'])) {
+                                                echo html_escape($Web_settings[0]['invoice_logo']);
+                                            }
+                                            ?>" class="img-bottom-m" alt="">
+                                        </td>
+                                        <td></td>
+                                        <td align="right">
+                                            <div class="invoice_name">
+
+                                                INVOICE
+
+                                            </div>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr style="background:#fcfbfb !important;margin-top: 10px">
+
+                                        <td align="left" width="450px">
+
+                                            <div class="company-content">
 
                                                 {company_info}
-                                                <img style="height: 80px;" src="<?php
-                                                if (isset($Web_settings[0]['invoice_logo'])) {
-                                                    echo html_escape($Web_settings[0]['invoice_logo']);
-                                                }
-                                                ?>" class="img-bottom-m" alt="">
+                                                <!--                                                <img style="height: 80px;" src="--><?php
+                                                //                                                if (isset($Web_settings[0]['invoice_logo'])) {
+                                                //                                                    echo html_escape($Web_settings[0]['invoice_logo']);
+                                                //                                                }
+                                                //                                                ?><!--" class="img-bottom-m" alt="">-->
 
 
 
-                                                <address style="margin-top: 0;">
+                                                <address >
                                                     <nobr><strong class="company_name_p">{company_name}</strong></nobr><br>
                                                     <abbr>{address}</abbr><br>
                                                     <nobr><abbr><?php echo display('email') ?>
@@ -216,12 +239,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             </div></td>
 
-                                        <td>
+                                        <td align="left" width="300px">
 
-                                            <div class="col-sm-3 " style="margin-top: 0.5in" >
+                                            <div  class="company-content" style="margin-top: 0">
 
                                                 <?php
-
                                                 $shipping_address=json_decode($or[0]->shipping_address)
                                                 ?>
                                                 <address >
@@ -234,31 +256,26 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                         </td>
 
-                                        <td><div class="col-sm-3  text-right" style="margin-top: 0" >
+                                        <td align="right" width="300px">
 
+                                            <div class=" text-right"  style="margin-top:0;">
 
-                                                <div style="margin-bottom: 0.5in">
-                                                    <strong  class="company_name_p text-right">INVOICE</strong><br>
-
-                                                </div>
-
-
-
-
-                                                <address style="margin-top:0;" >
+                                                <address  >
                                                     <h4><b>Order Information:</b></h4>
                                                     <abbr<nobr>Order No: <?php echo $or[0]->code?></nobr></abbr><br>
                                                     <abbr<nobr>Date: <?php echo  date('m/d/Y',$or[0]->date)?></nobr></abbr><br>
                                                     <abbr<nobr>Payment Method: <?php echo $or[0]->payment_type ?></nobr></abbr><br>
                                                     <abbr<nobr>Shipping Method: <?php echo $resp?></nobr></abbr><br>
-<!--                                                    <abbr><b>Sale Type:{st}</b></abbr><br>-->
+                                                    <!--                                                    <abbr><b>Sale Type:{st}</b></abbr><br>-->
 
 
                                                 </address>
 
 
 
-                                            </div></td>
+                                            </div>
+
+                                        </td>
 
 
 
@@ -269,7 +286,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                             <div class="">
 
-                                <table class="table table-bordered" style="width: 100%;">
+                                <table class="table" style="width: 100%;">
                                     <thead>
                                     <tr class="bg-trans-dark">
                                         <th class="min-col">#</th>
@@ -319,12 +336,12 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                     <tr >
 
-                                        <td colspan="5" style="background-color: #cad1dba1 !important;" class="text-right" colspan="3"><b>Sub-Total:</b></td>
+                                        <td colspan="5"  class="text-right" colspan="3"><b>Sub-Total:</b></td>
 
-                                        <td style="background-color: #cad1dba1 !important;" align="right"><b><?php echo array_sum(array_column($or,'price'))?></b></td>
+                                        <td  align="right"><b><?php echo array_sum(array_column($or,'price'))?></b></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3" rowspan="7" style="background-color: #cad1dba1 !important;">
+                                        <td colspan="3" rowspan="7" >
                                             <strong>Notes:</strong>
                                         </td>
                                         <td colspan="2" class="text-right"><b>Discount:</b></td>
@@ -333,27 +350,27 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     </tr>
                                     <tr>
 
-                                        <td style="background-color: #cad1dba1 !important;" colspan="2" class="text-right"><b>Shipping Cost:</b></td>
+                                        <td  colspan="2" class="text-right"><b>Shipping Cost:</b></td>
 
-                                        <td style="background-color: #cad1dba1 !important;" align="right"><b><?php echo $or[0]->shipping_cost?></b></td>
+                                        <td  align="right"><b><?php echo $or[0]->shipping_cost?></b></td>
                                     </tr>
                                     <tr>
 
-                                        <td style="background-color: #cad1dba1 !important;" colspan="2" class="text-right"><b>Total Tax:</b></td>
+                                        <td  colspan="2" class="text-right"><b>Total Tax:</b></td>
 
-                                        <td style="background-color: #cad1dba1 !important;" align="right"><b> <?php echo $currency.' '.$or[0]->tax?></b></td>
+                                        <td  align="right"><b> <?php echo $currency.' '.$or[0]->tax?></b></td>
                                     </tr>
                                     <tr>
 
-                                        <td style="background-color: #cad1dba1 !important;" colspan="2" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                        <td  colspan="2" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
 
-                                        <td style="background-color: #cad1dba1 !important;" align="right"><b>   <?php echo $currency.' '.$or[0]->grand_total?></b></td>
+                                        <td  align="right"><b>   <?php echo $currency.' '.$or[0]->grand_total?></b></td>
                                     </tr>
                                     <tr>
 
-                                        <td style="background-color: #cad1dba1 !important;" colspan="2" class="text-right"><b>Paid Amount:</b></td>
+                                        <td  colspan="2" class="text-right"><b>Paid Amount:</b></td>
 
-                                        <td style="background-color: #cad1dba1 !important;" align="right"><b>
+                                        <td  align="right"><b>
 
 
                                                 <?php if (substr($or[0]->payment_details,0,1=='{')) {
@@ -380,9 +397,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     </tr>
                                     <tr>
 
-                                        <td style="background-color: #cad1dba1 !important;" colspan="2" class="text-right"><b>Due Amount:</b></td>
+                                        <td  colspan="2" class="text-right"><b>Due Amount:</b></td>
 
-                                        <td style="background-color: #cad1dba1 !important;" align="right"><b> <?php echo $currency.' '.($or[0]->grand_total-$paidtotal)?></b></td>
+                                        <td  align="right"><b> <?php echo $currency.' '.($or[0]->grand_total-$paidtotal)?></b></td>
                                     </tr>
                                     </tbody>
 
