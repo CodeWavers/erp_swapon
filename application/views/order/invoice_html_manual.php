@@ -77,7 +77,24 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             .condition_tag {
                                 margin: 60px;
                                 border: 1px dashed red;
-                                color: red;
+                                color: red !important;
+                                width: 150px;
+                                /* Browsers not below */
+                                transform: rotate(-45deg);
+                                /* Safari */
+                                -webkit-transform: rotate(-45deg);
+                                /* Firefox */
+                                -moz-transform: rotate(-45deg);
+                                /* Opera */
+                                -o-transform: rotate(-45deg);
+                                /* IE */
+                                -ms-transform: rotate(-45deg);
+
+                            }
+                            .condition_tag_green {
+                                margin: 60px;
+                                border: 1px dashed green;
+                                color: green !important;
                                 width: 150px;
                                 /* Browsers not below */
                                 transform: rotate(-45deg);
@@ -287,8 +304,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <tr>
                                         <td class="text-center"> <?php echo $sl++ ?></td>
 <!--                                        <td class="text-center"><img height="50" src="--><?php //echo api_url()?><!--/public/--><?php //echo $od->thumbnail_img?><!--"></td>-->
-                                        <td class="text-center"><img height="50" src="https://dev.swaponsworld.com/public/<?php echo $od->thumbnail_img?>"></td>
+<!--                                        <td class="text-center"><img height="50" src="https://dev.swaponsworld.com/public/--><?php //echo $od->thumbnail_img?><!--"></td>-->
 
+                                        <td class="text-center"><img height="50" src="<?php echo ecom_url()?>/public/<?php echo $od->thumbnail_img?>"></td>
 
                                         <td>
                                             <strong><?php echo $od->name?></strong>
@@ -318,6 +336,26 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <tr>
                                         <td colspan="3" rowspan="7">
 <!--                                            <strong>Notes:</strong>-->
+
+                                            <?php if($order[0]->grand_total-$paidtotal>0){ ?>
+                                                <div class="condition_tag text-danger text-center text-uppercase" >
+
+                                                    <h3>Condition</h3>
+
+
+                                                        <abbr>TK <?=$order[0]->grand_total-$paidtotal ?></abbr>
+
+
+                                                </div>
+                                            <?php }else{ ?>
+
+                                                <div class="condition_tag_green text-success text-center text-uppercase " >
+
+                                                    <h3>No Condition</h3>
+
+
+                                                </div>
+                                            <?php } ?>
                                         </td>
                                         <td colspan="2" class="text-right"><b>Discount:</b></td>
 
@@ -380,6 +418,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
                                 </table>
+
+
+
 
                             </div>
 

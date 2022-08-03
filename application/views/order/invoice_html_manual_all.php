@@ -79,7 +79,24 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             .condition_tag {
                                 margin: 60px;
                                 border: 1px dashed red;
-                                color: red;
+                                color: red !important;
+                                width: 150px;
+                                /* Browsers not below */
+                                transform: rotate(-45deg);
+                                /* Safari */
+                                -webkit-transform: rotate(-45deg);
+                                /* Firefox */
+                                -moz-transform: rotate(-45deg);
+                                /* Opera */
+                                -o-transform: rotate(-45deg);
+                                /* IE */
+                                -ms-transform: rotate(-45deg);
+
+                            }
+                            .condition_tag_green {
+                                margin: 60px;
+                                border: 1px dashed green;
+                                color: green !important;
                                 width: 150px;
                                 /* Browsers not below */
                                 transform: rotate(-45deg);
@@ -160,7 +177,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                         </div>
 
                         <?php foreach ($order as $or) {?>
-                        <div class="panel-body" style="margin-bottom:2in ">
+                        <div class="panel-body" style="margin-bottom:4in ">
 
                             <div>
 
@@ -313,7 +330,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <?php foreach ($or as $od) {?>
                                         <tr>
                                             <td class="text-center"> <?php echo $sl++ ?></td>
-                                            <td class="text-center"><img height="50" src="https://dev.swaponsworld.com/public/<?php echo $od->thumbnail_img?>"></td>
+                                            <td class="text-center"><img height="50" src="<?php echo ecom_url()?>/public/<?php echo $od->thumbnail_img?>"></td>
 
                                             <td>
                                                 <strong><?php echo $od->name?></strong>
@@ -341,8 +358,52 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <td  align="right"><b><?php echo array_sum(array_column($or,'price'))?></b></td>
                                     </tr>
                                     <tr>
+                                        <td  align="right" hidden><b>
+
+
+                                                <?php if (substr($or[0]->payment_details,0,1=='{')) {
+
+                                                    $data = json_decode($or[0]->payment_details);
+                                                    if($data){
+                                                        (int) $paidtotal= $data->amount;
+                                                    }
+                                                    else {
+                                                        (int) $paidtotal= 0;
+                                                    }
+
+                                                }else {
+
+                                                    $paidtotal=0;
+//                                                    (int) $paidtotal= array_sum(array_column($offline_payment,'amount'));
+
+
+                                                }
+
+                                                echo $paidtotal;
+                                                ?>
+                                            </b></td>
                                         <td colspan="3" rowspan="7" >
-                                            <strong>Notes:</strong>
+<!--                                            <strong>Notes:</strong>-->
+
+                                            <?php if($or[0]->grand_total-$paidtotal>0){ ?>
+                                                <div class="condition_tag text-danger text-center text-uppercase" >
+
+                                                    <h3>Condition</h3>
+
+
+                                                        <abbr>TK <?=$or[0]->grand_total-$paidtotal ?></abbr>
+
+
+                                                </div>
+                                            <?php }else{ ?>
+
+                                                <div class="condition_tag_green text-success text-center text-uppercase " >
+
+                                                    <h3>No Condition</h3>
+
+
+                                                </div>
+                                            <?php } ?>
                                         </td>
                                         <td colspan="2" class="text-right"><b>Discount:</b></td>
 

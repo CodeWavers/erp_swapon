@@ -181,10 +181,16 @@
                                     <div class="col-sm-6" style="margin-bottom: 10px;">
 
                                         <select name="agg_id" id="aggregator" class="form-control"  >
-                                            <option value="">Select One</option>
+
+                                            <?php if (!empty($aggre_list)){?>
+                                                <option value="">Select One</option>
                                             {aggre_list}
                                             <option value="{id}">{aggre_name}</option>
                                             {/aggre_list}
+
+                                           <?php }else { ?>
+                                                <option value="" selected>No Aggregator Found</option>
+                                           <?php } ?>
                                         </select>
                                     </div>
                                 </div>
