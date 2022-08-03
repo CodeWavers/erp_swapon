@@ -77,8 +77,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             .condition_tag {
                                 margin: 60px;
                                 border: 1px dashed red;
-                                color: red;
-                                width: 150px;
+                                color: red !important;
+                                width: 300px;
                                 /* Browsers not below */
                                 transform: rotate(-45deg);
                                 /* Safari */
@@ -312,10 +312,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 <?php if($delivery_type == 2){ ?>
                                 <div class="condition_tag text-danger text-center text-uppercase" >
 
-                                    <h3>{con}</h3>
+                                    <h1 style="color: red !important;">{con}</h1>
 
                                     <?php if($condition_cost >0){ ?>
-                                    <abbr>TK {condition_cost}</abbr>
+                                    <abbr style="color: red !important;">TK {condition_cost}</abbr>
                                     <?php } ?>
 
                                 </div>

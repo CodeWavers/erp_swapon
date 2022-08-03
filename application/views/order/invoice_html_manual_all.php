@@ -80,7 +80,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 margin: 60px;
                                 border: 1px dashed red;
                                 color: red !important;
-                                width: 150px;
+                                width: 300px;
                                 /* Browsers not below */
                                 transform: rotate(-45deg);
                                 /* Safari */
@@ -97,7 +97,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 margin: 60px;
                                 border: 1px dashed green;
                                 color: green !important;
-                                width: 150px;
+                                width: 300px;
                                 /* Browsers not below */
                                 transform: rotate(-45deg);
                                 /* Safari */
@@ -386,20 +386,20 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 <!--                                            <strong>Notes:</strong>-->
 
                                             <?php if($or[0]->grand_total-$paidtotal>0){ ?>
-                                                <div class="condition_tag text-danger text-center text-uppercase" >
+                                                <div class="condition_tag  text-center text-uppercase" >
 
-                                                    <h3>Condition</h3>
+                                                    <h1 style="color: red !important;">Condition</h1>
 
 
-                                                        <abbr>TK <?=$or[0]->grand_total-$paidtotal ?></abbr>
+                                                        <abbr style="color: red !important;">TK <?=$or[0]->grand_total-$paidtotal ?></abbr>
 
 
                                                 </div>
                                             <?php }else{ ?>
 
-                                                <div class="condition_tag_green text-success text-center text-uppercase " >
+                                                <div class="condition_tag_green  text-center text-uppercase " >
 
-                                                    <h3>No Condition</h3>
+                                                    <h1 style="color: green !important;">No Condition</h1>
 
 
                                                 </div>
