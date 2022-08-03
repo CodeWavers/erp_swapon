@@ -1233,15 +1233,20 @@ class Cinvoice extends CI_Controller
             $this->db->insert('acc_coa', $customer_coa);
             $this->Customers->previous_balance_add($this->input->post('previous_balance', TRUE), $customer_id);
 
+            $this->session->set_userdata(array('message' => display('save_successfully')));
+            redirect(base_url('Cinvoice'));
             $data['status']        = true;
             $data['message']       = display('save_successfully');
             $data['customer_id']   = $customer_id;
             $data['customer_name'] = $data['customer_name'];
         } else {
+
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Cinvoice'));
             $data['status'] = false;
             $data['error_message'] = display('please_try_again');
         }
-        echo json_encode($data);
+//        echo json_encode($data);
     }
 
 

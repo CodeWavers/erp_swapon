@@ -33,6 +33,7 @@ class Cbarcode extends CI_Controller {
 				'product_name'    => $product_info[0]['product_name'],
 				'product_model'   => $product_info[0]['product_model'],
 				'price'           => $product_info[0]['price'],
+				'purchase_price'           => $product_info[0]['purchase_price'],
 				'product_details' => $product_info[0]['product_details'],
 				'currency'		  => $setting_detail[0]['currency'],
 			    'position'	      => $setting_detail[0]['currency_position'],

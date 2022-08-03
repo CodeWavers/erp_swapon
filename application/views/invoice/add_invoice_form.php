@@ -879,7 +879,7 @@
                                 <h3 class="modal-title"><?php echo display('add_new_customer') ?></h3>
                             </div>
 
-                            <?php echo form_open('Cinvoice/instant_customer', array('class' => 'form-vertical', 'id' => 'newcustomer')) ?>
+                            <?php echo form_open('Cinvoice/instant_customer', array('class' => 'form-vertical', 'id' => '')) ?>
                             <div class="modal-body">
                                 <div id="customeMessage" class="alert hide"></div>
                                 <div class="panel-body">

@@ -117,7 +117,10 @@
                                                         <img src="<?php echo base_url('Cbarcode/barcode_generator/{product_id}') ?>" class="img-responsive center-block barcode-image" alt="">
 
                                                         <div class="product-name-details barcode-productdetails">{product_name}</div>
-                                                        <div class="price barcode-price"><?php echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?> <small class="barcode-vat"><?php echo display('incl_vat') ?>.
+                                                        <s class="price barcode-price"><?php echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?> .
+
+                                                        </s>
+                                                            <div class="price barcode-price"><?php echo (($position == 0) ? "$currency {purchase_price}" : "{purchase_price} $currency") ?> .
 
                                                         </div>
                                                     </div>
@@ -157,7 +160,11 @@
                                                         <span class="model-name barcode-modelname">{product_model}</span>
                                                         <img src="<?php echo base_url('my-assets/image/qr/{qr_image}') ?>" class="img-responsive center-block qrcode-image" alt="">
                                                         <div class="product-name-details qrcode-productdetails">{product_name}</div>
-                                                        <div class="price barcode-price"><?php echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?> <small class="barcode-vat"><?php echo display('incl_vat') ?></small>
+                                                        <s class="price barcode-price"><?php echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?> .
+
+                                                        </s>
+                                                        <div class="price barcode-price"><?php echo (($position == 0) ? "$currency {purchase_price}" : "{purchase_price} $currency") ?> .
+
                                                         </div>
                                                     </div>
                                                 </td>
