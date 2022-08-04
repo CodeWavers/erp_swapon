@@ -46,7 +46,7 @@ function addInputField(t) {
         tab11 = tabindex + 11;
         tab12 = tabindex + 12;
         e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
-        "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
+            "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
             " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
             "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
             "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
@@ -55,9 +55,9 @@ function addInputField(t) {
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
-        document.getElementById(t).appendChild(e),
-        document.getElementById(a).focus(),
-        document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
+            document.getElementById(t).appendChild(e),
+            document.getElementById(a).focus(),
+            document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
         document.getElementById("details").setAttribute("tabindex", tab7);
         document.getElementById("invoice_discount").setAttribute("tabindex", tab8);
         document.getElementById("shipping_cost").setAttribute("tabindex", tab9);
@@ -122,7 +122,7 @@ function addInputField_pre(t) {
         tab11 = tabindex + 11;
         tab12 = tabindex + 12;
         e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList_pre(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
-        "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
+            "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
             " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
             "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
             "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
@@ -131,9 +131,9 @@ function addInputField_pre(t) {
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
-        document.getElementById(t).appendChild(e),
-        document.getElementById(a).focus(),
-        document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
+            document.getElementById(t).appendChild(e),
+            document.getElementById(a).focus(),
+            document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
         document.getElementById("details").setAttribute("tabindex", tab7);
         document.getElementById("invoice_discount").setAttribute("tabindex", tab8);
         document.getElementById("shipping_cost").setAttribute("tabindex", tab9);
@@ -183,14 +183,14 @@ function quantity_calculate(item) {
         }
     }
 
-   // alert(comm_item)
+    // alert(comm_item)
 
     //if (comm_item != ''){
     //    var comm_item=0;
     //}
 
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
 
@@ -212,14 +212,15 @@ function quantity_calculate_pre(item) {
     var dis_type = $("#discount_type_" + item).val();
 
 
-   // alert(comm_item)
+    // alert(comm_item)
 
     //if (comm_item != ''){
     //    var comm_item=0;
     //}
 
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
+
 
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
 
@@ -240,23 +241,25 @@ function calculateSum() {
         tx = 0,
         ds = 0,
 
-        s_cost =  $("#shipping_cost").val(),
-        c_cost =  $("#condition_cost").val(),
-        commission =  $("#commission").val();
+        s_cost =  ($("#shipping_cost").val() ? $("#shipping_cost").val() : 0),
+        c_cost =  ($("#condition_cost").val() ? $("#condition_cost").val() : 0),
+        commission =  ($("#commission").val() ? $("#commission").val() : 0);
+    //c_cost =  $("#condition_cost").val(),
+    //commission =  $("#commission").val();
 
-   // alert(commission);
+    // alert(commission);
 
 
     //Total Tax
-    for(var i=0;i<taxnumber;i++){
-
-        var j = 0;
-        $(".total_tax"+i).each(function () {
-            isNaN(this.value) || 0 == this.value.length || (j += parseFloat(this.value))
-        });
-        $("#total_tax_ammount"+i).val(j.toFixed(2, 2));
-
-    }
+    //for(var i=0;i<taxnumber;i++){
+    //
+    //    var j = 0;
+    //    $(".total_tax"+i).each(function () {
+    //        isNaN(this.value) || 0 == this.value.length || (j += parseFloat(this.value))
+    //    });
+    //    $("#total_tax_ammount"+i).val(j.toFixed(2, 2));
+    //
+    //}
     //Total Discount
     $(".total_discount").each(function () {
         isNaN(this.value) || 0 == this.value.length || (p += parseFloat(this.value))
@@ -294,9 +297,9 @@ function calculateSum() {
     var gt = $("#grandTotal").val();
     var invdis = $("#invoice_discount").val();
     var total_discount_ammount = $("#total_discount_ammount").val();
-    var ttl_discount = +total_discount_ammount;
+    var ttl_discount = p+total_discount_ammount;
     //var ttl_cms = +commission;
-    $("#total_discount_ammount").val(ttl_discount.toFixed(2, 2));
+    $("#total_discount_ammount").val(ttl_discount);
     var grnt_totals = gt;
     invoice_paidamount();
     $("#grandTotal").val(grnt_totals);
@@ -564,15 +567,15 @@ function bank_paymet(val, sl){
 function  delivery_type(val){
 
 
-        if (val == 2) {
-            var style = 'block';
-            document.getElementById('courier_div').setAttribute("required", true);
-        } else {
-            var style = 'none';
-            document.getElementById('courier_div').removeAttribute("required");
-        }
+    if (val == 2) {
+        var style = 'block';
+        document.getElementById('courier_div').setAttribute("required", true);
+    } else {
+        var style = 'none';
+        document.getElementById('courier_div').removeAttribute("required");
+    }
 
-        document.getElementById('courier_div').style.display = style;
+    document.getElementById('courier_div').style.display = style;
 
 
 
@@ -636,25 +639,28 @@ function  sale_type(val){
 
         }
 
-    if(val==1 || 2){
-        var style = 'block';
-        document.getElementById('whole_sale').setAttribute("required", true);
-        //document.getElementById('commission_check').setAttribute("required", true);
-    }else{
-        var style ='none';
-        document.getElementById('whole_sale').removeAttribute("required");
-        //document.getElementById('commission_check').removeAttribute("required");
-    }
+        if(val==1 || 2){
+            var style = 'block';
+            document.getElementById('whole_sale').setAttribute("required", true);
+            //document.getElementById('commission_check').setAttribute("required", true);
+        }else{
+            var style ='none';
+            document.getElementById('whole_sale').removeAttribute("required");
+            //document.getElementById('commission_check').removeAttribute("required");
+        }
 
-    document.getElementById('whole_sale').style.display = style;
-    //document.getElementById('commission_check').style.display = style;
+        document.getElementById('whole_sale').style.display = style;
+        //document.getElementById('commission_check').style.display = style;
 
         if(val==3){
             var style = 'block';
             document.getElementById('aggregator').setAttribute("required", true);
+            $('.customer_div').addClass('d-none');
+
         }else{
             var style ='none';
             document.getElementById('aggregator').removeAttribute("required");
+            $('.customer_div').removeClass('d-none');
         }
 
         document.getElementById('aggregator').style.display = style;
@@ -806,7 +812,7 @@ $(document).ready(function() {
             $("#insert_sale").submit();
         }
 
-      if(e.keyCode == 13) {
+        if(e.keyCode == 13) {
             e.preventDefault();
             return false;
         }
@@ -826,7 +832,7 @@ $(document).ready(function() {
         e.preventDefault();
         $(".page-loader-wrapper").css('display', 'block');
 
-    //    var formData = new FormData(this);
+        //    var formData = new FormData(this);
         $.ajax({
             url : $(this).attr('action'),
             method : $(this).attr('method'),
@@ -1122,44 +1128,44 @@ function add_pay_row(sl) {
         + '<select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_'+sl+'">'
         + bank_list
 
-            + '</select>'
+        + '</select>'
 
 
-            + '</div>'
+        + '</div>'
 
 
-            + ' </div>'
-            + '</div>'
+        + ' </div>'
+        + '</div>'
 
 
-            + '<div class="col-sm-4" style="display: none" id="bkash_div_'+sl+'">'
-            + '<div class="form-group row">'
-            + '<label for="bkash" class="col-sm-5 col-form-label">Bkash Number <i class="text-danger">*</i></label>'
-            + '<div class="col-sm-7">'
-            + '<select name="bkash_id[]" class="form-control bankpayment" id="bkash_id_'+sl+'">'
-            + bkash_list
+        + '<div class="col-sm-4" style="display: none" id="bkash_div_'+sl+'">'
+        + '<div class="form-group row">'
+        + '<label for="bkash" class="col-sm-5 col-form-label">Bkash Number <i class="text-danger">*</i></label>'
+        + '<div class="col-sm-7">'
+        + '<select name="bkash_id[]" class="form-control bankpayment" id="bkash_id_'+sl+'">'
+        + bkash_list
 
-            + '</select>'
+        + '</select>'
 
-            + ' </div>'
+        + ' </div>'
 
-            + '</div>'
-            + '</div>'
+        + '</div>'
+        + '</div>'
 
-            + '<div class="col-sm-4" style="display: none" id="nagad_div_'+sl+'">'
-            + '<div class="form-group row">'
-            + '<label for="nagad" class="col-sm-5 col-form-label">Nagad Number <i class="text-danger">*</i></label>'
-            + '<div class="col-sm-7">'
-            + '<select name="nagad_id[]" class="form-control bankpayment" id="nagad_id_'+sl+'">'
-            + nagad_list
-            + ' </select>'
+        + '<div class="col-sm-4" style="display: none" id="nagad_div_'+sl+'">'
+        + '<div class="form-group row">'
+        + '<label for="nagad" class="col-sm-5 col-form-label">Nagad Number <i class="text-danger">*</i></label>'
+        + '<div class="col-sm-7">'
+        + '<select name="nagad_id[]" class="form-control bankpayment" id="nagad_id_'+sl+'">'
+        + nagad_list
+        + ' </select>'
 
-            + '</div>'
+        + '</div>'
 
 
-            + '</div>'
-            + ' </div>'
-            +'<div class="col-sm-4" style="display: none" id="card_div_'+sl+'">'
+        + '</div>'
+        + ' </div>'
+        +'<div class="col-sm-4" style="display: none" id="card_div_'+sl+'">'
         +     '<div class="form-group row">'
         +        '<label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>'
         +        '<div class="col-sm-7">'
@@ -1175,18 +1181,18 @@ function add_pay_row(sl) {
         +    ' </div>'
         +   '</div>'
 
-            + '<div class="col-sm-3"id="ammnt_'+sl+'" >'
-            + '<label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>'
-            + '<div class="col-sm-7">'
-            + '<input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">'
-            + '</div>'
-            + '</div>'
-            +'<div class="col-sm-1">'
-            + '<a id="delete_btn" onclick="delete_row(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>'
+        + '<div class="col-sm-3"id="ammnt_'+sl+'" >'
+        + '<label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>'
+        + '<div class="col-sm-7">'
+        + '<input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">'
+        + '</div>'
+        + '</div>'
+        +'<div class="col-sm-1">'
+        + '<a id="delete_btn" onclick="delete_row(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>'
         + '</div>'
 
 
-            +'</div > '
+        +'</div > '
     );
     count.val(sl + 1);
 }

@@ -144,7 +144,7 @@ class Invoices extends CI_Model
 
 //            $button .= '  <a href="' . $base_url . 'Cinvoice/chalan_invoice_inserted_data/' . $record->invoice_id . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="Chalan"><i class="fa fa-fax" aria-hidden="true"></i></a>';
 
-            $button .= '  <a href="' . $base_url . 'Cinvoice/invoicdetails_download/' . $record->invoice_id . '" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('download') . '"><i class="fa fa-download"></i></a>';
+//            $button .= '  <a href="' . $base_url . 'Cinvoice/invoicdetails_download/' . $record->invoice_id . '" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('download') . '"><i class="fa fa-download"></i></a>';
 
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $button .= ' <a href="' . $base_url . 'Cinvoice/invoice_update_form/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';

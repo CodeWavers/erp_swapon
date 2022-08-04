@@ -337,7 +337,26 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <td colspan="3" rowspan="7">
 <!--                                            <strong>Notes:</strong>-->
 
-                                            <?php if($order[0]->grand_total-$paidtotal>0){ ?>
+                                            <?php if (substr($order[0]->payment_details,0,1=='{')) {
+
+                                                    $data = json_decode($order[0]->payment_details);
+                                                    if($data){
+                                                        (int) $paidtotal= $data->amount;
+                                                    }
+                                                    else {
+                                                        (int) $paidtotal= 0;
+                                                    }
+
+                                                }else {
+
+
+                                                    (int) $paidtotal= array_sum(array_column($offline_payment,'amount'));
+
+
+                                                }
+                                                ?>
+
+                                            <?php if(($order[0]->grand_total-$paidtotal) >0){ ?>
                                                 <div class="condition_tag  text-center text-uppercase" >
 
                                                     <h1 style="color: red !important;">Condition</h1>

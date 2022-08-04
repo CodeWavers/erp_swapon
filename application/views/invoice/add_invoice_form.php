@@ -201,7 +201,7 @@
 
                             <div id="whole_sale" class="whole_sale" style="display: none">
 
-                            <div class="col-sm-8 " id="payment_from_1"  >
+                            <div class="col-sm-8  customer_div" id="payment_from_1" >
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-3 col-form-label">Customer Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
