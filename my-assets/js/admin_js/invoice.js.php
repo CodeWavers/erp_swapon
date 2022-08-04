@@ -192,6 +192,8 @@ function quantity_calculate(item) {
     var just_tot = quantity * price_item;
     var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
+    $("#total_discount_" + item).val((just_tot) * (discount / 100));
+    //$("#total_discount_ammount").val((just_tot) * (discount / 100));
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
 
     calculateSum();
@@ -297,7 +299,7 @@ function calculateSum() {
     var gt = $("#grandTotal").val();
     var invdis = $("#invoice_discount").val();
     var total_discount_ammount = $("#total_discount_ammount").val();
-    var ttl_discount = p+total_discount_ammount;
+    var ttl_discount = +total_discount_ammount;
     //var ttl_cms = +commission;
     $("#total_discount_ammount").val(ttl_discount);
     var grnt_totals = gt;

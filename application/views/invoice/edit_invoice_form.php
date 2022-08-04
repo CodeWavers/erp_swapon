@@ -300,7 +300,7 @@
                                     </td>
                                     <!-- Discount -->
                                     <td width="200" class="text-center">
-                                        <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
+                                        <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right " placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
 
                                         <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
                                         <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
@@ -323,7 +323,7 @@
                                         } ?>
                                         <!-- Tax calculate end-->
                                         <!-- Discount calculate start-->
-                                        <input type="hidden" id="total_discount_{sl}" class="" value="{discount}" />
+                                        <input type="hidden" id="total_discount_{sl}" class="total_discount" value="{discount}" />
 
                                         <input type="hidden" id="all_discount_{sl}" class="" value="{discount}" name="discount_amount[]" />
                                         <!-- Discount calculate end -->
