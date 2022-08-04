@@ -75,9 +75,27 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 height: auto;
                             }
                             .condition_tag {
-                                margin: 60px;
+                                /*margin: 30px;*/
                                 border: 1px dashed red;
                                 color: red !important;
+                                width: 400px;
+                                /* Browsers not below */
+                                transform: rotate(-45deg);
+                                /* Safari */
+                                -webkit-transform: rotate(-45deg);
+                                /* Firefox */
+                                -moz-transform: rotate(-45deg);
+                                /* Opera */
+                                -o-transform: rotate(-45deg);
+                                /* IE */
+                                -ms-transform: rotate(-45deg);
+
+                            }
+
+                            .condition_tag_green {
+                                margin: 60px;
+                                border: 1px dashed green;
+                                color: green !important;
                                 width: 300px;
                                 /* Browsers not below */
                                 transform: rotate(-45deg);
@@ -217,12 +235,23 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             <div  class="company-content" style="margin-top: 0; text-align: justify;">
 
-                                                <address style=" text-align: justify;">
+                                                <?php if ($sale_type == 3) { ?>
+                                                    <address style=" text-align: justify;">
+                                                        <u><h4><b>Shiped By:</b></h4></u>
+                                                        <abbr><nobr>Aggregator Name: {agg_name} </nobr></abbr>
+
+                                                    </address>
+
+                                                <?php }else{ ?>
+
+                                                    <address style=" text-align: justify;">
                                                     <u><h4><b>Ship To:</b></h4></u>
                                                     <abbr><nobr>Name: {customer_name} </nobr></abbr><br>
                                                     <abbr><nobr>Mobile: {customer_mobile}</nobr></abbr><br>
                                                     <abbr><nobr>Address: {customer_address}</nobr></abbr><br>
                                                 </address>
+
+                                             <?php   } ?>
                                             </div>
 
                                         </td>
@@ -235,9 +264,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     <u><h4><b>Order Information:</b></h4></u>
                                                     <abbr><nobr>Order No: {invoice_no}</nobr></abbr><br>
                                                     <abbr><nobr>Date:{final_date}</nobr></abbr><br>
-                                                    <abbr><nobr>Payment Method: {pt}</nobr></abbr><br>
+<!--                                                    <abbr><nobr>Payment Method: {pt}</nobr></abbr><br>-->
                                                     <abbr><nobr>Shipping Method: {dt}</nobr></abbr><br>
-                            <abbr><b>Sale Type:{st}</b></abbr><br>
+                                                     <abbr><b>Sale Type:{st}</b></abbr><br>
 
 
                                                 </address>
@@ -305,21 +334,51 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             <td  align="right"><b><?php echo (($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency") ?></b></td>
                                         </tr>
+                                        <tr>
+                                            <td  colspan="5" class="text-right"><b>Paid Amount:</b></td>
+
+                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {paid_amount}" : "{paid_amount} $currency") ?></b></td>
+                                        </tr>
+                                        <tr>
+                                            <td  colspan="5" class="text-right"><b>Due Amount:</b></td>
+
+                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency") ?></b></td>
+                                        </tr>
                                     </tbody>
 
 
                                 </table>
-                                <?php if($delivery_type == 2){ ?>
-                                <div class="condition_tag text-danger text-center text-uppercase" >
 
-                                    <h1 style="color: red !important;">{con}</h1>
+                                <?php if($due_amount >0){ ?>
+                                    <div class="condition_tag  text-center text-uppercase" >
 
-                                    <?php if($condition_cost >0){ ?>
-                                    <abbr style="color: red !important;">TK {condition_cost}</abbr>
-                                    <?php } ?>
+                                        <h1 style="color: red !important;">Condition</h1>
 
-                                </div>
+
+                                        <abbr style="color: red !important;">TK <?=$due_amount ?></abbr>
+
+
+                                    </div>
+                                <?php }else{ ?>
+
+                                    <div class="condition_tag_green text-center text-uppercase " >
+
+                                        <h1 style="color: green !important;">No Condition</h1>
+
+
+                                    </div>
                                 <?php } ?>
+<!--                                --><?php //if($delivery_type == 2){ ?>
+<!--                                <div class="condition_tag text-danger text-center text-uppercase" >-->
+<!---->
+<!--                                    <h1 style="color: red !important;">{con}</h1>-->
+<!---->
+<!--                                    --><?php //if($condition_cost >0){ ?>
+<!--                                    <abbr style="color: red !important;">TK {condition_cost}</abbr>-->
+<!--                                    --><?php //} ?>
+<!---->
+<!--                                </div>-->
+<!--                                --><?php //} ?>
                             </div>
 
 

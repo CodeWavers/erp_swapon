@@ -2568,7 +2568,7 @@ class Invoices extends CI_Model
     {
         $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
         $this->db->from('invoice a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
         $this->db->join('courier_name cr', 'cr.courier_id = a.courier_id','left');
         $this->db->join('branch_name br', 'br.branch_id = a.branch_id','left');
@@ -2651,6 +2651,7 @@ class Invoices extends CI_Model
         $data = array(
             'invoice_id'      => $invoice_id,
             'customer_id'     => $this->input->post('customer_id', TRUE),
+            'agg_id'     => $this->input->post('agg_id', TRUE),
             'date'            => $this->input->post('invoice_date', TRUE),
             'total_amount'    => $this->input->post('grand_total_price', TRUE),
             'total_tax'       => $this->input->post('total_tax', TRUE),

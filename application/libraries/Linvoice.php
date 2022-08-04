@@ -393,6 +393,13 @@ class Linvoice
             ->get()
             ->result_array();
         $i = 0;
+
+        $agg_id = $invoice_detail[0]['agg_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
         if (!empty($invoice_detail)) {
             foreach ($invoice_detail as $k => $v) {
                 $i++;
@@ -411,6 +418,9 @@ class Linvoice
         $data = array(
             'title'           => 'Due Invoice View',
             'invoice_id'      => $invoice_detail[0]['invoice_id'],
+            'agg_name'     => $agg_name,
+            'sale_type'     => $invoice_detail[0]['sale_type'],
+            'agg_id'     => $invoice_detail[0]['agg_id'],
             'customer_id'     => $invoice_detail[0]['customer_id'],
             'customer_name'   => $invoice_detail[0]['customer_name'],
             'customer_name_two'   => $invoice_detail[0]['customer_name_two'],
@@ -716,6 +726,12 @@ class Linvoice
 
         $invoice_detail = $CI->Invoices->retrieve_invoice_html_data($invoice_id);
         $cus_id = $invoice_detail[0]['customer_id'];
+        $agg_id = $invoice_detail[0]['agg_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
         $customer_balance = $CI->Invoices->customer_balance($cus_id);
         $taxfield = $CI->db->select('*')
             ->from('tax_settings')
@@ -826,6 +842,7 @@ class Linvoice
             'invoice_no'        => $invoice_detail[0]['invoice'],
             'outlet_name'        => $outlet[0]['outlet_name'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
+            'agg_name'     => $agg_name,
             'customer_name'     => $invoice_detail[0]['customer_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],

@@ -55,14 +55,36 @@
 
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="form-group row">
-                                    <label for="customer_name" class="col-sm-4 col-form-label">Customer Name <i class="text-danger">*</i></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" size="100" name="customer_name" class=" form-control" placeholder='Organization ID' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="{customer_name}" />
+                                <?php if ($sale_type == 3) { ?>
 
-                                        <input id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="{customer_id}">
+                                    <div class="form-group row">
+                                        <label for="customer_name" class="col-sm-4 col-form-label">Aggregator Name <i class="text-danger">*</i></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" size="100" name="" class=" form-control" placeholder='' id="" tabindex="1"  readonly value="<?= $agg_name?>" />
+
+                                            <input id="agg_id" class=" " type="hidden" name="agg_id" value="{agg_id}">
+                                        </div>
                                     </div>
-                                </div>
+
+                                <?php }else{ ?>
+                                    <div class="form-group row">
+                                        <label for="customer_name" class="col-sm-4 col-form-label">Customer Name <i class="text-danger">*</i></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" size="100" name="customer_name" class=" form-control" placeholder='Organization ID' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="{customer_name}" />
+
+                                            <input id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="{customer_id}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="customer_mobile_two" class="col-sm-4 col-form-label">Customer Mobile </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" size="100" name="customer_mobile_two" class=" form-control" placeholder='Customer Mobile' id="customer_mobile_two" value="{customer_mobile_two}" />
+                                        </div>
+                                    </div>
+
+                                <?php   } ?>
+
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-4 col-form-label">Sale Type <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
@@ -73,12 +95,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
-                                    <label for="customer_mobile_two" class="col-sm-4 col-form-label">Customer Mobile </label>
-                                    <div class="col-sm-8">
-                                        <input type="text" size="100" name="customer_mobile_two" class=" form-control" placeholder='Customer Mobile' id="customer_mobile_two" value="{customer_mobile_two}" />
-                                    </div>
-                                </div>
+
                             </div>
 
                             <?php  if ($invoice_all_data[0]['sale_type']==1){?>
