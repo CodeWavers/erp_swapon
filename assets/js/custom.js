@@ -794,8 +794,14 @@ $(function ($) {
 
     ],
   });
+
+  var last_order=$('#order_table tr:has(td)').each(function() {
+    alert($(this).find('td:last').text());
+  });
   var order_table=$("#order_table").DataTable({
+
     responsive: true,
+    // bPaginate: false,
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
@@ -852,7 +858,7 @@ $(function ($) {
         className: "btn-sm prints",
       },
     ],
-
+    // paging: false,
     serverMethod: "post",
     ajax: {
       url: base_url + "Corder/CheckOrderList",
@@ -864,19 +870,10 @@ $(function ($) {
         data.fromdate = $("#from_date").val();
         data.todate = $("#to_date").val();
         data.status = $("#delivery_status").val();
+        // data.last_order =this.row( ':last-child' ).data()[0];
         data.csrf_test_name = CSRF_TOKEN;
       },
 
-      // success: function (data) {
-      //
-      //   console.log(data)
-      //
-      //   $("#last_order").val(data.last_order)
-      //
-      //
-      //
-      //
-      // },
     },
 
 
@@ -899,17 +896,21 @@ $(function ($) {
 
   });
 
-  $(".paginate_button").on('click',function(){
-    // get the current row
+
+  $(".paginate_button ").click(function () {
+
+    alert('Hello')
+    return
     var currentRow=$('#order_table').closest("tr");
 
-    var col1=currentRow.find("td:eq(0)").text(); // get current row 1st TD value
-    var col2=currentRow.find("td:eq(1)").text(); // get current row 2nd TD
-    var col3=currentRow.find("td:eq(2)").text(); // get current row 3rd TD
+    var col1=currentRow.find("td:eq(0)").text();
+    var col2=currentRow.find("td:eq(1)").text();
+    var col3=currentRow.find("td:eq(2)").text();
     var data=col1+"\n"+col2+"\n"+col3;
 
     alert(data);
-  })
+  });
+
   $("#btn-filter").click(function () {
     order_table.ajax.reload();
   });

@@ -195,6 +195,7 @@ function quantity_calculate(item) {
     $("#total_discount_" + item).val((just_tot) * (discount / 100));
     //$("#total_discount_ammount").val((just_tot) * (discount / 100));
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
+    //$("#total_price_wd_" + item).val(just_tot.toFixed(2, 2));
 
     calculateSum();
     invoice_paidamount();
@@ -285,7 +286,8 @@ function calculateSum() {
         o = a.toFixed(2, 2),
         e = t.toFixed(2, 2),
         tx = f.toFixed(2, 2),
-        ds = p.toFixed(2, 2);
+        //ds = p.toFixed(2, 2);
+        ds =  $("#invoice_discount").val();
 
     var test = +tx + +s_cost + +e + -ds + + ad  - commission;
     var test2 = +tx + +s_cost + +e + -ds + + ad ;
@@ -297,11 +299,11 @@ function calculateSum() {
     }
 
     var gt = $("#grandTotal").val();
-    var invdis = $("#invoice_discount").val();
+    //var invdis = $("#invoice_discount").val();
     var total_discount_ammount = $("#total_discount_ammount").val();
     var ttl_discount = +total_discount_ammount;
     //var ttl_cms = +commission;
-    $("#total_discount_ammount").val(ttl_discount);
+    //$("#total_discount_ammount").val(ttl_discount);
     var grnt_totals = gt;
     invoice_paidamount();
     $("#grandTotal").val(grnt_totals);
@@ -712,7 +714,7 @@ function customer_due(id){
         data: {customer_id:id,csrf_test_name:csrf_test_name},
         success: function (msg){
 
-            $("#previous").val(msg);
+            //$("#previous").val(msg);
 
             console.log(msg);
         },

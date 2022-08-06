@@ -407,8 +407,8 @@ class Order extends CI_Model
         }
 
 
-
-//        var_dump($resp);
+        $last_order=$data[array_key_last($data)];
+//       var_dump($last_order['order_code']);
 
 
         ## Response
@@ -416,7 +416,8 @@ class Order extends CI_Model
             "draw" => intval($draw),
             "iTotalRecords" => $total_product,
             "iTotalDisplayRecords" => $total_product,
-            "aaData" => $data
+            "aaData" => $data,
+           "last_order" => $last_order['order_code'],
             //"aaData" => $json_data
         );
 //        echo '<pre>';

@@ -97,14 +97,14 @@
                                         <select name="delivery_status" id="delivery_status" class="form-control sel_type"  tabindex="3" >
 
                                             <option value="">Select Option</option>
-                                            <option value="Pending">Pending</option>
+                                            <option value="pending">Pending</option>
                                             <option value="Order Confirmed">Order Confirmed</option>
                                             <option value="Processing">Processing</option>
                                             <option value="Shipped">Shipped</option>
                                             <option value="Delivered" >Delivered</option>
                                             <option value="Returned">Returned</option>
                                             <option value="Hold">Hold</option>
-                                            <option value="Cancelled">Cancelled</option>
+                                            <option value="Canceled">Cancelled</option>
 
                                         </select>
 
@@ -127,7 +127,7 @@
                             <p><input name="submit" class="btn btn-info" type="submit" value="Print"></p>
 
                             <br>
-                            <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="order_table">
+                            <table class="table  table-striped table-bordered" cellspacing="0" width="100%" id="order_table">
                                 <thead>
                                     <tr>
                                         <th>
@@ -169,6 +169,7 @@
                 <input type="hidden" class="form-control" id="base_url" name="base_url" value="<?php echo base_url() ?>">
 
                 <input type="hidden" id="total_product" value="<?php echo $total_product; ?>" name="">
+                <input type="hidden" id="last_order" value="" name="">
 
             </div>
         </div>

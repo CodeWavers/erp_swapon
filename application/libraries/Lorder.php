@@ -18,10 +18,7 @@ class Lorder
         $company_info = $CI->Products->retrieve_company();
 
 
-
-
-
-        $url = "http://dev.swaponsworld.com/api/v1/products/count_product";
+        $url = api_url()."products/count_product";
 
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
