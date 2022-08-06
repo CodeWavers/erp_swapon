@@ -160,7 +160,7 @@
                                                  <td class="product_field">
                                                      <input type="text"   name="product_name" onclick="invoice_productList({sl});" value="{sku}-{product_name}" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_names" tabindex="3" readonly="">
 
-                                                     <input type="hidden" class="product_id_{sl} autocomplete_hidden_value" value="{product_id}" id="product_id_{sl}" />
+                                                     <input type="hidden" class="product_id_{sl} " value="{product_id}" id="product_id_{sl}" />
                                                  </td>
                                                  <td >
                                                      <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{sum_quantity}" readonly="" />
@@ -223,7 +223,7 @@
                                                          <label class="text-right col-form-label col-sm-4">Return:
                                                          </label>
                                                          <div class="col-sm-2 ">
-                                                             <input id="cash_return" type="checkbox" name="cash_return" value="cash_ret" onclick="quantity_calculate(1)" onchange="quantity_calculate(1)">
+                                                             <input id="cash_return" type="checkbox" name="cash_return" value="cash_ret" onclick="validation(1)" onchange="quantity_calculate(1)" >
                                                          </div>
 
 
@@ -232,7 +232,7 @@
                                                          <label class="text-right col-form-label col-sm-4">Replace:
                                                          </label>
                                                          <div class="col-sm-2 ">
-                                                             <input id="rep_toggle" type="checkbox" name="rep_or_no" onchange="quantity_calculate(1)">
+                                                             <input id="rep_toggle" type="checkbox" name="rep_or_no" onchange="quantity_calculate(1)" onclick="validation(1)">
                                                          </div>
 
 
@@ -296,7 +296,7 @@
                                      </table>
                                  </div>
                                  <!-- <button type="button" class="btn btn-info" id="rep_toggle">Replace <i class="fa fa-arrow-circle-down"></i></button> -->
-                                 <input type="hidden" name="is_replace" id="is_replace" value="0">
+                                 <input type="hidden" name="is_replace" id="is_replace" class="" value="0">
                                  <div id="replace_table" style="display: none;">
                                      <center>
                                          <h4>Product Replacement</h4>

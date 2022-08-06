@@ -85,7 +85,7 @@
                                     <?php if ($invoice_all_data[0]['usablity'] == 2) { ?>
 	                                <h2 class="m-t-0">Replacement</h2>
                                         <div>Replacement ID: {return_id}</div>
-                                        <div>Old Invice ID: {invoice_id}</div>
+                                        <div>Old Invoice ID: {invoice_id}</div>
                                         <div>New Invoice ID: {invoice_id_new}</div>
                                         <div class="m-b-15"><?php echo display('billing_date') ?>: {final_date}</div>
                                     <?php }else{ ?>
@@ -125,14 +125,8 @@
 	                                        <th class="text-center"><?php echo display('sl') ?></th>
 	                                        <th class="text-center"><?php echo display('product_name') ?></th>
 	                                        <th class="text-center"><?php echo display('quantity') ?></th>
-	                                        
-	                                        <?php if ($discount_type == 1) { ?>
-	                                        <th class="text-center"><?php echo display('discount_percentage') ?> %</th>
-	                                        <?php }elseif($discount_type == 2){ ?>
-	                                        <th class="text-center"><?php echo display('discount') ?> </th>
-	                                        <?php }elseif($discount_type == 3) { ?>
-	                                        <th class="text-center"><?php echo display('fixed_dis') ?> </th>
-	                                        <?php } ?>
+	                                        <th class="text-center">Deducution(%)</th>
+
 
 	                                        <th class="text-center"><?php echo display('rate') ?></th>
 	                                        <th class="text-center"><?php echo display('ammount') ?></th>

@@ -76,6 +76,27 @@ function quantity_calculate(item) {
     isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
   }),
     $("#total_discount_ammount").val(d.toFixed(2, 2));
+
+
+}
+
+function validation(){
+
+  if ($(".chk").is(":checked") && ($("#is_replace").val() == 0 || $("#cash_return").val() == 0 ))  {
+    $("#add_invoice").prop("disabled", false);
+  } else {
+    if ($(".chk").filter(":checked").length < 1) {
+      $("#add_invoice").attr("disabled", true);
+    }
+  }
+
+  // if ($("#is_replace").val() == 0 || $("#cash_return").val() == 0){
+  //
+  //   $("#add_invoice").prop("disabled", true);
+  //
+  // }else{
+  //   $("#add_invoice").prop("disabled", false);
+  // }
 }
 
 ("use strict");
@@ -314,6 +335,13 @@ $(document).ready(function () {
 
   $("#add_invoice").prop("disabled", true);
   $(".chk").click(function () {
+    if ($("#is_replace").val() == 0 || $("#cash_return").val() == 0){
+
+      $("#add_invoice").prop("disabled", true);
+      return
+    }
+
+    $("chk").prop(":checked",false)
     if ($(this).is(":checked")) {
       $("#add_invoice").prop("disabled", false);
     } else {
@@ -322,7 +350,11 @@ $(document).ready(function () {
       }
     }
   });
+
+
 });
+
+
 
 ("use strict");
 function checkboxcheckSreturn(sl) {
