@@ -188,6 +188,10 @@
 				                            		<td class="border-bottom-top"><?php echo (($position==0)?"$currency {total_tax}":"{total_tax} $currency") ?> </td>
 				                            	</tr>
 				                            <?php } ?>
+<!--                                            <tr>-->
+<!--                                                <th class="grand_total">Delivery Charge:</th>-->
+<!--                                                <td class="grand_total">--><?php //echo (($position==0)?"$currency {delivery_charge}":"{delivery_charge} $currency") ?><!--</td>-->
+<!--                                            </tr>-->
 				                            	<tr>
 				                            		<th class="grand_total"><?php echo display('grand_total') ?> :</th>
 				                            		<td class="grand_total"><?php echo (($position==0)?"$currency {totalnamount}":"{totalnamount} $currency") ?></td>

@@ -612,6 +612,7 @@ class Returnse extends CI_Model
                 'product_rate'  => $product_rate,
                 'deduction'     => $discount,
                 'total_deduct'  => $this->input->post('total_discount', TRUE),
+                'delivery_charge'  => $add_cost,
 //                'total_tax'     => $this->input->post('total_tax', TRUE),
                 'total_ret_amount' => $total_price,
                 'net_total_amount' => $this->input->post('grand_total_price', TRUE),

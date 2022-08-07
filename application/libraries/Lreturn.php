@@ -141,6 +141,8 @@ class Lreturn
             'currency'    => $currency_details[0]['currency'],
             'position'    => $currency_details[0]['currency_position'],
         );
+
+       // echo '<pre>';print_r($data);exit();
         $returnList = $CI->parser->parse('return/return_list', $data, true);
         return $returnList;
     }
@@ -225,7 +227,7 @@ class Lreturn
         $invoice_detail = $CI->Returnse->retrieve_invoice_html_data($invoice_id);
         $replace_details = $CI->Invoices->retrieve_invoice_editdata($invoice_detail[0]['invoice_id_new']);
 
-//        echo '<pre>';print_r($replace_details);exit();
+//        echo '<pre>';print_r($invoice_detail[0]['invoice_id_new']);exit();
 
 
 
@@ -233,6 +235,7 @@ class Lreturn
         $subTotal_quantity_replace = 0;
         $subTotal_cartoon = 0;
         $subTotal_discount = 0;
+        $subTotal_ammount = 0;
         $subTotal_ammount_replace = 0;
         if (!empty($invoice_detail)) {
             foreach ($invoice_detail as $k => $v) {
@@ -261,6 +264,8 @@ class Lreturn
             }
         }
 
+        //echo '<pre>';print_r($replace_details);exit();
+
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Invoices->retrieve_company();
         $data = array(
@@ -273,6 +278,7 @@ class Lreturn
             'customer_mobile'  => $invoice_detail[0]['customer_mobile'],
             'customer_email'   => $invoice_detail[0]['customer_email'],
             'final_date'       => $invoice_detail[0]['final_date'],
+            'delivery_charge'     => number_format($invoice_detail[0]['delivery_charge'], 2, '.', ','),
             'total_amount'     => number_format($invoice_detail[0]['net_total_amount'], 2, '.', ','),
             'subTotal_quantity' => $subTotal_quantity,
             'subTotal_quantity_replace' => $subTotal_quantity_replace,

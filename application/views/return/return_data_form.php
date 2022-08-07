@@ -148,6 +148,7 @@
                                                  <th class="text-center"><?php echo display('sold_qty') ?></th>
                                                  <th class="text-center"><?php echo display('ret_quantity') ?> <i class="text-danger">*</i></th>
                                                  <th class="text-center"><?php echo display('rate') ?> <i class="text-danger"></i></th>
+                                                 <th class="text-center">Discount % </i></th>
                                                  <th class="text-center"><?php echo display('deduction') ?> %</th>
                                                  <th class="text-center"><?php echo display('total') ?></th>
                                                  <th class="text-center"><?php echo display('check_return') ?> <i class="text-danger">*</i></th>
@@ -173,6 +174,12 @@
                                                      <input type="text" name="product_rate[]" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" value="{rate}" id="price_item_{sl}" class="price_item{sl} form-control text-right" min="0" tabindex="5" required="" placeholder="0.00" readonly="" />
                                                  </td>
                                                  <!-- Discount -->
+
+                                                 <td>
+                                                     <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="dis_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
+
+                                                 </td>
+
                                                  <td>
                                                      <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="" min="0" tabindex="6" />
                                                      <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
@@ -211,7 +218,7 @@
                                          <tfoot>
 
                                              <tr>
-                                                 <td colspan="4" rowspan="3">
+                                                 <td colspan="5" rowspan="4">
                                                      <center><label for="details" class="  col-form-label text-center"><?php echo display('reason') ?></label></center>
                                                      <textarea class="form-control" name="details" id="details" placeholder="<?php echo display('reason') ?>"></textarea> <br>
                                                      <!-- <span class="usablity"><?php echo display('usablilties') ?> </span><br> -->
@@ -272,14 +279,19 @@
 
                                                  </td>
                                                  <td class="">
-
-                                                         <input id="pay_person" type="checkbox" onchange="quantity_calculate(1);" name="pay_person" value="pay_person" >
+                                                     <input id="pay_person" type="checkbox" onchange="quantity_calculate(1);" name="pay_person" value="pay_person" >
                                                      <label class=" col-form-label text-right">Customer Pay
                                                      </label>
 
                                                  </td>
                                              </tr>
 
+                                             <tr>
+                                                 <td colspan="1" class="text-right"><b> Paid Amount:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="paid_amount" class="form-control text-right" name="paid_amount" value="{paid_amount}" readonly="readonly" />
+                                                 </td>
+                                             </tr>
 
 
                                              <tr>

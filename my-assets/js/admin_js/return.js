@@ -31,6 +31,7 @@ function quantity_calculate(item) {
   var quantity = $("#total_qntt_" + item).val();
   var price_item = $("#price_item_" + item).val();
   var discount = $("#discount_" + item).val();
+  var disc = $("#dis_" + item).val();
   var add_cost = $("#total_tax_ammount").val() ? $("#total_tax_ammount").val() : 0;
   if (parseInt(sold_qty) < parseInt(quantity)) {
     alert("Sold quantity less than quantity!");
@@ -38,11 +39,12 @@ function quantity_calculate(item) {
   }
   var price = quantity * price_item;
   var dis = price * (discount / 100);
+  var diss = price * (disc / 100);
   $("#all_discount_" + item).val(dis);
   var ttldis = $("#all_discount_" + item).val();
 
   //Total price calculate per product
-  var temp = price - ttldis;
+  var temp = price - diss-ttldis;
   $("#total_price_" + item).val(temp); //
 
   $(".total_price").each(function () {
@@ -256,9 +258,11 @@ function delete_replace_row(e) {
 function replace_calculate(sl) {
   var qty = $("#replace_qty_" + sl).val();
   var price = $("#replace_price_" + sl).val();
+  var dis = $("#replace_dis_" + sl).val();
   var a = 0;
 
   var price = qty * price;
+
   $("#replace_total_" + sl).val(price.toFixed(2, 2));
 
   $(".rep_total").each(function () {
