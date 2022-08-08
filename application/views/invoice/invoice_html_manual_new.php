@@ -355,7 +355,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <h1 style="color: red !important;">Condition</h1>
 
 
-                                        <abbr style="color: red !important;">TK <?=$due_amount ?></abbr>
+                                        <h1 style="color: red !important;">TK <?=$due_amount ?></h1>
 
 
                                     </div>

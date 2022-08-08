@@ -3444,6 +3444,7 @@ class Invoices extends CI_Model
                         d.product_details,
                         d.unit,
                         d.product_model,
+                        d.purchase_price,
                         a.paid_amount as paid_amount,
                         a.due_amount as due_amount,
                         m.color_name,

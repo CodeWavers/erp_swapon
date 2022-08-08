@@ -362,7 +362,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     <h1 style="color: red !important;">Condition</h1>
 
 
-                                                        <abbr style="color: red !important;">TK <?=$order[0]->grand_total-$paidtotal ?></abbr>
+                                                        <h1 style="color: red !important;">TK <?=$order[0]->grand_total-$paidtotal ?></h1>
 
 
                                                 </div>
