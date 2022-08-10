@@ -214,9 +214,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                                                     echo display('unit');
                                                                                 } ?></th> -->
                                         <th class="text-center td-style">Qty</th>
-                                         <th class="text-center td-style">Unit</th>
-                                         <th class="text-center td-style"><?php echo display('rate'); ?></th>
-                                        <th class="text-center td-style"><?php echo display('ammount'); ?></th>
+<!--                                         <th class="text-center td-style">Unit</th>-->
+                                         <th class="text-center td-style">U.Price</th>
+                                        <th class="text-center td-style">T.Price</th>
                                     </thead>
 
                                     <?php
@@ -234,9 +234,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="center" class="td-style">
                                                 <?php echo html_escape($invoice_data['quantity']); ?>
                                             </td>
-                                            <td align="center" class="td-style">
-                                                <nobr><?php echo html_escape($invoice_data['unit']); ?></nobr>
-                                            </td>
+
                                             <!-- <td align="right" class="td-style">
                                                 <nobr>
                                                     <?php
@@ -263,7 +261,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     }
                                                     ?>
                                                 </nobr>
-                                                <s>Tk <?php echo html_escape($invoice_data['purchase_price']); ?></s>
+                                                <s>Tk <?php echo html_escape($invoice_data['price']); ?></s>
                                             </td>
                                             <td align="right" class="td-style" style="width: 15mm !important;">
 
@@ -282,12 +280,12 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     } ?>
 
                                     <tr>
-                                        <td colspan="7" class="minpos-bordertop">
+                                        <td colspan="6" class="minpos-bordertop">
                                             <nobr></nobr>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" class="minpos-bordertop">
+                                        <td colspan="6" class="minpos-bordertop">
                                             <nobr></nobr>
                                         </td>
                                     </tr>
@@ -295,7 +293,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <td align="left">
                                             <nobr></nobr>
                                         </td>
-                                        <td align="right" colspan="3">
+                                        <td align="right" colspan="2">
                                             <nobr><?php echo display('total') ?></nobr>
                                         </td>
                                         <td align="right" class="td-style">
@@ -314,7 +312,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
-                                            <td align="right" colspan="3">
+                                            <td align="right" colspan="2">
                                                 <nobr><?php echo display('invoice_discount'); ?></nobr>
                                             </td>
                                             <td align="right" class="td-style">
@@ -329,7 +327,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
-                                            <td align="right" colspan="3">
+                                            <td align="right" colspan="2">
                                                 <nobr><?php echo display('total_discount') ?></nobr>
                                             </td>
                                             <td align="right" class="td-style">
@@ -344,7 +342,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
-                                            <td align="right" colspan=3">
+                                            <td align="right" colspan="2">
                                                 <nobr><?php echo display('shipping_cost') ?></nobr>
                                             </td>
                                             <td align="right" class="td-style">
@@ -360,7 +358,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
-                                            <td align="right" colspan="3">
+                                            <td align="right" colspan="2">
                                                 <nobr><?php echo display('previous') ?></nobr>
                                             </td>
                                             <td align="right" class="td-style">
@@ -372,7 +370,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </tr>
                                     <?php } ?>
                                     <tr>
-                                        <td colspan="9" class="minpos-bordertop">
+                                        <td colspan="8" class="minpos-bordertop">
                                             <nobr></nobr>
                                         </td>
                                     </tr>
@@ -380,7 +378,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <td align="left">
                                             <nobr></nobr>
                                         </td>
-                                        <td align="right" colspan="3">
+                                        <td align="right" colspan="2">
                                             <nobr><strong><?php echo display('grand_total') ?></strong></nobr>
                                         </td>
                                         <td align="right" class="td-style">
@@ -394,7 +392,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     </tr>
 
                                     <tr>
-                                        <td colspan="9" class="minpos-bordertop">
+                                        <td colspan="8" class="minpos-bordertop">
                                             <nobr></nobr>
                                         </td>
                                     </tr>
@@ -403,7 +401,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
-                                            <td align="right" colspan="3">
+                                            <td align="right" colspan="2">
                                                 <nobr>
                                                     <?php echo display('paid_ammount') ?>
                                                 </nobr>
@@ -426,7 +424,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
-                                            <td align="right" colspan="3">
+                                            <td align="right" colspan="2">
                                                 <nobr><?php echo display('due') ?></nobr>
                                             </td>
                                             <td align="right" class="td-style">
@@ -444,7 +442,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 </table>
 
                                 <div style="text-align:center; margin-top: 0.5cm; font-size: 11px">
-                                    <td>Powered by <strong>Webcoders</strong></a></td>
+                                    <td>Powered by <strong>Devenport</strong></a></td>
 
                                 </div>
                             </div>

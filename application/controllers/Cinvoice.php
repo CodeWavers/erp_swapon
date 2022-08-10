@@ -754,7 +754,7 @@ class Cinvoice extends CI_Controller
                 $sl++;
             }
 
-            $tr .= "<input type=\"hidden\" id=\"total_discount_" . $product_details->product_id . "\" />
+            $tr .= "<input type=\"hidden\" name=\"total_discount[]\" id=\"total_discount_" . $product_details->product_id . "\" />
 							<input type=\"hidden\" id=\"all_discount_" . $product_details->product_id . "\" class=\"total_discount dppr\"/>
 							<button  class=\"btn btn-danger btn-xs text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
 						</td>

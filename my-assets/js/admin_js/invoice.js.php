@@ -54,6 +54,8 @@ function addInputField(t) {
             "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
+
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
             document.getElementById(t).appendChild(e),
             document.getElementById(a).focus(),
@@ -130,6 +132,7 @@ function addInputField_pre(t) {
             "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:100px;'>৳0.00</s></td>" +
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
             document.getElementById(t).appendChild(e),
             document.getElementById(a).focus(),
@@ -168,7 +171,10 @@ function quantity_calculate(item) {
     var discount = $("#discount_" + item).val();
     var total_tax = $("#total_tax_" + item).val();
     var total_discount = $("#total_discount_" + item).val();
-    var comm_item = $("#comm_" + item).val();
+
+    var  comm_item =  ($("#comm_" + item).val() ? $("#comm_" + item).val() : 0);
+
+    //var comm_item = $("#comm_" + item).val();
     var taxnumber = $("#txfieldnum").val();
     var dis_type = $("#discount_type_" + item).val();
     if (parseInt(quantity) > parseInt(available_quantity)) {
@@ -246,7 +252,10 @@ function calculateSum() {
 
         s_cost =  ($("#shipping_cost").val() ? $("#shipping_cost").val() : 0),
         c_cost =  ($("#condition_cost").val() ? $("#condition_cost").val() : 0),
-        commission =  ($("#commission").val() ? $("#commission").val() : 0);
+        commission =  ($("#commission").val() ? $("#commission").val() : 0),
+     perc_discount =  ($("#perc_discount").val() ? $("#perc_discount").val() : 0);
+
+
     //c_cost =  $("#condition_cost").val(),
     //commission =  $("#commission").val();
 
@@ -288,9 +297,19 @@ function calculateSum() {
         tx = f.toFixed(2, 2),
         //ds = p.toFixed(2, 2);
         ds =  $("#invoice_discount").val();
+    var pds =+(t) * (perc_discount / 100);
 
-    var test = +tx + +s_cost + +e + -ds + + ad  - commission;
-    var test2 = +tx + +s_cost + +e + -ds + + ad ;
+
+    var total_discount_ammount = $("#total_discount_ammount").val();
+    var ttl_discount = parseFloat(total_discount_ammount)+pds;
+    //var ttl_cms = +commission;
+    $("#total_discount_ammount").val(ttl_discount.toFixed(2,2));
+     //ds =+(t) * (perc_discount / 100);
+
+    //console.log(discount_perc);
+
+    var test = +tx + +s_cost + +e + -ttl_discount  + + ad  - commission;
+    var test2 = +tx + +s_cost + +e + -ttl_discount + + ad ;
 
     if(c_cost == undefined || commission ==undefined){
         $("#grandTotal").val(test2.toFixed(2, 2));
@@ -300,10 +319,7 @@ function calculateSum() {
 
     var gt = $("#grandTotal").val();
     //var invdis = $("#invoice_discount").val();
-    var total_discount_ammount = $("#total_discount_ammount").val();
-    var ttl_discount = +total_discount_ammount;
-    //var ttl_cms = +commission;
-    //$("#total_discount_ammount").val(ttl_discount);
+
     var grnt_totals = gt;
     invoice_paidamount();
     $("#grandTotal").val(grnt_totals);
@@ -607,12 +623,19 @@ function commision_add(val) {
         $('.comm_th').removeClass('d-none')
         $('.comm_th').addClass('d-inline')
 
+    }else{
+        $('.comm_th').addClass('d-none')
+        $('.comm_th').removeClass('d-inline')
     }
 
     if (val==2 ) {
         $('#commission_tr').removeClass('d-none')
         $('.comm_th').removeClass('d-inline')
         $('.comm_th').addClass('d-none')
+    }else{
+        $('#commission_tr').addClass('d-none')
+        $('.comm_th').addClass('d-inline')
+        $('.comm_th').removeClass('d-none')
     }
 }
 function  sale_type(val){

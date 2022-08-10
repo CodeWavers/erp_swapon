@@ -433,7 +433,7 @@
                                         <!-- Tax calculate end-->
 
                                         <!-- Discount calculate start-->
-                                        <input type="hidden" id="total_discount_1" class="" />
+                                        <input type="hidden" id="total_discount_1" class="total_discount" />
                                         <input type="hidden" id="all_discount_1" class="total_discount dppr" name="discount_amount[]" />
                                         <!-- Discount calculate end -->
 

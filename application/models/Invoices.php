@@ -640,6 +640,7 @@ class Invoices extends CI_Model
                 'invoice'         => $invoice_no_generated,
                 'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : ''),
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
                 'paid_amount'     => $this->input->post('paid_amount', TRUE),
                 'due_amount'      => $this->input->post('due_amount', TRUE),
@@ -824,6 +825,7 @@ class Invoices extends CI_Model
                 'invoice'         => $invoice_no_generated,
                 'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : ''),
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
                 'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
                 'customer_mobile_two'       => $this->input->post('customer_mobile_two', TRUE),
@@ -1458,7 +1460,7 @@ class Invoices extends CI_Model
         $rate                = $this->input->post('product_rate', TRUE);
         $p_id                = $this->input->post('product_id', TRUE);
         $total_amount        = $this->input->post('total_price', TRUE);
-        $discount_rate       = $this->input->post('discount_amount', TRUE);
+        $discount_rate       = $this->input->post('total_discount', TRUE);
         $discount_per        = $this->input->post('discount', TRUE);
         $commission_per        = $this->input->post('comm', TRUE);
         // $tax_amount          = $this->input->post('tax',TRUE);
@@ -1481,7 +1483,8 @@ class Invoices extends CI_Model
             $supplier_rate = $this->supplier_price($product_id);
             $disper = $discount_per[$i];
             $comm = $commission_per[$i];
-            $discount = is_numeric($product_quantity) * is_numeric($product_rate) * is_numeric($disper) / 100;
+            $discount = $discount_rate[$i];
+//            $discount = is_numeric($product_quantity) * is_numeric($product_rate) * is_numeric($disper) / 100;
             // $tax = $tax_amount[$i];
             // $description = $invoice_description[$i];
 
@@ -1632,6 +1635,7 @@ class Invoices extends CI_Model
                 'invoice'         => $invoice_no_generated,
                 'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : ''),
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
                 'paid_amount'     => $this->input->post('paid_amount', TRUE),
                 'due_amount'      => $this->input->post('due_amount', TRUE),
@@ -1812,6 +1816,7 @@ class Invoices extends CI_Model
                 'invoice'         => $invoice_no_generated,
                 'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : ''),
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
                 'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
                 'customer_mobile_two'       => $this->input->post('customer_mobile_two', TRUE),
@@ -2566,7 +2571,7 @@ class Invoices extends CI_Model
     //Retrieve invoice Edit Data
     public function retrieve_invoice_editdata($invoice_id)
     {
-        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
+        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
@@ -2661,6 +2666,7 @@ class Invoices extends CI_Model
             'due_amount'      => $this->input->post('due_amount', TRUE),
             'paid_amount'     => $this->input->post('paid_amount', TRUE),
             'invoice_discount' => $this->input->post('invoice_discount', TRUE),
+            'perc_discount' => $this->input->post('perc_discount', TRUE),
             'total_discount'  => $this->input->post('total_discount', TRUE),
             'prevous_due'     => $this->input->post('previous', TRUE),
             'courier_id'     => $this->input->post('courier_id', TRUE),
@@ -2740,7 +2746,7 @@ class Invoices extends CI_Model
         $rate          = $this->input->post('product_rate', TRUE);
         $p_id          = $this->input->post('product_id', TRUE);
         $total_amount  = $this->input->post('total_price', TRUE);
-        $discount_rate = $this->input->post('discount_amount', TRUE);
+        $discount_rate = $this->input->post('total_discount', TRUE);
         $discount_per  = $this->input->post('discount', TRUE);
         $invoice_description = $this->input->post('desc', TRUE);
 
@@ -3444,7 +3450,7 @@ class Invoices extends CI_Model
                         d.product_details,
                         d.unit,
                         d.product_model,
-                        d.purchase_price,
+                        d.price,
                         a.paid_amount as paid_amount,
                         a.due_amount as due_amount,
                         m.color_name,

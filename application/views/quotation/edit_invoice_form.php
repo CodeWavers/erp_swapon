@@ -276,7 +276,7 @@
                                             } ?>
                                             <!-- Tax calculate end-->
                                             <!-- Discount calculate start-->
-                                            <input type="hidden" id="total_discount_{sl}" class="" value="{discount}" />
+                                            <input type="hidden" id="total_discount_{sl}" class="total_discount" value="{discount}" />
 
                                             <input type="hidden" id="all_discount_{sl}" class="total_discount" value="{discount}" name="discount_amount[]" />
                                             <!-- Discount calculate end -->
