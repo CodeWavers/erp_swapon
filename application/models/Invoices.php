@@ -3458,7 +3458,8 @@ class Invoices extends CI_Model
                         e.branch_name,
                         f.courier_name,
                         o.receiver_name,
-                        a.receiver_number as rec_num
+                        a.receiver_number as rec_num,
+                         sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount
                        '
 
         );

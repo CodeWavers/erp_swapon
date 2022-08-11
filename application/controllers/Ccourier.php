@@ -474,6 +474,7 @@ class Ccourier extends CI_Controller {
         $bkash_id = $this->input->post('bkash_id');
         $nagad_id = $this->input->post('nagad_id');
         $paytype = $this->input->post('paytype');
+        $condition_cost = $this->input->post('condition_cost');
         if (!empty($bank_id)) {
             $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
 
@@ -592,6 +593,38 @@ class Ccourier extends CI_Controller {
                 $this->db->insert('acc_transaction', $nagadc);
             }
 
+        $corcc = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV-CC',
+            'VDate'          =>  $createdate,
+            'COAID'          =>  $courier_headcode,
+            'Narration'      =>  'Condition Charge For Invoice No -  ' . $inv_details->invoice . ' Courier  ' . $courier_name,
+            'Credit'          => (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+            'Debit'         =>   0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $corcc);
+
+        $condition_charge = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV-CC',
+            'VDate'          =>  $createdate,
+            'COAID'          =>  4040105,
+            'Narration'      =>  'Condition Charge For Invoice No -  ' . $inv_details->invoice . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+            'Debit'          =>   (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+            'Credit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $condition_charge);
+
+            $this->db->set('condition_cost',$condition_cost);
             $this->db->set('courier_paid',1);
             $this->db->where('invoice_id',$invoice_id);
             $this->db->update('invoice');

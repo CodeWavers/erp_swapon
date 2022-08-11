@@ -225,7 +225,7 @@ class Lcourier {
             'bkash_list'        => $bkash_list,
             'nagad_list'        => $nagad_list,
         );
-        // echo '<pre>'; print_r($data); die();
+//         echo '<pre>'; print_r($rqsn_list); die();
 
         return $CI->parser->parse('courier/courier_status', $data, true);
 

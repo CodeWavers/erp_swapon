@@ -307,10 +307,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <div>{product_name} - ({product_model})</div>
                                             </td>
 
-                                            <td align="right">{quantity}</td>
+                                            <td align="right">{sum_quantity}</td>
 
                                             <td align="right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?></td>
-                                            <td align="right"><?php echo (($position == 0) ? "$currency {total_price}" : "{total_price} $currency") ?></td>
+                                            <td align="right"><?php echo (($position == 0) ? "$currency {sum_amount}" : "{sum_amount} $currency") ?></td>
                                         </tr>
                                         {/invoice_all_data}
 

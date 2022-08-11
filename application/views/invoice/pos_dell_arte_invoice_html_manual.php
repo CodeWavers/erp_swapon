@@ -232,7 +232,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
 
                                             <td align="center" class="td-style">
-                                                <?php echo html_escape($invoice_data['quantity']); ?>
+                                                <?php echo html_escape($invoice_data['sum_quantity']); ?>
                                             </td>
 
                                             <!-- <td align="right" class="td-style">
@@ -267,11 +267,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <?php
                                                 if ($position == 0) {
-                                                    echo  $currency . ' ' . html_escape($invoice_data['total_price']);
+                                                    echo  $currency . ' ' . html_escape($invoice_data['sum_amount']);
                                                 } else {
-                                                    echo html_escape($invoice_data['total_price']) . ' ' . $currency;
+                                                    echo html_escape($invoice_data['sum_amount']) . ' ' . $currency;
                                                 }
-                                                $s_total += $invoice_data['total_price'];
+                                                $s_total += $invoice_data['sum_amount'];
                                                 ?>
 
                                             </td>

@@ -62,6 +62,7 @@
                                         <th>Customer Name</th>
                                         <th>Date</th>
                                         <th>Courier Name</th>
+                                        <th>Branch</th>
                                         <th>Condition</th>
                                         <th>Delivery Charge</th>
                                         <th>Condition Charge</th>
@@ -132,6 +133,7 @@
                                         <td><?php echo $row['customer_name']?></td>
                                         <td><?php echo $row['date']?></td>
                                         <td><?php echo $row['courier_name']?></td>
+                                        <td><?php echo $row['branch_name']?></td>
                                         <td><?php echo $courier_condition?></td>
                                         <td><?php echo $row['shipping_cost']?></td>
                                         <td><?php echo $row['condition_cost']?></td>
@@ -163,7 +165,7 @@
                                                     data-shipping_cost="<?php echo $row['shipping_cost']?>"
                                                     data-condition_cost="<?php echo $row['condition_cost']?>"
                                                     data-invoice_id="<?php echo $invoice_id=$row['invoice_id']?>"
-                                                    data-courier_id="<?php echo $row['courier_id']?>"
+                                                    data-courier_id="<?php echo $row['c_id']?>"
                                                     onclick="add_and_delete(this)"
                                             >
                                                 <i class="fa fa-check" aria-hidden="true"></i>
@@ -224,6 +226,17 @@
                                                 </select>
 
 
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" id="payment_from_1">
+                                        <div class="form-group row">
+                                            <label for="payment_type" class="col-sm-4 col-form-label">
+                                              Condition Charge <i class="text-danger">*</i></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="condition_cost" name="condition_cost">
 
                                             </div>
 
@@ -291,6 +304,7 @@
 
 
                                 </div>
+
 
 
 
