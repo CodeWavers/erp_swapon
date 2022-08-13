@@ -1090,7 +1090,8 @@ class Returnse extends CI_Model
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->where('usablity', 1);
         $this->db->or_where('usablity', 2);
-        $this->db->group_by('a.invoice_id', 'desc');
+        $this->db->group_by('a.invoice_id');
+        $this->db->order_by('a.date_return', 'desc');
         $this->db->limit($perpage, $page);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {

@@ -3473,7 +3473,8 @@ class Invoices extends CI_Model
         $this->db->join('courier_name f', 'f.courier_id = a.courier_id', 'left');
         $this->db->join('receiever_info o', 'o.id = a.reciever_id', 'left');
         $this->db->where('a.invoice_id', $invoice_id);
-        $this->db->where('c.quantity >', 0);
+//        $this->db->where('c.quantity >', 0);
+        $this->db->group_by('d.product_id');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
