@@ -659,6 +659,7 @@ class Invoices extends CI_Model
                 // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),
                 'courier_id'         => (!empty($this->input->post('courier_id', TRUE)) ? $this->input->post('courier_id', TRUE) : null),
                 'branch_id'         => (!empty($this->input->post('branch_id', TRUE)) ? $this->input->post('branch_id', TRUE) : null),
+                'delivery_ac'       =>  $this->input->post('delivery_ac', TRUE),
                 'outlet_id'       =>  $this->input->post('outlet_name', TRUE),
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
@@ -849,6 +850,7 @@ class Invoices extends CI_Model
                 'courier_id'         => (!empty($this->input->post('courier_id', TRUE)) ? $this->input->post('courier_id', TRUE) : null),
                 'branch_id'         => (!empty($this->input->post('branch_id', TRUE)) ? $this->input->post('branch_id', TRUE) : null),
                 'outlet_id'       =>  $this->input->post('outlet_name', TRUE),
+                'delivery_ac'       =>  $this->input->post('delivery_ac', TRUE),
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
@@ -927,7 +929,7 @@ class Invoices extends CI_Model
             $courier_pay_partial=$due_amount-($shipping_cost+$condition_cost);
 
 
-            $DC=$this->input->post('shipping_cost', TRUE)+$this->input->post('condition_cost', TRUE);
+            $DC=$this->input->post('delivery_ac', TRUE)+$this->input->post('condition_cost', TRUE);
 
             if ( $courier_condtion ==  1){
 
@@ -969,7 +971,7 @@ class Invoices extends CI_Model
                     'COAID'          =>  4040104,
                     'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
 //                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                    'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): 0),
+                    'Debit'          =>   (!empty($this->input->post('delivery_ac', TRUE)) ? $this->input->post('delivery_ac', TRUE): 0),
                     'Credit'         =>  0,
                     'IsPosted'       =>  1,
                     'CreateBy'       => $createby,
@@ -1037,7 +1039,7 @@ class Invoices extends CI_Model
                     'COAID'          =>  4040104,
                     'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
 //                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                    'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): 0),
+                    'Debit'          =>   (!empty($this->input->post('delivery_ac', TRUE)) ? $this->input->post('delivery_ac', TRUE): 0),
                     'Credit'         =>  0,
                     'IsPosted'       =>  1,
                     'CreateBy'       => $createby,
@@ -1088,7 +1090,7 @@ class Invoices extends CI_Model
                     'COAID'          =>  $courier_headcode,
                     'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
 //                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                    'Credit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                    'Credit'          =>   (!empty($this->input->post('delivery_ac', TRUE)) ? $this->input->post('delivery_ac', TRUE): null),
                     'Debit'         =>  0,
                     'IsPosted'       =>  1,
                     'CreateBy'       => $createby,
@@ -1104,7 +1106,7 @@ class Invoices extends CI_Model
                     'COAID'          =>  4040104,
                     'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
 //                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
-                    'Debit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): null),
+                    'Debit'          =>   (!empty($this->input->post('delivery_ac', TRUE)) ? $this->input->post('delivery_ac', TRUE): null),
                     'Credit'         =>  0,
                     'IsPosted'       =>  1,
                     'CreateBy'       => $createby,

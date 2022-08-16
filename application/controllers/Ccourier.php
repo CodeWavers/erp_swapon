@@ -239,6 +239,60 @@ class Ccourier extends CI_Controller {
             redirect(base_url('Ccourier/branch'));
         }
     }
+    public function branch_by_courier() {
+
+
+        $CI = & get_instance();
+        $CI->load->library('lpurchase');
+        $CI->load->model('Courier');
+        $id = $this->input->post('courier_id',TRUE);
+
+        $branches = $CI->Courier->branch_by_courier($id);
+
+
+        foreach ($branches as $branch) {
+            $courier_branch[] =array('branch_name'=>$branch['branch_name'],
+                'branch_id'=>$branch['branch_id'],
+                'courier_id'=>$branch['courier_id']);
+
+        }
+        $sub[]= "";
+        if (empty($courier_branch)) {
+            $sub .="No Branch Found !";
+        }else{
+            $sub .="<select name=\"branch_id\"  class=\"branch_id form-control\" id=\"branch_id\">";
+            $sub .= "<option value=''>".display('select_one')."</option>";
+            foreach ($courier_branch as $b) {
+
+                    $sub .="<option value=".$b['branch_id'].">".$b['branch_name']."</option>";
+
+
+            }
+            $sub .="</select>";
+        }
+
+        $data['branch']  =$sub;
+        $data['courier_id']  =$courier_branch['courier_id'];
+        $data['inside']  =$courier_branch['inside'];
+        $data['outside']  =$courier_branch['outside'];
+        $data['sub']  =$courier_branch['sub'];
+        //$data2['txnmber']        = $num_column;
+        echo json_encode($data);
+    }
+    public function charge_by_branch() {
+
+
+        $CI = & get_instance();
+        $CI->load->library('lpurchase');
+        $CI->load->model('Courier');
+        $id = $this->input->post('branch_id',TRUE);
+
+        $data = $CI->Courier->charge_by_branch($id);
+
+
+        echo json_encode($data);
+    }
+
 
     //Category Update Form
     public function branch_update_form($courier_id) {

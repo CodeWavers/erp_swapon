@@ -237,6 +237,8 @@ function quantity_calculate_pre(item) {
     calculateSum();
     invoice_paidamount();
 }
+
+
 //Calculate Sum
 "use strict";
 function calculateSum() {

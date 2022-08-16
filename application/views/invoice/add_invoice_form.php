@@ -246,7 +246,7 @@
                                     <label for="bank" class="col-sm-3 col-form-label">Courier Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
 
-                                        <select name="courier_id" class="form-control bankpayment" id="">
+                                        <select name="courier_id" class="form-control bankpayment" id="" onchange="get_branch(this.value)">
                                             <option value="">Select Location</option>
                                             <?php foreach ($courier_list as $courier) { ?>
                                                 <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
@@ -255,19 +255,29 @@
                                     </div>
 
                                 </div>
-
-                                <div class="form-group row">
+                                <div class="form-group row branch_div" id="branch_div" style="display: none;">
                                     <label for="bank" class="col-sm-3 col-form-label">Branch<i class="text-danger">*</i></label>
-                                    <div class="col-sm-6">
-                                        <select name="branch_id" class="form-control bankpayment" id="">
-                                            <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $b) { ?>
-                                                <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
-                                            <?php } ?>
+                                    <div class="col-sm-6" >
+                                        <select name="branch_id" id="branch_id" class="branch_id form-control text-right" tabindex="1" onchange="get_charge(this.value)">
+
                                         </select>
                                     </div>
-
                                 </div>
+
+                                <div class="form-group row branch_div" id="branch_div" style="display: none;">
+                                    <label for="bank" class="col-sm-3 col-form-label">Location<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6 " >
+                                          <input type="radio" id="inside" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="outside">Inside</label><br>
+                                          <input type="radio" id="outside" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="outside">Outside</label><br>
+                                          <input type="radio" id="sub" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="sub">Sub</label>
+                                    </div>
+                                </div>
+
+
+
 
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-3 col-form-label">Condition<i class="text-danger">*</i></label>
@@ -308,6 +318,8 @@
                                 </div>
 
                             </div>
+
+
 
                             <div class="col-sm-8">
                                 <div class="form-group row">
@@ -473,7 +485,7 @@
                                     <tr>
                                         <td class="text-right" colspan="2"><b>Sale Discount(%):</b></td>
                                         <td class="text-right">
-                                            <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="0.00" />
+                                            <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="" placeholder="0.00" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -508,7 +520,18 @@
                                                 <i class="fa fa-angle-double-down"></i>
                                             </button></td>
                                     </tr>
-
+                                    <tr>
+                                        <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right" colspan="8"><b>ADC:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14"  />
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
@@ -981,6 +1004,11 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        //
+        // var inputs = document.querySelectorAll('input[type="radio"]');
+        // for (var i = 0; i < inputs.length; i++) {
+        //     inputs[i].disabled = 'false';
+        // }
 
         $(".add_cheque").click(function() {
             $(".addCheque").append(" <div id=\"cheque\" class=\"cheque\">\n" +
@@ -1035,6 +1063,69 @@
         $(this).parents('.cheque').remove();
         //the above method will remove the user_data div
     });
+    "use strict";
+    function get_branch(courier_id) {
 
+        var base_url = "<?= base_url() ?>";
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+        $.ajax( {
+            url: base_url + "Ccourier/branch_by_courier",
+            method: 'post',
+            data: {
+                courier_id:courier_id,
+                csrf_test_name:csrf_test_name
+            },
+            cache: false,
+            success: function( data ) {
+                var obj = jQuery.parseJSON(data);
+                $('.branch_id').html(obj.branch);
+
+
+                $(".branch_div").css("display", "block");
+                // if(courier_id == obj.courier_id ){
+                //     $("#subCat_div").css("display", "block");
+                // }else{
+                //     $("#subCat_div").css("display", "none");
+                // }
+            }
+        })
+
+    }
+
+    function get_charge(branch_id) {
+
+        var base_url = "<?= base_url() ?>";
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+        $.ajax( {
+            url: base_url + "Ccourier/charge_by_branch",
+            method: 'post',
+            data: {
+                branch_id:branch_id,
+                csrf_test_name:csrf_test_name
+            },
+            cache: false,
+            success: function( data ) {
+                var obj = jQuery.parseJSON(data);
+             //   console.log(obj[0].inside)
+
+                $('#inside').val(obj[0].inside);
+                $('#outside').val(obj[0].outside);
+                $('#sub').val(obj[0].sub);
+
+            }
+        })
+
+    }
+
+    function put_value(val){
+
+      $('#delivery_ac').val(val);
+    }
 
 </script>

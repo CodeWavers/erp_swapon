@@ -189,6 +189,30 @@ class Courier extends CI_Model
         return false;
     }
 
+    public function branch_by_courier($id) {
+        $this->db->select('*');
+        $this->db->from('branch_name');
+        $this->db->where('courier_id', $id);
+        $this->db->where('status', 1);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+    public function charge_by_branch($id) {
+        $this->db->select('*');
+        $this->db->from('branch_name');
+        $this->db->where('branch_id', $id);
+        $this->db->where('status', 1);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
     //Count customer
     public function branch_entry($data)
     {
