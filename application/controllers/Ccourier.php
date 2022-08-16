@@ -218,10 +218,16 @@ class Ccourier extends CI_Controller {
             'branch_id'   => $branch_id,
             'courier_id'   => $courier_id,
             'branch_name' => $this->input->post('category_name',TRUE),
+            'inside' => $this->input->post('inside',TRUE),
+            'outside' => $this->input->post('outside',TRUE),
+            'sub' => $this->input->post('sub',TRUE),
             'status'        => 1
         );
 
+
+
         $result = $this->Courier->branch_entry($data);
+      //  echo '<pre>';print_r($result);exit();
 
         if ($result == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));
@@ -246,6 +252,9 @@ class Ccourier extends CI_Controller {
         $courier_id = $this->input->post('courier_id',TRUE);
         $data = array(
             'branch_name' => $this->input->post('category_name',TRUE),
+            'inside' => $this->input->post('inside',TRUE),
+            'outside' => $this->input->post('outside',TRUE),
+            'sub' => $this->input->post('sub',TRUE),
             'status'        => 1,
         );
 

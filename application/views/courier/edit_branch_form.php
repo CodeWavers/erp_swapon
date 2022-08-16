@@ -61,13 +61,54 @@
                         </div>
                       
                         <input type="hidden" value="{branch_id}" name="courier_id">
+                        <div class="form-group row">
 
+                            <label for="category_name" class="col-sm-3 col-form-label">Location <i class="text-danger">*</i></label>
+                            <div class="col-sm-3">
+                                <table class="table table-striped table-responsive table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Type</th>
+
+
+                                        <th>Charge</th>
+
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr>
+                                        <td>Inside</td>
+                                        <td > <input  class="form-control" name ="inside" id="" type="text" placeholder="Charge"  value="{inside}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Outside</td>
+                                        <td > <input  class="form-control" name ="outside" id="" type="text" placeholder="Charge"  value="{outside}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sub</td>
+                                        <td > <input  class="form-control" name ="sub" id="" type="text" placeholder="Charge" value="{sub}">
+                                        </td>
+                                    </tr>
+
+
+
+                                    </tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="example-text-input" class="col-sm-4 col-form-label"></label>
                             <div class="col-sm-6">
                                 <input type="submit" id="add-Customer" class="btn btn-success btn-large" name="add-Customer" value="<?php echo display('save_changes') ?>" />
                             </div>
                         </div>
+
+
                     </div>
                     <?php echo form_close()?>
                 </div>

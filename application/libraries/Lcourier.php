@@ -126,6 +126,9 @@ class Lcourier {
             'title'         =>'Branch Name Edit',
             'branch_id'   => $category_detail[0]['branch_id'],
             'branch_name' => $category_detail[0]['branch_name'],
+            'inside' => $category_detail[0]['inside'],
+            'outside' => $category_detail[0]['outside'],
+            'sub' => $category_detail[0]['sub'],
            // 'courier_name' => $category_detail[0]['courier_name'],
             //'courier_list'=>$courier_list,
             'status'        => $category_detail[0]['status']
