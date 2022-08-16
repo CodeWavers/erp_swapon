@@ -743,6 +743,7 @@ class Cinvoice extends CI_Controller
 
 						<td class=\"text-right\" style=\"width:100px\">
 							<input class=\"total_price form-control text-right\" type=\"text\" name=\"total_price[]\" id=\"total_price_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
+							<input class=\"total_price_wd form-control text-right\" type=\"hidden\" name=\"total_price_wd[]\" id=\"total_price_wd_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
 						</td>
 
 						<td>";
@@ -754,8 +755,9 @@ class Cinvoice extends CI_Controller
                 $sl++;
             }
 
-            $tr .= "<input type=\"hidden\" name=\"total_discount[]\" id=\"total_discount_" . $product_details->product_id . "\" />
-							<input type=\"hidden\" id=\"all_discount_" . $product_details->product_id . "\" class=\"total_discount dppr\"/>
+            $tr .= "<input type=\"hidden\"  class=\"total_discount\"  name=\"total_discount[]\" id=\"total_discount_" . $product_details->product_id . "\" />
+            
+							<input type=\"hidden\" id=\"all_discount_" . $product_details->product_id . "\" class=\" dppr\"/>
 							<button  class=\"btn btn-danger btn-xs text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
 						</td>
 					</tr>";

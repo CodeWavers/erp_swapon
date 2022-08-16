@@ -53,17 +53,18 @@ function addInputField(t) {
     "use strict";
     function quantity_calculate(item) {
         var quantity = $("#total_qntt_" + item).val();
-
-       // alert(quantity)
         var available_quantity = $(".available_quantity_" + item).val();
-        var price_item = $("#price_item_" + item).val();
+        var price_item = parseInt($("#price_item_" + item).val());
         var invoice_discount = $("#invoice_discount").val();
         var warrenty_date=$("#warrenty_date_"+item).val();
         var warehouse=$(".warehouse_"+item).val();
         var discount = $("#discount_" + item).val();
         var total_tax = $("#total_tax_" + item).val();
         var total_discount = $("#total_discount_" + item).val();
-       // var comm_item = $("#comm_" + item).val();
+
+        var  comm_item =  ($("#comm_" + item).val() ? $("#comm_" + item).val() : 0);
+
+        //var comm_item = $("#comm_" + item).val();
         var taxnumber = $("#txfieldnum").val();
         var dis_type = $("#discount_type_" + item).val();
         if (parseInt(quantity) > parseInt(available_quantity)) {
@@ -81,13 +82,17 @@ function addInputField(t) {
         // alert(comm_item)
 
         //if (comm_item != ''){
-        //    var comm=0
+        //    var comm_item=0;
         //}
 
         var just_tot = quantity * price_item;
-        var row_tot = ((just_tot) - ((just_tot) * (discount / 100)));
+        var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
+        $("#total_price_wd_" + item).val(just_tot);
+        $("#total_discount_" + item).val((just_tot) * (discount / 100));
+        //$("#total_discount_ammount").val((just_tot) * (discount / 100));
         $("#total_price_" + item).val(row_tot.toFixed(2, 2));
+        //$("#total_price_wd_" + item).val(just_tot.toFixed(2, 2));
 
         calculateSum();
         invoice_paidamount();
@@ -102,28 +107,17 @@ function addInputField(t) {
             o = 0,
             p = 0,
             f = 0,
+            x = 0,
             ad = 0,
             tx = 0,
             ds = 0,
 
-            s_cost =  $("#shipping_cost").val(),
-            c_cost =  $("#condition_cost").val(),
-            commission =  $("#commission").val();
+            s_cost =  ($("#shipping_cost").val() ? $("#shipping_cost").val() : 0),
+            c_cost =  ($("#condition_cost").val() ? $("#condition_cost").val() : 0),
+            commission =  ($("#commission").val() ? $("#commission").val() : 0),
+            perc_discount =  ($("#perc_discount").val() ? $("#perc_discount").val() : 0);
 
-        // alert(s_cost);
 
-
-        //Total Tax
-        for(var i=0;i<taxnumber;i++){
-
-            var j = 0;
-            $(".total_tax"+i).each(function () {
-                isNaN(this.value) || 0 == this.value.length || (j += parseFloat(this.value))
-            });
-            $("#total_tax_ammount"+i).val(j.toFixed(2, 2));
-
-        }
-        //Total Discount
         $(".total_discount").each(function () {
             isNaN(this.value) || 0 == this.value.length || (p += parseFloat(this.value))
         }),
@@ -138,6 +132,9 @@ function addInputField(t) {
             $(".total_price").each(function () {
                 isNaN(this.value) || 0 == this.value.length || (t += parseFloat(this.value))
             }),
+            $(".total_price_wd").each(function () {
+                isNaN(this.value) || 0 == this.value.length || (x += parseFloat(this.value))
+            }),
 
             $(".dppr").each(function () {
                 isNaN(this.value) || 0 == this.value.length || (ad += parseFloat(this.value))
@@ -146,10 +143,21 @@ function addInputField(t) {
             o = a.toFixed(2, 2),
             e = t.toFixed(2, 2),
             tx = f.toFixed(2, 2),
-            ds = p.toFixed(2, 2);
+            //ds = p.toFixed(2, 2);
+            ds =  $("#invoice_discount").val();
+        var pds =+(t) * (perc_discount / 100);
 
-        var test = +tx + +s_cost + +e + -ds + + ad + + c_cost  - commission;
-        var test2 = +tx + +s_cost + +e + -ds + + ad ;
+
+        var total_discount_ammount = $("#total_discount_ammount").val();
+        var ttl_discount = parseFloat(total_discount_ammount)+pds;
+        //var ttl_cms = +commission;
+        $("#total_discount_ammount").val(ttl_discount.toFixed(2,2));
+        //ds =+(t) * (perc_discount / 100);
+
+        //console.log(discount_perc);
+
+        var test = +tx + +s_cost + +x + -ttl_discount  + + ad  - commission;
+        var test2 = +tx + +s_cost + +x + -ttl_discount + + ad ;
 
         if(c_cost == undefined || commission ==undefined){
             $("#grandTotal").val(test2.toFixed(2, 2));
@@ -158,11 +166,8 @@ function addInputField(t) {
         }
 
         var gt = $("#grandTotal").val();
-        var invdis = $("#invoice_discount").val();
-        var total_discount_ammount = $("#total_discount_ammount").val();
-        var ttl_discount = +total_discount_ammount;
-        //var ttl_cms = +commission;
-        $("#total_discount_ammount").val(ttl_discount.toFixed(2, 2));
+        //var invdis = $("#invoice_discount").val();
+
         var grnt_totals = gt;
         invoice_paidamount();
         $("#grandTotal").val(grnt_totals);

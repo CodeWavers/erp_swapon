@@ -425,6 +425,7 @@
 
                                         <td class="invoice_fields"  width="100">
                                             <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
+                                            <input class="total_price_wd form-control text-right" type="hidden" name="total_price_wd[]" id="total_price_wd_1" value="0.00" readonly="readonly" />
                                             <input type="hidden" value="" name="discount_type" id="discount_type_1">
                                         </td>
 

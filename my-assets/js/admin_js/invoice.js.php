@@ -53,7 +53,7 @@ function addInputField(t) {
             "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  expiry_date_" + count + "' name='expiry_date[]' value=''/></td>" +
             "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
-            "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' total_price_wd form-control text-right' type='hidden' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
 
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
@@ -198,6 +198,7 @@ function quantity_calculate(item) {
     var just_tot = quantity * price_item;
     var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
+    $("#total_price_wd_" + item).val(just_tot);
     $("#total_discount_" + item).val((just_tot) * (discount / 100));
     //$("#total_discount_ammount").val((just_tot) * (discount / 100));
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
@@ -246,6 +247,7 @@ function calculateSum() {
         o = 0,
         p = 0,
         f = 0,
+        x = 0,
         ad = 0,
         tx = 0,
         ds = 0,
@@ -256,23 +258,6 @@ function calculateSum() {
      perc_discount =  ($("#perc_discount").val() ? $("#perc_discount").val() : 0);
 
 
-    //c_cost =  $("#condition_cost").val(),
-    //commission =  $("#commission").val();
-
-    // alert(commission);
-
-
-    //Total Tax
-    //for(var i=0;i<taxnumber;i++){
-    //
-    //    var j = 0;
-    //    $(".total_tax"+i).each(function () {
-    //        isNaN(this.value) || 0 == this.value.length || (j += parseFloat(this.value))
-    //    });
-    //    $("#total_tax_ammount"+i).val(j.toFixed(2, 2));
-    //
-    //}
-    //Total Discount
     $(".total_discount").each(function () {
         isNaN(this.value) || 0 == this.value.length || (p += parseFloat(this.value))
     }),
@@ -286,6 +271,9 @@ function calculateSum() {
         //Total Price
         $(".total_price").each(function () {
             isNaN(this.value) || 0 == this.value.length || (t += parseFloat(this.value))
+        }),
+        $(".total_price_wd").each(function () {
+            isNaN(this.value) || 0 == this.value.length || (x += parseFloat(this.value))
         }),
 
         $(".dppr").each(function () {
@@ -308,8 +296,8 @@ function calculateSum() {
 
     //console.log(discount_perc);
 
-    var test = +tx + +s_cost + +e + -ttl_discount  + + ad  - commission;
-    var test2 = +tx + +s_cost + +e + -ttl_discount + + ad ;
+    var test = +tx + +s_cost + +x + -ttl_discount  + + ad  - commission;
+    var test2 = +tx + +s_cost + +x + -ttl_discount + + ad ;
 
     if(c_cost == undefined || commission ==undefined){
         $("#grandTotal").val(test2.toFixed(2, 2));

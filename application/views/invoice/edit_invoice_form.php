@@ -318,6 +318,7 @@
 
                                     <td>
                                         <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{sum_amount}" readonly="readonly" />
+                                        <input class="total_price_wd form-control text-right" type="text" name="total_price_wd[]" id="total_price_wd_{sl}" value="0.00" readonly="readonly" />
 
                                         <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
                                     </td>
