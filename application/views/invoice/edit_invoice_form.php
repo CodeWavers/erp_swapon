@@ -276,10 +276,9 @@
                                      <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
                                  </td> -->
                                     <td>
-                                        <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
+                                        <input type="text" name="available_quantity[]" class="form-control text-right" value="{stock_qty}" readonly="" />
                                     </td>
                                     <td>
-                                        <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
                                         <input type="text" name="unit[]" class="form-control text-right " readonly="" value="{unit}" />
                                     </td>
                                     <td>
@@ -369,7 +368,7 @@
                                 <tr>
                                     <td class="text-right" colspan="1"><b>Sale Discount(%):</b></td>
                                     <td class="text-right">
-                                        <input type="number" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" />
+                                        <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" />
                                     </td>
                                 </tr>
                                 <tr>

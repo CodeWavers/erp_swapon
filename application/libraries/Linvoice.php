@@ -379,6 +379,8 @@ class Linvoice
         $CI->load->model('Service');
         $CI->load->model('Warehouse');
         $CI->load->model('Settings');
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
 
         $employee_list    = $CI->Service->employee_list();
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
@@ -395,6 +397,7 @@ class Linvoice
         $i = 0;
 
         $agg_id = $invoice_detail[0]['agg_id'];
+        $outlet_id = $invoice_detail[0]['outlet_id'];
 
         if (!empty($agg_id)){
             $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
@@ -404,7 +407,16 @@ class Linvoice
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
-                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
+
+                if ($outlet_id == 'HK7TGDT69VFMXB7') {
+                    $stock = $CI->Reports->getCheckList(null, $invoice_detail[$k]['product_id'])['central_stock'];
+                    //   $available_quantity = $this->Reports->current_stock($product_id,1);
+                } else {
+                    $stock = $CI->Rqsn->outlet_stock(null, $invoice_detail[$k]['product_id'])['outlet_stock'];
+
+                    // echo '<pre>';print_r($available_quantity);exit();
+                }
+//                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
                 $invoice_detail[$k]['stock_qty'] = $stock + $invoice_detail[$k]['quantity'];
             }
         }

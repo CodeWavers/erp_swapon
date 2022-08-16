@@ -94,6 +94,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 .td-style {
                                     border-left: 1px solid black !important;
+                                    /*border-bottom: 1px solid black !important;*/
                                 }
 
 
@@ -108,6 +109,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 table#tbl td {
                                     overflow-x: hidden !important;
+                                    border-bottom: 1px solid black !important;
                                 }
 
                                 table#tbl th:nth-of-type(1) {
@@ -204,9 +206,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     </div>
                                 </div>
                             </div>
-                            ============================
+                            =====================================
                             <div style="margin: 0; padding:0">
-                                <table class="item_table" id="tbl">
+                                <table class="item_table " id="tbl">
                                     <thead>
                                         <!-- <th width="5mm"><?php echo display('sl'); ?></th> -->
                                         <th class="text-center pr"><?php echo display('product'); ?></th>
@@ -261,7 +263,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     }
                                                     ?>
                                                 </nobr>
-                                                <s>Tk <?php echo html_escape($invoice_data['price']); ?></s>
+                                             <nobr>  <s>Tk <?php echo html_escape($invoice_data['price']); ?></s></nobr>
                                             </td>
                                             <td align="right" class="td-style" style="width: 15mm !important;">
 

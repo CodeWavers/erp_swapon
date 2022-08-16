@@ -472,7 +472,7 @@
                                     <tr>
                                         <td class="text-right" colspan="2"><b>Sale Discount(%):</b></td>
                                         <td class="text-right">
-                                            <input type="number" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="0.00" />
+                                            <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="0.00" />
                                         </td>
                                     </tr>
                                     <tr>
