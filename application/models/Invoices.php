@@ -149,6 +149,7 @@ class Invoices extends CI_Model
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $button .= ' <a href="' . $base_url . 'Cinvoice/invoice_update_form/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
             }
+            $button .= ' <a href="' . $base_url . 'Cretrun_m/invoice_return_form_c/' . $record->invoice_id . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="Return"><i class="fa fa-retweet" aria-hidden="true"></i></a> ';
 
 
 
@@ -157,14 +158,65 @@ class Invoices extends CI_Model
 
             $out = (($record->outlt == 'HK7TGDT69VFMXB7') ? $cw_name : $record->outlet_name);
 
-
+            if ( $record->due_amount > 0){
+                $payment_status='<span class="label label-danger ">Due</span>';
+            } else{
+                $payment_status='<span class="label label-success ">Paid</span>';
+            }
             // $outlet = ($this->Warehouse->branch_search_item($record->outlet_id)) ? $this->Warehouse->branch_search_item($record->outlet_id)[0]['outlet_name'] : '';
+            if ( $record->sale_type == 1){
+                $st='Whole Sale';
+            }
+            if ($record->sale_type== 2){
+                $st='Retail';
+            }
+            if ($record->sale_type == 3){
+                $st='Aggregators Sale';
+            }
 
+            if ($record->sale_type  == null){
+
+                $st='';
+            }
+
+            if ($record->courier_status  == 1){
+                $courier_status='Processing';
+            }
+
+            if ($record->courier_status == 2){
+                $courier_status='Shipped';
+
+            }
+            if ($record->courier_status  == 3){
+
+                $courier_status='Delivered';
+            }
+            if ($record->courier_status  == 4){
+
+                $courier_status='Cancelled';
+            }
+            if ($record->courier_status  == 5){
+                $courier_status='Returned';
+
+            }
+            if ($record->courier_status  == 6){
+
+                $courier_status='Exchanged';
+            }
+            if ($record->courier_status  == null){
+
+                $courier_status='';
+            }
             $data[] = array(
                 'sl'               => $sl,
                 'invoice_id'       => $details_i,
                 'invoice'          => $details,
                 'outlet_name'      => $out,
+                'delivery_type'      => ($record->delivery_type == '1') ? 'Pick Up' : (($record->delivery_type == '2') ? 'Courier' : 'Nothing Selected'),
+                'courier_status'      => $courier_status,
+                'payment_status'      => $payment_status,
+                'due_amount'      => $record->due_amount,
+                'sale_type'      => $st,
                 'salesman'         => $record->first_name . ' ' . $record->last_name,
                 'customer_name'    => $record->customer_name,
                 'final_date'       => $this->occational->dateConvert($record->date),
@@ -642,6 +694,8 @@ class Invoices extends CI_Model
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
                 'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
+                'total_commission'  => $this->input->post('total_commission', TRUE),
+                'comm_type'  => $this->input->post('commission_type', TRUE),
                 'paid_amount'     => $this->input->post('paid_amount', TRUE),
                 'due_amount'      => $this->input->post('due_amount', TRUE),
                 'prevous_due'     => $this->input->post('previous', TRUE),
@@ -828,6 +882,8 @@ class Invoices extends CI_Model
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
                 'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
+                'total_commission'  => $this->input->post('total_commission', TRUE),
+                'comm_type'  => $this->input->post('commission_type', TRUE),
                 'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
                 'customer_mobile_two'       => $this->input->post('customer_mobile_two', TRUE),
                 'paid_amount'     => $this->input->post('paid_amount', TRUE),
@@ -2573,7 +2629,7 @@ class Invoices extends CI_Model
     //Retrieve invoice Edit Data
     public function retrieve_invoice_editdata($invoice_id)
     {
-        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
+        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
@@ -2671,18 +2727,27 @@ class Invoices extends CI_Model
             'perc_discount' => $this->input->post('perc_discount', TRUE),
             'total_discount'  => $this->input->post('total_discount', TRUE),
             'prevous_due'     => $this->input->post('previous', TRUE),
-            'courier_id'     => $this->input->post('courier_id', TRUE),
-            'branch_id'     => $this->input->post('branch_id', TRUE),
+
+            'total_commission'  => $this->input->post('total_commission', TRUE),
+            'comm_type'  => $this->input->post('commission_type', TRUE),
             'is_pre'     => 1,
+            'sale_type'   => $this->input->post('sel_type', TRUE),
+            'reciever_id'       => $this->input->post('deli_reciever', TRUE),
+            'receiver_number'     => $this->input->post('del_rec_num', TRUE),
+            'courier_id'         => $this->input->post('courier_id', TRUE),
+
+            'branch_id'         => $this->input->post('branch_id', TRUE),
+            'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
             // 'sales_by'     => $this->input->post('employee_id',TRUE),
             'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
-            'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
+
             // 'payment_type'    => (!empty($this->input->post('paytype', TRUE)) ? $this->input->post('paytype', TRUE) : null),
-            'delivery_type'    => (!empty($this->input->post('delivery_type', TRUE)) ? $this->input->post('delivery_type', TRUE) : null),
+            'delivery_type'    => (!empty($this->input->post('deliver_type', TRUE)) ? $this->input->post('deliver_type', TRUE) : null),
             // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
             // 'bkash_id'         =>  (!empty($this->input->post('bkash_id',TRUE))?$this->input->post('bank_id',TRUE):null),
             // 'branch_id'         =>  (!empty($this->input->post('branch_id',TRUE))?$this->input->post('branch_id',TRUE):null),
         );
+
 
         //echo '<pre>';print_r($data);exit();delivery_type,paytype
 

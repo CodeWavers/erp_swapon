@@ -96,8 +96,8 @@
                                     <div class="col-sm-8">
                                         <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>"  readonly/>
                                         <input type="hidden" size="100" name="sel_type" class=" form-control"  id="sel_type" tabindex="1"  value="<?php echo $invoice_all_data[0]['sale_type']?>"  readonly/>
-                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="<?php echo $deliver_type=$invoice_all_data[0]['delivery_type']?>"  readonly/>
-                                        <input type="hidden" size="100" name="courier_condtion" class=" form-control"  id="courier_condtion" tabindex="1"  value="<?php echo $condition=$invoice_all_data[0]['courier_condtion']?>"  readonly/>
+<!--                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="--><?php //echo $delivery_type=$invoice_all_data[0]['delivery_type']?><!--"  readonly/>-->
+<!--                                        <input type="hidden" size="100" name="courier_condtion" class=" form-control"  id="courier_condtion" tabindex="1"  value="--><?php //echo $condition=$invoice_all_data[0]['courier_condtion']?><!--"  readonly/>-->
                                     </div>
                                 </div>
 
@@ -110,7 +110,12 @@
                                         <label for="date" class="col-sm-4 col-form-label">Commission<i class="text-danger">*</i></label>
                                         <div class="col-sm-8">
                                             <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
-                                                <option value="">Select Commission</option>
+                                                <?php  if ($comm_type==1){?>
+                                                <option value="1">Product Wise</option>
+                                                <?php } ?>
+                                                <?php  if ($comm_type==2){?>
+                                                    <option value="2">Overall</option>
+                                                <?php } ?>
                                                 <option value="1">Product Wise</option>
                                                 <option value="2">Overall</option>
                                             </select>
@@ -122,35 +127,114 @@
 
                             <?php } ?>
 
-                            <?php  if ($deliver_type == 2){?>
-                                <div class="col-md-6">
-                                    <div class="form-group row">
-                                        <label for="customer_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
-                                        <div class="col-sm-8">
-                                            <select name="courier_id" id="" class="form-control"  tabindex="3">
-                                                <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
+                            <div class="col-sm-6  " id="" >
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-4 col-form-label">Delivery Type<i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
 
-                                                <?php foreach ($courier_list as $courier) { ?>
-                                                    <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                            <select name="deliver_type" class="form-control" onchange="delivery_type(this.value)" tabindex="3">
+
+                                                <?php  if ($delivery_type == 1){?>
+                                                <option value="1">Pick Up</option>
+                                                 <?php } ?>
+
+                                                <?php  if ($delivery_type == 2){?>
+                                                    <option value="2">Courier</option>
                                                 <?php } ?>
+                                                <option value="1">Pick Up</option>
+                                                <option value="2">Courier</option>
+
+
                                             </select>
-                                        </div>
+
+
+
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="customer_name" class="col-sm-4 col-form-label">Branch Name <i class="text-danger">*</i></label>
-                                        <div class="col-sm-8">
-                                            <select name="branch_id" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
-                                                <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
-                                                <?php foreach ($branch_list as $b) { ?>
-                                                    <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6" style="display: none" id="courier_div">
+
+                                <div class="form-group row">
+                                    <label for="bank" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+
+                                        <select name="courier_id" class="form-control bankpayment" id="" onchange="get_branch(this.value)">
+                                            <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
+                                            <?php foreach ($courier_list as $courier) { ?>
+                                                <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row branch_div" id="branch_div">
+                                    <label for="bank" class="col-sm-4 col-form-label">Branch<i class="text-danger">*</i></label>
+                                    <div class="col-sm-8" >
+                                        <select name="branch_id" id="branch_id" class="branch_id form-control text-right" tabindex="1" onchange="get_charge(this.value)">
+                                            <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row branch_div" id="branch_div" style="display: none;">
+                                    <label for="bank" class="col-sm-4 col-form-label">Location<i class="text-danger">*</i></label>
+                                    <div class="col-sm-8 " >
+                                          <input type="radio" id="inside" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="outside">Inside</label><br>
+                                          <input type="radio" id="outside" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="outside">Outside</label><br>
+                                          <input type="radio" id="sub" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="sub">Sub</label>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="form-group row">
+                                    <label for="bank" class="col-sm-4 col-form-label">Condition<i class="text-danger">*</i></label>
+                                    <div class="col-sm-8">
+                                        <select name="courier_condtion" class="form-control bankpayment" id="" onchange="condition_charge(this.value)">
+                                            <option value="<?php echo $courier_condtion?>" selected><?php echo $con?></option>
+                                            <option value="1">Conditional</option>
+                                            <option value="2">Partial</option>
+                                            <option value="3">Unconditional</option>
+
+                                        </select>
                                     </div>
 
                                 </div>
 
-                            <?php } ?>
+                                <div class="form-group row">
+                                    <label for="deli_receiver" class="col-sm-4 col-form-label">Receiver</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" name="deli_reciever" id="deli_receiver"  onchange="receiver_changed(this)">
+                                            <option value="{rid}">{receiver_name}</option>
+                                            {receiver_list}
+                                            <option value="{id}">{receiver_name}</option>
+                                            {/receiver_list}
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn btn-sm btn-success" id="add_rec_btn" aria-hidden="true" data-toggle="modal" data-target="#add_receiver_modal">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row" id="receiver_num_div" >
+                                    <label for="del_rec_num" class="col-sm-4 col-form-label">Receiver Number</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="del_rec_num" name="del_rec_num" value="{receiver_number}">
+                                    </div>
+                                </div>
+
+                            </div>
+
+
                         </div>
 
                         <div class="row">
@@ -162,53 +246,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6" id="bank_div">
-                                <div class="form-group row">
-                                    <label for="bank" class="col-sm-4 col-form-label"><?php
-                                        echo display('bank');
-                                        ?> <i class="text-danger">*</i></label>
-                                    <div class="col-sm-6">
 
-                                        <input type="text" name="bank_id" class="form-control" id="bank_id" value="<?php echo html_escape($bank) ?>" placeholder="Bank">
-
-                                    </div>
-                                    <!--                                    <label for="bank" class="col-sm-4 col-form-label">Cheque NO:-->
-                                    <!--                                        <i class="text-danger">*</i></label>-->
-                                    <!--                                    <div class="col-sm-6">-->
-                                    <!--                                        <input type="number"   name="cheque_no[]" class=" form-control" placeholder=""  autocomplete="off"/>-->
-                                    <!--                                    </div>-->
-                                    <!---->
-                                    <!---->
-                                    <!--                                    <label for="date" class="col-sm-4 col-form-label">Due Date <i class="text-danger">*</i></label>-->
-                                    <!--                                    <div class="col-sm-6">-->
-                                    <!---->
-                                    <!--                                        <input class="datepicker form-control" type="text" size="50" name="cheque_date[]" id=""  value="" tabindex="4" autocomplete="off" />-->
-                                    <!--                                    </div>-->
-                                    <!--                                    <div  class=" col-sm-1">-->
-                                    <!--                                        <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cheque_info"><i class="ti-plus m-r-2"></i></a>-->
-                                    <!--                                    </div>-->
-
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6" style="display: none" id="courier_div">
-                                <div class="form-group row">
-                                    <label for="bank" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
-                                    <div class="col-sm-8">
-
-                                        <select name="courier_id" class="form-control bankpayment" id="">
-                                            <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['courier_id']) ?>" <?php if ($courier['courier_id'] == $courier_id) {echo 'selected'; } ?>><?php echo html_escape($courier['courier_name']); ?>
-                                                </option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                    <input type="hidden" id="editpayment_type" value="<?php echo $delivery_type; ?>" name="">
-
-                                </div>
-
-                            </div>
 
 
 
@@ -233,6 +271,49 @@
                             </div>
                         </div>
                         <br>
+                        <div class="modal fade modal-warning" id="add_receiver_modal" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                        <h3 class="modal-title">Add New Receiver</h3>
+                                    </div>
+
+                                    <?php echo form_open('Cinvoice/add_receiver', array('class' => 'form-vertical', 'id' => 'add_receiver_form')) ?>
+                                    <div class="modal-body">
+                                        <div id="customeMessage_rec" class="alert hide"></div>
+                                        <div class="panel-body">
+                                            <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+                                            <div class="form-group row">
+                                                <label for="receiver_name" class="col-sm-4 col-form-label">Receiver Name<i class="text-danger">*</i></label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label for="receiver_number" class="col-sm-4 col-form-label">Receiver Mobile No.<i class="text-danger">*</i></label>
+                                                <div class="col-sm-6">
+                                                    <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="modal-footer">
+
+                                        <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+
+                                        <input type="submit" class="btn btn-success" value="Submit">
+                                    </div>
+                                    <?php echo form_close() ?>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover" id="normalinvoice">
                                 <thead>
@@ -312,13 +393,14 @@
                                         <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate({sl});" onchange="({sl});" id="discount_{sl}" class="form-control text-right " placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
 
                                         <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
-                                        <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
-
+                                        <?php  if ($comm_type == 1){?>
+                                        <input class="comm_th form-control text-right  p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_{sl}" value="{commission_per}" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  placeholder="0.00"/>
+                                        <?php }?>
                                     </td>
 
                                     <td>
                                         <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{sum_amount}" readonly="readonly" />
-                                        <input class="total_price_wd form-control text-right" type="text" name="total_price_wd[]" id="total_price_wd_{sl}" value="0.00" readonly="readonly" />
+                                        <input class="total_price_wd form-control text-right" type="hidden" name="total_price_wd[]" id="total_price_wd_{sl}" value="0.00" readonly="readonly" />
 
                                         <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
                                     </td>
@@ -378,6 +460,15 @@
                                         <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
                                     </td>
                                 </tr>
+                                <?php  if ($comm_type==1){?>
+                                <tr id="t_comm_tr" >
+                                    <td class="text-right" colspan="8"><b>Total Commission:</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="total_commission" class="form-control text-right" name="total_commission" value="{total_commission}"  readonly="readonly" />
+                                    </td>
+                                </tr>
+                                <?php } ?>
+
                                 <?php $x = 0;
                                 foreach ($taxes as $taxfldt) { ?>
                                     <tr class="hideableRow hiddenRow">
@@ -402,22 +493,30 @@
                                         </button>
                                     </td>
                                 </tr>
-                                <?php  if ($deliver_type == 2){?>
+
                                     <tr>
                                         <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{shipping_cost}" />
                                         </td>
                                     </tr>
-                                    <?php  if ($condition == 1 || 2){?>
+
                                         <tr id="condition_tr" class=" " >
                                             <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{condition_cost}" tabindex="14" />
                                             </td>
                                         </tr>
-                                    <?php } ?>
-                                <?php } ?>
+
+
+
+                                    <tr>
+                                        <td class="text-right" colspan="8"><b>ADC:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{delivery_ac}" tabindex="14"  />
+                                        </td>
+                                    </tr>
+
                                 <?php  if ($invoice_all_data[0]['sale_type']==1){?>
                                 <tr id="commission_tr" class="">
                                     <td class="text-right" colspan="8"><b>Commission:</b></td>
@@ -793,6 +892,23 @@
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function() {
+
+        var del_type='<?= $delivery_type ?>'
+
+        if (del_type == 2) {
+            var style = 'block';
+
+        } else {
+            var style = 'none';
+
+        }
+
+
+        document.getElementById('courier_div').style.display = style;
+
+
+    })
     function delete_payment(e, id) {
         var csrf_test_name = $('[name="csrf_test_name"]').val();
         var base_url = '<?= base_url() ?>';
@@ -808,5 +924,70 @@
                 e.closest('tr').remove();
             }
         });
+    }
+
+    "use strict";
+    function get_branch(courier_id) {
+
+        var base_url = "<?= base_url() ?>";
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+        $.ajax( {
+            url: base_url + "Ccourier/branch_by_courier",
+            method: 'post',
+            data: {
+                courier_id:courier_id,
+                csrf_test_name:csrf_test_name
+            },
+            cache: false,
+            success: function( data ) {
+                var obj = jQuery.parseJSON(data);
+                $('.branch_id').html(obj.branch);
+
+
+                $(".branch_div").css("display", "block");
+                // if(courier_id == obj.courier_id ){
+                //     $("#subCat_div").css("display", "block");
+                // }else{
+                //     $("#subCat_div").css("display", "none");
+                // }
+            }
+        })
+
+    }
+
+    function get_charge(branch_id) {
+
+        var base_url = "<?= base_url() ?>";
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+        $.ajax( {
+            url: base_url + "Ccourier/charge_by_branch",
+            method: 'post',
+            data: {
+                branch_id:branch_id,
+                csrf_test_name:csrf_test_name
+            },
+            cache: false,
+            success: function( data ) {
+                var obj = jQuery.parseJSON(data);
+                //   console.log(obj[0].inside)
+
+                $('#inside').val(obj[0].inside);
+                $('#outside').val(obj[0].outside);
+                $('#sub').val(obj[0].sub);
+
+            }
+        })
+
+    }
+
+    function put_value(val){
+
+        $('#delivery_ac').val(val);
     }
 </script>

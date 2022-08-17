@@ -460,6 +460,7 @@
                                             <!-- Tax calculate end-->
 
                                             <!-- Discount calculate start-->
+                                            <input type="hidden" id="total_comm_1" class="total_comm" name="total_comm[]"/>
                                             <input type="hidden" id="total_discount_1" class="total_discount" name="total_discount[]"/>
                                             <input type="hidden" id="all_discount_1" class="total_discount dppr" name="discount_amount[]" />
                                             <!-- Discount calculate end -->
@@ -492,6 +493,13 @@
                                         <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
+                                        </td>
+                                    </tr>
+
+                                    <tr id="t_comm_tr" >
+                                        <td class="text-right" colspan="8"><b>Total Commission:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="total_commission" class="form-control text-right" name="total_commission" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
 
@@ -530,12 +538,6 @@
                                         <td class="text-right" colspan="8"><b>ADC:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14"  />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
-                                        <td class="text-right">
-                                            <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                         </td>
                                     </tr>
 

@@ -425,11 +425,24 @@ class Linvoice
         $card_list = $CI->Settings->get_real_card_data();
 
         $outlet = $CI->Warehouse->branch_search_item($invoice_detail[0]['outlet_id']);
-
+        $receiver_list        = $CI->Courier->get_receiver_list();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
         $data = array(
             'title'           => 'Due Invoice View',
+            'con'      => $con,
+            'courier_condtion'      => $invoice_detail[0]['courier_condtion'],
             'invoice_id'      => $invoice_detail[0]['invoice_id'],
+            'receiver_list'     => $receiver_list,
             'agg_name'     => $agg_name,
             'sale_type'     => $invoice_detail[0]['sale_type'],
             'agg_id'     => $invoice_detail[0]['agg_id'],
@@ -446,6 +459,7 @@ class Linvoice
             'paid_amount'     => $invoice_detail[0]['p_amnt'],
             'due_amount'      => $invoice_detail[0]['due_amnt'],
             'invoice_discount' => $invoice_detail[0]['invoice_discount'],
+            'delivery_ac' => $invoice_detail[0]['delivery_ac'],
             'perc_discount' => $invoice_detail[0]['perc_discount'],
             'total_discount'  => $invoice_detail[0]['total_discount'],
             'rr'            => $invoice_detail[0]['unit'],
@@ -458,6 +472,8 @@ class Linvoice
             'net_total'       => $invoice_detail[0]['prevous_due'] + $invoice_detail[0]['total_amount'],
             'shipping_cost'   => $invoice_detail[0]['shipping_cost'],
             'condition_cost'   => $invoice_detail[0]['condition_cost'],
+            'total_commission'   => $invoice_detail[0]['total_commission'],
+            'comm_type'   => $invoice_detail[0]['comm_type'],
             'commission'   => $invoice_detail[0]['commission'],
             'total_tax'       => $invoice_detail[0]['taxs'],
             'invoice_all_data' => $invoice_detail,
@@ -466,6 +482,9 @@ class Linvoice
             'bank_list'       => $bank_list,
             'bkash_list'      => $bkash_list,
             'employee_list' => $employee_list,
+            'rid'         => $invoice_detail[0]['rid'],
+            'receiver_name'         => $invoice_detail[0]['receiver_name'],
+            'receiver_number'         => $invoice_detail[0]['receiver_number'],
             'bank_id'         => $invoice_detail[0]['bank_id'],
             'bkash_id'        => $invoice_detail[0]['bkash_id'],
             'nagad_list'     => $nagad_list,
@@ -483,7 +502,7 @@ class Linvoice
             'sales_first_name'   => $invoice_detail[0]['customer_name'],
             // 'sales_last_name'   => $invoice_detail[0]['last_name'],
         );
-//      echo "<pre>" ;print_r($invoice_detail[0]['sum_amount']);exit();
+//      echo "<pre>" ;print_r($invoice_detail[0]['delivery_type']);exit();
         $chapterList = $CI->parser->parse('invoice/edit_invoice_form', $data, true);
         return $chapterList;
     }
@@ -875,6 +894,7 @@ class Linvoice
             'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
             'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
             'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
+            'total_commission'     => number_format($invoice_detail[0]['total_commission']+$invoice_detail[0]['commission'], 2, '.', ','),
             'invoice_all_data'  => $invoice_detail,
             'company_info'      => $company_info,
             'currency'          => $currency_details[0]['currency'],

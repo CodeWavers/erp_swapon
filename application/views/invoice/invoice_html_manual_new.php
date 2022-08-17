@@ -237,7 +237,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <?php if ($sale_type == 3) { ?>
                                                     <address style=" text-align: justify;">
-                                                        <u><h4><b>Shiped By:</b></h4></u>
+                                                        <u><h4><b>Shipped To:</b></h4></u>
                                                         <abbr><nobr>Aggregator Name: {agg_name} </nobr></abbr>
 
                                                     </address>
@@ -245,7 +245,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <?php }else{ ?>
 
                                                     <address style=" text-align: justify;">
-                                                    <u><h4><b>Ship To:</b></h4></u>
+                                                    <u><h4><b>Shipped To:</b></h4></u>
                                                     <abbr><nobr>Name: {customer_name} </nobr></abbr><br>
                                                     <abbr><nobr>Mobile: {customer_mobile}</nobr></abbr><br>
                                                     <abbr><nobr>Address: {customer_address}</nobr></abbr><br>
@@ -329,8 +329,20 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             <td align="right"><b><?php echo (($position == 0) ? "$currency {total_discount}" : "{total_discount} $currency") ?></b></td>
                                         </tr>
+
+<!--                                        --><?php //if ($total_commission > 0) {?>
+
                                         <tr>
-                                            <td  colspan="2" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+
+                                            <td colspan="2" class="text-right"><b>Total Commission:</b></td>
+
+                                            <td align="right"><b><?php echo (($position == 0) ? "$currency {total_commission}" : "{total_commission} $currency") ?></b></td>
+                                        </tr>
+
+<!--                                        --><?php //} ?>
+                                        <tr>
+
+                                            <td  colspan="5" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
 
                                             <td  align="right"><b><?php echo (($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency") ?></b></td>
                                         </tr>

@@ -55,6 +55,7 @@ function addInputField(t) {
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
             "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' total_price_wd form-control text-right' type='hidden' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
             "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right' hidden><input class=' total_comm form-control text-right' type='text' name='total_comm[]' id='total_comm_" + count + "' name='total_comm[]' value='0.00' readonly='readonly'/></td>" +
 
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
             document.getElementById(t).appendChild(e),
@@ -196,12 +197,13 @@ function quantity_calculate(item) {
     //}
 
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
 
     $("#total_price_wd_" + item).val(just_tot);
     $("#total_discount_" + item).val((just_tot) * (discount / 100));
+    $("#total_comm_" + item).val((just_tot) * (comm_item / 100));
     //$("#total_discount_ammount").val((just_tot) * (discount / 100));
-    $("#total_price_" + item).val(row_tot.toFixed(2, 2));
+    $("#total_price_" + item).val(row_tot.toFixed(2,2));
     //$("#total_price_wd_" + item).val(just_tot.toFixed(2, 2));
 
     calculateSum();
@@ -232,7 +234,9 @@ function quantity_calculate_pre(item) {
     var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
 
+
     $("#total_price_" + item).val(row_tot.toFixed(2, 2));
+    //$("#total_comm_" + item).val(row_tot.toFixed(2, 2));
 
     calculateSum();
     invoice_paidamount();
@@ -253,6 +257,7 @@ function calculateSum() {
         ad = 0,
         tx = 0,
         ds = 0,
+        cc = 0,
 
         s_cost =  ($("#shipping_cost").val() ? $("#shipping_cost").val() : 0),
         c_cost =  ($("#condition_cost").val() ? $("#condition_cost").val() : 0),
@@ -282,6 +287,10 @@ function calculateSum() {
             isNaN(this.value) || 0 == this.value.length || (ad += parseFloat(this.value))
         }),
 
+        $(".total_comm").each(function () {
+            isNaN(this.value) || 0 == this.value.length || (cc += parseFloat(this.value))
+        }),
+
         o = a.toFixed(2, 2),
         e = t.toFixed(2, 2),
         tx = f.toFixed(2, 2),
@@ -294,6 +303,7 @@ function calculateSum() {
     var ttl_discount = parseFloat(total_discount_ammount)+pds;
     //var ttl_cms = +commission;
     $("#total_discount_ammount").val(ttl_discount.toFixed(2,2));
+    $("#total_commission").val(cc.toFixed(2,2));
      //ds =+(t) * (perc_discount / 100);
 
     //console.log(discount_perc);
@@ -579,10 +589,10 @@ function  delivery_type(val){
 
     if (val == 2) {
         var style = 'block';
-        document.getElementById('courier_div').setAttribute("required", true);
+
     } else {
         var style = 'none';
-        document.getElementById('courier_div').removeAttribute("required");
+
     }
 
     document.getElementById('courier_div').style.display = style;
@@ -610,10 +620,12 @@ function add_customer() {
 function commision_add(val) {
 
     if (val==1 ) {
+        $('#t_comm_tr').removeClass('d-none')
         $('.comm_th').removeClass('d-none')
         $('.comm_th').addClass('d-inline')
 
     }else{
+        $('#t_comm_tr').addClass('d-none')
         $('.comm_th').addClass('d-none')
         $('.comm_th').removeClass('d-inline')
     }

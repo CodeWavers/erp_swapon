@@ -1096,7 +1096,7 @@ $(document).ready(function () {
     responsive: true,
 
     aaSorting: [[1, "desc"]],
-    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8] }],
+    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13] }],
     processing: true,
     serverSide: true,
 
@@ -1110,7 +1110,7 @@ $(document).ready(function () {
       {
         extend: "copy",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -1118,14 +1118,14 @@ $(document).ready(function () {
         extend: "csv",
         title: "InvoiceList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
         },
         className: "btn-sm prints",
       },
       {
         extend: "excel",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
         },
         title: "InvoiceList",
         className: "btn-sm prints",
@@ -1133,7 +1133,7 @@ $(document).ready(function () {
       {
         extend: "pdf",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
         },
         title: "Invoice List",
         className: "btn-sm prints",
@@ -1141,7 +1141,7 @@ $(document).ready(function () {
       {
         extend: "print",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
         },
         title: "<center> Invoice List</center>",
         className: "btn-sm prints",
@@ -1161,10 +1161,24 @@ $(document).ready(function () {
       { data: "sl" },
       { data: "invoice_id" },
       { data: "invoice" },
+      { data: "final_date" },
       { data: "outlet_name" },
       { data: "salesman" },
       { data: "customer_name" },
-      { data: "final_date" },
+      { data: "delivery_type" },
+      { data: "sale_type" },
+      { data: "courier_status" },
+      {
+        data: "payment_status",
+        class: "text-center",
+      },
+
+      {
+        data: "due_amount",
+        class: "text-right",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+
       {
         data: "total_amount",
         class: "total_sale text-right",

@@ -97,16 +97,21 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered" cellspacing="0" width="100%" id="InvList">
+                            <table class="table table-hover table-bordered table-responsive" cellspacing="0" width="100%" id="InvList">
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
                                         <th>Invoice ID</th>
                                         <th><?php echo display('invoice_no') ?></th>
+                                        <th><?php echo display('date') ?></th>
                                         <th>Outlet Name</th>
                                         <th><?php echo display('sale_by') ?></th>
                                         <th><?php echo display('customer_name') ?></th>
-                                        <th><?php echo display('date') ?></th>
+                                        <th>Delivery type</th>
+                                        <th>Sale type</th>
+                                        <th>Delivery Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Due Amount</th>
                                         <th><?php echo display('total_amount') ?></th>
                                         <th class="text-center"><?php echo display('action') ?></th>
                                     </tr>
@@ -115,7 +120,7 @@
 
                                 </tbody>
                                 <tfoot>
-                                    <th colspan="7" class="text-right"><?php echo display('total') ?>:</th>
+                                    <th colspan="12" class="text-right"><?php echo display('total') ?>:</th>
 
                                     <th></th>
                                     <th></th>

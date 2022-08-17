@@ -614,7 +614,8 @@ var count = 2,
             data: {customer_id:id,csrf_test_name:csrf_test_name},
             success: function (msg){
 
-                $("#previous").val(msg);
+                //$("#previous").val(msg);
+                $("#previous").val(0);
             },
             error: function (xhr, desc, err){
                  alert('failed');
