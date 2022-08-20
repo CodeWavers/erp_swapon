@@ -2684,6 +2684,7 @@ class Invoices extends CI_Model
         $customer_id = $this->input->post('customer_id', TRUE);
         $quantity    = $this->input->post('product_quantity', TRUE);
         $product_id  = $this->input->post('product_id', TRUE);
+        $delivery_type  = $this->input->post('deliver_type', TRUE);
 
         $changeamount = $this->input->post('change', TRUE);
         if ($changeamount > 0) {
@@ -2691,20 +2692,6 @@ class Invoices extends CI_Model
         } else {
             $paidamount = $this->input->post('paid_amount', TRUE);
         }
-
-
-        $card_id = $this->input->post('card_id', TRUE);
-        $bank_id = $this->input->post('bank_id', TRUE);
-        // if (!empty($bank_id)) {
-        //     $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
-
-        //     $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-        // } else {
-        //     $bankcoaid = '';
-        // }
-
-        $transection_id = $this->auth->generator(15);
-
 
         $this->db->where('VNo', $invoice_id);
         $this->db->delete('acc_transaction');
@@ -2748,11 +2735,6 @@ class Invoices extends CI_Model
             // 'branch_id'         =>  (!empty($this->input->post('branch_id',TRUE))?$this->input->post('branch_id',TRUE):null),
         );
 
-
-        //echo '<pre>';print_r($data);exit();delivery_type,paytype
-
-
-
         $prinfo  = $this->db->select('product_id,Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id', $product_id)->group_by('product_id')->get()->result();
 
         $pr_open_price = $this->db->select('supplier_price')
@@ -2783,26 +2765,16 @@ class Invoices extends CI_Model
         $customer_headcode = $coainfo->HeadCode;
         // Cash in Hand debit
 
-
-
-
         if ($invoice_id != '') {
             $this->db->where('invoice_id', $invoice_id);
             $this->db->update('invoice', $data);
         }
-
-
-
 
         for ($j = 0; $j < $num_column; $j++) {
             $taxfield = 'tax' . $j;
             $taxvalue = 'total_tax' . $j;
             $taxdata[$taxfield] = $this->input->post($taxvalue);
         }
-        $taxdata['customer_id'] = $customer_id;
-        $taxdata['date']        = (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d'));
-        $taxdata['relation_id'] = $invoice_id;
-        // $this->db->insert('tax_collection', $taxdata);
 
         // Inserting for Accounts adjustment.
         ############ default table :: customer_payment :: inflow_92mizdldrv #################
@@ -2816,18 +2788,11 @@ class Invoices extends CI_Model
         $discount_rate = $this->input->post('total_discount', TRUE);
         $discount_per  = $this->input->post('discount', TRUE);
         $invoice_description = $this->input->post('desc', TRUE);
-
         $this->db->where('invoice_id', $invoice_id);
         $this->db->delete('invoice_details');
-
         $this->db->where('invoice_id', $invoice_id);
         $this->db->delete('paid_amount');
-
-
         $serial_n       = $this->input->post('serial_no', TRUE);
-        // $warehouse       = $this->input->post('warehouse',TRUE);
-        $warrenty_date       = $this->input->post('warrenty_date', TRUE);
-        $expiry_date       = $this->input->post('expiry_date', TRUE);
         for ($i = 0, $n = count($p_id); $i < $n; $i++) {
             $cartoon_quantity = $cartoon[$i];
             $product_quantity = $quantity[$i];
@@ -2881,15 +2846,6 @@ class Invoices extends CI_Model
 
         $invoice_id  = $this->input->post('invoice_id', TRUE);
 
-        $pay_row = $this->input->post('row_id', true);
-        $pay_amount = $this->input->post('pay_amount', true);
-
-        // for ($i = 0; $i < count($pay_row); $i++) {
-        //     $this->db->where('id', $pay_row[$i]);
-        //     $this->db->set('amount', $pay_amount[$i]);
-        //     $this->db->update('paid_amount');
-        // }
-
         $paid = $this->input->post('p_amount', TRUE);
         $pay_type = $this->input->post('paytype', TRUE);
         $p_amount = $this->input->post('p_amount', TRUE);
@@ -2898,6 +2854,8 @@ class Invoices extends CI_Model
         $bkashname = '';
         $card_id = $this->input->post('card_id', TRUE);
         $nagad_id = $this->input->post('nagad_id', TRUE);
+        $sel_type = $this->input->post('sel_type', TRUE);
+        $invoice_no_generated = $this->input->post('invoice', TRUE);
 
 
         if ($sel_type == 1 || 2) {
@@ -3172,43 +3130,6 @@ class Invoices extends CI_Model
         // echo "<pre>";print_r($paid);
         if (count($paid) > 0) {
             for ($i = 0; $i < count($pay_type); $i++) {
-
-                // $account_name = '';
-
-                // switch ($pay_type[$i]) {
-                //     case 1:
-                //         $account_name = '';
-                //         break;
-
-                //     case 2:
-                //         $account_name = '';
-                //         break;
-
-                //     case 3:
-                //         $account_name = $bkashname;
-                //         break;
-
-                //     case 4:
-                //         $account_name = $bankname;
-                //         break;
-
-                //     case 5:
-                //         $account_name = $nagadname;
-                //         break;
-
-                //     case 6:
-                //         $account_name = '';
-                //         break;
-                // }
-
-                // $data = array(
-                //     'invoice_id'    => $invoice_id,
-                //     'pay_type'      => $pay_type[$i],
-                //     'amount'        => $p_amount[$i],
-                //     'account'       => $account_name
-                // );
-
-                // $this->db->insert('paid_amount', $data);
 
                 if ($pay_type[$i] == 1) {
 

@@ -394,7 +394,7 @@
                                         </td>
 
                                         <td  width="100">
-                                            <input type="text" id="stock_1" class="form-control" value="" readonly>
+                                            <input type="text" id="" class="form-control text-right available_quantity_1" value="" readonly>
                                         </td>
                                         <!-- <td class="invoice_fields">
                                         <select name="warehouse[]" id="warehouse_1" class="form-control text-right" required="" tabindex="1">
@@ -528,14 +528,14 @@
                                                 <i class="fa fa-angle-double-down"></i>
                                             </button></td>
                                     </tr>
-                                    <tr>
-                                        <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
+                                    <tr class="hidden_tr d-none">
+                                        <td class="text-right " colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="text-right" colspan="8"><b>ADC:</b></td>
+                                    <tr class="hidden_tr d-none">
+                                        <td class="text-right " colspan="8"><b>ADC:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14"  />
                                         </td>

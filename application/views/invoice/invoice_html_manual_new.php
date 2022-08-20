@@ -75,38 +75,47 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 height: auto;
                             }
                             .condition_tag {
-                                /*margin: 30px;*/
+                                margin-top: 80%;
+                                margin-left: 5%;
+                                top: 0;
+                                left: 0;
+                                position: fixed;
                                 border: 1px dashed red;
                                 color: red !important;
-                                width: 400px;
+                                width: 300px;
                                 /* Browsers not below */
-                                transform: rotate(-45deg);
+                                transform: rotate(-40deg);
                                 /* Safari */
-                                -webkit-transform: rotate(-45deg);
+                                -webkit-transform: rotate(-40deg);
                                 /* Firefox */
-                                -moz-transform: rotate(-45deg);
+                                -moz-transform: rotate(-40deg);
                                 /* Opera */
-                                -o-transform: rotate(-45deg);
+                                -o-transform: rotate(-40deg);
                                 /* IE */
-                                -ms-transform: rotate(-45deg);
+                                -ms-transform: rotate(-40deg);
+
 
                             }
 
                             .condition_tag_green {
-                                margin: 60px;
+                                margin-top: 80%;
+                                margin-left: 5%;
+                                top: 0;
+                                left: 0;
+                                position: fixed;
                                 border: 1px dashed green;
                                 color: green !important;
                                 width: 300px;
                                 /* Browsers not below */
-                                transform: rotate(-45deg);
+                                transform: rotate(-40deg);
                                 /* Safari */
-                                -webkit-transform: rotate(-45deg);
+                                -webkit-transform: rotate(-40deg);
                                 /* Firefox */
-                                -moz-transform: rotate(-45deg);
+                                -moz-transform: rotate(-40deg);
                                 /* Opera */
-                                -o-transform: rotate(-45deg);
+                                -o-transform: rotate(-40deg);
                                 /* IE */
-                                -ms-transform: rotate(-45deg);
+                                -ms-transform: rotate(-40deg);
 
                             }
                             @media print {
@@ -309,7 +318,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             <td align="right">{sum_quantity}</td>
 
-                                            <td align="right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?></td>
+                                            <td align="right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?><nobr>  <s>Tk {price}</s></nobr>
+                                            </td>
                                             <td align="right"><?php echo (($position == 0) ? "$currency {sum_amount}" : "{sum_amount} $currency") ?></td>
                                         </tr>
                                         {/invoice_all_data}

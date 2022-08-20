@@ -46,7 +46,7 @@ function addInputField(t) {
         tab11 = tabindex + 11;
         tab12 = tabindex + 12;
         e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
-            "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
+            "<td><input type='text'  class='form-control text-right  available_quantity_" + count + "' value='' readonly></td>"+
             " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
             "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
             "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
@@ -125,7 +125,7 @@ function addInputField_pre(t) {
         tab11 = tabindex + 11;
         tab12 = tabindex + 12;
         e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList_pre(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
-            "<td><input type='text' id='stock_" + count + "' class='form-control' value='' readonly></td>"+
+            "<td><input type='text' id='available_quantity_" + count + "' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='' readonly></td>"+
             " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
             "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
             "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
@@ -589,9 +589,11 @@ function  delivery_type(val){
 
     if (val == 2) {
         var style = 'block';
+        $('.hidden_tr').removeClass('d-none');
 
     } else {
         var style = 'none';
+        $('.hidden_tr').addClass('d-none');
 
     }
 

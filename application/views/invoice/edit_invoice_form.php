@@ -96,6 +96,8 @@
                                     <div class="col-sm-8">
                                         <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>"  readonly/>
                                         <input type="hidden" size="100" name="sel_type" class=" form-control"  id="sel_type" tabindex="1"  value="<?php echo $invoice_all_data[0]['sale_type']?>"  readonly/>
+                                        <input type="hidden" size="100" name="outlet_name" class=" form-control"  id="outlet_name" tabindex="1"  value="<?php echo $invoice_all_data[0]['outlet_id']?>"  readonly/>
+
 <!--                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="--><?php //echo $delivery_type=$invoice_all_data[0]['delivery_type']?><!--"  readonly/>-->
 <!--                                        <input type="hidden" size="100" name="courier_condtion" class=" form-control"  id="courier_condtion" tabindex="1"  value="--><?php //echo $condition=$invoice_all_data[0]['courier_condtion']?><!--"  readonly/>-->
                                     </div>
@@ -357,7 +359,7 @@
                                      <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
                                  </td> -->
                                     <td>
-                                        <input type="text" name="available_quantity[]" class="form-control text-right" value="{stock_qty}" readonly="" />
+                                        <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_{sl}" value="{stock_qty}" readonly="" />
                                     </td>
                                     <td>
                                         <input type="text" name="unit[]" class="form-control text-right " readonly="" value="{unit}" />
@@ -494,14 +496,21 @@
                                     </td>
                                 </tr>
 
-                                    <tr>
+                                    <tr class="hidden_tr ">
                                         <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{shipping_cost}" />
                                         </td>
                                     </tr>
 
-                                        <tr id="condition_tr" class=" " >
+                                <tr class="hidden_tr ">
+                                    <td class="text-right" colspan="8"><b>ADC:</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{delivery_ac}" tabindex="14"  />
+                                    </td>
+                                </tr>
+
+                                        <tr id="condition_tr" class=" " hidden>
                                             <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{condition_cost}" tabindex="14" />
@@ -510,12 +519,6 @@
 
 
 
-                                    <tr>
-                                        <td class="text-right" colspan="8"><b>ADC:</b></td>
-                                        <td class="text-right">
-                                            <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{delivery_ac}" tabindex="14"  />
-                                        </td>
-                                    </tr>
 
                                 <?php  if ($invoice_all_data[0]['sale_type']==1){?>
                                 <tr id="commission_tr" class="">
@@ -898,9 +901,12 @@
 
         if (del_type == 2) {
             var style = 'block';
+            $('.hidden_tr').removeClass('d-none');
 
         } else {
             var style = 'none';
+            $('.hidden_tr').addClass('d-none');
+
 
         }
 
