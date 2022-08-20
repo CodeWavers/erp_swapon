@@ -26,6 +26,7 @@ class Lreturn
     {
         $CI = &get_instance();
         $CI->load->model('Invoices');
+        $CI->load->model('Courier');
         $CI->load->model('Web_settings');
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
 
@@ -40,12 +41,25 @@ class Lreturn
                 $invoice_detail[$k]['sl'] = $i;
             }
         }
-
+        $courier_list        = $CI->Courier->get_courier_list();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
         $data = array(
             'title'         => display('invoice_return'),
             'invoice_id'    => $invoice_detail[0]['invoice_id'],
             'customer_id'   => $invoice_detail[0]['customer_id'],
+            'courier_list' =>$courier_list,
+            'con'      => $con,
+            "receiver_list"        => $CI->Courier->get_receiver_list(),
             'customer_name' => $invoice_detail[0]['customer_name'],
             'date'          => $invoice_detail[0]['date'],
             'receiver_number'          => $invoice_detail[0]['receiver_number'],

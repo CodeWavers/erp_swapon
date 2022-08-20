@@ -654,8 +654,10 @@ function  sale_type(val){
 
         if (val==1){
             $('#commission_check').removeClass('d-none')
+            $('#t_comm_tr').removeClass('d-none')
         }else{
             $('#commission_check').addClass('d-none')
+            $('#t_comm_tr').addClass('d-none')
         }
 
         if ( val == 2 || 3){

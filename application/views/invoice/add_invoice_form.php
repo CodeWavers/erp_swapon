@@ -496,7 +496,7 @@
                                         </td>
                                     </tr>
 
-                                    <tr id="t_comm_tr" >
+                                    <tr id="t_comm_tr" class="d-none" >
                                         <td class="text-right" colspan="8"><b>Total Commission:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="total_commission" class="form-control text-right" name="total_commission" value="0.00" readonly="readonly" />

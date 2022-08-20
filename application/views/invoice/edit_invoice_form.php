@@ -95,7 +95,7 @@
                                     <label for="customer_name" class="col-sm-4 col-form-label">Sale Type <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
                                         <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>"  readonly/>
-                                        <input type="hidden" size="100" name="sel_type" class=" form-control"  id="sel_type" tabindex="1"  value="<?php echo $invoice_all_data[0]['sale_type']?>"  readonly/>
+                                        <input type="hidden" size="100" name="sel_type" class=" form-control"  id="sel_type" tabindex="1"  value="<?php echo $sel_type =$invoice_all_data[0]['sale_type']?>"  readonly/>
                                         <input type="hidden" size="100" name="outlet_name" class=" form-control"  id="outlet_name" tabindex="1"  value="<?php echo $invoice_all_data[0]['outlet_id']?>"  readonly/>
 
 <!--                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="--><?php //echo $delivery_type=$invoice_all_data[0]['delivery_type']?><!--"  readonly/>-->
@@ -462,7 +462,9 @@
                                         <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
                                     </td>
                                 </tr>
-                                <?php  if ($comm_type==1){?>
+
+
+                                <?php  if ($sel_type == 1 && $comm_type==1){?>
                                 <tr id="t_comm_tr" >
                                     <td class="text-right" colspan="8"><b>Total Commission:</b></td>
                                     <td class="text-right">
