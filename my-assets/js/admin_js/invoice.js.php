@@ -132,8 +132,9 @@ function addInputField_pre(t) {
             "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  expiry_date_" + count + "' name='expiry_date[]' value=''/></td>" +
             "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:100px;'>৳0.00</s></td>" +
             "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate_pre(" + count + ");' onchange='quantity_calculate_pre(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
-            "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
-            "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' total_price_wd form-control text-right' type='hidden' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
+            "<td class='text-right' hidden><input class=' total_comm form-control text-right' type='text' name='total_comm[]' id='total_comm_" + count + "' name='total_comm[]' value='0.00' readonly='readonly'/></td>" +
             "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
             document.getElementById(t).appendChild(e),
             document.getElementById(a).focus(),
@@ -212,14 +213,14 @@ function quantity_calculate(item) {
 function quantity_calculate_pre(item) {
     var quantity = $("#total_qntt_" + item).val();
     var available_quantity = $(".available_quantity_" + item).val();
-    var price_item = $("#price_item_" + item).val();
+    var price_item = parseInt($("#price_item_" + item).val());
     var invoice_discount = $("#invoice_discount").val();
     var warrenty_date=$("#warrenty_date_"+item).val();
     var warehouse=$(".warehouse_"+item).val();
     var discount = $("#discount_" + item).val();
     var total_tax = $("#total_tax_" + item).val();
     var total_discount = $("#total_discount_" + item).val();
-    var comm_item = $("#comm_" + item).val();
+    var comm_item = ($("#comm_" + item).val() ? $("#comm_" + item).val() : 0);
     var taxnumber = $("#txfieldnum").val();
     var dis_type = $("#discount_type_" + item).val();
 
@@ -231,12 +232,17 @@ function quantity_calculate_pre(item) {
     //}
 
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
 
 
+    $("#total_price_wd_" + item).val(just_tot);
+    $("#total_discount_" + item).val((just_tot) * (discount / 100));
 
-    $("#total_price_" + item).val(row_tot.toFixed(2, 2));
+//$("#total_discount_ammount").val((just_tot) * (discount / 100));
+    $("#total_comm_" + item).val((just_tot) * (comm_item / 100));
     //$("#total_comm_" + item).val(row_tot.toFixed(2, 2));
+    $("#total_price_" + item).val(row_tot.toFixed(2,2));
+    //$("#total_price_wd_" + item).val(just_tot.toFixed(2, 2));
 
     calculateSum();
     invoice_paidamount();

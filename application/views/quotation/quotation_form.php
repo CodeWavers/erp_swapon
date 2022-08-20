@@ -369,7 +369,7 @@
                                     </td>
 
                                     <td  width="100">
-                                        <input type="text" id="stock_1" class="form-control" value="" readonly>
+                                        <input type="text" id="" class="form-control text-right available_quantity_1"  value="" readonly>
                                     </td>
                                     <!-- <td class="invoice_fields">
                                     <select name="warehouse[]" id="warehouse_1" class="form-control text-right" required="" tabindex="1">
@@ -412,6 +412,10 @@
 
                                     <td class="invoice_fields"  width="100">
                                         <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
+
+                                        <input class="total_price_wd form-control text-right" type="hidden" name="total_price_wd[]" id="total_price_wd_1" value="0.00" readonly="readonly" />
+
+
                                     </td>
 
                                     <!--                                        <td class="invoice_fields comm_th">-->
@@ -455,7 +459,13 @@
                                     <td><a id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField_pre('addinvoiceItem');" tabindex="11"><i class="fa fa-plus"></i></a></td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right" colspan="2"><b><?php echo display('total_discount') ?>:</b></td>
+                                    <td class="text-right" colspan="2"><b>Sale Discount(%):</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="" placeholder="0.00" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
                                     <td class="text-right">
                                         <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
                                     </td>
@@ -493,7 +503,7 @@
                                         <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate_pre(1);" onchange="quantity_calculate_pre(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                     </td>
                                 </tr>
-                                <tr id="condition_tr" class=" d-none" >
+                                <tr id="condition_tr" class=" d-none" hidden>
                                     <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                     <td class="text-right">
                                         <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate_pre(1);" onchange="quantity_calculate_pre(1);" placeholder="0.00" value="0.00" tabindex="14" />
