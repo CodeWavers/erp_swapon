@@ -1085,8 +1085,9 @@ class Returnse extends CI_Model
     ///start  return list
     public function return_list($perpage, $page)
     {
-        $this->db->select('a.net_total_amount,a.*,b.customer_name');
+        $this->db->select('a.net_total_amount,a.*,b.customer_name,i.*');
         $this->db->from('product_return a');
+        $this->db->join('invoice i', 'i.invoice_id = a.invoice_id');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->where('usablity', 1);
         $this->db->or_where('usablity', 2);

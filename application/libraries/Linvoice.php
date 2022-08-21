@@ -444,8 +444,9 @@ class Linvoice
             'invoice_id'      => $invoice_detail[0]['invoice_id'],
             'receiver_list'     => $receiver_list,
             'agg_name'     => $agg_name,
-            'sale_type'     => $invoice_detail[0]['sale_type'],
+
             'agg_id'     => $invoice_detail[0]['agg_id'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
             'customer_id'     => $invoice_detail[0]['customer_id'],
             'customer_name'   => $invoice_detail[0]['customer_name'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
@@ -516,11 +517,11 @@ class Linvoice
         $CI->load->model('Service');
         $CI->load->model('Warehouse');
         $CI->load->model('Settings');
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
 
         $employee_list    = $CI->Service->employee_list();
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
-
-      //  echo '<pre>';print_r($invoice_detail);exit();
         $payment_info = $CI->Invoices->payment_details($invoice_id);
         $courier_list        = $CI->Courier->get_courier_list();
         $bank_list      = $CI->Web_settings->bank_list();
@@ -532,11 +533,28 @@ class Linvoice
             ->get()
             ->result_array();
         $i = 0;
+
+        $agg_id = $invoice_detail[0]['agg_id'];
+        $outlet_id = $invoice_detail[0]['outlet_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
         if (!empty($invoice_detail)) {
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
-                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
+
+                if ($outlet_id == 'HK7TGDT69VFMXB7') {
+                    $stock = $CI->Reports->getCheckList(null, $invoice_detail[$k]['product_id'])['central_stock'];
+                    //   $available_quantity = $this->Reports->current_stock($product_id,1);
+                } else {
+                    $stock = $CI->Rqsn->outlet_stock(null, $invoice_detail[$k]['product_id'])['outlet_stock'];
+
+                    // echo '<pre>';print_r($available_quantity);exit();
+                }
+//                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
                 $invoice_detail[$k]['stock_qty'] = $stock + $invoice_detail[$k]['quantity'];
             }
         }
@@ -545,13 +563,30 @@ class Linvoice
         $card_list = $CI->Settings->get_real_card_data();
 
         $outlet = $CI->Warehouse->branch_search_item($invoice_detail[0]['outlet_id']);
-
+        $receiver_list        = $CI->Courier->get_receiver_list();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
         $data = array(
             'title'           => 'Due Invoice View',
+            'con'      => $con,
+            'courier_condtion'      => $invoice_detail[0]['courier_condtion'],
             'invoice_id'      => $invoice_detail[0]['invoice_id'],
+            'receiver_list'     => $receiver_list,
+            'agg_name'     => $agg_name,
+            'sale_type'     => $invoice_detail[0]['sale_type'],
+            'agg_id'     => $invoice_detail[0]['agg_id'],
             'customer_id'     => $invoice_detail[0]['customer_id'],
             'customer_name'   => $invoice_detail[0]['customer_name'],
+            'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'customer_name_two'   => $invoice_detail[0]['customer_name_two'],
             'customer_mobile_two'   => $invoice_detail[0]['customer_mobile_two'],
             'date'            => $invoice_detail[0]['date'],
@@ -562,6 +597,8 @@ class Linvoice
             'paid_amount'     => $invoice_detail[0]['p_amnt'],
             'due_amount'      => $invoice_detail[0]['due_amnt'],
             'invoice_discount' => $invoice_detail[0]['invoice_discount'],
+            'delivery_ac' => $invoice_detail[0]['delivery_ac'],
+            'perc_discount' => $invoice_detail[0]['perc_discount'],
             'total_discount'  => $invoice_detail[0]['total_discount'],
             'rr'            => $invoice_detail[0]['unit'],
             'warrenty_date'   => $invoice_detail[0]['warrenty_date'],
@@ -573,6 +610,8 @@ class Linvoice
             'net_total'       => $invoice_detail[0]['prevous_due'] + $invoice_detail[0]['total_amount'],
             'shipping_cost'   => $invoice_detail[0]['shipping_cost'],
             'condition_cost'   => $invoice_detail[0]['condition_cost'],
+            'total_commission'   => $invoice_detail[0]['total_commission'],
+            'comm_type'   => $invoice_detail[0]['comm_type'],
             'commission'   => $invoice_detail[0]['commission'],
             'total_tax'       => $invoice_detail[0]['taxs'],
             'invoice_all_data' => $invoice_detail,
@@ -581,6 +620,9 @@ class Linvoice
             'bank_list'       => $bank_list,
             'bkash_list'      => $bkash_list,
             'employee_list' => $employee_list,
+            'rid'         => $invoice_detail[0]['rid'],
+            'receiver_name'         => $invoice_detail[0]['receiver_name'],
+            'receiver_number'         => $invoice_detail[0]['receiver_number'],
             'bank_id'         => $invoice_detail[0]['bank_id'],
             'bkash_id'        => $invoice_detail[0]['bkash_id'],
             'nagad_list'     => $nagad_list,
@@ -598,7 +640,8 @@ class Linvoice
             'sales_first_name'   => $invoice_detail[0]['customer_name'],
             // 'sales_last_name'   => $invoice_detail[0]['last_name'],
         );
-    //   echo "<pre>" ;print_r($data);exit();
+//      echo "<pre>" ;print_r($invoice_detail[0]['delivery_type']);exit();
+
         $chapterList = $CI->parser->parse('quotation/edit_invoice_form', $data, true);
         return $chapterList;
     }

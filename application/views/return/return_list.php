@@ -95,9 +95,16 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
+                                        <th>Invoice No</th>
                                         <th><?php echo display('invoice_id') ?></th>
                                         <th><?php echo display('customer_name') ?></th>
                                         <th><?php echo display('date') ?></th>
+                                        <th>Delivery Type</th>
+
+                                        <th>Sale Type</th>
+                                        <th>Payment Status</th>
+                                        <th>Delivery Status</th>
+                                        <th>Due Amount</th>
                                         <th><?php echo display('total_amount') ?></th>
                                         <th><?php echo display('action') ?></th>
                                     </tr>
@@ -109,6 +116,11 @@
                                         {return_list}
                                         <tr>
                             <td>{sl}</td>
+                                            <td>
+                                                <a href="<?php echo base_url() . 'Cretrun_m/invoice_inserted_data/{invoice_id}'; ?>">
+                                                    {invoice}
+                                                </a>
+                                            </td>
                             <td>
                                 <a href="<?php echo base_url() . 'Cretrun_m/invoice_inserted_data/{invoice_id}'; ?>">
                                     {invoice_id}
@@ -119,6 +131,14 @@
                             </td>
 
                             <td>{final_date}</td>
+                            <td>{delivery_type}</td>
+
+                            <td>{sale_type}</td>
+                            <td align="center">{payment_status}</td>
+                                            <td>{delivery_status}</td>
+
+                            <td class="text-right"><?php echo (($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency") ?></td>
+
                             <td class="text-right"><?php echo (($position == 0) ? "$currency {net_total_amount}" : "{net_total_amount} $currency") ?></td>
                                             <td>
                                     <center>

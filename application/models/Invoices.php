@@ -158,6 +158,21 @@ class Invoices extends CI_Model
 
             $out = (($record->outlt == 'HK7TGDT69VFMXB7') ? $cw_name : $record->outlet_name);
 
+
+            $agg_id = $record->agg_id;
+
+
+
+            if (!empty($agg_id)){
+                $agg_name=$this->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+            }
+
+            if ( $record->agg_id == 3){
+                $customer_name=$agg_name;
+            }else{
+                $customer_name=$record->customer_name;
+            }
             if ( $record->due_amount > 0){
                 $payment_status='<span class="label label-danger ">Due</span>';
             } else{
@@ -218,7 +233,7 @@ class Invoices extends CI_Model
                 'due_amount'      => $record->due_amount,
                 'sale_type'      => $st,
                 'salesman'         => $record->first_name . ' ' . $record->last_name,
-                'customer_name'    => $record->customer_name,
+                'customer_name'    => $customer_name,
                 'final_date'       => $this->occational->dateConvert($record->date),
                 'total_amount'     => $record->total_amount,
                 'button'           => $button,

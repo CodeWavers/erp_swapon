@@ -136,6 +136,7 @@ class Quotation_model extends CI_Model
                 'is_pre'          => 2,
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE),
                 'delivery_type'    =>  $delivery_type,
+                'delivery_ac'       =>  $this->input->post('delivery_ac', TRUE),
                 // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
                 // 'bkash_id'         => (!empty($this->input->post('bkash_id', TRUE)) ? $this->input->post('bkash_id', TRUE) : null),
                 // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),

@@ -642,8 +642,8 @@ class Cquotation extends CI_Controller
         $quotation_id = $this->input->post('quotation_id', TRUE);
         $quotation_no = $this->input->post('quotation_no', TRUE);
         $customer_id  = $this->input->post('customer_id', TRUE);
-        $invoice_id   = $this->generator(10);
-        $invoice_id   = strtoupper($invoice_id);
+        $invoice_id  = $this->input->post('invoice_id', TRUE);
+
         $createby     = $this->session->userdata('user_id');
         $createdate   = date('Y-m-d H:i:s');
         $quantity     = $this->input->post('product_quantity', TRUE);
@@ -673,8 +673,8 @@ class Cquotation extends CI_Controller
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
         $quantity = $this->input->post('product_quantity', TRUE);
-        $invoice_no_generated = $this->number_generator();
 
+        $invoice_no_generated = $this->input->post('invoice', TRUE);
         $Vdate = $this->input->post('invoice_date', TRUE);
 
         $pay_type = $this->input->post('paytype', TRUE);
@@ -831,7 +831,7 @@ class Cquotation extends CI_Controller
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
                 'sales_by'        => $createby,
-                'status'          => 2,
+
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE),
                 'delivery_type'    =>  $delivery_type,
                 // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
@@ -843,12 +843,16 @@ class Cquotation extends CI_Controller
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
-
+                'status'          => 2,
+                'is_pre' =>1,
             );
 
 
-            // echo '<pre>'; print_r($datainv); exit();
-            $this->db->insert('invoice', $datainv);
+
+            if ($invoice_id != '') {
+                $this->db->where('invoice_id', $invoice_id);
+                $this->db->update('invoice', $datainv);
+            }
 
 
 
@@ -974,41 +978,43 @@ class Cquotation extends CI_Controller
                 }
             }
 
-
             $datainv = array(
                 'invoice_id'      => $invoice_id,
                 'customer_id'     => $customer_id,
                 'date'            => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
                 'total_amount'    => $this->input->post('grand_total_price', TRUE),
                 'total_tax'       => $this->input->post('total_tax', TRUE),
+                'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
+                'customer_mobile_two'       => $this->input->post('customer_mobile_two', TRUE),
                 'invoice'         => $invoice_no_generated,
                 'invoice_details' => (!empty($this->input->post('inva_details', TRUE)) ? $this->input->post('inva_details', TRUE) : ''),
                 'invoice_discount' => $this->input->post('invoice_discount', TRUE),
                 'total_discount'  => $this->input->post('total_discount', TRUE),
-                'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
-                'customer_mobile_two'       => $this->input->post('customer_mobile_two', TRUE),
                 'paid_amount'     => $this->input->post('paid_amount', TRUE),
                 'due_amount'      => $this->input->post('due_amount', TRUE),
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
                 'sales_by'        => $createby,
-                'status'          => 1,
 
+                // 'payment_type'    =>  $this->input->post('paytype',TRUE),
                 'delivery_type'    =>  $delivery_type,
-                'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
-
+                // 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
+                // 'bkash_id'         => (!empty($this->input->post('bkash_id', TRUE)) ? $this->input->post('bkash_id', TRUE) : null),
+                // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),
                 'courier_id'         => (!empty($this->input->post('courier_id', TRUE)) ? $this->input->post('courier_id', TRUE) : null),
                 'branch_id'         => (!empty($this->input->post('branch_id', TRUE)) ? $this->input->post('branch_id', TRUE) : null),
                 'outlet_id'       =>  $this->input->post('outlet_name', TRUE),
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
-
+                'is_pre' =>1,
+                'status'          => 1,
             );
 
-
-
-            $this->db->insert('invoice', $datainv);
+            if ($invoice_id != '') {
+                $this->db->where('invoice_id', $invoice_id);
+                $this->db->update('invoice', $datainv);
+            }
         }
 
 
@@ -1392,40 +1398,54 @@ class Cquotation extends CI_Controller
         // $expiry            = $this->input->post('expiry_date', TRUE);
 
 
+        $this->db->where('invoice_id', $invoice_id);
+        $this->db->delete('invoice_details');
+        $this->db->where('invoice_id', $invoice_id);
+        $this->db->delete('paid_amount');
+
         for ($i = 0, $n = count($p_id); $i < $n; $i++) {
+
             $product_quantity = $quantity[$i];
-            $product_rate = $rate[$i];
-            $product_id = $p_id[$i];
-            $serial_no  = (!empty($serial_n[$i]) ? $serial_n[$i] : null);
-            $total_price = $total_amount[$i];
-            $supplier_rate = $this->supplier_price($product_id);
-            $disper = $discount_per[$i];
-            $discount = is_numeric($product_quantity) * is_numeric($product_rate) * is_numeric($disper) / 100;
+            $product_rate     = $rate[$i];
+            $product_id       = $p_id[$i];
+            $serial_no        = (!empty($serial_n[$i]) ? $serial_n[$i] : null);
+            // $war        = (!empty($warehouse[$i])?$warehouse[$i]:null);
+            $total_price      = $total_amount[$i];
+            $supplier_rate    = $this->supplier_price($product_id);
+            $discount         = $discount_rate[$i];
+            $dis_per          = $discount_per[$i];
+            // $desciption        = $invoice_description[$i];
+            if (!empty($tax_amount[$i])) {
+                $tax = $tax_amount[$i];
+            } else {
+                $tax = $this->input->post('tax');
+            }
+
 
             $data1 = array(
                 'invoice_details_id' => $this->generator(15),
                 'invoice_id'         => $invoice_id,
                 'product_id'         => $product_id,
                 'sn'          => $serial_no,
-                'quantity'           => $product_quantity,
-                // 'warrenty_date'      => $warrenty_date,
-                // 'expiry_date'      => $expiry_date,
                 // 'warehouse'          => $war,
+                'warrenty_date'          => $serial_no,
+                'expiry_date'          => $serial_no,
+                'quantity'           => $product_quantity,
                 'rate'               => $product_rate,
                 'discount'           => $discount,
-                'description'        => 'Manual Sales',
-                'discount_per'       => $disper,
-                // 'tax'                => $tax,
-                'paid_amount'        => $paidamount,
-                'due_amount'         => $this->input->post('due_amount', TRUE),
-                'supplier_rate'      => $supplier_rate,
                 'total_price'        => $total_price,
-                'status'             => 2
-            );
+                'discount_per'       => $dis_per,
+                'tax'                => $this->input->post('total_tax', TRUE),
+                'paid_amount'        => $paidamount,
+                'supplier_rate'     => (!empty($supplier_rate)) ? $supplier_rate: null,
+                'due_amount'         => $this->input->post('due_amount', TRUE),
 
-            if (!empty($quantity)) {
-                $this->db->insert('invoice_details', $data1);
-            }
+                'status'             => 2
+                // 'description'       => $desciption,
+            );
+            $this->db->insert('invoice_details', $data1);
+
+
         }
 
 

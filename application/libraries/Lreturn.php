@@ -41,6 +41,13 @@ class Lreturn
                 $invoice_detail[$k]['sl'] = $i;
             }
         }
+        $agg_id = $invoice_detail[0]['agg_id'];
+        $outlet_id = $invoice_detail[0]['outlet_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
         $courier_list        = $CI->Courier->get_courier_list();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
 
@@ -57,10 +64,13 @@ class Lreturn
             'title'         => display('invoice_return'),
             'invoice_id'    => $invoice_detail[0]['invoice_id'],
             'customer_id'   => $invoice_detail[0]['customer_id'],
+            'agg_name'     => $agg_name,
+            'agg_id'     => $invoice_detail[0]['agg_id'],
             'courier_list' =>$courier_list,
             'con'      => $con,
             "receiver_list"        => $CI->Courier->get_receiver_list(),
             'customer_name' => $invoice_detail[0]['customer_name'],
+            'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'date'          => $invoice_detail[0]['date'],
             'receiver_number'          => $invoice_detail[0]['receiver_number'],
             'courier_condtion'          => $invoice_detail[0]['courier_condtion'],
@@ -144,6 +154,62 @@ class Lreturn
                 foreach ($return_list as $k => $v) {
                     $i++;
                     $return_list[$k]['sl'] = $i + $CI->uri->segment(3);
+                    $return_list[$k]['delivery_type']=( $return_list[$k]['delivery_type'] == '1') ? 'Pick Up' : (( $return_list[$k]['delivery_type'] == '2') ? 'Courier' : 'Nothing Selected');
+
+
+
+                    if (  $return_list[$k]['sale_type'] == 1){
+                        $st='Whole Sale';
+                    }
+                    if ( $return_list[$k]['sale_type']== 2){
+                        $st='Retail';
+                    }
+                    if ( $return_list[$k]['sale_type'] == 3){
+                        $st='Aggregators Sale';
+                    }
+
+                    if ( $return_list[$k]['sale_type'] == null){
+
+                        $st='';
+                    }
+                    $return_list[$k]['sale_type']=$st;
+                    if ($return_list[$k]['due_amount'] > 0){
+                        $payment_status='<span class="label label-danger ">Due</span>';
+                    } else{
+                        $payment_status='<span class="label label-success ">Paid</span>';
+                    }
+                    $return_list[$k]['payment_status']=$payment_status;
+
+                    if ( $return_list[$k]['courier_status'] == 1){
+                        $courier_status='Processing';
+                    }
+
+                    if ($return_list[$k]['courier_status']  == 2){
+                        $courier_status='Shipped';
+
+                    }
+                    if ($return_list[$k]['courier_status']   == 3){
+
+                        $courier_status='Delivered';
+                    }
+                    if ($return_list[$k]['courier_status']  == 4){
+
+                        $courier_status='Cancelled';
+                    }
+                    if ($return_list[$k]['courier_status']   == 5){
+                        $courier_status='Returned';
+
+                    }
+                    if ($return_list[$k]['courier_status']  == 6){
+
+                        $courier_status='Exchanged';
+                    }
+                    if ($return_list[$k]['courier_status']   == null){
+
+                        $courier_status='';
+                    }
+                    $return_list[$k]['delivery_status']=$courier_status;
+
                 }
             }
         }

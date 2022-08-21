@@ -52,20 +52,49 @@
                      </div>
                      <?php echo form_open('Cretrun_m/return_invoice', array('class' => 'form-vertical', 'id' => 'invoice_update')) ?>
                      <div class="panel-body">
+                         <input type="hidden" size="100" name="sel_type" class=" form-control" id="sel_type" tabindex="1" value="<?= $sel_type=$invoice_all_data[0]['sale_type']?>" readonly="">
 
+                         <?php if ($sel_type == 3) { ?>
                          <div class="row">
                              <div class="col-sm-6" id="payment_from_1">
-                                 <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger"></i></label>
-                                     <div class="col-sm-8">
-                                         <input type="text" name="customer_name" value="{customer_name}" class="form-control customerSelection" placeholder='<?php echo display('customer_name') ?>' required id="customer_name" tabindex="1" readonly="">
-                                         <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+                             <div class="form-group row">
+                                 <label for="customer_name" class="col-sm-4 col-form-label">Aggregator Name <i class="text-danger">*</i></label>
+                                 <div class="col-sm-8">
+                                     <input type="text" size="100" name="" class=" form-control" placeholder='' id="" tabindex="1"  readonly value="<?= $agg_name?>" />
 
-                                         <input type="hidden" class="customer_hidden_value" name="customer_id" value="{customer_id}" id="SchoolHiddenId" />
+                                     <input id="agg_id" class=" " type="hidden" name="agg_id" value="{agg_id}">
+                                 </div>
+                             </div>
+                             </div>
+                         </div>
+
+                         <?php }else{ ?>
+                             <div class="row">
+                                 <div class="col-sm-6" id="payment_from_1">
+                                     <div class="form-group row">
+                                         <label for="product_name" class="col-sm-4 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger"></i></label>
+                                         <div class="col-sm-8">
+                                             <input type="text" name="customer_name" value="{customer_name}" class="form-control customerSelection" placeholder='<?php echo display('customer_name') ?>' required id="customer_name" tabindex="1" readonly="">
+                                             <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+                                             <input type="hidden" class="customer_hidden_value" name="customer_id" value="{customer_id}" id="SchoolHiddenId" />
+                                         </div>
                                      </div>
                                  </div>
                              </div>
+                         <div class="row">
+                             <div class="col-sm-6" id="payment_from_1">
+                             <div class="form-group row">
+                                 <label for="customer_mobile_two" class="col-sm-4 col-form-label">Customer Mobile </label>
+                                 <div class="col-sm-8">
+                                     <input type="text" size="100" name="customer_mobile_two" class=" form-control" placeholder='Customer Mobile' id="customer_mobile_two" value="{customer_mobile}" readonly/>
+                                 </div>
+                             </div>
+                             </div>
                          </div>
+
+                         <?php   } ?>
+
 
                          <div class="row">
                              <div class="col-sm-6">
@@ -327,7 +356,6 @@
                                                  <div class="col-sm-8">
                                                      <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>"  readonly/>
 
-                                                     <input type="hidden" size="100" name="sel_type" class=" form-control" id="sel_type" tabindex="1" value="<?= $sel_type=$invoice_all_data[0]['sale_type']?>" readonly="">
 
 
                                                      <!--                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="--><!--"  readonly/>-->
