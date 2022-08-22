@@ -321,16 +321,19 @@ class Ccustomer extends CI_Controller
                 'cus_type' => 2,
             );
 
-            $check_customer = $this->db->select('customer_name')->from('customer_information')->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone))->get()->row();
+            $check_customer = $this->db->select('customer_id')->from('customer_information')->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone))->get()->row();
             if (!empty($check_customer)) {
                 $this->db->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone));
                 $result = $this->db->update('customer_information', $data);
+                $customer_id = $check_customer->customer_id;
+
+
             }else{
                 $result = $this->db->insert('customer_information', $data);
-
+                $customer_id = $this->db->insert_id();
             }
 
-            $customer_id = $this->db->insert_id();
+
             $coa = $this->Customers->headcode();
             if ($coa->HeadCode != NULL) {
                 $headcode = $coa->HeadCode + 1;
@@ -359,15 +362,15 @@ class Ccustomer extends CI_Controller
             ];
 
 
-            $check_headCode = $this->db->select('HeadCode')->from('acc_coa')->where('HeadCode', $headcode)->get()->row();
+            $check_headCode = $this->db->select('HeadName')->from('acc_coa')->where('HeadName', $c_acc)->get()->row();
             if (!empty($check_headCode)) {
-                $this->db->where('HeadCode',$headcode);
-            $this->db->update('customer_information', $customer_coa);
+                $this->db->where('HeadName',$c_acc);
+                $this->db->update('acc_coa', $customer_coa);
             }else{
-            $this->db->insert('customer_information', $customer_coa);
+                $this->db->insert('acc_coa', $customer_coa);
 
             }
-            $this->db->insert('acc_coa', $customer_coa);
+
 
 
         }

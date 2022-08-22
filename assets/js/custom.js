@@ -143,7 +143,7 @@ $(function ($) {
     // responsive: true,
 
     aaSorting: [[1, "asc"]],
-    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7] }],
+    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6] }],
     processing: true,
     serverSide: true,
 
@@ -163,7 +163,7 @@ $(function ($) {
         extend: "csv",
         title: "CustomerList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -171,7 +171,7 @@ $(function ($) {
         extend: "excel",
         title: "CustomerList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -179,14 +179,14 @@ $(function ($) {
         extend: "pdf",
         title: "CustomerList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
       {
         extend: "print",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         title: "<center>CustomerList</center>",
         className: "btn-sm prints",
@@ -202,7 +202,7 @@ $(function ($) {
     },
     columns: [
       { data: "sl" },
-      { data: "customer_id_two" },
+      // { data: "customer_id_two" },
       { data: "customer_name" },
       { data: "address" },
       { data: "address2" },
