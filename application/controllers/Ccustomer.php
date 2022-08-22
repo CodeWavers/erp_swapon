@@ -321,7 +321,15 @@ class Ccustomer extends CI_Controller
                 'cus_type' => 2,
             );
 
-            $result = $this->db->insert('customer_information', $data);
+            $check_customer = $this->db->select('customer_name')->from('customer_information')->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone))->get()->row();
+            if (!empty($check_customer)) {
+                $this->db->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone));
+                $result = $this->db->update('customer_information', $data);
+            }else{
+                $result = $this->db->insert('customer_information', $data);
+
+            }
+
             $customer_id = $this->db->insert_id();
             $coa = $this->Customers->headcode();
             if ($coa->HeadCode != NULL) {
@@ -350,84 +358,25 @@ class Ccustomer extends CI_Controller
                 'CreateDate'       => $createdate,
             ];
 
+
+            $check_headCode = $this->db->select('HeadCode')->from('acc_coa')->where('HeadCode', $headcode)->get()->row();
+            if (!empty($check_headCode)) {
+                $this->db->where('HeadCode',$headcode);
+            $this->db->update('customer_information', $customer_coa);
+            }else{
+            $this->db->insert('customer_information', $customer_coa);
+
+            }
             $this->db->insert('acc_coa', $customer_coa);
 
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        $this->session->set_userdata(array('message' => 'Synchronized Successfully'));
+        redirect(base_url('Ccustomer/manage_customer'));
 
     }
-    public function insert_finished_product_ecom()
-    {
 
-
-//        echo ecom_url();
-//        exit();
-        $url = api_url()."products/get_products_all";
-
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-//for debug only!
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-        $resp = curl_exec($curl);
-        curl_close($curl);
-
-        $records=json_decode($resp);
-
-      //  echo '<pre>';print_r($records->data);exit();
-
-        $data2=array();
-        foreach ($records->data as $r){
-            $image_url = ecom_url() . 'public/'.$r->thumbnail_image;
-            $data2['product_id']   = $r->sku;
-            $data2['category_id']  = $r->cats;
-            $data2['brand_id']  = '';
-            $data2['product_name'] = $r->name;
-            $data2['finished_raw']  = 1;
-            $data2['price']        = $r->unit_price;
-            $data2['purchase_price']        = $r->purchase_price;
-            $data2['unit']         = $r->unit;
-            $data2['sku']  = $r->sku;
-            $data2['tax']          = 0;
-            $data2['product_details'] = '';
-            $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
-            $data2['status']       = 1;
-
-            $result = $this->db->insert('product_information', $data2);
-
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
     // =================== customer Csv Upload ===============================
     //CSV Customer Add From here
     function uploadCsv_Customer()

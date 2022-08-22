@@ -26,6 +26,63 @@ class Cproduct extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+//Sync Product
+    public function insert_finished_product_ecom()
+    {
+
+        $url = api_url()."products/get_products_all";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+        //  echo '<pre>';print_r($records->data);exit();
+
+        $data2=array();
+        foreach ($records->data as $r){
+            $image_url = ecom_url() . 'public/'.$r->thumbnail_image;
+            $data2['product_id']   = $r->sku;
+            $data2['category_id']  = $r->cats;
+            $data2['brand_id']  = '';
+            $data2['product_name'] = $r->name;
+            $data2['finished_raw']  = 1;
+            $data2['price']        = $r->unit_price;
+            $data2['purchase_price']        = $r->purchase_price;
+            $data2['unit']         = $r->unit;
+            $data2['sku']  = $r->sku;
+            $data2['tax']          = 0;
+            $data2['product_details'] = '';
+            $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
+            $data2['status']       = 1;
+
+
+            $check_product = $this->db->select('product_id')->from('product_information')->where('product_id', $r->sku)->get()->row();
+            if (!empty($check_product)) {
+                $this->db->where('product_id', $r->sku);
+                $result= $this->db->update('product_information', $data2);
+            }else{
+                $result=  $this->db->insert('product_information', $data2);
+
+            }
+
+
+
+        }
+
+            $this->session->set_userdata(array('message' => 'Synchronized Successfully'));
+            redirect(base_url('Cproduct/manage_product'));
+
+
+    }
     //Insert Product and uload
     public function insert_product()
     {

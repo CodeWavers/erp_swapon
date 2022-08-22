@@ -50,6 +50,7 @@
                     <a href="<?php echo base_url('Cproduct/add_product_csv') ?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-plus"> </i> <?php echo display('add_product_csv') ?> </a>
                 <?php } ?>
 
+                <a href="<?php echo base_url('Cproduct/insert_finished_product_ecom') ?>" class="sync btn btn-danger m-b-5 m-r-2 "><i class="fa fa-refresh"> </i>  Sync Product</a>
 
             </div>
         </div>
@@ -59,6 +60,7 @@
 
         <!-- Manage Product report -->
         <div class="row">
+
             <div class="col-sm-12">
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
