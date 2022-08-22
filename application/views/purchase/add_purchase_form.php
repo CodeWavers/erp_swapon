@@ -149,9 +149,9 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group row">
-                                    <label for="cat_id" class="col-sm-2 col-form-label"> Category <i class="text-danger">*</i></label>
+                                    <label for="cat_id" class="col-sm-2 col-form-label"> Category </label>
                                     <div class="col-sm-3">
-                                        <select name="cat_id" id="cat_id" class="form-control" required">
+                                        <select name="cat_id[]" id="cat_id" class="form-control" multiple  >
                                             <option value="">Select One</option>
 
                                             {cates}
@@ -329,7 +329,8 @@
                                         <td class="text-right">
                                             <input type="text" id="Total" class="text-right form-control" name="total" value="0.00" readonly="readonly" />
                                         </td>
-                                        <td> <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addPurchaseOrderField1('addPurchaseItem')" tabindex="9" /><i class="fa fa-plus"></i></button>
+                                        <td>
+                                            <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addPurchaseOrderField1('addPurchaseItem')" tabindex="9" /><i class="fa fa-plus"></i></button>
 
                                             <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                         </td>

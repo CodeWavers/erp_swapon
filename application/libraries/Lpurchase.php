@@ -24,6 +24,8 @@ class Lpurchase
         $cw = $CI->Warehouse->central_warehouse();
         $cates = $CI->Categories->cates();
 
+     //   echo '<pre>';print_r($cates);exit();
+
         $data = array(
             'title'         => display('add_purchase'),
             'all_supplier'  => $all_supplier,
@@ -198,6 +200,7 @@ class Lpurchase
         $CI->load->model('Web_settings');
         $CI->load->model('Warehouse');
         $CI->load->model('Categories');
+        $CI->load->model('Reports');
         $payment_info = $CI->Purchases->payment_details($purchase_id);
 
         $bank_list        = $CI->Web_settings->bank_list();
@@ -208,17 +211,26 @@ class Lpurchase
         $supplier_list = $CI->Suppliers->supplier_list("110", "0");
         $supplier_selected = $CI->Suppliers->supplier_search_item($supplier_id);
         // $cates = $CI->Categories->cates();
+
         if (!empty($purchase_detail)) {
             $i = 0;
             foreach ($purchase_detail as $k => $v) {
                 $i++;
                 $purchase_detail[$k]['sl'] = $i;
+
+
+                    $stock = $CI->Reports->getCheckList(null, $purchase_detail[$k]['product_id'])['central_stock'];
+                    //   $available_quantity = $this->Reports->current_stock($product_id,1);
+
+
+                $purchase_detail[$k]['stock_qty'] = $stock ;
             }
         }
 
         $outlet = $CI->Warehouse->branch_search_item($purchase_detail[0]['outlet_id']);
 
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $cates = $CI->Categories->cates();
         $data = array(
             'title'         => display('purchase_edit'),
             'purchase_id'   => $purchase_detail[0]['purchase_id'],
@@ -245,9 +257,9 @@ class Lpurchase
             'discount_type' => $currency_details[0]['discount_type'],
             'paytype'       => $purchase_detail[0]['payment_type'],
             'payment_info'  => $payment_info,
-            // 'cates'            => $cates
+             'cates'            => $cates
         );
-//        echo "<pre>";print_r($data);exit();
+       // echo "<pre>";print_r($cates);exit();
         $chapterList = $CI->parser->parse('purchase/edit_purchase_form', $data, true);
         return $chapterList;
     }

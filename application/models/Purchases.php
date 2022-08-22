@@ -916,6 +916,8 @@ class Purchases extends CI_Model
                         'a.*,
 						b.*,
 						c.product_id,
+						c.unit,
+						c.sku,
 						c.product_name,
 						c.product_model,
 						d.supplier_id,

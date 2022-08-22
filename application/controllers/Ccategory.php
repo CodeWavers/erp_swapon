@@ -26,6 +26,69 @@ class Ccategory extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function insert_cats_ecom()
+    {
+
+        $url = api_url()."categories/cats";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+        $data=array();
+        foreach ($records as $r){
+
+            $data=array(
+
+                'id'   => $r->id,
+                'name'   => $r->name,
+                'parent_id'   => $r->parent_id,
+                'commision_rate'   => $r->commision_rate,
+                'banner'   => $r->banner,
+                'icon'  => $r->icon,
+                'details' => $r->details,
+                'featured' => $r->featured,
+                'top' => $r->top,
+                'digital' => $r->digital,
+                'slug' => $r->slug,
+                'meta_title' => $r->meta_title,
+                'meta_description' => $r->meta_description,
+                'creator' => $r->creator,
+                'status' => $r->status,
+                'created_at' => $r->created_at,
+                'updated_at' => $r->updated_at,
+
+            );
+
+            $check_cats = $this->db->select('id')->from('cats')->where(array('id' =>$r->id))->get()->row();
+            if (!empty($check_cats)) {
+                $this->db->where(array('id' =>$r->id));
+                $result = $this->db->update('cats', $data);
+
+            }else{
+                $result = $this->db->insert('cats', $data);
+
+            }
+
+
+
+
+        }
+
+        $this->session->set_userdata(array('message' => 'Synchronized Successfully'));
+        redirect(base_url('Ccategory'));
+
+    }
+
 
     public function getItem()
     {

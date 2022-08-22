@@ -225,21 +225,19 @@ class Suppliers extends CI_Model
     //Product search item
     public function product_search_item($product_name,$product_status,$cat_id)
     {
-
-        // echo '<pre>';
-        // print_r($pr_status);
-        // exit();
-
-        $this->db->select('*');
+            $this->db->select('*');
             $this->db->from('product_information a');
             $this->db->where('a.finished_raw', $product_status);
 
             if (!empty($cat_id)){
-                $this->db->where('a.category_id', $cat_id);
+                foreach($cat_id as $key => $value) {
+                    if($key == 0) {
+                        $this->db->like('category_id', $value,'both');
+                    } else {
+                        $this->db->or_like('category_id', $value,'both');
+                    }
+                }
             }
-
-
-
 
             $this->db->group_start();
             $this->db->like('a.sku', $product_name, 'both');

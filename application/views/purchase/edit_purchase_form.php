@@ -106,6 +106,41 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group row">
+                                    <label for="product_status" class="col-sm-2 col-form-label"> Product Type <i class="text-danger">*</i></label>
+                                    <div class="col-sm-3">
+                                        <select name="product_status" id="product_status" class="form-control" required">
+                                        <option value="">Select One</option>
+                                        <option value="1">Finished Goods</option>
+                                        <option value="2">Raw Materials</option>
+                                        <option value="3">Tools</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group row">
+                                    <label for="cat_id" class="col-sm-2 col-form-label"> Category </label>
+                                    <div class="col-sm-3">
+                                        <select name="cat_id[]" id="cat_id" class="form-control" multiple  >
+                                            <option value="">Select One</option>
+
+                                            {cates}
+
+                                            <option value="{id}">{name}</option>
+                                            {/cates}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <br>
                         <div class="table-responsive">
                             <table class="table table-bordered  table-striped table-hover" id="purchaseTable">
@@ -113,6 +148,8 @@
                                     <tr>
                                         <th class="text-center" width="20%"><?php echo display('item_information') ?><i class="text-danger">*</i></th>
                                         <!-- <th class="text-center" width="8%">Warehouse</th> -->
+                                        <th class="text-center">Stock</th>
+                                        <th class="text-center" width="8%">Unit</th>
                                         <th class="text-center">Warrenty Date</th>
                                         <th class="text-center">Expired Date</th>
                                         <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
@@ -128,20 +165,20 @@
                                     {purchase_info}
                                     <tr>
                                         <td class="span3 supplier">
-                                            <input type="text" name="product_name" required class="form-control product_name productSelection" onkeypress="product_pur_or_list({sl});" placeholder="<?php echo display('product_name') ?>" id="product_name_{sl}" tabindex="5" value="{product_name} ({product_model}) ({size_name}) ({color_name})">
+                                            <input type="text" name="product_name" required class="form-control product_name productSelection" onkeypress="product_pur_or_list({sl});" placeholder="<?php echo display('product_name') ?>" id="product_name_{sl}" tabindex="5" value="{sku}- ({product_name}) ({size_name}) ({color_name})">
 
                                             <input type="hidden" class="autocomplete_hidden_value product_id_{sl}" name="product_id[]" id="SchoolHiddenId" value="{product_id}" />
 
                                             <input type="hidden" class="sl" value="{sl}">
                                         </td>
 
-                                        <!-- <td class="wt">
-                                            <input type="text" id="available_quantity_{sl}" class="form-control text-right stock_ctn_{sl}" placeholder="0.00" readonly />
-                                        </td> -->
+                                        <td class="wt">
+                                            <input type="text" id="available_quantity_{sl}" class="form-control text-right stock_ctn_{sl}" placeholder="0.00" value="{stock_qty}" readonly  />
+                                        </td>
 
 
 
-                                        <!-- <td class="wt"> <input type="text" placeholder="Warehouse" name="warehouse[]" value="{warehouse}" id="shelf_number" class="form-control text-right stock_ctn_1"  /></td> -->
+                                        <td class="wt"> <input type="text" placeholder="unit" name="unit[]" value="{unit}" id="unit" class="form-control text-right unit_1"  readonly /></td>
 
 
                                         <td>
@@ -171,7 +208,7 @@
 
 
 
-                                            <button class="btn btn-danger btn-sm text-right red" type="button" value="<?php echo display('delete') ?>" onclick="deleteRow(this)" tabindex="8"><i class="fa fa-close"></i></button>
+                                            <button class="btn btn-danger  " type="button" value="<?php echo display('delete') ?>" onclick="deleteRow(this)" tabindex="8"><i class="fa fa-close"></i></button>
                                         </td>
                                     </tr>
                                     {/purchase_info}
@@ -180,19 +217,19 @@
                                     <tfoot>
                                         <tr>
 
-                                            <td class="text-right" colspan="6"><b><?php echo display('total') ?>:</b></td>
+                                            <td class="text-right" colspan="8"><b><?php echo display('total') ?>:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="Total" class="text-right form-control" name="total" value="{total}" readonly="readonly" />
                                             </td>
                                             <td>
-                                                <!-- <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item"  onClick="addPurchaseOrderField1('addPurchaseItem')"  tabindex="9"/><i class="fa fa-plus"></i></button> -->
+                                                 <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item"  onClick="addPurchaseOrderField1('addPurchaseItem')"  tabindex="8"/><i class="fa fa-plus"></i></button>
 
                                                 <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                             </td>
                                         </tr>
                                         <tr>
 
-                                            <td class="text-right" colspan="6"><b><?php echo display('discounts') ?>:</b></td>
+                                            <td class="text-right" colspan="8"><b><?php echo display('discounts') ?>:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="discount" class="text-right form-control discount" onkeyup="calculate_store(1)" name="discount" placeholder="0.00" value="{total_discount}" />
                                             </td>
@@ -202,7 +239,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td class="text-right" colspan="6"><b><?php echo display('grand_total') ?>:</b></td>
+                                            <td class="text-right" colspan="8"><b><?php echo display('grand_total') ?>:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="grandTotal" class="text-right form-control" name="grand_total_price" value="{grand_total}" readonly="readonly" />
                                             </td>
@@ -210,7 +247,7 @@
                                         </tr>
                                         <tr>
 
-                                            <td class="text-right" colspan="6"><b><?php echo display('paid_amount') ?>:</b></td>
+                                            <td class="text-right" colspan="8"><b><?php echo display('paid_amount') ?>:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="paidAmount" class="text-right form-control" onKeyup="invoice_paidamount()" name="paid_amount" value="{paid_amount}" readonly />
                                             </td>
@@ -218,7 +255,7 @@
                                         </tr>
                                         <tr>
 
-                                            <td class="text-right" colspan="6"><b><?php echo display('due_amount') ?>:</b></td>
+                                            <td class="text-right" colspan="8"><b><?php echo display('due_amount') ?>:</b></td>
                                             <td class="text-right">
                                                 <input type="text" id="dueAmmount" class="text-right form-control" name="due_amount" value="{due_amount}" readonly="readonly" />
                                             </td>
