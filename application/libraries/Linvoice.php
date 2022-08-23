@@ -908,6 +908,7 @@ class Linvoice
             'title'             => display('invoice_details'),
             'balance'        => $customer_balance[0]['balance'],
             'pay_type' => $invoice_detail[0]['payment_type'],
+            'is_pre' => $invoice_detail[0]['is_pre'],
             'delivery_type'        => $invoice_detail[0]['delivery_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
             'dt'        => $dt,

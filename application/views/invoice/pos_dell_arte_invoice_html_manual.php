@@ -200,6 +200,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 <div>
                                     <div>
+                                        <?php if ($is_pre == 2){?>
+                                        <h5>Pre-Order</h5>
+                                        <?php } ?>
                                         <nobr style="font-size: 11px;">
                                             <strong><?php echo display('invoice_no'); ?> : {invoice_no}</strong>
                                         </nobr>
@@ -215,7 +218,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <!-- <th class="pprint-unit td-style"><?php if ($is_unit != 0) {
                                                                                     echo display('unit');
                                                                                 } ?></th> -->
-                                        <th class="text-center td-style" width="2%">Qty</th>
+                                        <th class="text-center td-style" >Qty</th>
 <!--                                         <th class="text-center td-style">Unit</th>-->
                                          <th class="text-center td-style">U.Price</th>
                                         <th class="text-center td-style">T.Price</th>
@@ -233,7 +236,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
                                             </td>
 
-                                            <td align="center" class="td-style" width="2%" >
+                                            <td align="center" class="td-style" width="10%" >
                                                 <?php echo html_escape($invoice_data['sum_quantity']); ?>
                                             </td>
 

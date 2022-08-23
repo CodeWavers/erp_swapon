@@ -88,9 +88,9 @@
 
                                             </td>
                                             <td>
-                                                <a href="<?php echo base_url('Cquotation/quotation_details_data/' . $quotation->quotation_id); ?>">
+
                                                     <?php echo html_escape($quotation->invoice); ?>
-                                                </a>
+
                                             </td>
                                             <td>
                                                 <?php
@@ -114,6 +114,7 @@
                                                 }
 
                                                 ?>
+
                                             </td>
 
                                             <td>
@@ -129,6 +130,7 @@
                                                 <?php if ($this->permission1->method('manage_quotation', 'delete')->access()) { ?>
                                                     <a href="<?php echo base_url() . 'Cquotation/delete_quotation/' . $quotation->invoice_id; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want to Delete ??')" title="<?php echo display('delete') ?>" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                 <?php } ?>
+                                                <a href="<?php echo base_url() . 'Cinvoice/invoice_inserted_data/' . $quotation->invoice_id; ?>" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>
 
 <!--                                                <a href="--><?php //echo base_url('Cquotation/quotation_download/' . $quotation->invoice_id); ?><!--" class="btn btn-primary btn-sm" title="--><?php //echo display('download') ?><!--" data-original-title="--><?php //echo display('download') ?><!-- "><i class="fa fa-download" aria-hidden="true"></i></a>-->
                                             </td>

@@ -199,11 +199,20 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                         <td></td>
                                         <td align="right">
+                                            <?php if ($is_pre == 2){?>
                                             <div class="invoice_name">
 
-                                                INVOICE
+                                                Pre-Order
 
                                             </div>
+
+                                            <?php }else{?>
+                                                <div class="invoice_name">
+
+                                                    INVOICE
+
+                                                </div>
+                                            <?php } ?>
                                         </td>
 
                                     </tr>
