@@ -35,6 +35,110 @@ class Creport extends CI_Controller
 
         $this->template->full_admin_html_view($content);
     }
+    public function stock_taking()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+
+
+        $query = $this->db->select('*')
+            ->from('product_information a')
+            ->where('a.finished_raw',1)
+            ->get();
+
+        $res = $query->result_array();
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'Stock Taking',
+            'product_list'  => $res,
+
+        );
+
+
+
+        $view = $this->parser->parse('report/stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+    public function manage_stock_taking()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->library('occational');
+
+        $response=$this->Reports->manage_stock_taking();
+
+       // echo '<pre>';print_r($response);exit();
+
+        $sl = 1;
+        foreach ($response as $k => $v) {
+            $response[$k]['sl']  = $sl;
+            $response[$k]['date']  = $this->occational->dateConvert($response[$k]['date']);
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'Manage Stock Taking',
+            'response_list'  => $response,
+
+        );
+
+
+
+        $view = $this->parser->parse('report/manage_stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+    public function save_stock()
+    {
+        $stid = mt_rand();
+
+        $date = date('Y-m-d');
+        $product_id = $this->input->post('product_id', TRUE);
+        $quantity = $this->input->post('p_qty', TRUE);
+
+        $data1 = array(
+            'stid'   => $stid,
+            'stid_no'      => $this->input->post('stid', TRUE),
+            'date'      => $this->input->post('date', TRUE),
+            'total_product'      => count(array_filter($quantity, function($x) { return !empty($x); })),
+            'notes'   => $this->input->post('notes', TRUE),
+
+        );
+
+
+
+        $this->db->insert('stock_taking', $data1);
+
+
+
+        for ($i = 0; $i < count($product_id); $i++) {
+            $pr_id = $product_id[$i];
+            $qty = $quantity[$i];
+
+            $data2 = array(
+                'st_details_id'    => mt_rand(),
+                'stid'           => $stid,
+                'product_id'        => $pr_id,
+                'physical_stock'             => $qty,
+                'create_date'            => $date,
+
+            );
+
+            if (!empty($qty)) {
+                $this->db->insert('stock_taking_details', $data2);
+            }
+        }
+
+        redirect(base_url('Creport/stock_taking'));
+    }
 
     public function tools_stock()
     {

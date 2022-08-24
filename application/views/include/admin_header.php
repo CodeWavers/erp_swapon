@@ -1277,6 +1277,28 @@ $birthday = $CI->Reports->birthday_noti();
                                                                                       ); ?></a></li>
             <?php } ?>
 
+              <?php if ($this->permission1->method('stock_report', 'read')->access()) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('1') == "Creport" &&
+                      $this->uri->segment('2') == ""
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url('Creport/stock_taking'); ?>">Stock Taking</a></li>
+              <?php } ?>
+
+              <?php if ($this->permission1->method('stock_report', 'read')->access()) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('1') == "Creport" &&
+                      $this->uri->segment('2') == ""
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url('Creport/manage_stock_taking'); ?>">Manage Stock Taking</a></li>
+              <?php } ?>
+
 <!--            --><?php //if ($this->permission1->method('stock_report', 'read')->access()) { ?>
 <!--              <li class="treeview --><?php //if (
 //                                    $this->uri->segment('1') == "Creport" &&
@@ -1299,16 +1321,18 @@ $birthday = $CI->Reports->birthday_noti();
 //                                  } ?><!--"><a href="--><?php //echo base_url('Creport/tools_stock'); ?><!--">Tools Stock</a></li>-->
 <!--            --><?php //} ?>
 
-            <?php if ($this->permission1->method('sms_configure', 'create')->access()) { ?>
-              <li class="treeview <?php if (
-                                    $this->uri->segment('1') == "Crqsn" &&
-                                    $this->uri->segment('2') == "outlet_stock_entry"
-                                  ) {
-                                    echo "active";
-                                  } else {
-                                    echo " ";
-                                  } ?>"><a href="<?php echo base_url('Crqsn/outlet_stock_entry'); ?>">Outlet Stock Entry</a></li>
-            <?php } ?>
+<!--            --><?php //if ($this->permission1->method('sms_configure', 'create')->access()) { ?>
+<!--              <li class="treeview --><?php //if (
+//                                    $this->uri->segment('1') == "Crqsn" &&
+//                                    $this->uri->segment('2') == "outlet_stock_entry"
+//                                  ) {
+//                                    echo "active";
+//                                  } else {
+//                                    echo " ";
+//                                  } ?><!--"><a href="--><?php //echo base_url('Crqsn/outlet_stock_entry'); ?><!--">Outlet Stock Entry</a></li>-->
+<!--            --><?php //} ?>
+
+
 
             <!-- outlet stock start -->
             <?php if ($this->permission1->method('outlet_stock', 'read')->access() || $this->permission1->method('outlet_stock', 'read')->access() || $this->permission1->method('outlet_stock', 'read')->access()) { ?>

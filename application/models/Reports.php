@@ -223,7 +223,17 @@ class reports extends CI_Model
         return false;
     }
 
+    public function manage_stock_taking()
+    {
 
+        $this->db->select("a.*");
+        $this->db->from('stock_taking a');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
 
     public function getCheckList($postData = null, $post_product_id = null, $pr_status = null)
     {
