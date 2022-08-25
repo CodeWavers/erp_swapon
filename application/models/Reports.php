@@ -243,6 +243,7 @@ class reports extends CI_Model
 
         $p_s = $this->input->post('product_status', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
+        $date = date('Y-m-d');
 
 
 
@@ -399,6 +400,18 @@ class reports extends CI_Model
                 ->get()
                 ->row();
 
+            $phy_count = $this->db->select('SUM(physical_stock) as phy_qty')
+                ->from('stock_taking_details')
+                ->where(array(
+                    'product_id' => $record->product_id,
+                    'create_date >=' => $date,
+                    'status' => 1,
+
+                ))
+                ->group_by('product_id')
+                ->get()
+                ->row();
+
 
 
 
@@ -426,11 +439,8 @@ class reports extends CI_Model
 
 
 
-
-            $stock = $total_in - $total_out;
-
             $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
-
+            $stock = ($total_in - $total_out)-$newStock;
 
             $data[] = array(
                 'sl'            =>   $sl,
@@ -445,7 +455,7 @@ class reports extends CI_Model
                 'totalSalesQnty' =>  $total_out,
                 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                'stok_quantity' => sprintf('%0.2f', $stock - $newStock),
+                'stok_quantity' => sprintf('%0.2f', $phy_count->phy_qty),
                 'total_sale_price' => $stock * $sprice,
                 'purchase_total' => (($stock * $pprice) != 0)
                     ? ($stock * $pprice)

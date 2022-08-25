@@ -66,6 +66,94 @@ class Creport extends CI_Controller
         $view = $this->parser->parse('report/stock_taking', $data, true);
         $this->template->full_admin_html_view($view);
     }
+    public function stock_taking_edit($id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+
+
+        $query = $this->db->select('*')
+            ->from('stock_taking_details a')
+            ->join('stock_taking s','s.stid=a.stid')
+            ->join('product_information b','a.product_id=b.product_id')
+            ->where('a.stid',$id)
+            ->get();
+
+        $res = $query->result_array();
+
+      //  echo '<pre>';print_r($res);exit();
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'Edit Stock Taking',
+            'product_list'  => $res,
+            'access'  => 'edit',
+            'stid'  => $res[0]['stid'],
+            'st'  => $res[0]['stid_no'],
+            'st_date'  => $res[0]['date'],
+            'notes'  => $res[0]['notes'],
+            'approve'  => $res[0]['approve'],
+
+
+        );
+
+
+
+        $view = $this->parser->parse('report/stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+    public function stock_taking_view($id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+        $CI->load->model('Reports');
+
+
+        $query = $this->db->select('*')
+            ->from('stock_taking_details a')
+            ->join('stock_taking s','s.stid=a.stid')
+            ->join('product_information b','a.product_id=b.product_id')
+            ->where('a.stid',$id)
+            ->get();
+
+        $res = $query->result_array();
+
+      //  echo '<pre>';print_r($res);exit();
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+            $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'])['central_stock'];
+
+            $res[$k]['stock_qty'] = $stock ;
+            $res[$k]['difference'] = $res[$k]['stock_qty']-$res[$k]['physical_stock'] ;
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'View Stock Taking',
+            'product_list'  => $res,
+            'access'  => 'view',
+            'stid'  => $res[0]['stid'],
+            'st'  => $res[0]['stid_no'],
+            'st_date'  => $res[0]['date'],
+            'notes'  => $res[0]['notes'],
+            'approve'  => $res[0]['approve'],
+
+        );
+
+
+
+        $view = $this->parser->parse('report/stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
 
     public function manage_stock_taking()
     {
@@ -98,11 +186,14 @@ class Creport extends CI_Controller
 
     public function save_stock()
     {
-        $stid = mt_rand();
+        $access = $this->input->post('access', TRUE);
+        $stid=(!empty($access)) ?  $this->input->post('st_id', TRUE) : mt_rand();
 
         $date = date('Y-m-d');
         $product_id = $this->input->post('product_id', TRUE);
         $quantity = $this->input->post('p_qty', TRUE);
+
+
 
         $data1 = array(
             'stid'   => $stid,
@@ -114,21 +205,39 @@ class Creport extends CI_Controller
         );
 
 
+        if ($access =='edit'){
+            $this->db->where('stid',$stid);
+            $this->db->delete('stock_taking_details');
+            $this->db->where('stid',$stid);
+            $this->db->update('stock_taking', $data1);
 
-        $this->db->insert('stock_taking', $data1);
+        }
+        elseif ($access =='view'){
+            $this->db->where('stid',$stid);
+            $this->db->delete('stock_taking_details');
+            $this->db->set('approve',1);
+            $this->db->where('stid',$stid);
+            $this->db->update('stock_taking');
+        }  else{
+            $this->db->insert('stock_taking', $data1);
 
-
+        }
 
         for ($i = 0; $i < count($product_id); $i++) {
             $pr_id = $product_id[$i];
             $qty = $quantity[$i];
+            $stk_qty =$this->input->post('stock_qty', TRUE)[$i];
+            $difference =$this->input->post('difference', TRUE)[$i];
 
             $data2 = array(
                 'st_details_id'    => mt_rand(),
                 'stid'           => $stid,
                 'product_id'        => $pr_id,
+                'current_stock'             => (!empty($stk_qty) ? $stk_qty : 0),
                 'physical_stock'             => $qty,
+                'difference'             => (!empty($difference) ? $difference : 0),
                 'create_date'            => $date,
+                'status'            => ($access == 'view') ?  '1' : '0',
 
             );
 
@@ -137,7 +246,7 @@ class Creport extends CI_Controller
             }
         }
 
-        redirect(base_url('Creport/stock_taking'));
+        redirect(base_url('Creport/manage_stock_taking'));
     }
 
     public function tools_stock()
