@@ -582,8 +582,9 @@ class Linvoice
             'invoice_id'      => $invoice_detail[0]['invoice_id'],
             'receiver_list'     => $receiver_list,
             'agg_name'     => $agg_name,
-            'sale_type'     => $invoice_detail[0]['sale_type'],
+
             'agg_id'     => $invoice_detail[0]['agg_id'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
             'customer_id'     => $invoice_detail[0]['customer_id'],
             'customer_name'   => $invoice_detail[0]['customer_name'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],

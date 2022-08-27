@@ -254,29 +254,7 @@
 
                                 </div>
 
-                                <div class="form-group row">
-                                    <label for="deli_receiver" class="col-sm-4 col-form-label">Receiver</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" name="deli_reciever" id="deli_receiver"  onchange="receiver_changed(this)">
-                                            <option value="{rid}">{receiver_name}</option>
-                                            {receiver_list}
-                                            <option value="{id}">{receiver_name}</option>
-                                            {/receiver_list}
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <button type="button" class="btn btn-sm btn-success" id="add_rec_btn" aria-hidden="true" data-toggle="modal" data-target="#add_receiver_modal">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
 
-                                <div class="form-group row" id="receiver_num_div" >
-                                    <label for="del_rec_num" class="col-sm-4 col-form-label">Receiver Number</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="del_rec_num" name="del_rec_num" value="{receiver_number}">
-                                    </div>
-                                </div>
 
                             </div>
 

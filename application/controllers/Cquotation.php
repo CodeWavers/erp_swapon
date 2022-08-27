@@ -830,6 +830,8 @@ class Cquotation extends CI_Controller
                 'due_amount'      => $this->input->post('due_amount', TRUE),
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
+
                 'sales_by'        => $createby,
 
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE),
@@ -994,6 +996,8 @@ class Cquotation extends CI_Controller
                 'due_amount'      => $this->input->post('due_amount', TRUE),
                 'prevous_due'     => $this->input->post('previous', TRUE),
                 'shipping_cost'   => $this->input->post('shipping_cost', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
+
                 'sales_by'        => $createby,
 
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE),

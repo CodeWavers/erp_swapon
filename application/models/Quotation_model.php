@@ -131,6 +131,7 @@ class Quotation_model extends CI_Model
                 'commission'   => $this->input->post('commission', TRUE),
                 'sale_type'   => $this->input->post('sel_type', TRUE),
                 'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
                 'sales_by'        => $createby,
                 'status'          => 2,
                 'is_pre'          => 2,
@@ -315,6 +316,8 @@ class Quotation_model extends CI_Model
                 'commission'   => $this->input->post('commission', TRUE),
                 'sale_type'   => $this->input->post('sel_type', TRUE),
                 'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
+                'perc_discount' => $this->input->post('perc_discount', TRUE),
+
                 'sales_by'        => $createby,
                 'status'          => 1,
                 'is_pre'          => 2,
