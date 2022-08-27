@@ -481,14 +481,14 @@ $_SESSION['redirect_uri'] = $currentURL;
                                             </a></td>
                                     </tr> -->
 
-                                    <tr>
+                                    <tr  class="hidden_tr d-none">
                                         <td class="text-right" colspan="7"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" />
                                         </td>
                                     </tr>
 
-                                    <tr>
+                                    <tr  class="hidden_tr d-none">
                                         <td class="text-right" colspan="7"><b>ADC:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14"  />

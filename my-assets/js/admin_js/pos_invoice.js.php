@@ -951,10 +951,12 @@ $(document ).ready(function() {
 
         if (val == 2) {
             var style = 'block';
-            document.getElementById('courier_div').setAttribute("required", true);
+            $('.hidden_tr').removeClass('d-none');
+
         } else {
             var style = 'none';
-            document.getElementById('courier_div').removeAttribute("required");
+            $('.hidden_tr').addClass('d-none');
+
         }
 
         document.getElementById('courier_div').style.display = style;
