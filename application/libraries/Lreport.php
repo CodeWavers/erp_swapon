@@ -1179,6 +1179,50 @@ class Lreport extends CI_Model
         return $reportList;
     }
 
+    //    ========== Variance Report ===========
+    public function variance_report($links = null, $per_page = null, $page = null,$category=null,$product_id=null,$from_date= null,$to_date=null)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->model('Categories');
+        $category_list = $CI->Categories->cates();
+        $category_name = $CI->Categories->cates_by_id($category);
+        $product_list = $CI->Reports->product_list();
+
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        $response=$CI->Reports->stock_taking_details($category,$product_id,$from_date,$to_date);
+        $cw = $CI->Warehouse->branch_list_product();
+        $data = array(
+            'title'                      => "Variance_report",
+            'category_list'              => $category_list,
+            'product_list'              => $product_list,
+            'response' => $response,
+            'company_info'               => $company_info,
+            'currency'                   => $currency_details[0]['currency'],
+            'position'                   => $currency_details[0]['currency_position'],
+            'links'                      => $links,
+            'software_info'              => $currency_details,
+            'company'                    => $company_info,
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'product_id' => $product_id,
+            'category_name' => $category_name->name,
+            'category_id' => $category_name->id,
+
+        );
+
+        //echo '<pre>';print_r($response);exit();
+        $reportList = $CI->parser->parse('report/variance_report', $data, true);
+        return $reportList;
+    }
+
     //    ============== its for filter_sales_report_category_wise============
     public function filter_sales_report_category_wise($outlet_id = null, $category = null, $from_date = null, $to_date = null, $links = null)
     {

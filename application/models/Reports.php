@@ -234,6 +234,29 @@ class reports extends CI_Model
         }
         return false;
     }
+    public function stock_taking_details($category,$product_id,$from_date,$to_date)
+    {
+        $dateRange = "a.create_date BETWEEN '$from_date' AND '$to_date'";
+
+        $this->db->select("*");
+        $this->db->from('stock_taking_details a');
+        $this->db->join('product_information c', 'c.product_id = a.product_id', 'left');
+        if (!empty($category)){
+            $this->db->like('c.category_id',$category,'both');
+        }
+        if (!empty($product_id)){
+            $this->db->where('a.product_id',$product_id);
+        }
+        if (!empty($from_date)){
+            $this->db->where($dateRange);
+        }
+        $this->db->order_by('a.create_date','desc');
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return false;
+    }
 
     public function getCheckList($postData = null, $post_product_id = null, $pr_status = null)
     {
@@ -1103,6 +1126,19 @@ class reports extends CI_Model
     //    =============== its for sales_report_category_wise_count =============
     public function sales_report_category_wise_count()
     {
+    }
+
+    //=================Stock takig details ================//
+
+    public function stock_taking_details_by_id($id){
+        $this->db->select('*')
+            ->from('stock_taking_details a')
+            ->join('stock_taking s','s.stid=a.stid')
+            ->join('product_information b','a.product_id=b.product_id')
+            ->where('a.stid',$id)
+            ->get();
+        $query = $this->db->get();
+        return $query->result_array();
     }
 
     //    ============= its for sales_report_category_wise ===============

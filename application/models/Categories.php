@@ -39,6 +39,16 @@ class Categories extends CI_Model
         }
         return false;
     }
+    public function cates_by_id($id)
+    {
+        $this->db->select('name,id');
+        $this->db->from('cats');
+        $this->db->where('id',$id);
+
+        return $this->db->get()->row();
+
+
+    }
 
     //customer List
     public function category_list_product()

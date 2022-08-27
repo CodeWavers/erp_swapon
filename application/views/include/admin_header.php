@@ -193,7 +193,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('pos_invoice', 'create')->access() ||
         $this->permission1->method('gui_pos', 'create')->access()
       ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice" || $this->uri->segment('1') == "Corder" || $this->uri->segment('1') == "Admin_dashboard"  || $this->uri->segment('1') == "Cquotation" ) {
+        <li class="treeview <?php if ($this->uri->segment('1') == "Cinvoice" || $this->uri->segment('1') == "Corder"  || $this->uri->segment('1') == "Cquotation" ) {
                               echo "active";
                             } else {
                               echo " ";
@@ -1580,6 +1580,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('product_sales_reports_date_wise', 'read')->access() ||
         $this->permission1->method('sales_report_category_wise', 'read')->access() ||
         $this->permission1->method('shipping_cost_report', 'read')->access() ||
+        $this->permission1->method('varience_report', 'read')->access() ||
         $this->permission1->method('money_receipt', 'read')->access()
       ) { ?>
         <li class="treeview <?php if (
@@ -1604,6 +1605,7 @@ $birthday = $CI->Reports->birthday_noti();
                               $this->uri->segment('2') == "retrieve_dateWise_DueReports" ||
                               $this->uri->segment('2') == "sales_return" ||
                               $this->uri->segment('2') == "supplier_return" ||
+                              $this->uri->segment('2') == "variance_report" ||
                               $this->uri->segment('2') == "retrieve_dateWise_tax"
                             ) {
                               echo "active";
@@ -1627,6 +1629,17 @@ $birthday = $CI->Reports->birthday_noti();
                                   } ?>"><a href="<?php echo base_url(
                                                     'Admin_dashboard/closing'
                                                   ); ?>"><?php echo display('closing'); ?></a></li>
+            <?php } ?>
+              <?php if (
+              $this->permission1->method('variance_report', 'create')->access()
+            ) { ?>
+              <li class="treeview <?php if ($this->uri->segment('2') == "variance_report") {
+                                    echo "active";
+                                  } else {
+                                    echo " ";
+                                  } ?>"><a href="<?php echo base_url(
+                                                    'Admin_dashboard/variance_report'
+                                                  ); ?>">Variance Report</a></li>
             <?php } ?>
 
             <?php if (
