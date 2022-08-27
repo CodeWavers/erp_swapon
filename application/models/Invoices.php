@@ -3581,14 +3581,15 @@ class Invoices extends CI_Model
 
         $product_information = $this->db->get()->row();
 
+        $stock = $CI->Reports->getCheckList(null, $product_id)['central_stock'];
 
-        $available_quantity=$CI->Reports->current_stock($product_id,$product_status=null);
+       // $available_quantity=$CI->Reports->current_stock($product_id,$product_status=null);
 
 
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
 
         $data2 = array(
-            'total_product'  => $available_quantity,
+            'total_product'  => $stock,
 //            'supplier_price' => $product_information->supplier_price,
 //            'price'          => $product_information->price,
 //            'supplier_id'    => $product_information->supplier_id,
