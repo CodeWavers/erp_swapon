@@ -133,7 +133,7 @@ class Creport extends CI_Controller
             $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'])['central_stock'];
 
             $res[$k]['stock_qty'] = $stock ;
-            $res[$k]['difference'] = $res[$k]['stock_qty']-$res[$k]['physical_stock'] ;
+            $res[$k]['difference'] = $res[$k]['physical_stock']-$res[$k]['stock_qty'] ;
             $sl++;
         }
 
@@ -218,6 +218,12 @@ class Creport extends CI_Controller
             $this->db->set('approve',1);
             $this->db->where('stid',$stid);
             $this->db->update('stock_taking');
+
+
+
+
+
+
         }  else{
             $this->db->insert('stock_taking', $data1);
 
@@ -244,6 +250,8 @@ class Creport extends CI_Controller
             if (!empty($qty)) {
                 $this->db->insert('stock_taking_details', $data2);
             }
+
+
         }
 
         redirect(base_url('Creport/manage_stock_taking'));

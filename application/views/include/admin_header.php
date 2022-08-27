@@ -1277,10 +1277,10 @@ $birthday = $CI->Reports->birthday_noti();
                                                                                       ); ?></a></li>
             <?php } ?>
 
-              <?php if ($this->permission1->method('stock_report', 'read')->access()) { ?>
+              <?php if ($this->permission1->method('stock_taking', 'read')->access()) { ?>
                   <li class="treeview <?php if (
                       $this->uri->segment('1') == "Creport" &&
-                      $this->uri->segment('2') == ""
+                      $this->uri->segment('2') == "stock_taking"
                   ) {
                       echo "active";
                   } else {
@@ -1288,10 +1288,10 @@ $birthday = $CI->Reports->birthday_noti();
                   } ?>"><a href="<?php echo base_url('Creport/stock_taking'); ?>">Stock Taking</a></li>
               <?php } ?>
 
-              <?php if ($this->permission1->method('stock_report', 'read')->access()) { ?>
+              <?php if ($this->permission1->method('manage_stock_taking', 'read')->access()) { ?>
                   <li class="treeview <?php if (
                       $this->uri->segment('1') == "Creport" &&
-                      $this->uri->segment('2') == ""
+                      $this->uri->segment('2') == "manage_stock_taking"
                   ) {
                       echo "active";
                   } else {

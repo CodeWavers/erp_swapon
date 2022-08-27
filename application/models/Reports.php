@@ -400,18 +400,6 @@ class reports extends CI_Model
                 ->get()
                 ->row();
 
-            $phy_count = $this->db->select('SUM(physical_stock) as phy_qty')
-                ->from('stock_taking_details')
-                ->where(array(
-                    'product_id' => $record->product_id,
-                    'create_date >=' => $date,
-                    'status' => 1,
-
-                ))
-                ->group_by('product_id')
-                ->get()
-                ->row();
-
 
 
 
@@ -437,15 +425,31 @@ class reports extends CI_Model
 
             }
 
+            $phy_count = $this->db->select('SUM(difference) as phy_qty')
+                ->from('stock_taking_details')
+                ->where(array(
+                    'product_id' => $record->product_id,
+//                    'create_date >=' => $date,
+                    'status' => 1,
+
+                ))
+                ->group_by('product_id')
+                ->order_by('id','desc')
+                ->get()
+                ->row();
+
+
+
 
 
             $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
-            $stock = ($total_in - $total_out)-$newStock;
+            $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+            $stock = (($total_in - $total_out)-$newStock)+$diff;
 
             $data[] = array(
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
-                'product_model' => ($record->product_model ? $record->product_model : ''),
+                'product_model' => ($phy_count->create_date ? $record->product_model : ''),
                 'category' => ($record->name ? $record->name : ''),
                 'sku' => ($record->sku ? $record->sku : ''),
                 'sales_price'   =>  sprintf('%0.2f', $sprice),
@@ -455,7 +459,7 @@ class reports extends CI_Model
                 'totalSalesQnty' =>  $total_out,
                 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                'stok_quantity' => sprintf('%0.2f', $phy_count->phy_qty),
+                'stok_quantity' => sprintf('%0.2f',$stock),
                 'total_sale_price' => $stock * $sprice,
                 'purchase_total' => (($stock * $pprice) != 0)
                     ? ($stock * $pprice)
