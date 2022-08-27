@@ -80,7 +80,9 @@
                                             <?php } ?>
 
                                             <a href="<?php echo base_url() . 'Creport/stock_taking_view/' . $res['stid']; ?>" class="btn btn-success btn-sm" title="View/Approve" data-original-title="View"><i class="fa fa-street-view" aria-hidden="true"></i></a>
-
+                                            <?php if ($res['approve'] == 1) { ?>
+                                            <a href="<?php echo base_url() . 'Creport/stock_taking_print/' . $res['stid']; ?>" class="btn btn-warning btn-sm" title="Print" data-original-title="Print"><i class="fa fa-print" aria-hidden="true"></i></a>
+                                            <?php } ?>
                                         </td>
 
 

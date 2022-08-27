@@ -128,9 +128,9 @@
                                         </td>
 
 
-                                        <td align="right"><input class="form-control input-sm text-right"  placeholder="0.00" type="text" value="{stock_qty}" name="stock_qty[]" id="stock_qty_{sl}" readonly></td>
-                                        <td align="right"><input class="form-control input-sm  text-right"  placeholder="0.00" type="text" value="{physical_stock}" name="p_qty[]" id="p_qty_{sl}" readonly></td>
-                                        <td align="right"><input class="form-control input-sm  text-right"  placeholder="0.00" type="text" value="{difference}" name="difference[]" id="difference_{sl}" readonly></td>
+                                        <td align="right"><input class="form-control input-sm text-right"  placeholder="0" type="text" value="{stock_qty}" name="stock_qty[]" id="stock_qty_{sl}" readonly></td>
+                                        <td align="right"><input class="form-control input-sm  text-right"  placeholder="0" type="text" value="{physical_stock}" name="p_qty[]" id="p_qty_{sl}" readonly></td>
+                                        <td align="right"><input class="form-control input-sm  text-right"  placeholder="0" type="text" value="{difference}" name="difference[]" id="difference_{sl}" readonly></td>
 
 
                                     </tr>
@@ -158,7 +158,7 @@
                                             {product_name}
                                             <input type="hidden" name="product_id[]" value={product_id}>
                                         </td>
-                                        <td align="right"><input class="form-control text-right"  placeholder="0.00" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
+                                        <td align="right"><input class="form-control text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
                                     </tr>
                                     {/product_list}
                                     </tbody>

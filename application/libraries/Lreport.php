@@ -1223,6 +1223,48 @@ class Lreport extends CI_Model
         return $reportList;
     }
 
+    public function stock_taking_print($id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->library('numbertowords');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Invoices');
+        $company_info = $CI->Invoices->retrieve_company();
+        $redirect_url = $_SESSION['redirect_uri'];
+
+        $res = $CI->Reports->stock_taking_details_by_id($id);
+
+        //  echo '<pre>';print_r($res);exit();
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'Print Stock Taking',
+            'product_list'  => $res,
+            'date'  => $CI->occational->dateConvert($res[0]['date']),
+            'stid'  => $res[0]['stid_no'],
+            'company_info'  => $company_info,
+            'access'  => 'view',
+
+
+        );
+
+
+
+
+            $chapterList = $CI->parser->parse('report/stock_taking_print', $data, true);
+
+        return $chapterList;
+    }
+
     //    ============== its for filter_sales_report_category_wise============
     public function filter_sales_report_category_wise($outlet_id = null, $category = null, $from_date = null, $to_date = null, $links = null)
     {

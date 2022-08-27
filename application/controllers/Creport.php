@@ -71,16 +71,10 @@ class Creport extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Warehouse');
         $CI->load->model('Purchases');
+        $CI->load->model('Reports');
 
 
-        $query = $this->db->select('*')
-            ->from('stock_taking_details a')
-            ->join('stock_taking s','s.stid=a.stid')
-            ->join('product_information b','a.product_id=b.product_id')
-            ->where('a.stid',$id)
-            ->get();
-
-        $res = $query->result_array();
+        $res = $CI->Reports->stock_taking_details_by_id($id);
 
       //  echo '<pre>';print_r($res);exit();
 
@@ -115,15 +109,7 @@ class Creport extends CI_Controller
         $CI->load->model('Purchases');
         $CI->load->model('Reports');
 
-
-        $query = $this->db->select('*')
-            ->from('stock_taking_details a')
-            ->join('stock_taking s','s.stid=a.stid')
-            ->join('product_information b','a.product_id=b.product_id')
-            ->where('a.stid',$id)
-            ->get();
-
-        $res = $query->result_array();
+        $res = $CI->Reports->stock_taking_details_by_id($id);
 
       //  echo '<pre>';print_r($res);exit();
 
@@ -182,6 +168,16 @@ class Creport extends CI_Controller
 
         $view = $this->parser->parse('report/manage_stock_taking', $data, true);
         $this->template->full_admin_html_view($view);
+    }
+
+    //Retrive right now inserted data to cretae html
+    public function stock_taking_print($id)
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $content = $CI->lreport->stock_taking_print($id);
+        $this->template->full_admin_html_view($content);
     }
 
     public function save_stock()

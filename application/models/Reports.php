@@ -1135,10 +1135,12 @@ class reports extends CI_Model
             ->from('stock_taking_details a')
             ->join('stock_taking s','s.stid=a.stid')
             ->join('product_information b','a.product_id=b.product_id')
-            ->where('a.stid',$id)
-            ->get();
+            ->where('a.stid',$id);
         $query = $this->db->get();
-        return $query->result_array();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
     }
 
     //    ============= its for sales_report_category_wise ===============
