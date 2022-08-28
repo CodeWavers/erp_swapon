@@ -535,7 +535,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     <tr>
 
                                         <td align="center">
-                                            <input type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" value="<?php echo display('add_new_item') ?>" tabindex="12" />
+<!--                                            <input type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" value="--><?php //echo display('add_new_item') ?><!--" tabindex="12" />-->
 
                                             <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                         </td>

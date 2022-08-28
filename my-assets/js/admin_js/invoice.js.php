@@ -986,7 +986,7 @@ function invoice_productList(sl) {
                         $('.'+txclass).val(obj.taxdta[i]);
                     }
 
-                    console.log(obj)
+                 //   console.log(obj)
                     $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
                     $('#'+purchase_price).html('৳'+obj.price);
                     $('.'+available_quantity).val(obj.stock);

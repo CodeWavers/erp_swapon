@@ -5,50 +5,86 @@
     header('Content-Type: text/javascript; charset=utf8');
     ?>
 
-function addInputField(t) {
-    var row = $("#addinvoice tbody tr").length;
-    var count = row + 1;
-       var tab1 =0;
-       var tab2 =0;
-       var tab3 =0;
-       var tab4 =0;
-       var tab5 =0;
-       var tab6 =0;
-       var tab7 =0;
-       var tab8 =0;
-       var tab9 =0;
-    var limits = 500;
-     var taxnumber = $("#txfieldnum").val();
-    var tbfild ='';
-    for(var i=0;i<taxnumber;i++){
-        var taxincrefield = '<input id="total_tax'+i+'_'+count+'" class="total_tax'+i+'_'+count+'" type="hidden"><input id="all_tax'+i+'_'+count+'" class="total_tax'+i+'" type="hidden" name="tax[]">';
-         tbfild +=taxincrefield;
-    }
-    if (count == limits)
-        alert("You have reached the limit of adding " + count + " inputs");
-    else {
-        var a = "product_name_" + count,
-                tabindex = count * 5,
+    function addInputField(t) {
+
+        var row = $("#normalinvoice tbody tr").length;
+        var count = row + 1;
+        var  tab1 = 0;
+        var  tab2 = 0;
+        var  tab3 = 0;
+        var  tab4 = 0;
+        var  tab5 = 0;
+        var  tab6 = 0;
+        var  tab7 = 0;
+        var  tab8 = 0;
+        var  tab9 = 0;
+        var  tab10 = 0;
+        var  tab11 = 0;
+        var  tab12 = 0;
+        var limits = 500;
+        var taxnumber = $("#txfieldnum").val();
+        var tbfild ='';
+        for(var i=0;i<taxnumber;i++){
+            var taxincrefield = '<input id="total_tax'+i+'_'+count+'" class="total_tax'+i+'_'+count+'" type="hidden"><input id="all_tax'+i+'_'+count+'" class="total_tax'+i+'" type="hidden" name="tax[]">';
+            tbfild +=taxincrefield;
+        }
+        if (count == limits)
+            alert("You have reached the limit of adding " + count + " inputs");
+        else {
+            var a = "product_name_" + count,
+                tabindex = count * 6,
                 e = document.createElement("tr");
-        tab1 = tabindex + 1;
-        tab2 = tabindex + 2;
-        tab3 = tabindex + 3;
-        tab4 = tabindex + 4;
-        tab5 = tabindex + 5;
-        tab6 = tabindex + 6;
-        tab7 = tabindex + 7;
-        tab8 = tabindex + 8;
-        tab9 = tabindex + 9;
-        e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td> <td><input type='text' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /></td><td><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td><td> <?php $date = date('Y-m-d'); ?><input type='text' name='product_quantity[]' required='required' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab2 + "' value='1'/></td><td><input type='text' id='warrenty_date' class='form-control datepicker' value='<?php echo $date?>' name='warrenty_date[]' id='date'/></td><td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td><td class='text-center'  width='200'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab4 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td><td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td><td>"+tbfild+"<input type='hidden' id='all_discount_" + count + "' class='total_discount' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: center;' class='btn btn-danger btn-xs' type='button'  onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
+            tab1 = tabindex + 1;
+            tab2 = tabindex + 2;
+            tab3 = tabindex + 3;
+            tab4 = tabindex + 4;
+            tab5 = tabindex + 5;
+            tab6 = tabindex + 6;
+            tab7 = tabindex + 7;
+            tab8 = tabindex + 8;
+            tab9 = tabindex + 9;
+            tab10 = tabindex + 10;
+            tab11 = tabindex + 11;
+            tab12 = tabindex + 12;
+            e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
+                "<td><input type='text'  class='form-control text-right  available_quantity_" + count + "' value='' readonly></td>"+
+                " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
+                "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
+                "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
+                "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
+                "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
+                "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' total_price_wd form-control text-right' type='hidden' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
+                "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
+                "<td class='text-right' hidden><input class=' total_comm form-control text-right' type='text' name='total_comm[]' id='total_comm_" + count + "' name='total_comm[]' value='0.00' readonly='readonly'/></td>" +
+
+                "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
                 document.getElementById(t).appendChild(e),
                 document.getElementById(a).focus(),
                 document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
-        document.getElementById("paidAmount").setAttribute("tabindex", tab7);
-        document.getElementById("full_paid_tab").setAttribute("tabindex", tab8);
-        document.getElementById("add_invoice").setAttribute("tabindex", tab9);
-        count++
+            document.getElementById("details").setAttribute("tabindex", tab7);
+            document.getElementById("invoice_discount").setAttribute("tabindex", tab8);
+            document.getElementById("shipping_cost").setAttribute("tabindex", tab9);
+            document.getElementById("paidAmount").setAttribute("tabindex", tab10);
+            // document.getElementById("full_paid_tab").setAttribute("tabindex", tab11);
+            document.getElementById("add_invoice").setAttribute("tabindex", tab12);
+            var commision_type=$('#commission_type').val()
+
+            if (commision_type==1 ) {
+                $('.comm_th').removeClass('d-none')
+                $('.comm_th').addClass('d-inline')
+
+            }
+
+            if (commision_type==2 ) {
+                $('.comm_th').removeClass('d-inline')
+                $('.comm_th').addClass('d-none')
+            }
+
+            count++
+        }
     }
-}
+
+
 //Quantity calculat
     "use strict";
     function quantity_calculate(item) {
@@ -1032,96 +1068,192 @@ $(document).ready(function() {
 function cancelprint(){
    location.reload();
 }
+    "use strict";
+    function invoice_productList(sl) {
 
-       "use strict";
-     function invoice_productList(sl) {
-      //   alert(sl)
-    var csrf_test_name = $('[name="csrf_test_name"]').val();
-         var base_url = $("#base_url").val();
- var priceClass = 'price_item'+sl;
-         var purchase_price = 'purchase_price_'+sl;
+        var outlet_id = $("#outlet_name").val();
+
+        var priceClass = 'price_item'+sl;
+        var purchase_price = 'purchase_price_'+sl;
+
         var available_quantity = 'available_quantity_'+sl;
         var unit = 'unit_'+sl;
         var tax = 'total_tax_'+sl;
         var serial_no = 'serial_no_'+sl;
+        var warehouse = 'warehouse_'+sl;
+        var warrenty_date='warrenty_date_'+sl;
+        var expiry_date='expiry_date_'+sl;
         var discount_type = 'discount_type_'+sl;
+        var discount = 'discount_'+sl;
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+        var base_url = $("#base_url").val();
 
-    // Auto complete
-    var options = {
-        minLength: 0,
-        source: function( request, response ) {
-            var product_name = $('#product_name_'+sl).val();
-        $.ajax( {
-          url: base_url + "Cinvoice/autocompleteproductsearch",
-          method: 'post',
-          dataType: "json",
-          data: {
-            term: request.term,
-            product_name:product_name,
-            csrf_test_name:csrf_test_name,
-          },
-          success: function( data ) {
-            response( data );
 
-          }
-        });
-      },
-       focus: function( event, ui ) {
-           $(this).val(ui.item.label);
-           return false;
-       },
-       select: function( event, ui ) {
-            $(this).parent().parent().find(".autocomplete_hidden_value").val(ui.item.value);
+
+        // Auto complete
+        var options = {
+            minLength: 0,
+            source: function( request, response ) {
+                var product_name = $('#product_name_'+sl).val();
+                $.ajax( {
+                    url: base_url + "Cinvoice/autocompleteproductsearch",
+                    method: 'post',
+                    dataType: "json",
+                    data: {
+                        term: request.term,
+                        product_name:product_name,
+                        pr_status: 1,
+                        csrf_test_name:csrf_test_name,
+                    },
+                    success: function( data ) {
+                        response( data );
+
+                    }
+                });
+            },
+            focus: function( event, ui ) {
                 $(this).val(ui.item.label);
-            var sl = $(this).parent().parent().find(".sl").val();
+                return false;
+            },
+            select: function( event, ui ) {
+                $(this).parent().parent().find(".autocomplete_hidden_value").val(ui.item.value);
+                $(this).val(ui.item.label);
                 var id=ui.item.value;
                 var dataString = 'product_id='+ id;
                 var base_url = $('.baseUrl').val();
-           var outlet_id = $("#outlet_name").val();
-
+                var  customer_id=$('#autocomplete_customer_id').val();
+                console.log(id);
                 $.ajax
-                   ({
-                        type: "POST",
-                        url: base_url+"Cinvoice/retrieve_product_data_inv",
-                       data: {
-                           product_id: id,
-                           outlet_id : outlet_id,
-                           csrf_test_name: csrf_test_name
-                       },
-                        cache: false,
-                        success: function(data)
-                        {
-                            var obj = jQuery.parseJSON(data);
-                            for (var i = 0; i < (obj.txnmber); i++) {
+                ({
+                    type: "POST",
+                    url: base_url+"Cinvoice/retrieve_product_data_inv",
+                    data: {product_id:id,customer_id:customer_id,outlet_id: outlet_id,csrf_test_name:csrf_test_name},
+                    cache: false,
+                    success: function(data)
+                    {
+                        var obj = jQuery.parseJSON(data);
+                        for (var i = 0; i < (obj.txnmber); i++) {
                             var txam = obj.taxdta[i];
                             var txclass = 'total_tax'+i+'_'+sl;
-                           $('.'+txclass).val(obj.taxdta[i]);
-                            }
-                            $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
-                            $('#'+purchase_price).html('৳'+obj.price);
-                            $('.'+available_quantity).val(obj.total_product);
-                            $('.'+unit).val(obj.unit);
-                            $('.'+tax).val(obj.tax);
-                            $('#txfieldnum').val(obj.txnmber);
-                            $('#'+serial_no).html(obj.serial);
-                            $('#'+discount_type).val(obj.discount_type);
-
-                            //This Function Stay on others.js page
-                            quantity_calculate(sl);
-
+                            $('.'+txclass).val(obj.taxdta[i]);
                         }
-                    });
 
-            $(this).unbind("change");
-            return false;
-       }
-   }
+                        //   console.log(obj)
+                        $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
+                        $('#'+purchase_price).html('৳'+obj.price);
+                        $('.'+available_quantity).val(obj.stock);
+                        $('.'+unit).val(obj.unit);
+                        $('.'+warrenty_date).val(obj.warrenty_date);
+                        $('.'+expiry_date).val(obj.expired_date);
+                        $('#'+warehouse).html(obj.warehouse);
+                        $('.'+tax).val(obj.tax);
+                        $('#txfieldnum').val(obj.txnmber);
+                        // $('#'+serial_no).html(obj.serial);
+                        // $('#'+discount_type).val(obj.discount_type);
+                        $('#' + discount).val(obj.discount);
+                        $("#stock_"+sl).val(obj.stock);
+                        quantity_calculate(sl);
 
-   $('body').on('keypress.autocomplete', '.productSelection', function() {
-       $(this).autocomplete(options);
-   });
+                    }
+                });
 
-}
+                $(this).unbind("change");
+                return false;
+            }
+        }
+
+        $('body').on('keypress.autocomplete', '.productSelection', function() {
+            $(this).autocomplete(options);
+        });
+
+    }
+       "use strict";
+//     function invoice_productList(sl) {
+//      //   alert(sl)
+//    var csrf_test_name = $('[name="csrf_test_name"]').val();
+//         var base_url = $("#base_url").val();
+// var priceClass = 'price_item'+sl;
+// var total_price = 'total_price_'+sl;
+//         var purchase_price = 'purchase_price_'+sl;
+//        var available_quantity = 'available_quantity_'+sl;
+//        var unit = 'unit_'+sl;
+//        var tax = 'total_tax_'+sl;
+//        var serial_no = 'serial_no_'+sl;
+//        var discount_type = 'discount_type_'+sl;
+//
+//    // Auto complete
+//    var options = {
+//        minLength: 0,
+//        source: function( request, response ) {
+//            var product_name = $('#product_name_'+sl).val();
+//        $.ajax( {
+//          url: base_url + "Cinvoice/autocompleteproductsearch",
+//          method: 'post',
+//          dataType: "json",
+//          data: {
+//            term: request.term,
+//            product_name:product_name,
+//            csrf_test_name:csrf_test_name,
+//          },
+//          success: function( data ) {
+//            response( data );
+//
+//          }
+//        });
+//      },
+//       focus: function( event, ui ) {
+//           $(this).val(ui.item.label);
+//           return false;
+//       },
+//       select: function( event, ui ) {
+//            $(this).parent().parent().find(".autocomplete_hidden_value").val(ui.item.value);
+//                $(this).val(ui.item.label);
+//            var sl = $(this).parent().parent().find(".sl").val();
+//                var id=ui.item.value;
+//                var dataString = 'product_id='+ id;
+//                var base_url = $('.baseUrl').val();
+//           var outlet_id = $("#outlet_name").val();
+//
+//                $.ajax
+//                   ({
+//                        type: "POST",
+//                        url: base_url+"Cinvoice/retrieve_product_data_inv",
+//                       data: {
+//                           product_id: id,
+//                           outlet_id : outlet_id,
+//                           csrf_test_name: csrf_test_name
+//                       },
+//                        cache: false,
+//                        success: function(data)
+//                        {
+//                            var obj = jQuery.parseJSON(data);
+//
+//                            $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
+//                            $('#'+total_price).val(obj.purchase_price ? obj.purchase_price : 0.00);
+//                            $('#'+purchase_price).html('৳'+obj.price);
+//                            $('.'+available_quantity).val(obj.total_product);
+//                            $('.'+unit).val(obj.unit);
+//                            $('.'+tax).val(obj.tax);
+//                            $('#txfieldnum').val(obj.txnmber);
+//                            $('#'+serial_no).html(obj.serial);
+//                            $('#'+discount_type).val(obj.discount_type);
+//
+//                            //This Function Stay on others.js page
+//                            quantity_calculate(sl);
+//
+//                        }
+//                    });
+//
+//            $(this).unbind("change");
+//            return false;
+//       }
+//   }
+//
+//   $('body').on('keypress.autocomplete', '.productSelection', function() {
+//       $(this).autocomplete(options);
+//   });
+//
+//}
 
         window.onload = function () {
         $('body').addClass("sidebar-mini sidebar-collapse");
