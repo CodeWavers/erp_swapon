@@ -147,7 +147,8 @@ class Quotation_model extends CI_Model
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
-                'courier_status'      => 1,
+                'courier_status'      => ($delivery_type == 1) ? 0 : 1
+
 
             );
 
@@ -334,7 +335,8 @@ class Quotation_model extends CI_Model
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
                 'customer_card_no'      => $cus_card,
-                'courier_status'      => 1,
+                'courier_status'      => ($delivery_type == 1) ? 0 : 1
+
 
             );
 
