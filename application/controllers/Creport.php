@@ -58,6 +58,7 @@ class Creport extends CI_Controller
         $data = array(
             'title'     => 'Stock Taking',
             'product_list'  => $res,
+            'access'  => '',
 
         );
 
@@ -187,7 +188,9 @@ class Creport extends CI_Controller
 
         $date = date('Y-m-d');
         $product_id = $this->input->post('product_id', TRUE);
-        $quantity = $this->input->post('p_qty', TRUE);
+        $quantity = array_filter($this->input->post('p_qty', TRUE));
+
+        //echo '<pre>';print_r($product_id);exit();
 
 
 
@@ -228,21 +231,22 @@ class Creport extends CI_Controller
         for ($i = 0; $i < count($product_id); $i++) {
             $pr_id = $product_id[$i];
             $qty = $quantity[$i];
-            $stk_qty =$this->input->post('stock_qty', TRUE)[$i];
-            $difference =$this->input->post('difference', TRUE)[$i];
 
             $data2 = array(
                 'st_details_id'    => mt_rand(),
                 'stid'           => $stid,
                 'product_id'        => $pr_id,
-                'current_stock'             => (!empty($stk_qty) ? $stk_qty : 0),
+                'current_stock'             => (!empty($this->input->post('stock_qty', TRUE)[$i]) ? $this->input->post('stock_qty', TRUE)[$i] : 0),
                 'physical_stock'             => $qty,
-                'difference'             => (!empty($difference) ? $difference : 0),
+                'difference'             => (!empty($this->input->post('difference', TRUE)[$i]) ? $this->input->post('difference', TRUE)[$i] : 0),
                 'create_date'            => $date,
                 'status'            => ($access == 'view') ?  '1' : '0',
 
             );
 
+
+           // echo '<pre>';print_r($data1);
+           // echo '<pre>';print_r($data2);exit();
             if (!empty($qty)) {
                 $this->db->insert('stock_taking_details', $data2);
             }

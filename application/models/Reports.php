@@ -228,6 +228,7 @@ class reports extends CI_Model
 
         $this->db->select("a.*");
         $this->db->from('stock_taking a');
+        $this->db->order_by('a.id','desc');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -472,7 +473,7 @@ class reports extends CI_Model
             $data[] = array(
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
-                'product_model' => ($phy_count->create_date ? $record->product_model : ''),
+                'product_model' => ($record->product_model ? $record->product_model : ''),
                 'category' => ($record->name ? $record->name : ''),
                 'sku' => ($record->sku ? $record->sku : ''),
                 'sales_price'   =>  sprintf('%0.2f', $sprice),

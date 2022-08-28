@@ -157,6 +157,7 @@
                                         <td>
                                             {product_name}
                                             <input type="hidden" name="product_id[]" value={product_id}>
+
                                         </td>
                                         <td align="right"><input class="form-control text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
                                     </tr>
@@ -171,14 +172,14 @@
                         </div>
                         <?php if ($access == 'view'){ ?>
                             <?php if ($approve == 0){ ?>
-                                <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md">Approve</button>
+                                <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Approve</button>
                             <?php }else{ ?>
                                 <a  href="<?php echo base_url() . 'Creport/manage_stock_taking/'?>" id="" name="" class="btn btn-black btn-md">Back</a>
 
                             <?php } ?>
 
                         <?php }else{ ?>
-                            <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md">Submit</button>
+                            <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Submit</button>
 
                         <?php } ?>
                     </div>
@@ -201,7 +202,8 @@
             ],
         });
 
-        $('button').click(function () {
+        $('.submit_btn').click(function () {
+            // table.clear();
             table.destroy();
         });
     });
