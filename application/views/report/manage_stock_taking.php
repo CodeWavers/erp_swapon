@@ -77,6 +77,8 @@
                                         <td>
                                             <?php if ($res['approve'] == 0) { ?>
                                             <a href="<?php echo base_url() . 'Creport/stock_taking_edit/' . $res['stid']; ?>" class="btn btn-info btn-sm" title="Edit" data-original-title="Edit"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                                <a href="<?php echo base_url() . 'Creport/stock_taking_delete/' . $res['stid']; ?>" class="btn btn-danger btn-sm" title="Delete" data-original-title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+
                                             <?php } ?>
 
                                             <a href="<?php echo base_url() . 'Creport/stock_taking_view/' . $res['stid']; ?>" class="btn btn-success btn-sm" title="View/Approve" data-original-title="View"><i class="fa fa-street-view" aria-hidden="true"></i></a>

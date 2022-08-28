@@ -48,6 +48,7 @@
                                 Stock Taking
                             </h4>
                         </div>
+
                     </div>
 
 
@@ -101,6 +102,24 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-10 col-form-label">
+                                    </label>
+                                    <div class="col-sm-2 text-right ">
+                                        <?php if ($access == 'view'){ ?>
+                                            <?php if ($approve == 0){ ?>
+                                                <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Approve</button>
+                                            <?php }else{ ?>
+                                                <a  href="<?php echo base_url() . 'Creport/manage_stock_taking/'?>" id="" name="" class="btn btn-black btn-md">Back</a>
+
+                                            <?php } } ?>
+
+
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -129,7 +148,7 @@
 
 
                                         <td align="right"><input class="form-control input-sm text-right"  placeholder="0" type="text" value="{stock_qty}" name="stock_qty[]" id="stock_qty_{sl}" readonly></td>
-                                        <td align="right"><input class="form-control input-sm  text-right"  placeholder="0" type="text" value="{physical_stock}" name="p_qty[]" id="p_qty_{sl}" readonly></td>
+                                        <td align="right"><input class="form-control input-sm p_qty  text-right"  placeholder="0" type="text" value="{physical_stock}" name="p_qty[]" id="p_qty_{sl}" readonly></td>
                                         <td align="right"><input class="form-control input-sm  text-right"  placeholder="0" type="text" value="{difference}" name="difference[]" id="difference_{sl}" readonly></td>
 
 
@@ -159,7 +178,7 @@
                                             <input type="hidden" name="product_id[]" value={product_id}>
 
                                         </td>
-                                        <td align="right"><input class="form-control text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
+                                        <td align="right"><input class="form-control p_qty text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
                                     </tr>
                                     {/product_list}
                                     </tbody>
@@ -170,15 +189,9 @@
                             <?php } ?>
 
                         </div>
-                        <?php if ($access == 'view'){ ?>
-                            <?php if ($approve == 0){ ?>
-                                <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Approve</button>
-                            <?php }else{ ?>
-                                <a  href="<?php echo base_url() . 'Creport/manage_stock_taking/'?>" id="" name="" class="btn btn-black btn-md">Back</a>
 
-                            <?php } ?>
 
-                        <?php }else{ ?>
+                        <?php if ($access != 'view'){ ?>
                             <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Submit</button>
 
                         <?php } ?>
@@ -192,6 +205,7 @@
 </div>
 
 <script type="text/javascript">
+
     $(document).ready(function () {
         var table = $('#st_table').DataTable({
             columnDefs: [
@@ -207,6 +221,8 @@
             table.destroy();
         });
     });
+
+
 
 
 

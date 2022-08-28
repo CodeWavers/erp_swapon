@@ -180,6 +180,16 @@ class Creport extends CI_Controller
         $content = $CI->lreport->stock_taking_print($id);
         $this->template->full_admin_html_view($content);
     }
+    public function stock_taking_delete($stid){
+        $this->db->where('stid',$stid);
+        $this->db->delete('stock_taking');
+
+        $this->db->where('stid',$stid);
+        $this->db->delete('stock_taking_details');
+
+        $this->session->set_userdata(array('message' => 'Successfully Deleted'));
+        redirect(base_url('Creport/manage_stock_taking'));
+    }
 
     public function save_stock()
     {
@@ -190,7 +200,11 @@ class Creport extends CI_Controller
         $product_id = $this->input->post('product_id', TRUE);
         $quantity = array_filter($this->input->post('p_qty', TRUE));
 
-        //echo '<pre>';print_r($product_id);exit();
+     if (empty($quantity)){
+         $this->session->set_userdata(array('error_message' => 'Physical count is empty!!'));
+         redirect(base_url('Creport/stock_taking'));
+         exit();
+     }
 
 
 
