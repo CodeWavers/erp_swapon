@@ -213,6 +213,7 @@ class Cproduct extends CI_Controller
         $data2['product_details'] = $this->input->post('description', TRUE);
         $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
         $data2['status']       = 1;
+        $data2['created_date']       =  date('Y-m-d');
 
         $data['barcode']   = $product_id;
         $data['name'] = $this->input->post('product_name', TRUE);
@@ -673,7 +674,8 @@ class Cproduct extends CI_Controller
                         'tax'           => '',
                         'product_details' => 'Csv Product',
                         'image'         => base_url('my-assets/image/product.png'),
-                        'status'        => 1
+                        'status'        => 1,
+                        'created_date'      =>  date('Y-m-d')
                     );
 
                     if ($count > 0) {
