@@ -61,25 +61,25 @@ function addInputField(t) {
     tab11 = tabindex + 11;
     tab12 = tabindex + 12;
     e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
-        "<td><input type='text'  class='form-control text-right  available_quantity_" + count + "' value='' readonly></td>"+
-        " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
-        "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
-        "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
-        "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  expiry_date_" + count + "' name='expiry_date[]' value=''/></td>" +
-        "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
-        "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='discount_" + count + "' style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
-        "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' total_price_wd form-control text-right' type='hidden' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
-        "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
-        "<td class='text-right' hidden><input class=' total_comm form-control text-right' type='text' name='total_comm[]' id='total_comm_" + count + "' name='total_comm[]' value='0.00' readonly='readonly'/></td>" +
+        "<td><input type='text'  class='form-control text-right  re_available_quantity_" + count + "' value='' readonly></td>"+
+        " <td><input type='hidden' name='re_available_quantity[]' id='' class='form-control text-right common_avail_qnt re_available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
+        "<td> <input type='text' name='re_product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_total_qntt_" + count + "' class='common_qnt re_total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
+        "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  re_warrenty_date_" + count + "' name='re_warrenty_date[]' value=''/></td>" +
+        "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  re_expiry_date_" + count + "' name='re_expiry_date[]' value=''/></td>" +
+        "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='re_product_rate[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_price_item_" + count + "' class='re_common_rate re_price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='re_purchase_price_" + count + "' class=' re_purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
+        "<td class='text-center'><input type='text' name='re_iscount[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='discount_" + count + "' style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='re_comm[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
+        "<td class='text-right'><input class='re_common_total_price re_total_price form-control text-right' type='text' name='re_total_price[]' id='re_total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' re_total_price_wd form-control text-right' type='hidden' name='re_total_price_wd[]' id='re_total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
+        "<td class='text-right' hidden><input class=' re_total_discount form-control text-right' type='text' name='re_total_discount[]' id='re_total_discount_" + count + "' name='re_discount_amt[]' value='0.00' readonly='readonly'/></td>" +
+        "<td class='text-right' hidden><input class=' re_total_comm form-control text-right' type='text' name='re_total_comm[]' id='re_total_comm_" + count + "' name='re_total_comm[]' value='0.00' readonly='readonly'/></td>" +
 
-        "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
+        "<td>" + tbfild + "<input type='hidden' id='re_all_discount_" + count + "' class='re_total_discount dppr' name='re_discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
         document.getElementById(t).appendChild(e),
         document.getElementById(a).focus(),
         document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
-    document.getElementById("details").setAttribute("tabindex", tab7);
-    document.getElementById("invoice_discount").setAttribute("tabindex", tab8);
-    document.getElementById("shipping_cost").setAttribute("tabindex", tab9);
-    document.getElementById("paidAmount").setAttribute("tabindex", tab10);
+    document.getElementById("re_details").setAttribute("tabindex", tab7);
+    document.getElementById("re_invoice_discount").setAttribute("tabindex", tab8);
+    document.getElementById("re_shipping_cost").setAttribute("tabindex", tab9);
+    document.getElementById("re_paidAmount").setAttribute("tabindex", tab10);
     // document.getElementById("full_paid_tab").setAttribute("tabindex", tab11);
     document.getElementById("add_invoice").setAttribute("tabindex", tab12);
     var commision_type=$('#commission_type').val()
@@ -100,17 +100,17 @@ function addInputField(t) {
 }
 "use strict";
 function quantity_calculate_re(item) {
-  var quantity = $("#total_qntt_" + item).val();
-  var available_quantity = $(".available_quantity_" + item).val();
-  var price_item = parseInt($("#price_item_" + item).val());
-  var invoice_discount = $("#invoice_discount").val();
-  var warrenty_date=$("#warrenty_date_"+item).val();
-  var warehouse=$(".warehouse_"+item).val();
-  var discount = $("#discount_" + item).val();
-  var total_tax = $("#total_tax_" + item).val();
-  var total_discount = $("#total_discount_" + item).val();
+  var quantity = $("#re_total_qntt_" + item).val();
+  var available_quantity = $(".re_available_quantity_" + item).val();
+  var price_item = parseInt($("#re_price_item_" + item).val());
+  var invoice_discount = $("#re_invoice_discount").val();
+  var warrenty_date=$("#re_warrenty_date_"+item).val();
+  var warehouse=$(".re_warehouse_"+item).val();
+  var discount = $("#re_discount_" + item).val();
+  var total_tax = $("#re_total_tax_" + item).val();
+  var total_discount = $("#re_total_discount_" + item).val();
 
-  var  comm_item =  ($("#comm_" + item).val() ? $("#comm_" + item).val() : 0);
+  var  comm_item =  ($("#re_comm_" + item).val() ? $("#re_comm_" + item).val() : 0);
 
   //var comm_item = $("#comm_" + item).val();
   var taxnumber = $("#txfieldnum").val();
@@ -118,13 +118,15 @@ function quantity_calculate_re(item) {
   if (parseInt(quantity) > parseInt(available_quantity)) {
     var message = "You can Sale maximum " + available_quantity + " Items";
     alert(message);
-    $("#total_qntt_" + item).val('');
+    $("#re_total_qntt_" + item).val('');
     var quantity = 0;
-    $("#total_price_" + item).val(0);
+    $("#re_total_price_" + item).val(0);
     for(var i=0;i<taxnumber;i++){
-      $("#all_tax"+i+"_" + item).val(0);
+      $("#re_all_tax"+i+"_" + item).val(0);
       quantity_calculate_re(item);
     }
+
+
   }
 
   // alert(comm_item)
@@ -136,11 +138,11 @@ function quantity_calculate_re(item) {
   var just_tot = quantity * price_item;
   var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
 
-  $("#total_price_wd_" + item).val(just_tot);
-  $("#total_discount_" + item).val((just_tot) * (discount / 100));
-  $("#total_comm_" + item).val((just_tot) * (comm_item / 100));
+  $("#re_total_price_wd_" + item).val(just_tot);
+  $("#re_total_discount_" + item).val((just_tot) * (discount / 100));
+  $("#re_total_comm_" + item).val((just_tot) * (comm_item / 100));
   //$("#total_discount_ammount").val((just_tot) * (discount / 100));
-  $("#total_price_" + item).val(row_tot.toFixed(2,2));
+  $("#re_total_price_" + item).val(row_tot.toFixed(2,2));
   //$("#total_price_wd_" + item).val(just_tot.toFixed(2, 2));
 
   calculateSum();
@@ -162,27 +164,27 @@ function calculateSum() {
       ds = 0,
       cc = 0,
 
-      s_cost =  ($("#shipping_cost").val() ? $("#shipping_cost").val() : 0),
-      c_cost =  ($("#condition_cost").val() ? $("#condition_cost").val() : 0),
-      commission =  ($("#commission").val() ? $("#commission").val() : 0),
-      perc_discount =  ($("#perc_discount").val() ? $("#perc_discount").val() : 0);
+      s_cost =  ($("#re_shipping_cost").val() ? $("#re_shipping_cost").val() : 0),
+      c_cost =  ($("#re_condition_cost").val() ? $("#re_condition_cost").val() : 0),
+      commission =  ($("#re_commission").val() ? $("#re_commission").val() : 0),
+      perc_discount =  ($("#re_perc_discount").val() ? $("#re_perc_discount").val() : 0);
 
 
-  $(".total_discount").each(function () {
+  $(".re_total_discount").each(function () {
     isNaN(this.value) || 0 == this.value.length || (p += parseFloat(this.value))
   }),
-      $("#total_discount_ammount").val(p.toFixed(2, 2)),
+      $("#re_total_discount_ammount").val(p.toFixed(2, 2)),
 
-      $(".totalTax").each(function () {
+      $(".re_totalTax").each(function () {
         isNaN(this.value) || 0 == this.value.length || (f += parseFloat(this.value))
       }),
-      $("#total_tax_amount").val(f.toFixed(2, 2)),
+      $("#re_dc").val(f.toFixed(2, 2)),
 
       //Total Price
-      $(".total_price").each(function () {
+      $(".re_total_price").each(function () {
         isNaN(this.value) || 0 == this.value.length || (t += parseFloat(this.value))
       }),
-      $(".total_price_wd").each(function () {
+      $(".re_total_price_wd").each(function () {
         isNaN(this.value) || 0 == this.value.length || (x += parseFloat(this.value))
       }),
 
@@ -190,7 +192,7 @@ function calculateSum() {
         isNaN(this.value) || 0 == this.value.length || (ad += parseFloat(this.value))
       }),
 
-      $(".total_comm").each(function () {
+      $(".re_total_comm").each(function () {
         isNaN(this.value) || 0 == this.value.length || (cc += parseFloat(this.value))
       }),
 
@@ -202,11 +204,11 @@ function calculateSum() {
   var pds =+(t) * (perc_discount / 100);
 
 
-  var total_discount_ammount = $("#total_discount_ammount").val();
+  var total_discount_ammount = $("#re_total_discount_ammount").val();
   var ttl_discount = parseFloat(total_discount_ammount)+pds;
   //var ttl_cms = +commission;
-  $("#total_discount_ammount").val(ttl_discount.toFixed(2,2));
-  $("#total_commission").val(cc.toFixed(2,2));
+  $("#re_total_discount_ammount").val(ttl_discount.toFixed(2,2));
+  $("#re_total_commission").val(cc.toFixed(2,2));
   //ds =+(t) * (perc_discount / 100);
 
   //console.log(discount_perc);
@@ -215,17 +217,17 @@ function calculateSum() {
   var test2 = +tx + +s_cost + +x + -ttl_discount + + ad ;
 
   if(c_cost == undefined || commission ==undefined){
-    $("#grandTotal").val(test2.toFixed(2, 2));
+    $("#re_grandTotal").val(test2.toFixed(2, 2));
   }else {
-    $("#grandTotal").val(test.toFixed(2, 2));
+    $("#re_grandTotal").val(test.toFixed(2, 2));
   }
 
-  var gt = $("#grandTotal").val();
+  var gt = $("#re_grandTotal").val();
   //var invdis = $("#invoice_discount").val();
 
   var grnt_totals = gt;
   invoice_paidamount();
-  $("#grandTotal").val(grnt_totals);
+  $("#re_grandTotal").val(grnt_totals);
 
 
 
@@ -297,18 +299,18 @@ function invoice_productList(sl) {
 
   var outlet_id = $("#outlet_name").val();
 
-  var priceClass = 'price_item'+sl;
-  var purchase_price = 'purchase_price_'+sl;
+  var priceClass = 're_price_item'+sl;
+  var purchase_price = 're_purchase_price_'+sl;
 
-  var available_quantity = 'available_quantity_'+sl;
-  var unit = 'unit_'+sl;
-  var tax = 'total_tax_'+sl;
-  var serial_no = 'serial_no_'+sl;
-  var warehouse = 'warehouse_'+sl;
-  var warrenty_date='warrenty_date_'+sl;
-  var expiry_date='expiry_date_'+sl;
-  var discount_type = 'discount_type_'+sl;
-  var discount = 'discount_'+sl;
+  var available_quantity = 're_available_quantity_'+sl;
+  var unit = 're_unit_'+sl;
+  var tax = 're_total_tax_'+sl;
+  var serial_no = 're_serial_no_'+sl;
+  var warehouse = 're_warehouse_'+sl;
+  var warrenty_date='re_warrenty_date_'+sl;
+  var expiry_date='re_expiry_date_'+sl;
+  var discount_type = 're_discount_type_'+sl;
+  var discount = 're_discount_'+sl;
   var csrf_test_name = $('[name="csrf_test_name"]').val();
   var base_url = $("#base_url").val();
 
@@ -376,7 +378,7 @@ function invoice_productList(sl) {
           // $('#'+discount_type).val(obj.discount_type);
           $('#' + discount).val(obj.discount);
           $("#stock_"+sl).val(obj.stock);
-          quantity_calculate(sl);
+          quantity_calculate_re(sl);
 
         }
       });
