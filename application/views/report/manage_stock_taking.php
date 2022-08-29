@@ -61,6 +61,7 @@
                                         <th>Date </th>
                                         <th>Total Product</th>
                                         <th>Notes</th>
+                                        <th>Status</th>
                                         <th>Action</th>
 
                                     </tr>
@@ -73,6 +74,14 @@
                                         <td><?= $res['date']?></td>
                                         <td><?= $res['total_product']?></td>
                                         <td><?= $res['notes']?></td>
+                                        <td align="center">
+
+                                            <?php if ($res['approve'] == 0) { ?>
+                                            <span class="label label-danger ">Pending</span>
+                                            <?php }else{ ?>
+                                                <span class="label label-success ">Approved</span>
+                                            <?php } ?>
+                                        </td>
 
                                         <td>
                                             <?php if ($res['approve'] == 0) { ?>

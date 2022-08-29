@@ -56,7 +56,7 @@ class Products extends CI_Model
 
     public function getProductList($postData = null)
     {
-
+        $this->load->library('occational');
         $response = array();
 
         ## Read value
@@ -156,6 +156,7 @@ class Products extends CI_Model
             $data[] = array(
                 'sl'               => $sl,
                 'product_name'     => $product_name,
+                'created_date'    => $this->occational->dateConvert($record->created_date),
                 'product_category'    => $record->category_id,
                 //'product_code'     => $record->product_code,
                 //'product_type'    => $record->ptype_name,

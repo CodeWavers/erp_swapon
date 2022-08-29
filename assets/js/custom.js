@@ -561,7 +561,7 @@ $(function ($) {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5] },
+      { bSortable: false, aTargets: [0, 3, 6,7] },
     ],
     processing: true,
     serverSide: true,
@@ -624,6 +624,7 @@ $(function ($) {
     columns: [
       { data: "sl" },
       { data: "product_name" },
+      { data: "created_date" },
       { data: "product_status" },
       { data: "sku" },
       // { data: "product_category" },
@@ -1274,7 +1275,7 @@ $(document).ready(function () {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 2, 3, 4, 5, 6, 7,8,9] },
+      { bSortable: false, aTargets: [0, 2,4, 5, 6, 7,8,9,10,11,12] },
     ],
     processing: true,
     serverSide: true,

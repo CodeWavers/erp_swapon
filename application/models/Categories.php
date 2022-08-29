@@ -50,6 +50,10 @@ class Categories extends CI_Model
 
     }
 
+    public function sub_sub_cat_by_id($id){
+
+    }
+
     //customer List
     public function category_list_product()
     {

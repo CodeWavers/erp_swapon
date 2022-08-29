@@ -62,11 +62,11 @@
                                     <div class="form-group row">
                                         <form>
                                             <div class="col-sm-4">
-                                                <input type="number" name="qty" class="form-control" value="<?php echo (isset($_GET["qty"]) ? $_GET["qty"] : "1");
+                                                <input type="number" name="qty" class="form-control" value="<?php echo (isset($_GET["qty"]) ? $_GET["qty"] : "5");
                                                                                                             ?>">
                                             </div>
                                             <div class="col-sm-4">
-                                                <input type="number" name="cqty" class="form-control" value="<?php echo (isset($_GET["cqty"]) ? $_GET["cqty"] : "1");
+                                                <input type="number" name="cqty" class="form-control" value="<?php echo (isset($_GET["cqty"]) ? $_GET["cqty"] : "5");
                                                                                                                 ?>">
                                             </div>
                                             <div class="col-sm-2">
@@ -94,8 +94,8 @@
                         <div class="table-responsive">
                             <?php
                             if (isset($product_id)) {
-                                $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "1");
-                                $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "1");
+                                $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "5");
+                                $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "5");
                             ?>
                                 <div id="printableArea">
                                     <table id="" class="table-bordered">
@@ -117,10 +117,10 @@
                                                         <img src="<?php echo base_url('Cbarcode/barcode_generator/{product_id}') ?>" class="img-responsive center-block barcode-image" alt="">
 
                                                         <div class="product-name-details barcode-productdetails">{product_name}</div>
-                                                        <s class="price barcode-price"><?php echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?> .
+                                                        <s class="price barcode-price"><?php echo (($position == 0) ? "$currency {price}" : "{price} $currency") ?>
 
                                                         </s>
-                                                            <div class="price barcode-price"><?php echo (($position == 0) ? "$currency {purchase_price}" : "{purchase_price} $currency") ?> .
+                                                            <div class="price barcode-price"><?php echo (($position == 0) ? "$currency {purchase_price}" : "{purchase_price} $currency") ?> 
 
                                                         </div>
                                                     </div>
@@ -142,8 +142,8 @@
                                 <div id="printableArea">
                                     <table class="table-bordered barcode-collaps">
                                         <?php
-                                        $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "1");
-                                        $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "1");
+                                        $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "5");
+                                        $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "5");
 
                                         $counter = 0;
                                         for ($i = 0; $i < $qty; $i++) {

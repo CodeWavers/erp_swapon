@@ -178,6 +178,7 @@ class Api extends CI_Controller {
     }
     public function insert_finished_product_ecom()
     {
+        $this->db->where('finished_raw',1)->delete('product_information');
 
         $url = api_url()."products/get_products_all";
 
@@ -212,16 +213,17 @@ class Api extends CI_Controller {
             $data2['product_details'] = '';
             $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
             $data2['status']       = 1;
+            $data2['created_date']       =  $r->created_at;
+            $result=  $this->db->insert('product_information', $data2);
 
-
-            $check_product = $this->db->select('product_id')->from('product_information')->where('product_id', $r->sku)->get()->row();
-            if (!empty($check_product)) {
-                $this->db->where('product_id', $r->sku);
-                $result= $this->db->update('product_information', $data2);
-            }else{
-                $result=  $this->db->insert('product_information', $data2);
-
-            }
+//            $check_product = $this->db->select('product_id')->from('product_information')->where('product_id', $r->sku)->get()->row();
+//            if (!empty($check_product)) {
+//                $this->db->where('product_id', $r->sku);
+//                $result= $this->db->update('product_information', $data2);
+//            }else{
+//                $result=  $this->db->insert('product_information', $data2);
+//
+//            }
 
 
 

@@ -37,7 +37,12 @@
 	margin-left: 250px;
 }
 .barcode-toptd{
-	border: 1px solid black ;padding: 5px;
+	/*border: 1px solid black ;*/
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+
 }
 
 .barcode-innerdiv{

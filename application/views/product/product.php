@@ -77,9 +77,10 @@
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
                                         <th><?php echo display('product_name') ?></th>
+                                        <th>Created Date</th>
                                         <th>Product Status</th>
                                         <th>SKU</th>
-<!--                                        <th>--><?php //echo "Category Name" ?><!--</th>-->
+
                                         <th><?php echo display('price') ?></th>
 
                                         <th><?php echo display('image') ?>s</th>

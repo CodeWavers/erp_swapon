@@ -77,53 +77,55 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 height: auto;
                             }
                             .condition_tag {
-                                margin-top: 80%;
-                                margin-left: 5%;
-                                top: 0;
-                                left: 0;
-                                position: fixed;
+                                /*margin-top: 10%;*/
+                                /*margin-left: 5%;*/
+                                /*top: 0;*/
+                                /*left: 0;*/
+                                /*position: absolute;*/
                                 border: 1px dashed red;
                                 color: red !important;
                                 width: 300px;
                                 /* Browsers not below */
                                 transform: rotate(-40deg);
                                 /* Safari */
-                                -webkit-transform: rotate(-40deg);
+                                -webkit-transform: rotate(-20deg);
                                 /* Firefox */
-                                -moz-transform: rotate(-40deg);
+                                -moz-transform: rotate(-20deg);
                                 /* Opera */
-                                -o-transform: rotate(-40deg);
+                                -o-transform: rotate(-20deg);
                                 /* IE */
-                                -ms-transform: rotate(-40deg);
+                                -ms-transform: rotate(-20deg);
 
 
                             }
 
                             .condition_tag_green {
-                                margin-top: 80%;
-                                margin-left: 5%;
-                                top: 0;
-                                left: 0;
-                                position: fixed;
+                                /*margin-top: 10%;*/
+                                /*margin-left: 5%;*/
+                                /*top: 0;*/
+                                /*left: 0;*/
+                                /*position: ;*/
                                 border: 1px dashed green;
                                 color: green !important;
                                 width: 300px;
                                 /* Browsers not below */
-                                transform: rotate(-40deg);
+                                transform: rotate(-20deg);
                                 /* Safari */
-                                -webkit-transform: rotate(-40deg);
+                                -webkit-transform: rotate(-20deg);
                                 /* Firefox */
-                                -moz-transform: rotate(-40deg);
+                                -moz-transform: rotate(-20deg);
                                 /* Opera */
-                                -o-transform: rotate(-40deg);
+                                -o-transform: rotate(-20deg);
                                 /* IE */
-                                -ms-transform: rotate(-40deg);
+                                -ms-transform: rotate(-20deg);
 
                             }
                             @media print {
 
 
-
+                                .panel-body {
+                                    page-break-before: always;
+                                }
                                 .inv-footer-l {
                                     float: left;
                                     width: 35%;
@@ -311,7 +313,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 </table>
                             </div>
 
-                            <div class="">
+                            <div class="f">
 
                                 <table class="table" style="width: 100%;">
                                     <thead>
