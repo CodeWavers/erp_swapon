@@ -134,7 +134,7 @@ class Products extends CI_Model
                 $button .= '<a href="' . $base_url . 'Cproduct/product_delete/' . $record->product_id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
             }
 
-            $button .= '  <a href="' . $base_url . 'Cqrcode/qrgenerator/' . $record->product_id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('qr_code') . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
+//            $button .= '  <a href="' . $base_url . 'Cqrcode/qrgenerator/' . $record->product_id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('qr_code') . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
 
             $button .= '  <a href="' . $base_url . 'Cbarcode/barcode_print/' . $record->product_id . '" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('barcode') . '"><i class="fa fa-barcode" aria-hidden="true"></i></a>';
             if ($this->permission1->method('manage_product', 'update')->access()) {
