@@ -53,7 +53,128 @@
                      <?php echo form_open('Cretrun_m/return_invoice', array('class' => 'form-vertical', 'id' => 'invoice_update')) ?>
                      <div class="panel-body">
                          <input type="hidden" size="100" name="sel_type" class=" form-control" id="sel_type" tabindex="1" value="<?= $sel_type=$invoice_all_data[0]['sale_type']?>" readonly="">
+                         <div class="row">
+                             <div class="col-sm-6">
 
+
+                                 <div class="form-group row">
+                                     <label for="customer_name" class="col-sm-4 col-form-label">Sale Type <i class="text-danger">*</i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>"  readonly/>
+
+
+
+                                         <!--                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="--><!--"  readonly/>-->
+                                         <!--                                        <input type="hidden" size="100" name="courier_condtion" class=" form-control"  id="courier_condtion" tabindex="1"  value="--><!--"  readonly/>-->
+                                     </div>
+                                 </div>
+
+
+                             </div>
+
+                             <?php  if ($invoice_all_data[0]['sale_type']==1){?>
+                                 <div class="col-sm-6 commission_check " id="commission_check" >
+                                     <div class="form-group row">
+                                         <label for="date" class="col-sm-4 col-form-label">Commission<i class="text-danger">*</i></label>
+                                         <div class="col-sm-8">
+                                             <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
+                                                 <?php  if ($comm_type==1){?>
+                                                     <option value="1">Product Wise</option>
+                                                 <?php } ?>
+                                                 <?php  if ($comm_type==2){?>
+                                                     <option value="2">Overall</option>
+                                                 <?php } ?>
+                                                 <option value="1">Product Wise</option>
+                                                 <option value="2">Overall</option>
+                                             </select>
+
+                                         </div>
+
+                                     </div>
+                                 </div>
+
+                             <?php } ?>
+
+                         </div>
+                         <div class="row">
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label">Invoice No<i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" tabindex="2" class="form-control" name="invoice" value="{invoice}" required readonly="" />
+
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <div class="col-sm-6">
+                                 <div class="form-group row">
+                                     <label for="product_name" class="col-sm-4 col-form-label"><?php echo display('date') ?> <i class="text-danger"></i></label>
+                                     <div class="col-sm-8">
+                                         <input type="text" tabindex="2" class="form-control" name="invoice_date" value="{date}" required readonly="" />
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+
+                         <?php if($delivery_type==2){?>
+
+                             <div class="row">
+
+                                 <div class="col-sm-6">
+                                     <div class="form-group row">
+                                         <label for="product_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger"></i></label>
+                                         <div class="col-sm-8">
+                                             <input type="text" tabindex="2" class="form-control" name="courier_name" value="{courier_name}" required readonly="" />
+                                             <input type="hidden" tabindex="2" class="form-control" name="courier_id" value="{courier_id}" required readonly="" />
+                                             <input type="hidden" tabindex="2" class="form-control" name="courier_status" value="{courier_status}" required readonly="" />
+                                             <input type="hidden" tabindex="2" class="form-control" name="courier_condtion" value="{courier_condtion}" required readonly="" />
+                                             <input type="hidden" tabindex="2" class="form-control" name="sale_type" value="{sale_type}" required readonly="" />
+                                             <!--                                         <input type="text" tabindex="2" class="form-control" name="delivery_type" value="--><?//= $delivery_type?><!--" required readonly="" />-->
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <div class="col-sm-6">
+                                     <div class="form-group row">
+                                         <label for="product_name" class="col-sm-4 col-form-label">Courier Branch <i class="text-danger"></i></label>
+                                         <div class="col-sm-8">
+                                             <input type="text" tabindex="2" class="form-control" name="branch_name" value="{branch_name}"  readonly="" />
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <div class="row">
+                                 <div class="col-sm-6">
+                                     <div class="form-group row">
+                                         <label for="product_name" class="col-sm-4 col-form-label">Courier Condition<i class="text-danger"></i></label>
+                                         <div class="col-sm-8">
+                                             <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['courier_condtion']==1){echo 'Conditional ';}elseif($invoice_all_data[0]['courier_condtion']==2){echo 'Partial';}elseif($invoice_all_data[0]['courier_condtion']==3){echo 'Unconditional';} ?>"  readonly/>
+
+                                         </div>
+                                     </div>
+                                 </div>
+                                 <div class="col-sm-6">
+                                     <div class="form-group row">
+                                         <label for="product_name" class="col-sm-4 col-form-label">Receiver Name <i class="text-danger"></i></label>
+                                         <div class="col-sm-8">
+                                             <input type="text" tabindex="2" class="form-control" name="receiver_name" value="{receiver_name}"  readonly="" />
+                                             <input type="hidden" tabindex="2" class="form-control" name="receiver_id" value="{reciever_id}"  readonly="" />
+                                         </div>
+                                     </div>
+                                 </div>
+
+                                 <div class="col-sm-6">
+                                     <div class="form-group row">
+                                         <label for="product_name" class="col-sm-4 col-form-label">Receiver Mobile  <i class="text-danger"></i></label>
+                                         <div class="col-sm-8">
+                                             <input type="text" tabindex="2" class="form-control" name="receiver_number" value="{receiver_number}"  readonly="" />
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         <?php } ?>
                          <?php if ($sel_type == 3) { ?>
                          <div class="row">
                              <div class="col-sm-6" id="payment_from_1">
@@ -81,89 +202,132 @@
                                          </div>
                                      </div>
                                  </div>
-                             </div>
-                         <div class="row">
-                             <div class="col-sm-6" id="payment_from_1">
-                             <div class="form-group row">
-                                 <label for="customer_mobile_two" class="col-sm-4 col-form-label">Customer Mobile </label>
-                                 <div class="col-sm-8">
-                                     <input type="text" size="100" name="customer_mobile_two" class=" form-control" placeholder='Customer Mobile' id="customer_mobile_two" value="{customer_mobile}" readonly/>
+
+                                 <div class="col-sm-6" id="payment_from_1">
+                                     <div class="form-group row">
+                                         <label for="customer_mobile_two" class="col-sm-4 col-form-label">Customer Mobile </label>
+                                         <div class="col-sm-8">
+                                             <input type="text" size="100" name="customer_mobile_two" class=" form-control" placeholder='Customer Mobile' id="customer_mobile_two" value="{customer_mobile}" readonly/>
+                                         </div>
+                                     </div>
                                  </div>
                              </div>
-                             </div>
-                         </div>
+
 
                          <?php   } ?>
 
-
                          <div class="row">
-                             <div class="col-sm-6">
+                             <div class="col-sm-6  " id="" >
                                  <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label"><?php echo display('date') ?> <i class="text-danger"></i></label>
+                                     <label for="date" class="col-sm-4 col-form-label">Delivery Type<i class="text-danger">*</i></label>
                                      <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="invoice_date" value="{date}" required readonly="" />
+
+                                         <select name="deliver_type" class="form-control" onchange="delivery_type(this.value)">
+
+                                             <?php  if ($delivery_type == 1){?>
+                                                 <option value="1">Pick Up</option>
+                                             <?php } ?>
+
+                                             <?php  if ($delivery_type == 2){?>
+                                                 <option value="2">Courier</option>
+                                             <?php } ?>
+                                             <option value="1">Pick Up</option>
+                                             <option value="2">Courier</option>
+
+
+                                         </select>
+
+
+
                                      </div>
+
                                  </div>
                              </div>
+
+
+                             <div class="col-sm-12"  id="courier_div">
+
+                                 <div class="form-group row">
+                                     <label for="bank" class="col-sm-2 col-form-label">Courier Name <i class="text-danger">*</i></label>
+                                     <div class="col-sm-4">
+
+                                         <select name="courier_id" class="form-control bankpayment" id="" onchange="get_branch(this.value)">
+                                             <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
+                                             <?php foreach ($courier_list as $courier) { ?>
+                                                 <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                             <?php } ?>
+                                         </select>
+                                     </div>
+
+                                 </div>
+                                 <div class="form-group row branch_div" id="branch_div">
+                                     <label for="bank" class="col-sm-2 col-form-label">Branch<i class="text-danger">*</i></label>
+                                     <div class="col-sm-4" >
+                                         <select name="branch_id" id="branch_id" class="branch_id form-control text-right" tabindex="1" onchange="get_charge(this.value)">
+                                             <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
+                                         </select>
+                                     </div>
+                                 </div>
+
+                                 <div class="form-group row branch_div" id="branch_div" style="display: none;">
+                                     <label for="bank" class="col-sm-2 col-form-label">Location<i class="text-danger">*</i></label>
+                                     <div class="col-sm-4 " >
+                                           <input type="radio" id="inside" name="charge" value="" onchange="put_value(this.value)">
+                                           <label for="outside">Inside</label><br>
+                                           <input type="radio" id="outside" name="charge" value="" onchange="put_value(this.value)">
+                                           <label for="outside">Outside</label><br>
+                                           <input type="radio" id="sub" name="charge" value="" onchange="put_value(this.value)">
+                                           <label for="sub">Sub</label>
+                                     </div>
+                                 </div>
+
+
+
+
+                                 <div class="form-group row">
+                                     <label for="bank" class="col-sm-2 col-form-label">Condition<i class="text-danger">*</i></label>
+                                     <div class="col-sm-4">
+                                         <select name="courier_condtion" class="form-control bankpayment" id="" onchange="condition_charge(this.value)">
+                                             <option value="<?php echo $courier_condtion?>" selected><?php echo $con?></option>
+                                             <option value="1">Conditional</option>
+                                             <option value="2">Partial</option>
+                                             <option value="3">Unconditional</option>
+
+                                         </select>
+                                     </div>
+
+                                 </div>
+
+                                 <div class="form-group row">
+                                     <label for="deli_receiver" class="col-sm-2 col-form-label">Receiver</label>
+                                     <div class="col-sm-4">
+                                         <select class="form-control" name="deli_reciever" id="deli_receiver"  onchange="receiver_changed(this)">
+                                             <option value="{rid}">{receiver_name}</option>
+                                             {receiver_list}
+                                             <option value="{id}">{receiver_name}</option>
+                                             {/receiver_list}
+                                         </select>
+                                     </div>
+                                     <div class="col-sm-2">
+                                         <button type="button" class="btn btn-sm btn-success" id="add_rec_btn" aria-hidden="true" data-toggle="modal" data-target="#add_receiver_modal">
+                                             <i class="fa fa-plus"></i>
+                                         </button>
+                                     </div>
+                                 </div>
+
+                                 <div class="form-group row" id="receiver_num_div" >
+                                     <label for="del_rec_num" class="col-sm-2 col-form-label">Receiver Number</label>
+                                     <div class="col-sm-4">
+                                         <input type="text" class="form-control" id="del_rec_num" name="del_rec_num" value="{receiver_number}">
+                                     </div>
+                                 </div>
+
+                             </div>
+
                          </div>
 
-                         <?php if($delivery_type==2){?>
 
-                         <div class="row">
-                             <div class="col-sm-6">
-                                 <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label">Courier Name <i class="text-danger"></i></label>
-                                     <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="courier_name" value="{courier_name}" required readonly="" />
-                                         <input type="hidden" tabindex="2" class="form-control" name="courier_id" value="{courier_id}" required readonly="" />
-                                         <input type="hidden" tabindex="2" class="form-control" name="courier_status" value="{courier_status}" required readonly="" />
-                                         <input type="hidden" tabindex="2" class="form-control" name="courier_condtion" value="{courier_condtion}" required readonly="" />
-                                         <input type="hidden" tabindex="2" class="form-control" name="sale_type" value="{sale_type}" required readonly="" />
-                                         <input type="hidden" tabindex="2" class="form-control" name="invoice" value="{invoice}" required readonly="" />
-<!--                                         <input type="text" tabindex="2" class="form-control" name="delivery_type" value="--><?//= $delivery_type?><!--" required readonly="" />-->
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="col-sm-6">
-                                 <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label">Courier Branch <i class="text-danger"></i></label>
-                                     <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="branch_name" value="{branch_name}"  readonly="" />
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
 
-                         <div class="row">
-                             <div class="col-sm-6">
-                                 <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label">Courier Condition<i class="text-danger"></i></label>
-                                     <div class="col-sm-8">
-                                         <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['courier_condtion']==1){echo 'Conditional ';}elseif($invoice_all_data[0]['courier_condtion']==2){echo 'Partial';}elseif($invoice_all_data[0]['courier_condtion']==3){echo 'Unconditional';} ?>"  readonly/>
-
-                                     </div>
-                                 </div>
-                             </div>
-                             <div class="col-sm-6">
-                                 <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label">Receiver Name <i class="text-danger"></i></label>
-                                     <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="receiver_name" value="{receiver_name}"  readonly="" />
-                                         <input type="hidden" tabindex="2" class="form-control" name="receiver_id" value="{reciever_id}"  readonly="" />
-                                     </div>
-                                 </div>
-                             </div>
-
-                             <div class="col-sm-6">
-                                 <div class="form-group row">
-                                     <label for="product_name" class="col-sm-4 col-form-label">Receiver Mobile  <i class="text-danger"></i></label>
-                                     <div class="col-sm-8">
-                                         <input type="text" tabindex="2" class="form-control" name="receiver_number" value="{receiver_number}"  readonly="" />
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                         <?php } ?>
 
                          <input type="hidden" name="outlet_id" id="outlet_name" value="{outlet_id}">
 
@@ -175,12 +339,14 @@
                                          <thead>
                                              <tr>
                                                  <th class="text-center"><?php echo display('item_information') ?> <i class="text-danger"></i></th>
+                                                 <th class="text-center">Unit</i></th>
                                                  <th class="text-center"><?php echo display('sold_qty') ?></th>
+
                                                  <th class="text-center"><?php echo display('ret_quantity') ?> <i class="text-danger">*</i></th>
                                                  <th class="text-center"><?php echo display('rate') ?> <i class="text-danger"></i></th>
-                                                 <th class="text-center">Discount % </i></th>
-                                                 <th class="text-center"><?php echo display('deduction') ?> %</th>
-                                                 <th class="text-center"><?php echo display('total') ?></th>
+                                                 <th class="text-center">Discount % | Commission %</i></th>
+                                                 <th class="text-center">Return Amount</th>
+                                                 <th class="text-center">Payable</th>
                                                  <th class="text-center"><?php echo display('check_return') ?> <i class="text-danger">*</i></th>
                                              </tr>
                                          </thead>
@@ -192,6 +358,9 @@
                                                      <input type="text"   name="product_name" onclick="invoice_productList({sl});" value="{sku}-{product_name}" class="form-control productSelection" required placeholder='<?php echo display('product_name') ?>' id="product_names" tabindex="3" readonly="">
 
                                                      <input type="hidden" class="product_id_{sl} " value="{product_id}" id="product_id_{sl}" />
+                                                 </td>
+                                                 <td >
+                                                     <input type="text" name="unit[]" id="unit_{sl}" class="form-control text-right unit_1" value="{unit}" readonly="" />
                                                  </td>
                                                  <td >
                                                      <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{sum_quantity}" readonly="" />
@@ -206,19 +375,29 @@
                                                  <!-- Discount -->
 
                                                  <td>
-                                                     <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="dis_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
-
+                                                     <input type="text" readonly style="width: 120px; display:inline-block" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="dis_{sl}" class="form-control text-right" placeholder="0.00" value="{discount_per}" min="0" tabindex="6" />
+                                                     <?php  if ($sel_type == 1 && $comm_type==1){?>
+                                                     <input class="comm_th form-control text-right  p-5" readonly style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="{commission_per}" onkeyup="quantity_calculate(1);" placeholder="0.00" onchange="quantity_calculate(1);"  />
+                                                        <?php } ?>
                                                  </td>
 
-                                                 <td>
-                                                     <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="" min="0" tabindex="6" />
+
+
+                                                 <td hidden>
+                                                     <input type="hidden" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="" min="0" tabindex="6" />
                                                      <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
                                                  </td>
 
                                                  <td>
-                                                     <input class="total_price form-control text-right" type="text" id="total_price_{sl}" value="" readonly="readonly" />
+                                                     <input class="total_price form-control text-right" type="text" id="total_price_{sl}" value="" readonly="readonly" placeholder="0.00" />
 
                                                      <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
+                                                 </td>
+
+                                                 <td>
+                                                     <input class=" form-control text-right" type="text" id="payable_{sl}" value="" placeholder="0.00" readonly="readonly" />
+                                                     <input class=" form-control text-right" type="hidden" id="pa_total_price_{sl}" value="{total_price}" placeholder="0.00" readonly="readonly" />
+
                                                  </td>
                                                  <td>
 
@@ -248,7 +427,7 @@
                                          <tfoot>
 
                                              <tr>
-                                                 <td colspan="5" rowspan="4">
+                                                 <td colspan="6" rowspan="11">
                                                      <center><label for="details" class="  col-form-label text-center"><?php echo display('reason') ?></label></center>
                                                      <textarea class="form-control" name="details" id="details" placeholder="<?php echo display('reason') ?>"></textarea> <br>
                                                      <!-- <span class="usablity"><?php echo display('usablilties') ?> </span><br> -->
@@ -275,31 +454,58 @@
 
                                                      </div>
 
-<!--                                                     <div class="form-group row">-->
-<!--                                                         <label class="text-right col-form-label col-sm-4">Wastage:-->
-<!--                                                         </label>-->
-<!--                                                         <div class="col-sm-2 ">-->
-<!--                                                             <input id="rep_toggle" type="checkbox" name="wastage" onchange="quantity_calculate(1)">-->
-<!--                                                         </div>-->
-<!---->
-<!---->
-<!--                                                     </div>-->
-
-
-
-
-                                                     <!-- <label class="ab"><?php echo display('wastage') ?>
-                                                                 <input type="radio" name="radio" value="3">
-                                                                 <span class="checkmark"></span>
-                                                             </label>  -->
 
                                                  </td>
-                                                 <td class="text-right" colspan="1"><b><?php echo display('to_deduction') ?>:</b></td>
-                                                 <td class="text-right">
-                                                     <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="" readonly="readonly" />
+                                                 <td class="text-right" colspan="1" hidden><b><?php echo display('to_deduction') ?>:</b></td>
+                                                 <td class="text-right" hidden>
+                                                     <input type="text" id="total_d" class="form-control text-right" name="total_d" value="" readonly="readonly" />
                                                  </td>
                                              </tr>
                                              <tr>
+                                                 <td class="text-right" colspan="1"><b>Sale Discount:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="perc_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" placeholder="0.00" />
+                                                 </td>
+                                             </tr>
+                                             <tr>
+                                                 <td class="text-right" colspan="1"><b>Sale Discount(%):</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="perc_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" placeholder="0.00" />
+                                                 </td>
+                                             </tr>
+                                             <tr>
+                                                 <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
+                                                 </td>
+                                             </tr>
+
+                                             <?php if ($sel_type == 1 && $comm_type == 2) {?>
+                                                 <tr id="commission_tr" class="">
+                                                     <td class="text-right" colspan="1"><b>Commission:</b></td>
+                                                     <td class="text-right">
+                                                         <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="{commission}"  />
+                                                     </td>
+                                                 </tr>
+                                             <?php } ?>
+                                             <?php  if ($sel_type == 1 && $comm_type==1){?>
+                                                 <tr id="t_comm_tr" >
+                                                     <td class="text-right" colspan="1"><b>Total Commission:</b></td>
+                                                     <td class="text-right">
+                                                         <input type="text" id="total_commission" class="form-control text-right" name="total_commission" value="{total_commission}"  readonly="readonly" />
+                                                     </td>
+                                                 </tr>
+                                             <?php } ?>
+
+
+
+                                             <tr id="" >
+                                                 <td class="text-right" colspan="1"><b>Total Sales Return:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="sales_return" class="form-control text-right" name="sales_return" value="" placeholder="0.00" readonly="readonly" />
+                                                 </td>
+                                             </tr>
+                                             <tr class="hidden_tr">
                                                  <td class="text-right" colspan="1"><b>Delivery Charge:</b></td>
                                                  <td class="text-right">
                                                      <input id="total_tax_ammount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" aria-invalid="false" type="text">
@@ -316,6 +522,21 @@
                                                  </td>
                                              </tr>
 
+
+                                             <tr class="hidden_tr ">
+                                                 <td class="text-right" colspan="1"><b>ADC:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{delivery_ac}" tabindex="14"  />
+                                                 </td>
+                                             </tr>
+
+                                             <tr>
+                                                 <td colspan="1" class="text-right"><b>Net Payable:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="net_pay" class="form-control text-right" name="net_pay" value="" placeholder="0.00" readonly="readonly" />
+                                                 </td>
+                                             </tr>
+
                                              <tr>
                                                  <td colspan="1" class="text-right"><b> Paid Amount:</b></td>
                                                  <td class="text-right">
@@ -325,9 +546,9 @@
 
 
                                              <tr>
-                                                 <td colspan="1" class="text-right"><b> Total:</b></td>
+                                                 <td colspan="1" class="text-right text-danger"><b> Due/Customer Receivable:</b></td>
                                                  <td class="text-right">
-                                                     <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="" readonly="readonly" />
+                                                     <input type="text" id="due_amount" class="form-control label-danger-outline font-bold text-danger text-right" name="due_amount" value="{due_amount}" readonly="readonly" />
                                                  </td>
                                                  <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                                  <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
@@ -347,158 +568,7 @@
                                      </center>
                                      <br>
 
-                                     <div class="row">
-                                         <div class="col-sm-6">
 
-
-                                             <div class="form-group row">
-                                                 <label for="customer_name" class="col-sm-4 col-form-label">Sale Type <i class="text-danger">*</i></label>
-                                                 <div class="col-sm-8">
-                                                     <input type="text" size="100" name="" class=" form-control"  id="" tabindex="1"  value="<?php if($invoice_all_data[0]['sale_type']==1){echo 'Whole Sale';}elseif($invoice_all_data[0]['sale_type']==2){echo 'Retail';}elseif($invoice_all_data[0]['sale_type']==3){echo 'Aggregators';} ?>"  readonly/>
-
-
-
-                                                     <!--                                        <input type="hidden" size="100" name="deliver_type" class=" form-control"  id="deliver_type" tabindex="1"  value="--><!--"  readonly/>-->
-                                                     <!--                                        <input type="hidden" size="100" name="courier_condtion" class=" form-control"  id="courier_condtion" tabindex="1"  value="--><!--"  readonly/>-->
-                                                 </div>
-                                             </div>
-
-
-                                         </div>
-
-                                         <?php  if ($invoice_all_data[0]['sale_type']==1){?>
-                                             <div class="col-sm-6 commission_check " id="commission_check" >
-                                                 <div class="form-group row">
-                                                     <label for="date" class="col-sm-4 col-form-label">Commission<i class="text-danger">*</i></label>
-                                                     <div class="col-sm-8">
-                                                         <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
-                                                             <?php  if ($comm_type==1){?>
-                                                                 <option value="1">Product Wise</option>
-                                                             <?php } ?>
-                                                             <?php  if ($comm_type==2){?>
-                                                                 <option value="2">Overall</option>
-                                                             <?php } ?>
-                                                             <option value="1">Product Wise</option>
-                                                             <option value="2">Overall</option>
-                                                         </select>
-
-                                                     </div>
-
-                                                 </div>
-                                             </div>
-
-                                         <?php } ?>
-
-
-                                         <div class="col-sm-6  " id="" >
-                                             <div class="form-group row">
-                                                 <label for="date" class="col-sm-4 col-form-label">Delivery Type<i class="text-danger">*</i></label>
-                                                 <div class="col-sm-8">
-
-                                                     <select name="deliver_type" class="form-control" onchange="delivery_type(this.value)">
-
-                                                         <?php  if ($delivery_type == 1){?>
-                                                             <option value="1">Pick Up</option>
-                                                         <?php } ?>
-
-                                                         <?php  if ($delivery_type == 2){?>
-                                                             <option value="2">Courier</option>
-                                                         <?php } ?>
-                                                         <option value="1">Pick Up</option>
-                                                         <option value="2">Courier</option>
-
-
-                                                     </select>
-
-
-
-                                                 </div>
-
-                                             </div>
-                                         </div>
-
-
-                                         <div class="col-sm-6"  id="courier_div">
-
-                                             <div class="form-group row">
-                                                 <label for="bank" class="col-sm-4 col-form-label">Courier Name <i class="text-danger">*</i></label>
-                                                 <div class="col-sm-8">
-
-                                                     <select name="courier_id" class="form-control bankpayment" id="" onchange="get_branch(this.value)">
-                                                         <option value="<?php echo $courier_id?>" selected><?php echo $courier_name?></option>
-                                                         <?php foreach ($courier_list as $courier) { ?>
-                                                             <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
-                                                         <?php } ?>
-                                                     </select>
-                                                 </div>
-
-                                             </div>
-                                             <div class="form-group row branch_div" id="branch_div">
-                                                 <label for="bank" class="col-sm-4 col-form-label">Branch<i class="text-danger">*</i></label>
-                                                 <div class="col-sm-8" >
-                                                     <select name="branch_id" id="branch_id" class="branch_id form-control text-right" tabindex="1" onchange="get_charge(this.value)">
-                                                         <option value="<?php echo $branch_id?>" selected><?php echo $branch_name?></option>
-                                                     </select>
-                                                 </div>
-                                             </div>
-
-                                             <div class="form-group row branch_div" id="branch_div" style="display: none;">
-                                                 <label for="bank" class="col-sm-4 col-form-label">Location<i class="text-danger">*</i></label>
-                                                 <div class="col-sm-8 " >
-                                                       <input type="radio" id="inside" name="charge" value="" onchange="put_value(this.value)">
-                                                       <label for="outside">Inside</label><br>
-                                                       <input type="radio" id="outside" name="charge" value="" onchange="put_value(this.value)">
-                                                       <label for="outside">Outside</label><br>
-                                                       <input type="radio" id="sub" name="charge" value="" onchange="put_value(this.value)">
-                                                       <label for="sub">Sub</label>
-                                                 </div>
-                                             </div>
-
-
-
-
-                                             <div class="form-group row">
-                                                 <label for="bank" class="col-sm-4 col-form-label">Condition<i class="text-danger">*</i></label>
-                                                 <div class="col-sm-8">
-                                                     <select name="courier_condtion" class="form-control bankpayment" id="" onchange="condition_charge(this.value)">
-                                                         <option value="<?php echo $courier_condtion?>" selected><?php echo $con?></option>
-                                                         <option value="1">Conditional</option>
-                                                         <option value="2">Partial</option>
-                                                         <option value="3">Unconditional</option>
-
-                                                     </select>
-                                                 </div>
-
-                                             </div>
-
-                                             <div class="form-group row">
-                                                 <label for="deli_receiver" class="col-sm-4 col-form-label">Receiver</label>
-                                                 <div class="col-sm-6">
-                                                     <select class="form-control" name="deli_reciever" id="deli_receiver"  onchange="receiver_changed(this)">
-                                                         <option value="{rid}">{receiver_name}</option>
-                                                         {receiver_list}
-                                                         <option value="{id}">{receiver_name}</option>
-                                                         {/receiver_list}
-                                                     </select>
-                                                 </div>
-                                                 <div class="col-sm-2">
-                                                     <button type="button" class="btn btn-sm btn-success" id="add_rec_btn" aria-hidden="true" data-toggle="modal" data-target="#add_receiver_modal">
-                                                         <i class="fa fa-plus"></i>
-                                                     </button>
-                                                 </div>
-                                             </div>
-
-                                             <div class="form-group row" id="receiver_num_div" >
-                                                 <label for="del_rec_num" class="col-sm-4 col-form-label">Receiver Number</label>
-                                                 <div class="col-sm-8">
-                                                     <input type="text" class="form-control" id="del_rec_num" name="del_rec_num" value="{receiver_number}">
-                                                 </div>
-                                             </div>
-
-                                         </div>
-
-
-                                     </div>
 
                                      <div class="table-responsive">
                                          <table class="table table-bordered table-hover" id="normalinvoice">
@@ -624,7 +694,7 @@
                                                  </td>
                                              </tr>
 
-                                             <?php if ($sel_type == 1) {?>
+                                             <?php if ($sel_type == 1 && $comm_type == 1) {?>
                                              <tr id="t_comm_tr" >
                                                  <td class="text-right" colspan="8"><b>Total Commission:</b></td>
                                                  <td class="text-right">
@@ -863,11 +933,11 @@
       //   alert(val)
          if (val == 2) {
              var style = 'block';
-             // $('.hidden_tr').removeClass('d-none');
+              $('.hidden_tr').removeClass('d-none');
 
          } else {
              var style = 'none';
-             // $('.hidden_tr').addClass('d-none');
+              $('.hidden_tr').addClass('d-none');
 
          }
 
@@ -877,6 +947,42 @@
 
 
 
+     }
+
+     "use strict";
+
+
+     function get_charge(branch_id) {
+
+         var base_url = "<?= base_url() ?>";
+         var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+         $.ajax( {
+             url: base_url + "Ccourier/charge_by_branch",
+             method: 'post',
+             data: {
+                 branch_id:branch_id,
+                 csrf_test_name:csrf_test_name
+             },
+             cache: false,
+             success: function( data ) {
+                 var obj = jQuery.parseJSON(data);
+                 //   console.log(obj[0].inside)
+
+                 $('#inside').val(obj[0].inside);
+                 $('#outside').val(obj[0].outside);
+                 $('#sub').val(obj[0].sub);
+
+             }
+         })
+
+     }
+
+     function put_value(val){
+
+         $('#delivery_ac').val(val);
      }
 
  </script>

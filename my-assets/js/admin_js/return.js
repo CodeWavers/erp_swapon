@@ -67,7 +67,7 @@ function addInputField(t) {
         "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  re_warrenty_date_" + count + "' name='re_warrenty_date[]' value=''/></td>" +
         "<td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  re_expiry_date_" + count + "' name='re_expiry_date[]' value=''/></td>" +
         "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='re_product_rate[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_price_item_" + count + "' class='re_common_rate re_price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='re_purchase_price_" + count + "' class=' re_purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
-        "<td class='text-center'><input type='text' name='re_iscount[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='discount_" + count + "' style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='re_comm[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
+        "<td class='text-center'><input type='text' name='re_discount[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_discount_" + count + "' style='width:120px;display:inline-block' class='form-control text-right re_common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='re_comm[]' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
         "<td class='text-right'><input class='re_common_total_price re_total_price form-control text-right' type='text' name='re_total_price[]' id='re_total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' re_total_price_wd form-control text-right' type='hidden' name='re_total_price_wd[]' id='re_total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
         "<td class='text-right' hidden><input class=' re_total_discount form-control text-right' type='text' name='re_total_discount[]' id='re_total_discount_" + count + "' name='re_discount_amt[]' value='0.00' readonly='readonly'/></td>" +
         "<td class='text-right' hidden><input class=' re_total_comm form-control text-right' type='text' name='re_total_comm[]' id='re_total_comm_" + count + "' name='re_total_comm[]' value='0.00' readonly='readonly'/></td>" +
@@ -239,6 +239,7 @@ function quantity_calculate(item) {
     o = 0,
     d = 0,
     p = 0;
+  var pa_total_price = $("#pa_total_price_" + item).val();
   var sold_qty = $("#sold_qty_" + item).val();
   var quantity = $("#total_qntt_" + item).val();
   var price_item = $("#price_item_" + item).val();
@@ -254,16 +255,28 @@ function quantity_calculate(item) {
   var diss = price * (disc / 100);
   $("#all_discount_" + item).val(dis);
   var ttldis = $("#all_discount_" + item).val();
+  var total_d = $("#total_discount_ammount").val();
+
+ // alert(total_d)
 
   //Total price calculate per product
   var temp = price - diss-ttldis;
+  var paya = pa_total_price-temp;
   $("#total_price_" + item).val(temp); //
+  $("#payable_" + item).val(paya.toFixed(2,2)); //
 
   $(".total_price").each(function () {
     isNaN(this.value) || o == this.value.length || (a += parseFloat(this.value));
   });
 
-  $("#base_total").val(a);
+  var sales_return=a-total_d;
+  $("#sales_return").val(sales_return);
+
+  var net_pay=total_d-a;
+  $("#net_pay").val(net_pay);
+
+  var paid_amount=parseFloat($('#paid_amount').val());
+  $('#due_amount').val(net_pay+paid_amount)
 
   var gr_tot = parseFloat(a);
   if ($("#cash_return").is(":checked") || $("#rep_toggle").is(":checked")) {
@@ -288,8 +301,8 @@ function quantity_calculate(item) {
 
   $(".total_discount").each(function () {
     isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
-  }),
-    $("#total_discount_ammount").val(d.toFixed(2, 2));
+  })
+   // $("#total_discount_ammount").val(d.toFixed(2, 2));
 
 
 }

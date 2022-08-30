@@ -95,6 +95,11 @@ class Lreturn
             'shipping_cost'     => $invoice_detail[0]['shipping_cost'],
             'condition_cost'     => $invoice_detail[0]['condition_cost'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
+            'perc_discount'     => $invoice_detail[0]['perc_discount'],
+            'delivery_ac'     => $invoice_detail[0]['delivery_ac'],
+            'commission'     => $invoice_detail[0]['commission'],
+            'comm_type'     => $invoice_detail[0]['comm_type'],
+            'total_commission'     => $invoice_detail[0]['total_commission'],
         );
 
 //        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();
