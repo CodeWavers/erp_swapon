@@ -691,9 +691,9 @@ $birthday = $CI->Reports->birthday_noti();
             <ul class="treeview-menu">
                 <?php if (
                     $this->permission1->method('add_aggregator', 'create')->access() ||
-                    $this->permission1->method('manage_aggre', 'read')->access() ||
-                    $this->permission1->method('manage_aggre', 'update')->access() ||
-                    $this->permission1->method('manage_aggre', 'delete')->access()
+                    $this->permission1->method('add_aggregator', 'read')->access() ||
+                    $this->permission1->method('add_aggregator', 'update')->access() ||
+                    $this->permission1->method('add_aggregator', 'delete')->access()
                 ) { ?>
                     <li class="treeview <?php if ($this->uri->segment('1') == "Caggre") {
                         echo "active";

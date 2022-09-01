@@ -84,10 +84,10 @@
                                             <td>
                                     <center>
                                         <?php echo form_open() ?>
-                                        <?php if($this->permission1->method('manage_aggre','update')->access()){ ?>
+                                        <?php if($this->permission1->method('add_aggregator','update')->access()){ ?>
                                         <a href="<?php echo base_url() . 'Caggre/aggre_update_form/{aggre_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                     <?php }?>
-                                      <?php if($this->permission1->method('manage_aggre','delete')->access()){ ?>
+                                      <?php if($this->permission1->method('add_aggregator','delete')->access()){ ?>
                                         <a href="<?php echo base_url() . 'Caggre/aggre_delete/{aggre_id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                     <?php }?>
                                             <?php echo form_close() ?>
