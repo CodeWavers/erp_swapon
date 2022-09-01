@@ -656,6 +656,7 @@ function  sale_type(val){
             $('#commission_check').removeClass('d-none')
             $('#t_comm_tr').removeClass('d-none')
         }else{
+            $('#commission_tr').addClass('d-none')
             $('#commission_check').addClass('d-none')
             $('#t_comm_tr').addClass('d-none')
         }

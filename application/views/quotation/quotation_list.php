@@ -134,7 +134,6 @@
                                             <td>
                                                 <?php echo html_escape($quotation->invoice_id); ?>
 
-<!--                                                <a href="--><?//=base_url().'/Cinvoice/invoice_inserted_data/'.$quotation->invoice_id?><!--" class="" >--><?//=$quotation->invoice_id?><!--</a>-->
 
                                             </td>
                                             <td>
