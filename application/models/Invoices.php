@@ -1533,6 +1533,7 @@ class Invoices extends CI_Model
         $rate                = $this->input->post('product_rate', TRUE);
         $p_id                = $this->input->post('product_id', TRUE);
         $total_amount        = $this->input->post('total_price', TRUE);
+        $total_amount_wd        = $this->input->post('total_price_wd', TRUE);
         $discount_rate       = $this->input->post('total_discount', TRUE);
         $discount_per        = $this->input->post('discount', TRUE);
         $commission_per        = $this->input->post('comm', TRUE);
@@ -1553,6 +1554,7 @@ class Invoices extends CI_Model
             $product_id = $p_id[$i];
             $serial_no  = (!empty($serial_n[$i]) ? $serial_n[$i] : null);
             $total_price = $total_amount[$i];
+            $total_price_wd = $total_amount_wd[$i];
             $supplier_rate = $this->supplier_price($product_id);
             $disper = $discount_per[$i];
             $comm = $commission_per[$i];
@@ -1580,6 +1582,7 @@ class Invoices extends CI_Model
                 'due_amount'         => $this->input->post('due_amount', TRUE),
                 'supplier_rate'      => $supplier_rate,
                 'total_price'        => $total_price,
+                'total_price_wd'        => $total_price_wd,
                 'status'             => 2
             );
             //  echo '<pre>';print_r($data1);exit();
@@ -2800,6 +2803,7 @@ class Invoices extends CI_Model
         $rate          = $this->input->post('product_rate', TRUE);
         $p_id          = $this->input->post('product_id', TRUE);
         $total_amount  = $this->input->post('total_price', TRUE);
+        $total_amount_wd  = $this->input->post('total_amount_wd', TRUE);
         $discount_rate = $this->input->post('total_discount', TRUE);
         $discount_per  = $this->input->post('discount', TRUE);
         $invoice_description = $this->input->post('desc', TRUE);
@@ -2816,6 +2820,7 @@ class Invoices extends CI_Model
             $serial_no        = (!empty($serial_n[$i]) ? $serial_n[$i] : null);
             // $war        = (!empty($warehouse[$i])?$warehouse[$i]:null);
             $total_price      = $total_amount[$i];
+            $total_price_wd      = $total_amount_wd[$i];
             $supplier_rate    = $this->supplier_price($product_id);
             $discount         = $discount_rate[$i];
             $dis_per          = $discount_per[$i];
@@ -2839,6 +2844,7 @@ class Invoices extends CI_Model
                 'rate'               => $product_rate,
                 'discount'           => $discount,
                 'total_price'        => $total_price,
+                'total_price_wd'        => $total_price_wd,
                 'discount_per'       => $dis_per,
                 'tax'                => $this->input->post('total_tax', TRUE),
                 'paid_amount'        => $paidamount,
