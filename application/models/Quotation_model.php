@@ -28,9 +28,10 @@ class Quotation_model extends CI_Model
 
     public function pre_order_list($offset, $limit)
     {
-        $this->db->select('a.*, b.customer_name, b.customer_mobile');
+        $this->db->select('a.*, b.customer_name, b.customer_mobile,o.outlet_name');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('outlet_warehouse o', 'o.outlet_id = a.outlet_id','left');
         $this->db->where('a.is_pre', '2');
         $this->db->order_by('a.invoice', 'desc');
         $this->db->limit($offset, $limit);

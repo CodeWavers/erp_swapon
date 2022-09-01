@@ -55,14 +55,21 @@
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive" id="results">
-                            <table id="dataTableExample2" class="table datatable table-bordered table-striped table-hover">
+                            <table class="table table-striped table- datatable" cellspacing="0" width="100%" id="">
+
                                 <thead>
                                 <tr>
                                     <th class="text-center"><?php echo display('sl') ?></th>
-                                    <th class=""><?php echo display('customer_name') ?></th>
-                                    <th class=""><?php echo display('customer_mobile') ?></th>
+                                    <th class="">Invoice ID</th>
                                     <th class="">Invoice No</th>
                                     <th class="">Date</th>
+                                    <th class="">Outlet Name</th>
+                                    <th class=""><?php echo display('customer_name') ?></th>
+                                    <th class=""><?php echo display('customer_mobile') ?></th>
+                                    <th class="">Delivery Type</th>
+                                    <th class="">Sale Type</th>
+                                    <th class="">Payment Status</th>
+                                    <th class="">Due Amount</th>
                                     <th class="text-right">Total Amount</th>
                                     <th class="text-center"><?php echo display('status') ?></th>
                                     <th class="text-center"><?php echo display('action') ?></th>
@@ -72,14 +79,84 @@
                                 <?php
                                 if ($quotation_list) {
                                     $sl = 0;
+                                    $CI = &get_instance();
+                                    $CI->load->model('Warehouse');
+                                    $cw_name = $CI->Warehouse->central_warehouse()[0]['central_warehouse'];
+
                                     foreach ($quotation_list as $quotation) {
                                         $sl++;
+
+
+
+
+                                       $out = (($quotation->outlet_id == 'HK7TGDT69VFMXB7') ? $cw_name : $quotation->outlet_name);
+
+
+                                        $agg_id = $quotation->agg_id;
+
+
+
+                                        if (!empty($agg_id)){
+                                            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+                                        }
+
+                                        if ( $quotation->agg_id == 3){
+                                            $customer_name=$agg_name;
+                                        }else{
+                                            $customer_name=$quotation->customer_name;
+                                        }
+                                        if ( $quotation->due_amount > 0){
+                                            $payment_status='<span class="label label-danger ">Due</span>';
+                                        } else{
+                                            $payment_status='<span class="label label-success ">Paid</span>';
+                                        }
+                                        // $outlet = ($this->Warehouse->branch_search_item($quotation->outlet_id)) ? $this->Warehouse->branch_search_item($quotation->outlet_id)[0]['outlet_name'] : '';
+                                        if ( $quotation->sale_type == 1){
+                                            $st='Whole Sale';
+                                        }
+                                        if ($quotation->sale_type== 2){
+                                            $st='Retail';
+                                        }
+                                        if ($quotation->sale_type == 3){
+                                            $st='Aggregators Sale';
+                                        }
+
+                                        if ($quotation->sale_type  == null){
+
+                                            $st='';
+                                        }
+                                        
                                         ?>
                                         <tr>
                                             <td><?php echo $sl; ?></td>
+
+                                            <td>
+                                                <?php echo html_escape($quotation->invoice_id); ?>
+
+<!--                                                <a href="--><?//=base_url().'/Cinvoice/invoice_inserted_data/'.$quotation->invoice_id?><!--" class="" >--><?//=$quotation->invoice_id?><!--</a>-->
+
+                                            </td>
                                             <td>
 
-                                                <?php echo html_escape($quotation->customer_name); ?>
+                                                <?php echo html_escape($quotation->invoice); ?>
+
+                                            </td>
+                                            <td>
+                                                <?php
+
+                                                echo date('m-d-Y', strtotime(html_escape($quotation->date)));
+
+                                                ?>
+                                            </td>
+                                            <td>
+
+                                                <?php echo html_escape($out); ?>
+
+                                            </td>
+                                            <td>
+
+                                                <?php echo $customer_name; ?>
 
                                             </td>
                                             <td>
@@ -89,15 +166,23 @@
                                             </td>
                                             <td>
 
-                                                    <?php echo html_escape($quotation->invoice); ?>
+                                                <?php echo  ($quotation->delivery_type == '1') ? 'Pick Up' : (($quotation->delivery_type == '2') ? 'Courier' : 'Nothing Selected'); ?>
 
                                             </td>
                                             <td>
-                                                <?php
 
-                                                echo date('m-d-Y', strtotime(html_escape($quotation->date)));
+                                                <?php echo html_escape($st); ?>
 
-                                                ?>
+                                            </td>
+
+                                            <td>
+
+                                                <?php echo $payment_status ?>
+
+                                            </td>
+
+                                            <td class="text-right">
+                                                <?php echo html_escape((($position == 0) ? "$currency $quotation->due_amount" : "$quotation->due_amount $currency")); ?>
                                             </td>
 
                                             <td class="text-right">
