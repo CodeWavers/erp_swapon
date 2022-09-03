@@ -734,6 +734,10 @@ class Cinvoice extends CI_Controller
 						                                            <s id=\"purchase_price_1\" class=\"purchase_price1 text-right\" style=\"width: 100px ;\">৳" . $product_details->price . "</s>
 
 						</td>
+						
+						<td class=\"text-right\" style=\"width:100px\">
+							<input class=\"total_price_wd form-control text-right\" type=\"text\" name=\"total_price_wd[]\" id=\"total_price_wd_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
+						</td>
 
 						<td class=\"\">
 							<input type=\"text\" name=\"discount[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" id=\"discount_" . $product_details->product_id . "\" class=\"form-control text-right\" placeholder=\"0.00\" min=\"0\"/>
@@ -743,7 +747,6 @@ class Cinvoice extends CI_Controller
 
 						<td class=\"text-right\" style=\"width:100px\">
 							<input class=\"total_price form-control text-right\" type=\"text\" name=\"total_price[]\" id=\"total_price_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
-							<input class=\"total_price_wd form-control text-right\" type=\"hidden\" name=\"total_price_wd[]\" id=\"total_price_wd_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
 						</td>
 
 						<td>";

@@ -422,11 +422,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="left">
-                                            <nobr></nobr>
+                                        <td align="right">
+                                            <strong>Net Payable</strong>
                                         </td>
                                         <td align="right" colspan="2">
-                                          <strong>Net Payable(Including Vat)</strong>
+                                          <strong>(Including Vat)</strong>
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>

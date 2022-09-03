@@ -412,9 +412,10 @@ $_SESSION['redirect_uri'] = $currentURL;
                                         <th class="text-center"><?php echo display('available_qnty') ?></th>
                                         <th class="text-center"><?php echo display('unit') ?></th>
                                         <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
-                                        <th class="text-center">Warrenty Date</th>
+                                        <th class="text-center">Warranty Date</th>
                                         <th class="text-center"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
-
+                                        <th class="text-center invoice_fields"><?php echo display('total') ?>
+                                        </th>
                                         <?php if ($discount_type == 1) { ?>
                                             <th class="text-center invoice_fields"><?php echo display('discount_percentage') ?> %</th>
                                         <?php } elseif ($discount_type == 2) { ?>
@@ -423,7 +424,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                             <th class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
                                         <?php } ?>
 
-                                        <th class="text-center invoice_fields"><?php echo display('total') ?>
+                                        <th class="text-center invoice_fields"><?php echo display('total') ?>(with Discount)
                                         </th>
                                         <th class="text-center invoice_fields"><?php echo display('action') ?></th>
                                     </tr>
@@ -433,7 +434,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="5" rowspan="2">
+                                        <td colspan="6" rowspan="2">
                                             <center><label class="text-center" for="details" class="  col-form-label"><?php echo display('invoice_details') ?></label></center>
                                             <textarea name="inva_details" class="form-control" placeholder="<?php echo display('invoice_details') ?>"></textarea>
                                         </td>
@@ -450,7 +451,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="7"><b><?php echo display('total_discount') ?>:</b></td>
+                                        <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
                                         </td>
@@ -459,7 +460,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     foreach ($taxes as $taxfldt) { ?>
                                         <tr class="hideableRow hiddenRow">
 
-                                            <td class="text-right" colspan="7"><b><?php echo html_escape($taxfldt['tax_name']) ?></b></td>
+                                            <td class="text-right" colspan="8"><b><?php echo html_escape($taxfldt['tax_name']) ?></b></td>
                                             <td class="text-right">
                                                 <input id="total_tax_ammount<?php echo $x; ?>" tabindex="-1" class="form-control text-right valid totalTax" name="total_tax<?php echo $x; ?>" value="0.00" readonly="readonly" aria-invalid="false" type="text">
                                             </td>
@@ -482,20 +483,20 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     </tr> -->
 
                                     <tr  class="hidden_tr d-none">
-                                        <td class="text-right" colspan="7"><b>Delivery Charge:</b></td>
+                                        <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" />
                                         </td>
                                     </tr>
 
                                     <tr  class="hidden_tr d-none">
-                                        <td class="text-right" colspan="7"><b>ADC:</b></td>
+                                        <td class="text-right" colspan="8"><b>ADC:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14"  />
                                         </td>
                                     </tr>
                                     <tr id="condition_tr" class=" d-none" >
-                                        <td class="text-right" colspan="7"><b>Condition Charge:</b></td>
+                                        <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                         </td>
@@ -508,26 +509,26 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     </tr>
 
                                     <tr>
-                                        <td colspan="7" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                        <td colspan="8" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="grandTotal" class="form-control text-right" name="grand_total_price" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" class="text-right"><b><?php echo display('previous'); ?>:</b></td>
+                                        <td colspan="8" class="text-right"><b><?php echo display('previous'); ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="previous" class="form-control text-right" name="previous" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="7" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
+                                        <td colspan="8" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="n_total" class="form-control text-right" name="n_total" value="0" readonly="readonly" placeholder="" />
                                         </td>
                                     </tr>
                                     <tr>
 
-                                        <td class="text-right" colspan="7"><b><?php echo display('paid_ammount') ?>:</b></td>
+                                        <td class="text-right" colspan="8"><b><?php echo display('paid_ammount') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="" readonly/>
                                         </td>
@@ -540,19 +541,18 @@ $_SESSION['redirect_uri'] = $currentURL;
                                             <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                         </td>
 
-                                        <td class="text-right" colspan="6"><b><?php echo display('due') ?>:</b></td>
+                                        <td class="text-right" colspan="7"><b><?php echo display('due') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="dueAmmount" class="form-control text-right" name="due_amount" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="center">
-                                            <input type="button" id="full_paid_tab" class="btn btn-warning" value="<?php echo display('full_paid') ?>" tabindex="14" onClick="full_paid()" />
 
                                         </td>
                                         <td><a href="#" class="btn btn-info" data-toggle="modal" data-target="#calculator"><i class="fa fa-calculator" aria-hidden="true"></i> Calculator</a></td>
 
-                                        <td class="text-right" colspan="5"><b><?php echo display('change') ?>:</b></td>
+                                        <td class="text-right" colspan="6"><b><?php echo display('change') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="change" class="form-control text-right" name="change" value="0.00" readonly="readonly" />
                                         </td>
@@ -563,16 +563,25 @@ $_SESSION['redirect_uri'] = $currentURL;
 
                         <div class="row">
                             <div class="col-sm-12" id="payment_div">
-                                <div class="panel panel-bd lobidrag">
+                                <div class="panel panel-bd lobidrag text-center">
                                     <div class="panel-heading">
-                                        <div class="panel-title">
-                                            <h3>Payment</h3>
-                                            <input type="hidden" id="count" value="2">
+                                        <div class="panel-title row">
+                                            <div class="col-md-11">
+                                                <h3>Payment</h3>
+                                                <input type="hidden" id="count" value="2">
+
+                                            </div>
+                                            <div class="col-md-1 text-left">
+
+                                                <input type="button" id="full_paid_tab" class="btn btn-warning" value="<?php echo display('full_paid') ?>" tabindex="14" onClick="full_paid()" />
+
+                                            </div>
                                         </div>
+
                                     </div>
 
                                     <div class="panel-body">
-                                        <div id="pay_div" style="margin: 10px 3px; padding:10px 0">
+                                        <div id="pay_div" class="text-right" style="margin: 10px 3px; padding:10px 0;">
                                             <div class="row margin-top10">
                                                 <div class="col-sm-4">
                                                     <label for="payment_type" class="col-sm-5 col-form-label"><?php
