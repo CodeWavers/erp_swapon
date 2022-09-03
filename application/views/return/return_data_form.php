@@ -155,24 +155,7 @@
                                          </div>
                                      </div>
                                  </div>
-                                 <div class="col-sm-6">
-                                     <div class="form-group row">
-                                         <label for="product_name" class="col-sm-4 col-form-label">Receiver Name <i class="text-danger"></i></label>
-                                         <div class="col-sm-8">
-                                             <input type="text" tabindex="2" class="form-control" name="receiver_name" value="{receiver_name}"  readonly="" />
-                                             <input type="hidden" tabindex="2" class="form-control" name="receiver_id" value="{reciever_id}"  readonly="" />
-                                         </div>
-                                     </div>
-                                 </div>
 
-                                 <div class="col-sm-6">
-                                     <div class="form-group row">
-                                         <label for="product_name" class="col-sm-4 col-form-label">Receiver Mobile  <i class="text-danger"></i></label>
-                                         <div class="col-sm-8">
-                                             <input type="text" tabindex="2" class="form-control" name="receiver_number" value="{receiver_number}"  readonly="" />
-                                         </div>
-                                     </div>
-                                 </div>
                              </div>
                          <?php } ?>
                          <?php if ($sel_type == 3) { ?>
@@ -338,13 +321,13 @@
                                      <table class="table table-bordered table-hover" id="">
                                          <thead>
                                              <tr>
-                                                 <th class="text-center"><?php echo display('item_information') ?> <i class="text-danger"></i></th>
+                                                 <th class="text-center" width="20%"><?php echo display('item_information') ?> <i class="text-danger"></i></th>
                                                  <th class="text-center">Unit</i></th>
                                                  <th class="text-center"><?php echo display('sold_qty') ?></th>
 
                                                  <th class="text-center"><?php echo display('ret_quantity') ?> <i class="text-danger">*</i></th>
                                                  <th class="text-center"><?php echo display('rate') ?> <i class="text-danger"></i></th>
-                                                 <th class="text-center">Discount % | Commission %</i></th>
+                                                 <th class="text-center">Discount %  <?php  if ($sel_type == 1 && $comm_type==1){?> <span class="comm_th">| Commission % </span><?php } ?></th>
                                                  <th class="text-center">Return Amount</th>
                                                  <th class="text-center">Payable</th>
                                                  <th class="text-center"><?php echo display('check_return') ?> <i class="text-danger">*</i></th>
@@ -366,7 +349,7 @@
                                                      <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{sum_quantity}" readonly="" />
                                                  </td>
                                                  <td>
-                                                     <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" min="0" placeholder="0.00" tabindex="4" />
+                                                     <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" onkeypress="quantity_calculate({sl});" class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" min="0" placeholder="0.00" tabindex="4" />
                                                  </td>
 
                                                  <td>
@@ -384,6 +367,7 @@
 
 
                                                  <td hidden>
+                                                 <td hidden>
                                                      <input type="hidden" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="" min="0" tabindex="6" />
                                                      <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
                                                  </td>
@@ -395,8 +379,9 @@
                                                  </td>
 
                                                  <td>
-                                                     <input class=" form-control text-right" type="text" id="payable_{sl}" value="" placeholder="0.00" readonly="readonly" />
-                                                     <input class=" form-control text-right" type="hidden" id="pa_total_price_{sl}" value="{total_price}" placeholder="0.00" readonly="readonly" />
+                                                     <input class=" form-control text-right payable" type="text" id="payable_{sl}" value="" placeholder="0.00" readonly="readonly" />
+                                                     <input class=" form-control text-right paya_total" type="hidden" id="pa_total_price_{sl}" value="{total_price}" placeholder="0.00" readonly="readonly" />
+                                                     <input class=" form-control text-right dis_amount" type="hidden" id="dis_amount_{sl}" value="0" placeholder="0.00" readonly="readonly" />
 
                                                  </td>
                                                  <td>
@@ -427,7 +412,7 @@
                                          <tfoot>
 
                                              <tr>
-                                                 <td colspan="6" rowspan="11">
+                                                 <td colspan="6" rowspan="13">
                                                      <center><label for="details" class="  col-form-label text-center"><?php echo display('reason') ?></label></center>
                                                      <textarea class="form-control" name="details" id="details" placeholder="<?php echo display('reason') ?>"></textarea> <br>
                                                      <!-- <span class="usablity"><?php echo display('usablilties') ?> </span><br> -->
@@ -464,7 +449,7 @@
                                              <tr>
                                                  <td class="text-right" colspan="1"><b>Sale Discount:</b></td>
                                                  <td class="text-right">
-                                                     <input type="text" id="perc_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" placeholder="0.00" />
+                                                     <input type="text" id="invoice_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="invoice_discount" value="{invoice_discount}" placeholder="0.00" />
                                                  </td>
                                              </tr>
                                              <tr>
@@ -477,6 +462,14 @@
                                                  <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
+                                                 </td>
+                                             </tr>
+
+                                             <tr>
+                                                 <td class="text-right" colspan="1"><b>Gross Discount:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="sku_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="" value="" placeholder="0.00" />
+
                                                  </td>
                                              </tr>
 
@@ -496,7 +489,6 @@
                                                      </td>
                                                  </tr>
                                              <?php } ?>
-
 
 
                                              <tr id="" >
@@ -546,7 +538,7 @@
 
 
                                              <tr>
-                                                 <td colspan="1" class="text-right text-danger"><b> Due/Customer Receivable:</b></td>
+                                                 <td colspan="1" class="text-right text-danger"><b class="due_cus"> Customer Receivable:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="due_amount" class="form-control label-danger-outline font-bold text-danger text-right" name="due_amount" value="{due_amount}" readonly="readonly" />
                                                  </td>
@@ -574,7 +566,7 @@
                                          <table class="table table-bordered table-hover" id="normalinvoice">
                                              <thead>
                                              <tr>
-                                                 <th class="text-center " width="9%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
+                                                 <th class="text-center " width="8%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
                                                  <th>Stock</th>
                                                  <!-- <th class="text-center">Warehouse</th> -->
                                                  <!-- <th class="text-center"><?php echo display('available_qnty') ?></th> -->
@@ -626,7 +618,7 @@
                                                      <input name="" id="" class="form-control text-right re_unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                                  </td>
                                                  <td  width="100">
-                                                     <input type="text" name="re_product_quantity[]" required="" onkeyup="quantity_calculate_re(1);" onchange="quantity_calculate_re(1);" class="re_total_qntt_1 form-control text-right" id="re_total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="1" />
+                                                     <input type="text" name="re_product_quantity[]" required="" onkeyup="quantity_calculate_re(1);" onkeypress="quantity_calculate_re(1);" class="re_total_qntt_1 form-control text-right" id="re_total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="1" />
                                                  </td>
                                                  <td class="invoice_fields"  width="100">
                                                      <?php $date = date('Y-m-d'); ?>

@@ -731,8 +731,8 @@ $_SESSION['redirect_uri'] = $currentURL;
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <div class="col-sm-6">
+                            <div class="form-group row " >
+                                <div class="col-sm-12 text-right " style="margin: inherit">
                                     <input type="submit" id="add_invoice" class="btn btn-success" name="add-invoice" value="<?php echo display('submit') ?>" tabindex="17" />
                                     <!-- <input type="submit" value="<?php echo display('submit_and_add_another') ?>" name="add-purchase-another" class="btn btn-large btn-success" id="add_purchase_another" > -->
                                 </div>

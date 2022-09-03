@@ -238,6 +238,9 @@ function quantity_calculate(item) {
   var a = 0,
     o = 0,
     d = 0,
+    x = 0,
+    y = 0,
+    z = 0,
     p = 0;
   var pa_total_price = $("#pa_total_price_" + item).val();
   var sold_qty = $("#sold_qty_" + item).val();
@@ -253,56 +256,78 @@ function quantity_calculate(item) {
   var price = quantity * price_item;
   var dis = price * (discount / 100);
   var diss = price * (disc / 100);
-  $("#all_discount_" + item).val(dis);
+  $("#all_discount_" + item).val(diss);
   var ttldis = $("#all_discount_" + item).val();
   var total_d = $("#total_discount_ammount").val();
 
- // alert(total_d)
+  $(".total_price").each(function () {
+    isNaN(this.value) || a == this.value.length || (a += parseFloat(this.value));
+  });
+
+  $(".payable").each(function () {
+    isNaN(this.value) || x == this.value.length || (x += parseFloat(this.value));
+  });
+ $(".paya_total").each(function () {
+    isNaN(this.value) || y == this.value.length || (y += parseFloat(this.value));
+  });
+
+  $(".total_discount").each(function () {
+    isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
+  })
+//per sku discount calculation
+  var invoice_discount = parseFloat($("#invoice_discount").val());
+  var perc_dis = parseFloat($("#perc_discount").val());
+   var pds =y * (perc_dis / 100);
+
+  var dis_by_sku = price_item * (disc / 100);
+  $("#dis_amount_" + item).val(dis_by_sku);
+
+  $(".dis_amount").each(function () {
+    isNaN(this.value) || z == this.value.length || (z += parseFloat(this.value));
+  })
+      var invoice_value=sold_qty*price_item;
+    var sku_flat_discount=(invoice_discount/invoice_value)*price;
+    var sku_percent_discount=(pds/invoice_value)*price;
+
+    var sku_wise_t_dis=sku_flat_discount+sku_percent_discount;
+
+    $('#sku_discount').val(sku_wise_t_dis.toFixed(2,2));
+
 
   //Total price calculate per product
-  var temp = price - diss-ttldis;
+  var temp = price - diss;
   var paya = pa_total_price-temp;
   $("#total_price_" + item).val(temp); //
   $("#payable_" + item).val(paya.toFixed(2,2)); //
 
-  $(".total_price").each(function () {
-    isNaN(this.value) || o == this.value.length || (a += parseFloat(this.value));
-  });
 
-  var sales_return=a-total_d;
-  $("#sales_return").val(sales_return);
+  var new_discount= pa_total_price * (perc_dis / 100)+d+invoice_discount;
+  // $("#new_discount").val(new_discount.toFixed(2, 2));
 
-  var net_pay=total_d-a;
-  $("#net_pay").val(net_pay);
+
+  var sales_return=a-sku_wise_t_dis;
+  $("#sales_return").val(sales_return.toFixed(2,2));
+
+  var net_pay=sku_wise_t_dis-a;
+  $("#net_pay").val(net_pay.toFixed(2,2));
 
   var paid_amount=parseFloat($('#paid_amount').val());
-  $('#due_amount').val(net_pay+paid_amount)
 
-  var gr_tot = parseFloat(a);
-  if ($("#cash_return").is(":checked") || $("#rep_toggle").is(":checked")) {
-    var gr_total = parseFloat(a) - parseFloat(add_cost);
-    if ($("#pay_person").is(":checked")) {
-      $("#grandTotal").val(gr_total.toFixed(2, 2));
+  var due=x-paid_amount;
+  $('#due_amount').val(due.toFixed(2,2));
+  // $('#gross_discount').val(tt.toFixed(2,2))
 
-      replace_calculate(1)
-    }else{
-      $("#grandTotal").val(parseFloat(gr_tot).toFixed(2, 2));
-      replace_calculate(1)
-    }
-  } else {
-      $("#grandTotal").val(parseFloat(gr_tot).toFixed(2, 2));
-  }
 
-  // if ($("#rep_toggle").is(":checked")) {
-  //   $("#grandTotal").val(gr_tot.toFixed(2, 2));
-  // } else {
-  //   $("#grandTotal").val(parseFloat(add_cost).toFixed(2, 2));
+
+  // if (due > 0){
+  //   $('.due_cus').html('Due:')
+  //   $('.due_cus').removeClass('text-danger')
+  //   $('.due_cus').addClass('text-success')
+  // }else{
+  //   $('.due_cus').html('Customer Receivable:')
   // }
 
-  $(".total_discount").each(function () {
-    isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
-  })
-   // $("#total_discount_ammount").val(d.toFixed(2, 2));
+
 
 
 }
