@@ -175,6 +175,19 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <span class="subt">{tax_regno}</span>
                                 </div>
                             </div>
+                            <div class="row" style="font-size: 11px; margin-top: 0.2cm !important">
+
+                                    <div class="col-xs-6">
+                                       <nobr>BIN:  002174765-0401</nobr>
+                                    </div>
+
+                                    <div class="col-xs-6 text-right m-0">
+                                       <nobr>  Mushak-6.3</nobr>
+                                    </div>
+
+
+                            </div>
+                           <nobr> _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</nobr>
 
 
                             <div  class="text-center" align="" style="font-size: 11px; margin-top: 0.2cm !important">
@@ -188,17 +201,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 </div>
                             </div>
                             <div  class="text-center">
-                                <div style="margin-top: 0.3cm !important; font-size: 11px !important">
-                                    <nobr>
-                                        <date>
-                                            Date: <?php
-                                                    echo date('d-M-Y');
-                                                    ?>
-                                        </date>
-                                    </nobr>
-                                </div>
 
-                                <div>
+
+                                <div style="margin-top: 0.3cm !important;">
                                     <div>
                                         <?php if ($is_pre == 2){?>
                                         <h5>Pre-Order</h5>
@@ -208,8 +213,17 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </nobr>
                                     </div>
                                 </div>
+                                <div style=" font-size: 11px !important">
+                                    <nobr>
+                                        <date>
+                                            Date: <?php
+                                            echo date('d-M-Y');
+                                            ?>
+                                        </date>
+                                    </nobr>
+                                </div>
                             </div>
-                            =====================================
+                            <nobr>==================================</nobr>
                             <div style="margin: 0; padding:0">
                                 <table class="item_table " id="tbl">
                                     <thead>
@@ -299,7 +313,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <nobr></nobr>
                                         </td>
                                         <td align="right" colspan="2">
-                                            <nobr><?php echo display('total') ?></nobr>
+                                            <nobr>Sub Total</nobr>
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
@@ -313,7 +327,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     </tr>
 
                                     <?php if ($invoice_discount > 0) { ?>
-                                        <tr>
+                                        <tr hidden>
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
@@ -342,8 +356,36 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                         </tr>
                                     <?php } ?>
+
+                                    <tr>
+                                        <td align="left">
+                                            <nobr></nobr>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <nobr>Sales Return</nobr>
+                                        </td>
+                                        <td align="right" class="td-style">
+                                            <nobr>
+                                               Tk 0.00
+                                            </nobr>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="left">
+                                            <nobr></nobr>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <nobr>Rounding</nobr>
+                                        </td>
+                                        <td align="right" class="td-style">
+                                            <nobr>
+                                                Tk 0.00
+                                            </nobr>
+                                        </td>
+                                    </tr>
                                     <?php if ($shipping_cost > 0) { ?>
-                                        <tr>
+                                        <tr hidden>
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
@@ -359,7 +401,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </tr>
                                     <?php } ?>
                                     <?php if ($previous > 0) { ?>
-                                        <tr>
+                                        <tr hidden>
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
@@ -384,7 +426,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <nobr></nobr>
                                         </td>
                                         <td align="right" colspan="2">
-                                            <nobr><strong><?php echo display('grand_total') ?></strong></nobr>
+                                          <strong>Net Payable(Including Vat)</strong>
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
@@ -407,9 +449,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <nobr></nobr>
                                             </td>
                                             <td align="right" colspan="2">
-                                                <nobr>
+                                               <strong> <nobr>
                                                     <?php echo display('paid_ammount') ?>
                                                 </nobr>
+                                               </strong>
                                             </td>
                                             <td align="right" class="td-style">
                                                 <nobr>

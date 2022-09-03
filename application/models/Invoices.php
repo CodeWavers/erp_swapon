@@ -1554,7 +1554,7 @@ class Invoices extends CI_Model
             $product_id = $p_id[$i];
             $serial_no  = (!empty($serial_n[$i]) ? $serial_n[$i] : null);
             $total_price = $total_amount[$i];
-            $total_price_wd = $total_amount_wd[$i];
+            $total_price_wd = (!empty($total_amount_wd[$i]) ? $total_amount_wd[$i] : $total_amount);
             $supplier_rate = $this->supplier_price($product_id);
             $disper = $discount_per[$i];
             $comm = $commission_per[$i];
@@ -2647,7 +2647,7 @@ class Invoices extends CI_Model
     //Retrieve invoice Edit Data
     public function retrieve_invoice_editdata($invoice_id)
     {
-        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
+        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price_wd) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
@@ -3468,7 +3468,7 @@ class Invoices extends CI_Model
                         f.courier_name,
                         o.receiver_name,
                         a.receiver_number as rec_num,
-                         sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount
+                         sum(c.quantity) as sum_quantity,sum(c.total_price_wd) as sum_amount
                        '
 
         );
