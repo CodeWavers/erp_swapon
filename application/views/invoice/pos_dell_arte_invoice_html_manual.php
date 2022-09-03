@@ -426,7 +426,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <strong>Net Payable</strong>
                                         </td>
                                         <td align="right" colspan="2">
-                                          <strong>(Including Vat)</strong>
+                                          <nobr><strong>(Including Vat)</strong></nobr>
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
@@ -462,7 +462,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </tr>
                                     <?php } ?>
 
-                                    <?php if ($due_amount > 0) { ?>
+
                                         <tr>
                                             <td colspan="9" class="minpos-bordertop">
                                                 <nobr></nobr>
@@ -481,7 +481,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 </nobr>
                                             </td>
                                         </tr>
-                                    <?php } ?>
+
 
 
                                     </td>
