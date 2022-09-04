@@ -102,8 +102,8 @@
                         <div class="table-responsive">
                             <?php
                             if (isset($product_id)) {
-                                $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "5");
-                                $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "5");
+                                $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "8");
+                                $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "8");
                                 $category = (isset($_GET["category"]) ? $_GET["category"] : "");
                             ?>
                                 <div id="printableArea">
@@ -120,7 +120,8 @@
 
                                                     <div class="barcode-inner barcode-innerdiv">
                                                         <div class="product-name barcode-productname">
-                                                            {company_name}
+                                                            <nobr>{company_name}</nobr>
+
                                                         </div>
                                                         <span class="model-name barcode-modelname">{product_model}</span>
                                                         <img src="<?php echo base_url('Cbarcode/barcode_generator/{product_id}') ?>" class="img-responsive center-block barcode-image" alt="">
@@ -135,9 +136,9 @@
                                                     </div>
 
                                                 </td>
-                                                <?php if ($counter == 5) { ?>
+                                                <?php if ($counter == 7) { ?>
                                                 </tr>
-                                                <?php $counter = 0; ?>
+<!--                                                --><?php //$counter = 3; ?>
                                             <?php } ?>
                                             <?php $counter++; ?>
                                         <?php
@@ -151,12 +152,12 @@
                                 <div id="printableArea">
                                     <table class="table-bordered barcode-collaps">
                                         <?php
-                                        $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "5");
-                                        $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "5");
+                                        $qty = (isset($_GET["qty"]) ? $_GET["qty"] : "8");
+                                        $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "8");
                                         $category = (isset($_GET["category"]) ? $_GET["category"] : "");
 
                                         $counter = 0;
-                                        for ($i = 0; $i < $qty; $i++) {
+                                        for ($i = 0; $i = $qty; $i++) {
                                         ?>
                                             <?php if ($counter == $cqty) { ?>
                                                 <tr>
@@ -178,7 +179,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <?php if ($counter == 5) { ?>
+                                                <?php if ($counter == 7) { ?>
                                                 </tr>
                                                 <?php $counter = 0; ?>
                                             <?php } ?>

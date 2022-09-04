@@ -319,13 +319,15 @@ function quantity_calculate(item) {
 
 
 
-  // if (due > 0){
-  //   $('.due_cus').html('Due:')
-  //   $('.due_cus').removeClass('text-danger')
-  //   $('.due_cus').addClass('text-success')
-  // }else{
-  //   $('.due_cus').html('Customer Receivable:')
-  // }
+  if (due > 0){
+    $('.due_cus').html('Due:')
+    $('.due_cus').addClass('text-success')
+    $('#due_amount').addClass('label-success-outline')
+  }else{
+    $('.due_cus').html('Customer Receivable:')
+    $('.due_cus').addClass('text-danger')
+    $('#due_amount').addClass('label-danger-outline')
+  }
 
 
 

@@ -466,7 +466,7 @@
                                              </tr>
 
                                              <tr>
-                                                 <td class="text-right" colspan="1"><b>Gross Discount:</b></td>
+                                                 <td class="text-right" colspan="1"><b>Discount:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="sku_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="" value="" placeholder="0.00" />
 
@@ -538,9 +538,9 @@
 
 
                                              <tr>
-                                                 <td colspan="1" class="text-right text-danger"><b class="due_cus"> Customer Receivable:</b></td>
+                                                 <td colspan="1" class="text-right"><b class="due_cus"> Customer Receivable:</b></td>
                                                  <td class="text-right">
-                                                     <input type="text" id="due_amount" class="form-control label-danger-outline font-bold text-danger text-right" name="due_amount" value="{due_amount}" readonly="readonly" />
+                                                     <input type="text" id="due_amount" class="form-control  font-bold  text-right" name="due_amount" value="{due_amount}" readonly="readonly" />
                                                  </td>
                                                  <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                                  <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
