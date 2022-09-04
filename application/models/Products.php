@@ -569,6 +569,18 @@ class Products extends CI_Model
         return false;
     }
 
+   public function product_details($product_id)
+    {
+        $this->db->select('*');
+        $this->db->from('product_information');
+        $this->db->where('product_id', $product_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        }
+        return false;
+    }
+
     // Product Purchase Report
     public function product_purchase_info($product_id)
     {

@@ -1061,7 +1061,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                         },
                         success: function(data) {
                             if (data == false) {
-                                alert('This Product Not Found !');
+                                toastr.error('This Product Not Found !');
                                 document.getElementById('add_item_p').value = '';
                                 document.getElementById('add_item_p').focus();
                                 quantity_calculate(product_id);
@@ -1078,7 +1078,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                             }
                         },
                         error: function() {
-                            alert('Request Failed, Please check your code and try again!');
+                            toastr.error('Request Failed, Please check your code and try again!');
                         }
                     });
                 }

@@ -53,28 +53,6 @@
 
 
                     <div class="panel-body">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="form-group row">
-                                    <label for="outlet_name" class="col-sm-4 col-form-label">Outlet Name
-                                        <i class="text-danger">*</i>
-                                    </label>
-                                    <div class="col-sm-8">
-                                        <select name="outlet_name" id="outlet_name" class="form-control">
-                                            <?php if ($outlet_list) { ?>
-                                                {outlet_list}
-                                                <option value="{outlet_id}">{outlet_name}</option>
-                                                {/outlet_list}
-                                            <?php } else { ?>
-                                                {cw}
-                                                <option value="{warehouse_id}">{central_warehouse}</option>
-                                                {/cw}
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -124,16 +102,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group row">
-                                    <label for="add_item" class="col-sm-4 col-form-label"><?php echo display('barcode') ?> <i class="text-danger">*</i></label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="product_name" class="form-control bq" placeholder='Barcode' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
-                                        <input type="hidden" id="product_value" name="">
-                                        <input type="hidden" id="sel_type" name="sel_type" value="2">
-                                    </div>
-                                </div>
-                            </div>
+
                             <div class="col-sm-6">
                                 <div class="form-group row">
                                     <label for="date" class="col-sm-10 col-form-label">
@@ -189,36 +158,8 @@
 
                                 </table>
 
-                            <?php }else if ($access == 'edit'){?>
-                            <table id="st_table" class="table table-bordered table-hover ">
-                                <thead>
-                                <tr>
-                                    <th><?php echo display('sl_no') ?></th>
-                                    <th>SKU </th>
-                                    <th>Product Name </th>
-                                    <th class="text-right ">Physical Count</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {product_list}
-                                <tr>
-                                    <td>{sl}</td>
-                                    <td>{sku}</td>
-                                    <td>
-                                        {product_name}
-                                        <input type="hidden" name="product_id[]" value={product_id}>
-
-                                    </td>
-                                    <td align="right"><input class="form-control p_qty text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
-                                </tr>
-                                {/product_list}
-                                </tbody>
-
-                            </table>
-
-                            <?php } else { ?>
-
-                                <table id="addinvoice" class="table table-bordered table-hover ">
+                            <?php }else{ ?>
+                                <table id="st_table" class="table table-bordered table-hover ">
                                     <thead>
                                     <tr>
                                         <th><?php echo display('sl_no') ?></th>
@@ -228,10 +169,22 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+                                    {product_list}
+                                    <tr>
+                                        <td>{sl}</td>
+                                        <td>{sku}</td>
+                                        <td>
+                                            {product_name}
+                                            <input type="hidden" name="product_id[]" value={product_id}>
 
+                                        </td>
+                                        <td align="right"><input class="form-control p_qty text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
+                                    </tr>
+                                    {/product_list}
                                     </tbody>
 
                                 </table>
+
 
                             <?php } ?>
 
@@ -253,8 +206,6 @@
 
 <script type="text/javascript">
 
-
-
     $(document).ready(function () {
         var table = $('#st_table').DataTable({
             columnDefs: [
@@ -269,73 +220,9 @@
             // table.clear();
             table.destroy();
         });
-
-
-
-        $('#add_item_m_p').keydown(function(e) {
-            if (e.keyCode == 13) {
-                // e.preventDefault()
-                var rowCount = document.getElementById('addinvoice').rows.length;
-
-                // alert(rowCount)
-                var product_id = $(this).val();
-                var exist = $("#SchoolHiddenId_" + product_id).val();
-                var qty = $("#total_qntt_" + product_id).val();
-                // var add_qty = parseInt(qty) + 1;
-                var csrf_test_name = $('[name="csrf_test_name"]').val();
-                var base_url = $("#base_url").val();
-                if (product_id == exist) {
-                    toastr.error('Already inserted!!')
-                    // $("#total_qntt_" + product_id).val(add_qty);
-                    document.getElementById('add_item_m_p').value = '';
-                    document.getElementById('add_item_m_p').focus();
-                } else {
-                    $.ajax({
-                        type: "post",
-                        async: false,
-                        url: base_url + 'Creport/append_product',
-                        data: {
-                            product_id: product_id,
-                            rowCount: rowCount,
-                            csrf_test_name: csrf_test_name
-                        },
-                        success: function(data) {
-                            if (data == false) {
-                                toastr.error('This Product Not Found !');
-                                document.getElementById('add_item_m_p').value = '';
-                                document.getElementById('add_item_m_p').focus();
-
-                            } else {
-                                $("#hidden_tr").css("display", "none");
-                                document.getElementById('add_item_m_p').value = '';
-                                document.getElementById('add_item_m_p').focus();
-                                $('#addinvoice tbody').append(data);
-
-                            }
-                        },
-                        error: function() {
-                            toastr.error('Request Failed, Please check your code and try again!');
-                        }
-                    });
-                }
-            }
-        });
     });
 
-    function deleteRow(t) {
-        var a = $("#addinvoice > tbody > tr").length;
-//    alert(a);
-        var e = t.parentNode.parentNode;
-        e.parentNode.removeChild(e);
-    }
 
-    $('#submit_form').on('keyup keypress', function(e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
 
 
 

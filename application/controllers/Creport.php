@@ -58,6 +58,8 @@ class Creport extends CI_Controller
         $data = array(
             'title'     => 'Stock Taking',
             'product_list'  => $res,
+            'outlet_list'     =>  $CI->Warehouse->get_outlet_user(),
+            'cw'            => $CI->Warehouse->central_warehouse(),
             'access'  => '',
 
         );
@@ -170,6 +172,62 @@ class Creport extends CI_Controller
         $view = $this->parser->parse('report/manage_stock_taking', $data, true);
         $this->template->full_admin_html_view($view);
     }
+
+    public function append_product()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Products');
+        $product_id = $this->input->post('product_id', TRUE);
+        $rowCount = $this->input->post('rowCount', TRUE);
+
+
+        $product_details  = $CI->Products->product_details($product_id)[0];
+
+        //echo '<pre>';print_r($rowCount);exit();
+       $tr = " ";
+        if (!empty($product_details)) {
+         $qty=0;
+//         $sl=$rowCount+1;
+
+            $tr .= "
+            <tr id=\"row_" . $product_details->product_id . "\">
+                        <td style=\"width: 5%\">
+                                    $rowCount
+                        </td>
+                        <td style=\"width: 30%\">
+                                $product_details->sku
+                        </td>
+						<td class=\"\" style=\"width: 50%\">
+
+                            $product_details->product_name
+
+							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+
+						</td>
+
+                        <td>
+                            <input type=\"text\" name=\"p_qty[]\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                        </td>
+
+       
+
+						<td>";
+            $sl = 0;
+
+
+            $tr .= "<button  class=\"btn btn-danger btn-md text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+						</td>
+					</tr>";
+            echo $tr;
+        } else {
+            return false;
+        }
+    }
+
 
     //Retrive right now inserted data to cretae html
     public function stock_taking_print($id)

@@ -65,11 +65,11 @@
                                         <form>
 
                                             <div class="col-sm-3">
-                                                <input type="number" name="qty" class="form-control" value="<?php echo (isset($_GET["qty"]) ? $_GET["qty"] : "5");
+                                                <input type="number" name="qty" class="form-control" value="<?php echo (isset($_GET["qty"]) ? $_GET["qty"] : "8");
                                                                                                             ?>">
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="number" name="cqty" class="form-control" value="<?php echo (isset($_GET["cqty"]) ? $_GET["cqty"] : "5");
+                                                <input type="number" name="cqty" class="form-control" value="<?php echo (isset($_GET["cqty"]) ? $_GET["cqty"] : "8");
                                                                                                                 ?>">
                                             </div>
                                             <div class="col-sm-3">

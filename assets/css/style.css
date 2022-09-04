@@ -46,12 +46,14 @@
 	padding-bottom: 20px;
 	padding-left: 10px;
 	padding-right: 10px;
+	/*width: 50px !important;*/
 
 }
 
 .barcode-innerdiv{
 	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 	text-align: center; position: relative;
+
 }
 
 .barcode-productname{
