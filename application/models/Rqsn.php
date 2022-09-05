@@ -1456,7 +1456,7 @@ class Rqsn extends CI_Model
         $response = array();
 
 
-            $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
 
 
         $product_sku = $this->input->post('product_sku', TRUE);
@@ -1483,9 +1483,9 @@ class Rqsn extends CI_Model
             ## Total number of records without filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information d');
-            $this->db->join('rqsn_details b', 'd.product_id=b.product_id');
-            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id');
-            $this->db->where('c.from_id', $outlet_id);
+//            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+//            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
+          //  $this->db->where('c.from_id', $outlet_id);
             if ($product_sku != '') {
                 $this->db->where_in('d.sku', $product_sku);
             }
@@ -1493,7 +1493,7 @@ class Rqsn extends CI_Model
 
 
             if (isset($cat_id) && $cat_id != '') {
-                $this->db->where('d.category_id', $cat_id);
+                $this->db->like('d.category_id', $cat_id,'both');
             }
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
@@ -1510,15 +1510,15 @@ class Rqsn extends CI_Model
             ## Total number of record with filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information d');
-            $this->db->join('rqsn_details b', 'd.product_id=b.product_id');
-            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id');
-            $this->db->where('c.from_id', $outlet_id);
+//            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+//            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
+            //$this->db->where('c.from_id', $outlet_id);
             if ($product_sku != '') {
                 $this->db->where_in('d.sku', $product_sku);
             }
-            if (isset($cat_id) && $cat_id != '') {
-                $this->db->where('d.category_id', $cat_id);
-            }
+           if (isset($cat_id) && $cat_id != '') {
+                $this->db->like('d.category_id', $cat_id,'both');
+              }
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
@@ -1534,14 +1534,18 @@ class Rqsn extends CI_Model
         }
         ## Fetch records
         $this->db->select("*");
-        $this->db->from('rqsn a');
-        $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
-        $this->db->join('product_information d', 'd.product_id=b.product_id');
-        $this->db->where('b.status', 3);
-        // $this->db->or_where('b.status', 2);
-        $this->db->where('b.isrcv', 1);
-        //$this->db->where('b.isaprv',1);
-        $this->db->where('a.from_id', $outlet_id);
+//        $this->db->from('rqsn a');
+//        $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
+//        $this->db->join('product_information d', 'd.product_id=b.product_id');
+
+        $this->db->from('product_information d');
+//        $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+//        $this->db->join('rqsn a', 'b.rqsn_id=a.rqsn_id','left');
+
+//        $this->db->where('b.status', 3);
+//        $this->db->where('b.isrcv', 1);
+//        $this->db->where('a.from_id', $outlet_id);
+
         if ($product_sku != '') {
             $this->db->where_in('d.sku', $product_sku);
         }
@@ -1550,11 +1554,11 @@ class Rqsn extends CI_Model
             $this->db->where($searchQuery);
 
         if ($post_product_id) {
-            $this->db->where('b.product_id', $post_product_id);
+            $this->db->where('d.product_id', $post_product_id);
         }
 
         if (isset($cat_id) && $cat_id != '') {
-            $this->db->where('d.category_id', $cat_id);
+            $this->db->like('d.category_id', $cat_id,'both');
         }
 
 //            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
@@ -1626,7 +1630,25 @@ class Rqsn extends CI_Model
             $total_sale = $this->db->get()->row();
 
             $out_qty = (!empty($total_sale->total_sale) ? $total_sale->total_sale : 0);
-            $stock =  (!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty;
+
+
+            $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                ->from('stock_taking_details a')
+                ->join('stock_taking b', 'b.stid = a.stid')
+                ->where(array(
+                    'b.outlet_id' =>$outlet_id,
+                    'a.product_id' => $record->product_id,
+//                    'create_date >=' => $date,
+                    'a.status' => 1,
+
+                ))
+                ->group_by('a.product_id')
+                ->order_by('a.id','desc')
+                ->get()
+                ->row();
+            $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+//            $stock = (($total_in - $total_out)-$newStock)+$diff;
+            $stock =  ((!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty)+$diff;
 
             $data[] = array(
                 'sl'            =>   $sl,
@@ -1640,7 +1662,7 @@ class Rqsn extends CI_Model
                 'totalSalesQnty' => sprintf('%0.2f', $out_qty),
                 'dispatch' => $total_sale->total_sale,
                 'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
-                'stok_quantity' => sprintf('%0.2f', $stock),
+                'stok_quantity' => sprintf('%0.2f', $diff),
                 'total_sale_price' => ($stock) * $sprice,
                 'purchase_total' => (($stock * $pprice) != 0)
                     ? ($stock * $pprice)

@@ -18,7 +18,7 @@ class Lrqsn
         $CI->load->model('categories');
         $CI->load->model('Warehouse');
 
-        $cat_list = $CI->categories->category_list(1);
+        $cat_list = $CI->categories->cates();
         $outlet_list    = $CI->Warehouse->get_outlet_user();
         $cw_list    = $CI->Rqsn->cw_list();
         $sku_list = $CI->Products->sku_list();

@@ -223,11 +223,13 @@ class reports extends CI_Model
         return false;
     }
 
-    public function manage_stock_taking()
+    public function manage_stock_taking($outlet_id)
     {
 
-        $this->db->select("a.*");
+        $this->db->select("a.*,o.outlet_name,a.outlet_id as out");
         $this->db->from('stock_taking a');
+        $this->db->join('outlet_warehouse o','a.outlet_id=o.outlet_id','left');
+        $this->db->where('a.outlet_id',$outlet_id);
         $this->db->order_by('a.id','desc');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -449,16 +451,18 @@ class reports extends CI_Model
 
             }
 
-            $phy_count = $this->db->select('SUM(difference) as phy_qty')
-                ->from('stock_taking_details')
+            $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                ->from('stock_taking_details a')
+                ->join('stock_taking b', 'b.stid = a.stid')
                 ->where(array(
-                    'product_id' => $record->product_id,
+                    'b.outlet_id' =>'HK7TGDT69VFMXB7',
+                    'a.product_id' => $record->product_id,
 //                    'create_date >=' => $date,
-                    'status' => 1,
+                    'a.status' => 1,
 
                 ))
-                ->group_by('product_id')
-                ->order_by('id','desc')
+                ->group_by('a.product_id')
+                ->order_by('a.id','desc')
                 ->get()
                 ->row();
 
@@ -1132,10 +1136,11 @@ class reports extends CI_Model
     //=================Stock takig details ================//
 
     public function stock_taking_details_by_id($id){
-        $this->db->select('*')
+        $this->db->select('*,s.outlet_id as out')
             ->from('stock_taking_details a')
             ->join('stock_taking s','s.stid=a.stid')
             ->join('product_information b','a.product_id=b.product_id')
+            ->join('outlet_warehouse o','o.outlet_id=s.outlet_id','left')
             ->where('a.stid',$id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {

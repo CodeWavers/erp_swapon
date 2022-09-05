@@ -80,7 +80,7 @@
                                     <select id="cat_list" class="form-control" name="cat_list">
                                         <option value="">Select One</option>
                                         {cat_list}
-                                        <option value="{category_id}">{category_name}</option>
+                                        <option value="{id}">{name}</option>
                                         {/cat_list}
                                     </select>
                                 </div>

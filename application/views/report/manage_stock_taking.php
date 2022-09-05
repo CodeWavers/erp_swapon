@@ -58,6 +58,7 @@
                                     <tr>
                                         <th><?php echo display('sl_no') ?></th>
                                         <th>STID </th>
+                                        <th>Outlet Name </th>
                                         <th>Date </th>
                                         <th>Total Product</th>
                                         <th>Notes</th>
@@ -71,6 +72,7 @@
                                     <tr>
                                         <td><?= $res['sl']?></td>
                                         <td><?= $res['stid_no']?></td>
+                                        <td><?= $res['outlet_name']?></td>
                                         <td><?= $res['date']?></td>
                                         <td><?= $res['total_product']?></td>
                                         <td><?= $res['notes']?></td>
@@ -90,7 +92,7 @@
 
                                             <?php } ?>
 
-                                            <a href="<?php echo base_url() . 'Creport/stock_taking_view/' . $res['stid']; ?>" class="btn btn-success btn-sm" title="View/Approve" data-original-title="View"><i class="fa fa-street-view" aria-hidden="true"></i></a>
+                                            <a href="<?php echo base_url() . 'Creport/stock_taking_view/' . $res['stid'] .'/' .$res['outlet_id']; ?>" class="btn btn-success btn-sm" title="View/Approve" data-original-title="View"><i class="fa fa-street-view" aria-hidden="true"></i></a>
                                             <?php if ($res['approve'] == 1) { ?>
                                             <a href="<?php echo base_url() . 'Creport/stock_taking_print/' . $res['stid']; ?>" class="btn btn-warning btn-sm" title="Print" data-original-title="Print"><i class="fa fa-print" aria-hidden="true"></i></a>
                                             <?php } ?>

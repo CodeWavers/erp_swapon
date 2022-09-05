@@ -59,18 +59,25 @@
                                     <label for="outlet_name" class="col-sm-4 col-form-label">Outlet Name
                                         <i class="text-danger">*</i>
                                     </label>
+
+
                                     <div class="col-sm-8">
-                                        <select name="outlet_name" id="outlet_name" class="form-control">
-                                            <?php if ($outlet_list) { ?>
-                                                {outlet_list}
-                                                <option value="{outlet_id}">{outlet_name}</option>
-                                                {/outlet_list}
-                                            <?php } else { ?>
-                                                {cw}
-                                                <option value="{warehouse_id}">{central_warehouse}</option>
-                                                {/cw}
-                                            <?php } ?>
-                                        </select>
+                                        <?php if ($access == 'view' || $access == 'edit'  ){ ?>
+                                            <input type="text" required tabindex="2" class="form-control " name="" value="{outlet_name}" id="" readonly />
+
+                                        <?php }else{ ?>
+                                            <select name="outlet_name" id="outlet_name" class="form-control">
+                                                <?php if ($outlet_list) { ?>
+                                                    {outlet_list}
+                                                    <option value="{outlet_id}">{outlet_name}</option>
+                                                    {/outlet_list}
+                                                <?php } else { ?>
+                                                    {cw}
+                                                    <option value="{warehouse_id}">{central_warehouse}</option>
+                                                    {/cw}
+                                                <?php } ?>
+                                            </select>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
@@ -124,16 +131,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <?php if ($access == ''  ){ ?>
                             <div class="col-sm-6">
                                 <div class="form-group row">
                                     <label for="add_item" class="col-sm-4 col-form-label"><?php echo display('barcode') ?> <i class="text-danger">*</i></label>
                                     <div class="col-sm-7">
                                         <input type="text" name="product_name" class="form-control bq" placeholder='Barcode' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
                                         <input type="hidden" id="product_value" name="">
-                                        <input type="hidden" id="sel_type" name="sel_type" value="2">
+
                                     </div>
                                 </div>
                             </div>
+                            <?php } ?>
                             <div class="col-sm-6">
                                 <div class="form-group row">
                                     <label for="date" class="col-sm-10 col-form-label">

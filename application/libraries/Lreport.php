@@ -116,7 +116,7 @@ class Lreport extends CI_Model
         $CI->load->model('categories');
         $data['title'] = 'Stock Report';
 
-        $cat_list = $this->categories->category_list(1);
+        $cat_list = $CI->categories->cates();
         $sku_list = $this->Products->sku_list();
         $company_info = $CI->Reports->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();

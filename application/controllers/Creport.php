@@ -79,12 +79,20 @@ class Creport extends CI_Controller
 
         $res = $CI->Reports->stock_taking_details_by_id($id);
 
-      //  echo '<pre>';print_r($res);exit();
+
 
         $sl = 1;
         foreach ($res as $k => $v) {
             $res[$k]['sl']  = $sl;
             $sl++;
+        }
+
+        if ( $res[0]['out'] == "HK7TGDT69VFMXB7" ){
+            $outlet_name=$this->db->select('central_warehouse')->from('central_warehouse')->where('warehouse_id','HK7TGDT69VFMXB7')->get()->row()->central_warehouse;
+           // echo '<pre>';print_r($outlet_name);exit();
+
+        }else{
+            $outlet_name=$res[0]['outlet_name'];
         }
 
         $data = array(
@@ -96,30 +104,47 @@ class Creport extends CI_Controller
             'st_date'  => $res[0]['date'],
             'notes'  => $res[0]['notes'],
             'approve'  => $res[0]['approve'],
+            'outlet_name'  => $outlet_name,
 
 
         );
 
 
-
         $view = $this->parser->parse('report/stock_taking', $data, true);
         $this->template->full_admin_html_view($view);
     }
-    public function stock_taking_view($id)
+    public function stock_taking_view($id,$outlet_id)
     {
         $CI = &get_instance();
         $CI->load->model('Warehouse');
         $CI->load->model('Purchases');
         $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
 
         $res = $CI->Reports->stock_taking_details_by_id($id);
 
-      //  echo '<pre>';print_r($res);exit();
+        if ( $res[0]['out'] == "HK7TGDT69VFMXB7" ){
+            $outlet_name=$this->db->select('central_warehouse')->from('central_warehouse')->where('warehouse_id','HK7TGDT69VFMXB7')->get()->row()->central_warehouse;
+            // echo '<pre>';print_r($outlet_name);exit();
+
+        }else{
+            $outlet_name=$res[0]['outlet_name'];
+        }
 
         $sl = 1;
         foreach ($res as $k => $v) {
             $res[$k]['sl']  = $sl;
-            $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'])['central_stock'];
+
+            if ($outlet_id == 'HK7TGDT69VFMXB7') {
+                $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'])['central_stock'];
+                //   $available_quantity = $this->Reports->current_stock($product_id,1);
+            } else {
+                $stock = $CI->Rqsn->outlet_stock(null,$res[$k]['product_id'])['outlet_stock'];
+
+                // echo '<pre>';print_r($available_quantity);exit();
+            }
+
+
 
             $res[$k]['stock_qty'] = $stock ;
             $res[$k]['difference'] = $res[$k]['physical_stock']-$res[$k]['stock_qty'] ;
@@ -135,6 +160,7 @@ class Creport extends CI_Controller
             'st_date'  => $res[0]['date'],
             'notes'  => $res[0]['notes'],
             'approve'  => $res[0]['approve'],
+            'outlet_name'  => $outlet_name,
 
         );
 
@@ -149,15 +175,31 @@ class Creport extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Reports');
         $CI->load->library('occational');
+        $CI->load->model('warehouse');
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+        if (!empty($outlet_id)){
+            $response=$this->Reports->manage_stock_taking($outlet_id);
+        }else{
+            $response=$this->Reports->manage_stock_taking('HK7TGDT69VFMXB7');
 
-        $response=$this->Reports->manage_stock_taking();
+        }
 
-       // echo '<pre>';print_r($response);exit();
+
+      //  echo '<pre>';print_r($outlet_id);exit();
 
         $sl = 1;
         foreach ($response as $k => $v) {
             $response[$k]['sl']  = $sl;
             $response[$k]['date']  = $this->occational->dateConvert($response[$k]['date']);
+            if ( $response[$k]['out'] == "HK7TGDT69VFMXB7" ){
+                $response[$k]['outlet_name']=$this->db->select('central_warehouse')->from('central_warehouse')->where('warehouse_id','HK7TGDT69VFMXB7')->get()->row()->central_warehouse;
+                // echo '<pre>';print_r($outlet_name);exit();
+
+            }else{
+                $response[$k]['outlet_name']=$response[$k]['outlet_name'];
+            }
+
+
             $sl++;
         }
 
@@ -255,6 +297,7 @@ class Creport extends CI_Controller
         $stid=(!empty($access)) ?  $this->input->post('st_id', TRUE) : mt_rand();
 
         $date = date('Y-m-d');
+        $outlet_id = $this->input->post('outlet_name', TRUE);
         $product_id = $this->input->post('product_id', TRUE);
         $quantity = array_filter($this->input->post('p_qty', TRUE));
 
@@ -266,8 +309,11 @@ class Creport extends CI_Controller
 
 
 
+
+
         $data1 = array(
             'stid'   => $stid,
+            'outlet_id'   => $outlet_id,
             'stid_no'      => $this->input->post('stid', TRUE),
             'date'      => $this->input->post('date', TRUE),
             'total_product'      => count(array_filter($quantity, function($x) { return !empty($x); })),
@@ -275,6 +321,8 @@ class Creport extends CI_Controller
 
         );
 
+
+    // echo '<pre>';print_r($data1);exit();
 
         if ($access =='edit'){
             $this->db->where('stid',$stid);
