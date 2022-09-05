@@ -2,7 +2,7 @@
 <!-- <link href="<?php echo base_url('assets/css/gui_pos.css') ?>" rel="stylesheet" type="text/css" /> -->
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/json/customer.js.php"></script>
 
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/pos_invoice.js.php" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>my-assets/js/admin_js/pos_invoice.js" type="text/javascript"></script>
 
 <?php
 $currentURL = $this->uri->uri_string();

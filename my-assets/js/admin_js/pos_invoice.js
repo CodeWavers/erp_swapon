@@ -1,9 +1,5 @@
 
     "use strict";
-    <?php
-    $cache_file = "pos_invoice.json";
-    header('Content-Type: text/javascript; charset=utf8');
-    ?>
 
     function addInputField(t) {
 

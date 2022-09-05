@@ -1,9 +1,5 @@
 //Add Input Field Of Row
 "use strict";
-<?php
-$cache_file = "invoice.json";
-header('Content-Type: text/javascript; charset=utf8');
-?>
 function addInputField(t) {
 
     var row = $("#normalinvoice tbody tr").length;
