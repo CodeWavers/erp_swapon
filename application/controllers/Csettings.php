@@ -861,6 +861,21 @@ class Csettings extends CI_Controller
     redirect('Csettings/nagad_list');
   }
 
+
+
+    //Bank Delete
+    public function bank_delete($bank_id){
+        $info = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+        $head = $this->db->select('HeadCode')->from('acc_coa')->where('HeadCode', $info)->get()->row()->HeadCode;
+
+        $this->db->where('bank_id', $bank_id);
+        $this->db->delete('bank_add');
+        $this->db->where('HeadCode', $head);
+        $this->db->delete('acc_coa');
+        $this->session->set_userdata(['message' => 'Successfully Deleted']);
+        redirect('Csettings/bank_list');
+    }
+
   #==============Table list============#
 
   public function table_list()

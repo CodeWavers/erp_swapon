@@ -1288,7 +1288,7 @@ $(document).ready(function() {
                     $("#cust_info").modal('hide');
                 } else {
                     //customeMessage.addClass('alert-danger').removeClass('alert-success').html(data.error_message);
-                    toastr.error(data.message)
+                    toastr.error(data.error_message)
                 }
             },
             error: function(xhr)

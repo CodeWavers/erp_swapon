@@ -50,7 +50,7 @@
        <?php if($this->permission1->method('bank_transaction','create')->access()){ ?>
                   <a href="<?php echo base_url('Csettings/nagad_transaction')?>" class="btn btn-success m-b-5 m-r-2"><i class="ti-align-justify"> </i>Nagad Transaction </a>
                    <?php }?>
-                    <?php if($this->permission1->method('nagad_ledger','read')->access()){ ?>
+                    <?php if($this->permission1->method('bank_ledger','read')->access()){ ?>
                   <a href="<?php echo base_url('Csettings/nagad_ledger')?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-align-justify"> </i>Nagad Ledger </a>
                    <?php }?>
 
@@ -94,7 +94,7 @@
 										<td><?php echo (($position==0)?"$currency {balance}":"{balance} $currency") ?></td>
 										<td>
 										<?php echo form_open()?>
-										 <?php if($this->permission1->method('nagad_list','update')->access()){ ?>
+										 <?php if($this->permission1->method('bank_list','update')->access()){ ?>
 											<a href="<?php echo base_url().'Csettings/edit_nagad/{nagad_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 										<?php }?>
 										<?php echo form_close()?>

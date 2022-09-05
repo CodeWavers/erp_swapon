@@ -94,7 +94,7 @@
 										<td><?php echo (($position==0)?"$currency {balance}":"{balance} $currency") ?></td>
 										<td>
 										<?php echo form_open()?>
-										 <?php if($this->permission1->method('bkash_list','update')->access()){ ?>
+										 <?php if($this->permission1->method('bank_list','update')->access()){ ?>
 											<a href="<?php echo base_url().'Csettings/edit_bkash/{bkash_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="" data-original-title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 										<?php }?>
 										<?php echo form_close()?>

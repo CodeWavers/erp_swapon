@@ -895,8 +895,11 @@ function detailsmodal(productname,stock,model,unit,price,image){
 
 $(document).ready(function() {
         "use strict";
+    var allowSubmit = false;
  $("#newcustomer").submit(function(e){
-        e.preventDefault();
+     if (!allowSubmit){
+         e.preventDefault();
+     }
         var customeMessage   = $("#customeMessage");
         var customer_id      = $("#autocomplete_customer_id");
         var customer_name    = $("#customer_name");
@@ -920,7 +923,7 @@ $(document).ready(function() {
                      $("#cust_info").modal('hide');
                 } else {
                     //customeMessage.addClass('alert-danger').removeClass('alert-success').html(data.error_message);
-                    toastr.error(data.message)
+                    toastr.error(data.error_message)
                 }
             },
             error: function(xhr)
