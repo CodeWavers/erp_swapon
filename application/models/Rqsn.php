@@ -1662,7 +1662,7 @@ class Rqsn extends CI_Model
                 'totalSalesQnty' => sprintf('%0.2f', $out_qty),
                 'dispatch' => $total_sale->total_sale,
                 'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
-                'stok_quantity' => sprintf('%0.2f', $diff),
+                'stok_quantity' => sprintf('%0.2f', $stock),
                 'total_sale_price' => ($stock) * $sprice,
                 'purchase_total' => (($stock * $pprice) != 0)
                     ? ($stock * $pprice)
