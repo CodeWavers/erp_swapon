@@ -877,7 +877,21 @@ function detailsmodal(productname,stock,model,unit,price,image){
 }
 
 
+    "use strict";
 
+    function add_customer() {
+
+        var name=$('#customer_name').val();
+
+        if ($.isNumeric(name) == true){
+            $('#mobile').val(name);
+        }else{
+            $('#m_customer_name').val(name);
+        }
+
+
+
+    }
 
 $(document).ready(function() {
         "use strict";
@@ -899,17 +913,19 @@ $(document).ready(function() {
             success: function(data)
             {
                 if (data.status == true) {
-                    customeMessage.addClass('alert-success').removeClass('alert-danger').html(data.message);
+                    toastr.success(data.message)
+                    //customeMessage.addClass('alert-success').removeClass('alert-danger').html(data.message);
                     customer_id.val(data.customer_id);
                     customer_name.val(data.customer_name);
                      $("#cust_info").modal('hide');
                 } else {
-                    customeMessage.addClass('alert-danger').removeClass('alert-success').html(data.error_message);
+                    //customeMessage.addClass('alert-danger').removeClass('alert-success').html(data.error_message);
+                    toastr.error(data.message)
                 }
             },
             error: function(xhr)
             {
-                alert('failed!');
+                toastr.error('Failed! Something went wrong..!')
             }
 
         });

@@ -298,16 +298,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <?php $sl++;
                                     } ?>
 
-                                    <tr>
-                                        <td colspan="6" class="minpos-bordertop">
-                                            <nobr></nobr>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="6" class="minpos-bordertop">
-                                            <nobr></nobr>
-                                        </td>
-                                    </tr>
+
                                     <tr>
                                         <td align="left">
                                             <nobr></nobr>
@@ -380,7 +371,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
-                                                Tk 0.00
+                                                <?php if ($position == 0) {
+                                                    echo  $currency . ' ' . html_escape(number_format(round($s_total), 2, '.', ','));
+                                                } else {
+                                                    echo html_escape(number_format(round($s_total), 2, '.', ',')) . ' ' . $currency;
+                                                } ?>
                                             </nobr>
                                         </td>
                                     </tr>
@@ -416,11 +411,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <tr>
-                                        <td colspan="8" class="minpos-bordertop">
-                                            <nobr></nobr>
-                                        </td>
-                                    </tr>
+
                                     <tr>
                                         <td align="right">
                                             <strong>Net Payable</strong>
@@ -438,11 +429,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                     </tr>
 
-                                    <tr>
-                                        <td colspan="8" class="minpos-bordertop">
-                                            <nobr></nobr>
-                                        </td>
-                                    </tr>
+
                                     <?php if ($paid_amount > 0) { ?>
                                         <tr>
                                             <td align="left">
@@ -455,19 +442,15 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                </strong>
                                             </td>
                                             <td align="right" class="td-style">
-                                                <nobr>
+                                                <strong> <nobr>
                                                     <?php echo html_escape((($position == 0) ? "$currency {paid_amount}" : "{paid_amount} $currency")) ?>
-                                                </nobr>
+                                                </nobr>   </strong>
                                             </td>
                                         </tr>
                                     <?php } ?>
 
 
-                                        <tr>
-                                            <td colspan="9" class="minpos-bordertop">
-                                                <nobr></nobr>
-                                            </td>
-                                        </tr>
+
                                         <tr>
                                             <td align="left">
                                                 <nobr></nobr>
@@ -480,6 +463,13 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     <?php echo html_escape((($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency")) ?>
                                                 </nobr>
                                             </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td align="left" colspan="4" >
+                                                <nobr>Notes: {invoice_details}</nobr>
+                                            </td>
+
                                         </tr>
 
 

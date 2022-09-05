@@ -2647,7 +2647,7 @@ class Invoices extends CI_Model
     //Retrieve invoice Edit Data
     public function retrieve_invoice_editdata($invoice_id)
     {
-        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
+        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount,c.total_price_wd, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
@@ -2803,7 +2803,7 @@ class Invoices extends CI_Model
         $rate          = $this->input->post('product_rate', TRUE);
         $p_id          = $this->input->post('product_id', TRUE);
         $total_amount  = $this->input->post('total_price', TRUE);
-        $total_amount_wd  = $this->input->post('total_amount_wd', TRUE);
+        $total_amount_wd  = $this->input->post('total_price_wd', TRUE);
         $discount_rate = $this->input->post('total_discount', TRUE);
         $discount_per  = $this->input->post('discount', TRUE);
         $invoice_description = $this->input->post('desc', TRUE);
