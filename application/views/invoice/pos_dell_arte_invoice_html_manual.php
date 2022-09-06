@@ -369,11 +369,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
-                                                <?php if ($position == 0) {
-                                                    echo  $currency . ' ' . html_escape(number_format(round($s_total), 2, '.', ','));
-                                                } else {
-                                                    echo html_escape(number_format(round($s_total), 2, '.', ',')) . ' ' . $currency;
-                                                } ?>
+                                                <?php echo html_escape((($position == 0) ? "$currency {rounding}" : "{rounding} $currency")) ?>
+
                                             </nobr>
                                         </td>
                                     </tr>
@@ -523,6 +520,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     </tr>
 
                                     <?php } ?>
+                                    <?php if (!empty($invoice_details)) { ?>
+                                    <tr>
 
                                             <td align="left" colspan="4" >
                                                 <nobr>Notes: {invoice_details}</nobr>
@@ -530,7 +529,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                         </tr>
 
-
+                                    <?php } ?>
 
                                     </td>
                                     </tr>

@@ -907,6 +907,13 @@ class Linvoice
             $con='No Condition';
         }
 
+        $price=$invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'];
+        $whole=intval($price);
+        $decimal1 = $price - $whole;
+
+      //  echo $decimal1;exit();
+        $decimal2 = round($decimal1, 2);
+        $decimal = substr($decimal2, 2);
 
         $data = array(
             'title'             => display('invoice_details'),
@@ -933,7 +940,10 @@ class Linvoice
             'final_date'        => $invoice_detail[0]['final_date'],
             'inv_date'        => $invoice_detail[0]['date'],
             'invoice_details'   => $invoice_detail[0]['invoice_details'],
-            'total_amount'      => number_format($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'], 2, '.', ','),
+            'rounding' =>0.00,
+
+//            'rounding'      => number_format($decimal2, 2, '.', ','),
+            'total_amount'      => number_format(round($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due']), 2, '.', ','),
             'total'      => number_format($invoice_detail[0]['total_amount'], 2, '.', ','),
             'subTotal_quantity' => $subTotal_quantity,
             'invoice_discount'    => number_format($invoice_detail[0]['invoice_discount'], 2, '.', ','),
