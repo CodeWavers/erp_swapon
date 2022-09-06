@@ -103,7 +103,7 @@
                                         <th><?php echo display('sl') ?></th>
                                         <th>Invoice ID</th>
                                         <th><?php echo display('invoice_no') ?></th>
-                                        <th><?php echo display('date') ?></th>
+                                        <th><?php echo display('date') ?>/Time</th>
                                         <th>Outlet Name</th>
                                         <th><?php echo display('sale_by') ?></th>
                                         <th><?php echo display('customer_name') ?></th>

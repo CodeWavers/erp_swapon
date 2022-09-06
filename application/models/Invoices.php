@@ -234,7 +234,7 @@ class Invoices extends CI_Model
                 'sale_type'      => $st,
                 'salesman'         => $record->first_name . ' ' . $record->last_name,
                 'customer_name'    => $customer_name,
-                'final_date'       => $this->occational->dateConvert($record->date),
+                'final_date'       => $this->occational->dateConvert($record->date)." ".$record->time,
                 'total_amount'     => $record->total_amount,
                 'button'           => $button,
             );
