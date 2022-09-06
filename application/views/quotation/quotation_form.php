@@ -1,5 +1,5 @@
 <!-- Invoice js -->
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js.php" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 <style type="text/css">
     .form-control {
         padding: 6px 5px;
