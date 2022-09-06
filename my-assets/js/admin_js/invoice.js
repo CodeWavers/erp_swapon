@@ -369,11 +369,14 @@ function invoice_paidamount() {
 "use strict"
 function calc_paid(){
     var pt = 0;
+
+    var paid_amount = (parseFloat($("#paid_amount").val()) ? parseFloat($("#paid_amount").val()) : 0);
+
     $(".p_amount").each(function () {
         isNaN(this.value) || 0 == this.value.length || (pt += parseFloat(this.value))
     });
 
-    $("#paidAmount").val(pt);
+    $("#paidAmount").val((paid_amount+pt).toFixed(2,2));
     invoice_paidamount();
 }
 

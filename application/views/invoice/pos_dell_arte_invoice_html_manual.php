@@ -216,9 +216,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 <div style=" font-size: 11px !important">
                                     <nobr>
                                         <date>
-                                            Date: <?php
-                                            echo date('d-M-Y');
-                                            ?>
+                                            Date: {date} {time}
                                         </date>
                                     </nobr>
                                 </div>
@@ -428,6 +426,46 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </nobr>
                                         </td>
                                     </tr>
+                                    <?php foreach ($payment_info as $pay){?>
+
+                                        <?php
+
+                                        if ($pay->pay_type == 1){
+                                            $pay_type='In Cash';
+                                        }
+                                        if ($pay->pay_type == 3){
+                                            $pay_type='In Bkash';
+                                        }
+
+                                        if ($pay->pay_type == 4){
+                                            $pay_type='In Bank';
+                                        }
+
+                                        if ($pay->pay_type == 5){
+                                            $pay_type='In Nagad';
+                                        }
+
+                                        if ($pay->pay_type == 6){
+                                            $pay_type='In Card';
+                                        }
+
+
+                                        ?>
+                                        <tr>
+                                            <td align="left">
+                                                <nobr></nobr>
+                                            </td>
+                                            <td align="right" colspan="2">
+                                                <nobr><?= $pay_type?></nobr>
+                                            </td>
+                                            <td align="right" class="td-style">
+                                                <nobr>
+                                                    <?php echo html_escape((($position == 0) ? $currency ." ". number_format($pay->amount) :number_format($pay->amount)." ".$currency)) ?>
+                                                </nobr>
+                                            </td>
+                                        </tr>
+
+                                    <?php } ?>
 
 
                                     <?php if ($paid_amount > 0) { ?>
@@ -437,7 +475,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                             <td align="right" colspan="2">
                                                <strong> <nobr>
-                                                    <?php echo display('paid_ammount') ?>
+                                                   Total Paid
                                                 </nobr>
                                                </strong>
                                             </td>
@@ -450,21 +488,41 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <?php } ?>
 
 
-
                                         <tr>
                                             <td align="left">
                                                 <nobr></nobr>
                                             </td>
                                             <td align="right" colspan="2">
-                                                <nobr><?php echo display('due') ?></nobr>
+                                             <nobr>
+                                                       Due
+                                                    </nobr>
+
                                             </td>
                                             <td align="right" class="td-style">
-                                                <nobr>
-                                                    <?php echo html_escape((($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency")) ?>
-                                                </nobr>
+                                                 <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency")) ?>
+                                                    </nobr>
                                             </td>
                                         </tr>
-                                        <tr>
+                                    <?php if ($changeamount > 0) { ?>
+                                    <tr>
+                                        <td align="left">
+                                            <nobr></nobr>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <nobr>
+                                                Change
+                                            </nobr>
+
+                                        </td>
+                                        <td align="right" class="td-style">
+                                            <nobr>
+                                                <?php echo html_escape((($position == 0) ? "$currency {changeamount}" : "{changeamount} $currency")) ?>
+                                            </nobr>
+                                        </td>
+                                    </tr>
+
+                                    <?php } ?>
 
                                             <td align="left" colspan="4" >
                                                 <nobr>Notes: {invoice_details}</nobr>

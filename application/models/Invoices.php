@@ -700,6 +700,7 @@ class Invoices extends CI_Model
                 'customer_id'     => $customer_id,
                 'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
                 'date'            => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
+                'time'    =>date("h:i A") ,
                 'total_amount'    => $this->input->post('grand_total_price', TRUE),
                 'total_tax'       => $this->input->post('total_tax', TRUE),
                 'customer_name_two'       => $this->input->post('customer_name_two', TRUE),
@@ -729,6 +730,7 @@ class Invoices extends CI_Model
                 'courier_id'         => (!empty($this->input->post('courier_id', TRUE)) ? $this->input->post('courier_id', TRUE) : null),
                 'branch_id'         => (!empty($this->input->post('branch_id', TRUE)) ? $this->input->post('branch_id', TRUE) : null),
                 'delivery_ac'       =>  $this->input->post('delivery_ac', TRUE),
+                'changeamount'       =>  $changeamount,
                 'outlet_id'       =>  $this->input->post('outlet_name', TRUE),
                 'reciever_id'       => $this->input->post('deli_reciever', TRUE),
                 'receiver_number'     => $this->input->post('del_rec_num', TRUE),
@@ -890,6 +892,7 @@ class Invoices extends CI_Model
                 'customer_id'     => $customer_id,
                 'agg_id'     =>  (!empty($agg_id) ? $agg_id : NULL),
                 'date'            => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
+                'time'    =>date("h:i A") ,
                 'total_amount'    => $this->input->post('grand_total_price', TRUE),
                 'total_tax'       => $this->input->post('total_tax', TRUE),
                 'invoice'         => $invoice_no_generated,
@@ -909,6 +912,7 @@ class Invoices extends CI_Model
                 'commission'   => $this->input->post('commission', TRUE),
                 'sale_type'   => $this->input->post('sel_type', TRUE),
                 'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
+                'changeamount'       =>  $changeamount,
                 'sales_by'        => $createby,
                 'status'          => 1,
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE)[0],
@@ -1720,6 +1724,7 @@ class Invoices extends CI_Model
                 'commission'   => $this->input->post('commission', TRUE),
                 'sale_type'   => $this->input->post('sel_type', TRUE),
                 'courier_condtion'   => $this->input->post('courier_condtion', TRUE),
+                'changeamount'       =>  $changeamount,
                 'sales_by'        => $createby,
                 'status'          => 2,
                 // 'payment_type'    =>  $this->input->post('paytype',TRUE),
@@ -1909,6 +1914,7 @@ class Invoices extends CI_Model
                 //                'cheque_date'     =>$cheque_d,
                 //                'cheque_no'    =>  $cheque,
                 'delivery_type'    =>  $delivery_type,
+                'changeamount'       =>  $changeamount,
                 'bank_id'         => (!empty($this->input->post('bank_id', TRUE)) ? $this->input->post('bank_id', TRUE) : null),
                 // 'bkash_id'         => (!empty($this->input->post('bkash_id', TRUE)) ? $this->input->post('bkash_id', TRUE) : null),
                 // 'nagad_id'         => (!empty($this->input->post('nagad_id', TRUE)) ? $this->input->post('nagad_id', TRUE) : null),
@@ -2808,8 +2814,8 @@ class Invoices extends CI_Model
         $invoice_description = $this->input->post('desc', TRUE);
         $this->db->where('invoice_id', $invoice_id);
         $this->db->delete('invoice_details');
-        $this->db->where('invoice_id', $invoice_id);
-        $this->db->delete('paid_amount');
+//        $this->db->where('invoice_id', $invoice_id);
+//        $this->db->delete('paid_amount');
         $serial_n       = $this->input->post('serial_no', TRUE);
         for ($i = 0, $n = count($p_id); $i < $n; $i++) {
             $cartoon_quantity = $cartoon[$i];
@@ -3869,6 +3875,17 @@ class Invoices extends CI_Model
         $query = $this->db->get();
 
         return $query->result_array();
+    }
+    public function payment_details_total($invoice_id)
+    {
+        $this->db->select('sum(amount) as amount,pay_type')
+            ->from('paid_amount')
+            ->where('invoice_id', $invoice_id)
+            ->group_by('pay_type');
+
+        $query = $this->db->get();
+
+        return $query->result();
     }
 
     public function due_invoices()

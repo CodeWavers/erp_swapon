@@ -673,9 +673,13 @@ class Customers extends CI_Model
     //Count customer
     public function customer_entry($data)
     {
+
+      //  echo '<pre>';print_r($data);exit();
         $this->db->select('*');
         $this->db->from('customer_information');
-        $this->db->where('customer_name', $data['customer_name']);
+        if (isset( $data['customer_mobile'])) {
+            $this->db->where('customer_mobile', $data['customer_mobile']);
+        }
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return FALSE;

@@ -621,8 +621,8 @@
                                                     <div class="col-sm-7">
                                                         <select name="paytype[]" class="form-control pay_type" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
                                                             <option value="1"><?php echo display('cash_payment') ?></option>
-<!--                                                            <option value="2"><span class="d-none">Cheque Payment</span></option>-->
-<!--                                                            <option value="4">--><?php //echo display('bank_payment') ?><!--</option>-->
+                                                            <option value="2"><span class="">Cheque Payment</span></option>
+                                                            <option value="4"><?php echo display('bank_payment') ?></option>
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
                                                             <option value="6">Card Payment</option>

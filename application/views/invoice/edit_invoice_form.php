@@ -402,7 +402,7 @@
 
                                     <td>
                                         <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_{sl}" value="{sum_amount}" readonly="readonly" />
-                                        <input class="total_price_wd form-control text-right" type="text" name="total_price_wd[]" id="total_price_wd_{sl}" value="{total_price_wd}" readonly="readonly" />
+                                        <input class="total_price_wd form-control text-right" type="hidden" name="total_price_wd[]" id="total_price_wd_{sl}" value="{total_price_wd}" readonly="readonly" />
 
                                         <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
                                     </td>
@@ -553,6 +553,7 @@
                                     <td class="text-right" colspan="8"><b><?php echo display('paid_ammount') ?>:</b></td>
                                     <td class="text-right">
                                         <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="{paid_amount}" />
+                                        <input type="text" id="paid_amount" class="form-control text-right"  placeholder="0.00" tabindex="13" value="{paid_amount}" />
                                     </td>
                                 </tr>
                                 <tr>

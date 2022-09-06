@@ -1,0 +1,317 @@
+//CSV Upload File
+    function uploadCsv()
+    {
+        $this->load->model('suppliers');
+        $filename = $_FILES['upload_csv_file']['name'];
+        $tmp = explode('.', $filename);
+        $ext = end($tmp);
+        $ext = substr(strrchr($filename, '.'), 1);
+        $size_id = '';
+        $color_id = '';
+        if ($ext == 'csv') {
+            $count = 0;
+            $fp = fopen($_FILES['upload_csv_file']['tmp_name'], 'r') or die("can't open file");
+
+            if (($handle = fopen($_FILES['upload_csv_file']['tmp_name'], 'r')) !== FALSE) {
+
+                while ($csv_line = fgetcsv($fp, 1024)) {
+                    //keep this if condition if you want to remove the first row
+                    for ($i = 0, $j = count($csv_line); $i < $j; $i++) {
+                        $insert_csv = array();
+                        // print_r($csv_line[1]);
+                        // exit();
+                        $product_id = $this->generator(10);
+                        $insert_csv['color_id']   = '';
+                        $insert_csv['size_id']   = '';
+                        $insert_csv['category_id']   = '';
+
+
+                        $insert_csv['product_name']    = (!empty($csv_line[0]) ? $csv_line[0] : null);
+                        $insert_csv['ptype_id']    = (!empty($csv_line[1]) ? $csv_line[1] : null);
+                        $insert_csv['product_code']    = (!empty($csv_line[2]) ? $csv_line[2] : null);
+                        $insert_csv['product_model']    = (!empty($csv_line[3]) ? $csv_line[3] : null);
+                        $insert_csv['color_id']   = (!empty($csv_line[4]) ? $csv_line[4] : null);
+                        $insert_csv['size_id']   = (!empty($csv_line[5]) ? $csv_line[5] : null);
+                        // $insert_csv['quantity']   = (!empty($csv_line[6]) ? $csv_line[6] : null);
+                        $insert_csv['unit']    = (!empty($csv_line[6]) ? $csv_line[6] : null);
+                        $insert_csv['trxn_unit']    = (!empty($csv_line[7]) ? $csv_line[7] : null);
+                        $insert_csv['unit_multiplier']    = (!empty($csv_line[8]) ? $csv_line[8] : null);
+                        $insert_csv['category_id']  = (!empty($csv_line[9]) ? $csv_line[9] : null);
+                        $insert_csv['supplier_id']    = (!empty($csv_line[10]) ? $csv_line[10] : null);
+                        $insert_csv['supplier_price']    = (!empty($csv_line[11]) ? $csv_line[11] : null);
+                        $insert_csv['price']    = (!empty($csv_line[12]) ? $csv_line[12] : null);
+                        $insert_csv['finished_raw']    = (!empty($csv_line[13]) ? $csv_line[13] : 0);
+                        // // $insert_csv['re_order_level']    = (!empty($csv_line[10])?$csv_line[10]:null);
+                        // $insert_csv['price']          = (!empty($csv_line[10]) ? $csv_line[10] : null);
+                        // $insert_csv['supplier_price'] = (!empty($csv_line[11]) ? $csv_line[11] : null);
+
+                    }
+                    $check_supplier = $this->db->select('*')->from('supplier_information')->where('supplier_name', $insert_csv['supplier_id'])->get()->row();
+                    if (!empty($check_supplier)) {
+                        $supplier_id = $check_supplier->supplier_id;
+                    } else {
+                        $supplierinfo = array(
+                            'supplier_name' => $insert_csv['supplier_id'],
+                            'address'           => '',
+                            'mobile'            => '',
+                            'details'           => '',
+                            'status'            => 1
+                        );
+                        if ($count > 0) {
+                            $this->db->insert('supplier_information', $supplierinfo);
+                        }
+                        $supplier_id = $this->db->insert_id();
+                        $coa = $this->suppliers->headcode();
+                        if ($coa->HeadCode != NULL) {
+                            $headcode = $coa->HeadCode + 1;
+                        } else {
+                            $headcode = "502020001";
+                        }
+                        $c_acc = $supplier_id . '-' . $insert_csv['supplier_id'];
+                        $createby = $this->session->userdata('user_id');
+                        $createdate = date('Y-m-d H:i:s');
+
+
+                        $supplier_coa = [
+                            'HeadCode'         => $headcode,
+                            'HeadName'         => $c_acc,
+                            'PHeadName'        => 'Account Payable',
+                            'HeadLevel'        => '3',
+                            'IsActive'         => '1',
+                            'IsTransaction'    => '1',
+                            'IsGL'             => '0',
+                            'HeadType'         => 'L',
+                            'IsBudget'         => '0',
+                            'IsDepreciation'   => '0',
+                            'supplier_id'      => $supplier_id,
+                            'DepreciationRate' => '0',
+                            'CreateBy'         => $createby,
+                            'CreateDate'       => $createdate,
+                        ];
+
+                        if ($count > 0) {
+                            $this->db->insert('acc_coa', $supplier_coa);
+                        }
+                    }
+
+                    $category_id = null;
+
+                    $check_category = $this->db->select('*')->from('product_category')->where('category_name', $insert_csv['category_id'])->get()->row();
+                    if (!empty($check_category)) {
+                        $category_id = $check_category->category_id;
+                    } else {
+                        $category_id = $this->auth->generator(15);
+                        $categorydata = array(
+                            'category_id' => $category_id,
+                            'category_name' => $insert_csv['category_id'],
+                            'status' => 1
+                        );
+                        if ($count > 0) {
+                            $this->db->insert('product_category', $categorydata);
+                        }
+                    }
+
+                    $color_id = null;
+                    if (!empty(($insert_csv['color_id']))) {
+                        $check_color = $this->db->select('*')->from('color_list')->where('color_name', $insert_csv['color_id'])->get()->row();
+                        if (!empty($check_color)) {
+                            $color_id = $check_color->color_id;
+                        } else {
+                            $color_id = $this->auth->generator(15);
+                            $categorydata = array(
+                                'color_id' => $color_id,
+                                'color_name' => $insert_csv['color_id'],
+                                'status' => 1
+                            );
+                            if ($count > 0) {
+                                $this->db->insert('color_list', $categorydata);
+                            }
+                        }
+                    }
+
+                    $size_id = null;
+                    if (!empty($insert_csv['size_id'])) {
+                        $check_size = $this->db->select('*')->from('size_list')->where('size_name', $insert_csv['size_id'])->get()->row();
+                        if (!empty($check_size)) {
+                            $size_id = $check_size->size_id;
+                        } else {
+                            $size_id = $this->auth->generator(15);
+                            $categorydata = array(
+                                'size_id' => $size_id,
+                                'size_name' => $insert_csv['size_id'],
+                                'status' => 1
+                            );
+                            if ($count > 0) {
+                                $this->db->insert('size_list', $categorydata);
+                            }
+                        }
+                    }
+
+                    $check_ptype = $this->db->select('*')->from('product_type')->where('ptype_name', $insert_csv['ptype_id'])->get()->row();
+
+                    if (!empty($check_ptype)) {
+
+                        $ptype_id = $check_ptype->ptype_id;
+                    } else {
+                        $ptype_id = $this->auth->generator(15);
+                        $ptypedata = array(
+                            'ptype_id' => $ptype_id,
+                            'ptype_name' => $insert_csv['ptype_id'],
+                            'status' => 1
+                        );
+                        if ($count > 0) {
+
+                            $this->db->insert('product_type', $ptypedata);
+                        }
+                    }
+
+
+
+
+                    // $check_brand = $this->db->select('*')->from('product_brand')->where('brand_name', $insert_csv['brand_id'])->get()->row();
+                    // if (!empty($check_brand)) {
+                    //     $brand_id = $check_brand->brand_id;
+                    // } else {
+                    //     $brand_id = $this->auth->generator(15);
+                    //     $branddata = array(
+                    //         'brand_id' => $brand_id,
+                    //         'brand_name' => $insert_csv['brand_id'],
+                    //         'status' => 1
+                    //     );
+                    //     if ($count > 0) {
+                    //         $this->db->insert('product_brand', $branddata);
+                    //     }
+                    // }
+
+                    $data = array(
+                        'product_id'    => $product_id,
+                        //'product_id'    => $insert_csv['product_id'],
+                        'category_id'   => $category_id,
+                        // 'brand_id'      => $brand_id,
+                        'ptype_id'      => $ptype_id,
+                        'product_name'  => $insert_csv['product_name'],
+                        // 'product_id_two' => $insert_csv['product_id_two'],
+                        'product_model' => $insert_csv['product_model'],
+                        'price'         => $insert_csv['price'],
+                        'product_code'         => $insert_csv['product_code'],
+                        'size'         => $size_id,
+                        'color'         => $color_id,
+                        // 're_order_level'=> $insert_csv['re_order_level'],
+                        'unit'          => $insert_csv['unit'],
+                        'trxn_unit'           => $insert_csv['trxn_unit'],
+                        'unit_multiplier'           => $insert_csv['unit_multiplier'],
+                        'finished_raw'           => $insert_csv['finished_raw'],
+                        'tax'           => '',
+                        'product_details' => 'Csv Product',
+                        'image'         => base_url('my-assets/image/product.png'),
+                        'status'        => 1,
+                        'created_date'      =>  date('Y-m-d')
+                    );
+
+                    if ($count > 0) {
+
+                        $result = $this->db->select('*')
+                            ->from('product_information')
+                            ->where('product_name', $data['product_name'])
+                            ->where('product_model', $data['product_model'])
+                            ->where('ptype_id', $ptype_id)
+                            ->where('category_id', $category_id)
+                            ->where('size', $insert_csv['size_id'])
+                            ->where('color',  $insert_csv['color_id'])
+                            // ->where('brand_id', $brand_id)
+                            ->where('ptype_id', $ptype_id)
+                            ->get()
+                            ->row();
+                        if (empty($result)) {
+                            $this->db->insert('product_information', $data);
+                            $product_id = $product_id;
+                        } else {
+                            $product_id = $result->product_id;
+                            $udata = array(
+                                'product_id'     => $result->product_id,
+                                // 'product_id_two'     => $insert_csv['product_id_two'],
+                                'category_id'    => $category_id,
+                                // 'brand_id'    => $brand_id,
+                                'ptype_id'    => $ptype_id,
+                                'product_name'   => $result->product_name,
+                                'product_model'  => $insert_csv['product_model'],
+                                'price'          => $insert_csv['price'],
+                                'product_code'         => $insert_csv['product_code'],
+                                'size'         => $insert_csv['size_id'],
+                                'color'         => $insert_csv['color_id'],
+                                'unit'           => $insert_csv['unit'],
+                                'trxn_unit'           => $insert_csv['trxn_unit'],
+                                'unit_multiplier'           => $insert_csv['unit_multiplier'],
+                                'finished_raw'           => $insert_csv['finished_raw'],
+
+                                //  're_order_level' => $insert_csv['re_order_level'],
+                                'tax'            => '',
+                                'product_details' => 'Csv Uploaded Product',
+                                'image'         => base_url('my-assets/image/product.png'),
+                                'status'        => 1
+                            );
+                            $this->db->where('product_id', $result->product_id);
+                            $this->db->update('product_information', $udata);
+                        }
+
+                        $supp_prd = array(
+                            //'product_id'     => $insert_csv['product_id'],
+                            'product_id' => $product_id,
+                            'supplier_id'    => $supplier_id,
+                            // 'product_id_two' => $insert_csv['product_id_two'],
+                            'supplier_price' => $insert_csv['supplier_price'],
+                            'products_model' => $insert_csv['product_model'],
+                        );
+
+                        // $splprd = $this->db->select('*')
+                        //      ->from('supplier_product')
+                        //      ->where('supplier_id', $supplier_id)
+                        //      ->where('product_id', $product_id)
+                        //      ->get()
+                        //      ->num_rows();
+                        $this->db->insert('supplier_product', $supp_prd);
+                        // if (!empty($splprd)) {
+
+                        // }else{
+                        //     $supp_prd = array(
+                        //         'supplier_id'    => $supplier_id,
+                        //         'supplier_price' => $insert_csv['supplier_price'],
+                        //         'products_model' => $insert_csv['product_model']
+                        //     );
+                        //     $this->db->where('product_id', $product_id);
+                        //     $this->db->where('supplier_id', $supplier_id);
+                        //     $this->db->update('supplier_product', $supp_prd);
+                        // }
+                        $data_service = array(
+
+                            'service_name' => $insert_csv['product_name'],
+                            // 'description' =>$this->input->post('description',TRUE)
+
+
+                        );
+
+
+                        $this->db->insert('product_service', $data_service);
+                    }
+                    $count++;
+                }
+            }
+
+            $this->db->select('*');
+            $this->db->from('product_information');
+            $this->db->where('status', 1);
+            $query = $this->db->get();
+            foreach ($query->result() as $row) {
+                $json_product[] = array('label' => $row->product_name . "-(" . $row->product_model . ")", 'value' => $row->product_id);
+            }
+            $cache_file = './my-assets/js/admin_js/json/product.json';
+            $productList = json_encode($json_product);
+            file_put_contents($cache_file, $productList);
+            fclose($fp) or die("can't close file");
+            $this->session->set_userdata(array('message' => display('successfully_added')));
+            redirect(base_url('Cproduct/manage_product'));
+        } else {
+            $this->session->set_userdata(array('error_message' => 'Please Import Only Csv File'));
+            redirect(base_url('Cproduct/manage_product'));
+        }
+    }

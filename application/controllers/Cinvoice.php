@@ -1194,7 +1194,8 @@ class Cinvoice extends CI_Controller
             'contact'    => $this->input->post('contact', TRUE),
             'customer_name'    => $this->input->post('customer_name', TRUE),
             'customer_address' => $this->input->post('address', TRUE),
-            'customer_mobile'  => $this->input->post('mobile', TRUE),
+            'customer_mobile' => $this->input->post('mobile', TRUE),
+//            'customer_mobile'  => (!empty($this->input->post('mobile', TRUE)) ? $this->input->post('mobile', TRUE) : ''),
             'customer_email'   => $this->input->post('email', TRUE),
             'cus_type'   => $this->input->post('cus_type', TRUE),
             'status'           => 1

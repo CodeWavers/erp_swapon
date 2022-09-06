@@ -802,6 +802,9 @@ class Linvoice
         $redirect_url = $_SESSION['redirect_uri'];
 
         $invoice_detail = $CI->Invoices->retrieve_invoice_html_data($invoice_id);
+        $payment_info = $CI->Invoices->payment_details_total($invoice_id);
+
+     //   echo '<pre>';print_r($payment_info);exit();
         $cus_id = $invoice_detail[0]['customer_id'];
         $agg_id = $invoice_detail[0]['agg_id'];
 
@@ -921,6 +924,8 @@ class Linvoice
             'outlet_name'        => $outlet[0]['outlet_name'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
             'agg_name'     => $agg_name,
+            'time'     => $invoice_detail[0]['time'],
+            'date'     => $invoice_detail[0]['date'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
@@ -937,6 +942,7 @@ class Linvoice
             'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
             'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
             'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
+            'changeamount'        => number_format($invoice_detail[0]['changeamount'], 2, '.', ','),
             'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
             'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
             'total_commission'     => number_format($invoice_detail[0]['total_commission']+$invoice_detail[0]['commission'], 2, '.', ','),
@@ -955,6 +961,7 @@ class Linvoice
             'is_unit'           => $isunit,
             'inwords'           => $inwords,
             'manage'            => $manage,
+            'payment_info'            => $payment_info,
             'red_url'           => isset($redirect_url) ? $redirect_url : null,
 
         );
