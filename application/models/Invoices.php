@@ -1241,7 +1241,6 @@ class Invoices extends CI_Model
             for ($i = 0; $i < count($pay_type); $i++) {
 
                 if ($paid[$i] > 0){
-
                     if ($pay_type[$i] == 1) {
 
                         $cc = array(

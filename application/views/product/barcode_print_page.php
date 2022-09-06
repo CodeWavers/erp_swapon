@@ -106,7 +106,9 @@
                                 $cqty = (isset($_GET["cqty"]) ? $_GET["cqty"] : "8");
                                 $category = (isset($_GET["category"]) ? $_GET["category"] : "");
                             ?>
+
                                 <div id="printableArea">
+
                                     <table id="" class="table-bordered">
                                         <?php
                                         $counter = 0;
@@ -116,7 +118,7 @@
                                                 <tr>
                                                     <?php $counter = 0; ?>
                                                 <?php } ?>
-                                                <td class="barcode-toptd">
+                                                <td class="barcode-toptd"  >
 
                                                     <div class="barcode-inner barcode-innerdiv">
                                                         <div class="product-name barcode-productname">

@@ -177,12 +177,8 @@ class Creport extends CI_Controller
         $CI->load->library('occational');
         $CI->load->model('warehouse');
         $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
-        if (!empty($outlet_id)){
             $response=$this->Reports->manage_stock_taking($outlet_id);
-        }else{
-            $response=$this->Reports->manage_stock_taking('HK7TGDT69VFMXB7');
 
-        }
 
 
       //  echo '<pre>';print_r($outlet_id);exit();

@@ -229,7 +229,9 @@ class reports extends CI_Model
         $this->db->select("a.*,o.outlet_name,a.outlet_id as out");
         $this->db->from('stock_taking a');
         $this->db->join('outlet_warehouse o','a.outlet_id=o.outlet_id','left');
-        $this->db->where('a.outlet_id',$outlet_id);
+        if (!empty($outlet_id)){
+            $this->db->where('a.outlet_id',$outlet_id);
+        }
         $this->db->order_by('a.id','desc');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
