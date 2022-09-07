@@ -524,7 +524,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <tr>
 
                                             <td align="left" colspan="4" >
-                                                <nobr>Notes: {invoice_details}</nobr>
+                                               <strong>Notes:</strong> {invoice_details}
                                             </td>
 
                                         </tr>

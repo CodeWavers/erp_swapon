@@ -167,9 +167,9 @@ $_SESSION['redirect_uri'] = $currentURL;
                             </div>
                             <div class="col-sm-6">
                                 <div class="form-group row">
-                                    <label for="add_item" class="col-sm-4 col-form-label"><?php echo display('barcode') ?> <i class="text-danger">*</i></label>
+                                    <label for="add_item" class="col-sm-4 col-form-label">Product SKU <i class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <input type="text" name="product_name" class="form-control bq" placeholder='Barcode' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
+                                        <input type="text" name="product_name" class="form-control bq" placeholder='SKU' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
                                         <input type="hidden" id="product_value" name="">
                                         <input type="hidden" id="sel_type" name="sel_type" value="2">
                                     </div>

@@ -907,13 +907,11 @@ class Linvoice
             $con='No Condition';
         }
 
-        $price=$invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'];
-        $whole=intval($price);
-        $decimal1 = $price - $whole;
+       $price=$invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'];
+        $round_price=round($price);
+        $rounding=$round_price-$price;
 
-      //  echo $decimal1;exit();
-        $decimal2 = round($decimal1, 2);
-        $decimal = substr($decimal2, 2);
+
 
         $data = array(
             'title'             => display('invoice_details'),
@@ -940,9 +938,7 @@ class Linvoice
             'final_date'        => $invoice_detail[0]['final_date'],
             'inv_date'        => $invoice_detail[0]['date'],
             'invoice_details'   => $invoice_detail[0]['invoice_details'],
-            'rounding' =>0.00,
-
-//            'rounding'      => number_format($decimal2, 2, '.', ','),
+            'rounding' =>number_format($rounding,2),
             'total_amount'      => number_format(round($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due']), 2, '.', ','),
             'total'      => number_format($invoice_detail[0]['total_amount'], 2, '.', ','),
             'subTotal_quantity' => $subTotal_quantity,
@@ -950,8 +946,8 @@ class Linvoice
             'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
             'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
             'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
-            'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
-            'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
+            'paid_amount'       => number_format(round($invoice_detail[0]['paid_amount']), 2, '.', ','),
+            'due_amount'        => number_format(round($invoice_detail[0]['due_amount']), 2, '.', ','),
             'changeamount'        => number_format($invoice_detail[0]['changeamount'], 2, '.', ','),
             'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
             'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),

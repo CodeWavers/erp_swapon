@@ -553,7 +553,7 @@
                                     <td class="text-right" colspan="8"><b><?php echo display('paid_ammount') ?>:</b></td>
                                     <td class="text-right">
                                         <input type="text" id="paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="paid_amount" placeholder="0.00" tabindex="13" value="{paid_amount}" />
-                                        <input type="text" id="paid_amount" class="form-control text-right"  placeholder="0.00" tabindex="13" value="{paid_amount}" />
+                                        <input type="hidden" id="paid_amount" class="form-control text-right"  placeholder="0.00" tabindex="13" value="{paid_amount}" />
                                     </td>
                                 </tr>
                                 <tr>
