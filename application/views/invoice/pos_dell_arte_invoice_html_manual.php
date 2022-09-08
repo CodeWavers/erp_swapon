@@ -244,9 +244,19 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <!-- <td align="center">
                                                 <nobr><?php echo $sl; ?></nobr>
                                             </td> -->
+
                                             <td align="center">
-                                                <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
+                                                <?php if ($sales_return > 0) { ?>
+                                                <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')(RET)'; ?>
+                                                <?php }else{ ?>
+                                                    <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
+
+                                                <?php } ?>
+
                                             </td>
+
+
+
 
                                             <td align="center" class="td-style" width="10%" >
                                                 <?php echo html_escape($invoice_data['sum_quantity']); ?>
@@ -345,7 +355,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                         </tr>
                                     <?php } ?>
-
+                                    <?php if ($sales_return > 0) { ?>
                                     <tr>
                                         <td align="left">
                                             <nobr></nobr>
@@ -355,10 +365,44 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
-                                               Tk 0.00
+                                                <?php echo html_escape((($position == 0) ? "$currency {sales_return}" : "{sales_return} $currency")) ?>
+
                                             </nobr>
                                         </td>
                                     </tr>
+
+                                    <tr>
+                                        <td align="left">
+                                            <nobr></nobr>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <nobr>Cash Refund</nobr>
+                                        </td>
+                                        <td align="right" class="td-style">
+                                            <nobr>
+                                                <?php echo html_escape((($position == 0) ? "$currency {cash_refund}" : "{cash_refund} $currency")) ?>
+
+                                            </nobr>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td align="left">
+                                            <nobr></nobr>
+                                        </td>
+                                        <td align="right" colspan="2">
+                                            <nobr>Customer Account(Adjust)</nobr>
+                                        </td>
+                                        <td align="right" class="td-style">
+                                            <nobr>
+                                                <?php echo html_escape((($position == 0) ? "$currency {customer_ac}" : "{customer_ac} $currency")) ?>
+
+                                            </nobr>
+                                        </td>
+                                    </tr>
+
+                                    <?php }?>
 
                                     <tr>
                                         <td align="left">
@@ -409,7 +453,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                     <tr>
                                         <td align="right">
-                                            <strong>Net Payable</strong>
+                                            <nobr>  <strong>Net Payable</strong></nobr>
                                         </td>
                                         <td align="right" colspan="2">
                                           <nobr><strong>(Including Vat)</strong></nobr>
@@ -423,6 +467,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </nobr>
                                         </td>
                                     </tr>
+
+                                    <?php if ($sales_return == 0) { ?>
                                     <?php foreach ($payment_info as $pay){?>
 
                                         <?php
@@ -519,6 +565,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                     </tr>
 
+                                    <?php } ?>
                                     <?php } ?>
                                     <?php if (!empty($invoice_details)) { ?>
                                     <tr>

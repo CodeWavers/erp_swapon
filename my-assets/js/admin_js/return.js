@@ -233,15 +233,15 @@ function calculateSum() {
 
 }
 //Quantity calculat
-("use strict");
+"use strict";
 function quantity_calculate(item) {
   var a = 0,
-    o = 0,
-    d = 0,
-    x = 0,
-    y = 0,
-    z = 0,
-    p = 0;
+      o = 0,
+      d = 0,
+      x = 0,
+      y = 0,
+      z = 0,
+      p = 0;
   var pa_total_price = $("#pa_total_price_" + item).val();
   var sold_qty = $("#sold_qty_" + item).val();
   var quantity = $("#total_qntt_" + item).val();
@@ -267,7 +267,7 @@ function quantity_calculate(item) {
   $(".payable").each(function () {
     isNaN(this.value) || x == this.value.length || (x += parseFloat(this.value));
   });
- $(".paya_total").each(function () {
+  $(".paya_total").each(function () {
     isNaN(this.value) || y == this.value.length || (y += parseFloat(this.value));
   });
 
@@ -277,7 +277,7 @@ function quantity_calculate(item) {
 //per sku discount calculation
   var invoice_discount = parseFloat($("#invoice_discount").val());
   var perc_dis = parseFloat($("#perc_discount").val());
-   var pds =y * (perc_dis / 100);
+  var pds =y * (perc_dis / 100);
 
   var dis_by_sku = price_item * (disc / 100);
   $("#dis_amount_" + item).val(dis_by_sku);
@@ -285,13 +285,16 @@ function quantity_calculate(item) {
   $(".dis_amount").each(function () {
     isNaN(this.value) || z == this.value.length || (z += parseFloat(this.value));
   })
-      var invoice_value=sold_qty*price_item;
-    var sku_flat_discount=(invoice_discount/invoice_value)*price;
-    var sku_percent_discount=(pds/invoice_value)*price;
+  var total=parseFloat($('#total_amount').val());
+  var total_discount=parseFloat($('#total_discount_ammount').val());
+   var invoice_value=total+total_discount;
 
-    var sku_wise_t_dis=sku_flat_discount+sku_percent_discount;
+  var sku_flat_discount=(invoice_discount/invoice_value)*price;
+  var sku_percent_discount=(pds/invoice_value)*price;
 
-    $('#sku_discount').val(sku_wise_t_dis.toFixed(2,2));
+  var sku_wise_t_dis=sku_flat_discount+sku_percent_discount;
+
+  $('#sku_discount').val(sku_wise_t_dis.toFixed(2,2));
 
 
   //Total price calculate per product
@@ -307,27 +310,27 @@ function quantity_calculate(item) {
 
   var sales_return=a-sku_wise_t_dis;
   $("#sales_return").val(sales_return.toFixed(2,2));
+  $("#customer_ac").val(sales_return.toFixed(2,2));
 
   var net_pay=sku_wise_t_dis-a;
   $("#net_pay").val(net_pay.toFixed(2,2));
 
-  var paid_amount=parseFloat($('#paid_amount').val());
-
-  var due=x-paid_amount;
-  $('#due_amount').val(due.toFixed(2,2));
-  // $('#gross_discount').val(tt.toFixed(2,2))
-
-
-
-  if (due > 0){
-    $('.due_cus').html('Due:')
-    $('.due_cus').addClass('text-success')
-    $('#due_amount').addClass('label-success-outline')
-  }else{
-    $('.due_cus').html('Customer Receivable:')
-    $('.due_cus').addClass('text-danger')
-    $('#due_amount').addClass('label-danger-outline')
-  }
+  //
+  // if (due > 0){
+  //
+  //   $('.due_cus').html('Customer Receivable:')
+  //
+  //   $('.due_cus').removeClass('text-danger')
+  //   $('#due_amount').removeClass('label-danger-outline')
+  //   $('.due_cus').addClass('text-success')
+  //   $('#due_amount').addClass('label-success-outline')
+  // }else{
+  //   $('.due_cus').html('Due:')
+  //   $('.due_cus').removeClass('text-success')
+  //   $('#due_amount').removeClass('label-success-outline')
+  //   $('.due_cus').addClass('text-danger')
+  //   $('#due_amount').addClass('label-danger-outline')
+  // }
 
 
 
@@ -626,54 +629,54 @@ function add_replace_row() {
   var sl = $("#inc_id").val();
   var html = "";
   html +=
-    "<tr>" +
-    '<td class="product_field">' +
-    '<input type="text" name="product_name" onclick="invoice_productList(' +
-    sl +
-    ');" value="" class="form-control productSelection" required placeholder="Product Name" id="pr_name_' +
-    sl +
-    '" tabindex="3">' +
-    '<input type="hidden" class="product_id_' +
-    sl +
-    ' autocomplete_hidden_value" value="" id="product_id_' +
-    sl +
-    '" />' +
-    "</td>" +
-    "<td>" +
-    '<input type="text" name="sold_qty[]" id="stock_' +
-    sl +
-    '" class="form-control text-right available_quantity_' +
-    sl +
-    '" readonly="" />' +
-    "</td>" +
-    "<td>" +
-    '<input type="text" onkeyup="replace_calculate(' +
-    sl +
-    ');" onchange="replace_calculate(' +
-    sl +
-    ');" class="total_qntt_' +
-    sl +
-    ' form-control text-right" id="replace_qty_' +
-    sl +
-    '" min="0" placeholder="0.00" tabindex="4" />' +
-    "</td>" +
-    ' <td><input type="text" name="replace_rate[]" onkeyup="quantity_calculate(' +
-    sl +
-    ');" onchange="quantity_calculate(' +
-    sl +
-    ');" value="" id="replace_price_' +
-    sl +
-    '" class="form-control text-right" min="0" tabindex="5" required="" placeholder="0.00" readonly="" /></td>' +
-    "<td>" +
-    '<input class="rep_total form-control text-right" type="text" id="replace_total_' +
-    sl +
-    '" value="" readonly="readonly" />' +
-    '<input type="hidden" name="invoice_details_id[]" id="" value="" />' +
-    "</td>" +
-    "<td>" +
-    '<button type="button" class="btn btn-sm btn-danger" onclick="delete_replace_row(this)"><i class="fa fa-minus"></i></button>' +
-    "</td>" +
-    "</tr>";
+      "<tr>" +
+      '<td class="product_field">' +
+      '<input type="text" name="product_name" onclick="invoice_productList(' +
+      sl +
+      ');" value="" class="form-control productSelection" required placeholder="Product Name" id="pr_name_' +
+      sl +
+      '" tabindex="3">' +
+      '<input type="hidden" class="product_id_' +
+      sl +
+      ' autocomplete_hidden_value" value="" id="product_id_' +
+      sl +
+      '" />' +
+      "</td>" +
+      "<td>" +
+      '<input type="text" name="sold_qty[]" id="stock_' +
+      sl +
+      '" class="form-control text-right available_quantity_' +
+      sl +
+      '" readonly="" />' +
+      "</td>" +
+      "<td>" +
+      '<input type="text" onkeyup="replace_calculate(' +
+      sl +
+      ');" onchange="replace_calculate(' +
+      sl +
+      ');" class="total_qntt_' +
+      sl +
+      ' form-control text-right" id="replace_qty_' +
+      sl +
+      '" min="0" placeholder="0.00" tabindex="4" />' +
+      "</td>" +
+      ' <td><input type="text" name="replace_rate[]" onkeyup="quantity_calculate(' +
+      sl +
+      ');" onchange="quantity_calculate(' +
+      sl +
+      ');" value="" id="replace_price_' +
+      sl +
+      '" class="form-control text-right" min="0" tabindex="5" required="" placeholder="0.00" readonly="" /></td>' +
+      "<td>" +
+      '<input class="rep_total form-control text-right" type="text" id="replace_total_' +
+      sl +
+      '" value="" readonly="readonly" />' +
+      '<input type="hidden" name="invoice_details_id[]" id="" value="" />' +
+      "</td>" +
+      "<td>" +
+      '<button type="button" class="btn btn-sm btn-danger" onclick="delete_replace_row(this)"><i class="fa fa-minus"></i></button>' +
+      "</td>" +
+      "</tr>";
 
   $("#replaceT > tbody").append(html);
   console.log(html);
@@ -977,9 +980,9 @@ function checkboxcheckSreturn(sl) {
 ("use strict");
 function quantity_calculateSreturn(item) {
   var a = 0,
-    o = 0,
-    d = 0,
-    p = 0;
+      o = 0,
+      d = 0,
+      p = 0;
   var sold_qty = $("#sold_qty_" + item).val();
   var quantity = $("#total_qntt_" + item).val();
   var price_item = $("#price_item_" + item).val();
@@ -1000,10 +1003,10 @@ function quantity_calculateSreturn(item) {
     $(".total_price").each(function () {
       isNaN(this.value) || o == this.value.length || (a += parseFloat(this.value));
     }),
-      $("#grandTotal").val(a.toFixed(2, 2));
+        $("#grandTotal").val(a.toFixed(2, 2));
     $(".total_discount").each(function () {
       isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
     }),
-      $("#total_discount_ammount").val(d.toFixed(2, 2));
+        $("#total_discount_ammount").val(d.toFixed(2, 2));
   }
 }
