@@ -60,7 +60,7 @@ function addInputField(t) {
     tab10 = tabindex + 10;
     tab11 = tabindex + 11;
     tab12 = tabindex + 12;
-    e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='product_id[]' id='SchoolHiddenId'/></td>" +
+    e.innerHTML = "<td><input type='text' name='product_name' onkeypress='invoice_productList(" + count + ");' class='form-control productSelection common_product' placeholder='Product Name' id='" + a + "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  product_id_" + count + "' name='re_product_id[]' id='SchoolHiddenId'/></td>" +
         "<td><input type='text'  class='form-control text-right  re_available_quantity_" + count + "' value='' readonly></td>"+
         " <td><input type='hidden' name='re_available_quantity[]' id='' class='form-control text-right common_avail_qnt re_available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
         "<td> <input type='text' name='re_product_quantity[]' value='1' required='required' onkeyup='quantity_calculate_re(" + count + ");' onchange='quantity_calculate_re(" + count + ");' id='re_total_qntt_" + count + "' class='common_qnt re_total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
@@ -104,8 +104,6 @@ function quantity_calculate_re(item) {
   var available_quantity = $(".re_available_quantity_" + item).val();
   var price_item = parseInt($("#re_price_item_" + item).val());
   var invoice_discount = $("#re_invoice_discount").val();
-  var warrenty_date=$("#re_warrenty_date_"+item).val();
-  var warehouse=$(".re_warehouse_"+item).val();
   var discount = $("#re_discount_" + item).val();
   var total_tax = $("#re_total_tax_" + item).val();
   var total_discount = $("#re_total_discount_" + item).val();
@@ -145,8 +143,8 @@ function quantity_calculate_re(item) {
   $("#re_total_price_" + item).val(row_tot.toFixed(2,2));
   //$("#total_price_wd_" + item).val(just_tot.toFixed(2, 2));
 
-  calculateSum();
-  invoice_paidamount();
+   calculateSum();
+   invoice_paidamount();
 }
 
 "use strict";
@@ -447,26 +445,28 @@ function invoice_paidamount() {
   }else{
     pr = 0;
   }
-  var t = $("#grandTotal").val(),
-      a = $("#paidAmount").val(),
+  var t = $("#re_grandTotal").val(),
+      a = $("#re_paidAmount").val(),
       e = t - a,
       f = e + pr,
-      nt = parseFloat(t, 10) + pr;
+      nt = parseFloat(t, 10) + pr,
+      re_r =Math.round(nt)-nt,
   d = a - nt;
-  $("#n_total").val(nt.toFixed(2, 2));
+  $("#re_n_total").val(Math.round(nt).toFixed(2, 2));
+  $('#re_rounding').val(re_r.toFixed(2,2));
   if(f > 0){
-    $("#dueAmmount").val(f.toFixed(2,2));
+    $("#re_dueAmmount").val(Math.round(f).toFixed(2,2));
     if(a <= f){
-      $("#change").val(0);
+      $("#re_change").val(0);
     }
   }else{
     if(a < f){
-      $("#change").val(0);
+      $("#re_change").val(0);
     }
     if(a > f){
-      $("#change").val(d.toFixed(2,2))
+      $("#re_change").val(d.toFixed(2,2))
     }
-    $("#dueAmmount").val(0)
+    $("#re_dueAmmount").val(0)
 
   }
 }

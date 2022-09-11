@@ -547,7 +547,7 @@
                                              </tr>
 
                                              <tr>
-                                                 <td colspan="1" class="text-right"><b class="due_cus"> Customer Account(Adjust):</b></td>
+                                                 <td colspan="1" class="text-right"><b class="due_cus"> Customer A/C(Adjust):</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="customer_ac" class="form-control  font-bold  text-right" name="customer_ac" value="0.00" placeholder="0.00" readonly />
                                                  </td>
@@ -767,6 +767,12 @@
                                                  <td colspan="8" class="text-right"><b><?php echo display('previous'); ?>:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="previous" class="form-control text-right" name="previous" value="0.00" readonly="readonly" />
+                                                 </td>
+                                             </tr>
+                                             <tr>
+                                                 <td colspan="8" class="text-right"><b>Rounding:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="re_rounding" class="form-control text-right" name="re_rounding" value=""  readonly="readonly" placeholder="0.00" />
                                                  </td>
                                              </tr>
                                              <tr>

@@ -403,7 +403,22 @@ class Returnse extends CI_Model
 //        return $invoice_id;
 //    }
 
+    public function supplier_price($product_id)
+    {
+        $this->db->select('supplier_price');
+        $this->db->from('supplier_product');
+        $this->db->where(array('product_id' => $product_id));
+        $supplier_product = $this->db->get()->row();
 
+
+        $this->db->select('Avg(rate) as supplier_price');
+        $this->db->from('product_purchase_details');
+        $this->db->where(array('product_id' => $product_id));
+        $purchasedetails = $this->db->get()->row();
+        $price = (!empty($purchasedetails->supplier_price) ? $purchasedetails->supplier_price : $supplier_product->supplier_price);
+
+        return (!empty($price) ? $price : 0);
+    }
     public function return_invoice_entry_new() {
         // echo '<pre>';
         // print_r($_POST);
@@ -441,6 +456,7 @@ class Returnse extends CI_Model
 
         $rate =$this->input->post('product_rate', TRUE);
         $p_id =$this->input->post('product_id', TRUE);
+        $re_p_id =$this->input->post('re_product_id', TRUE);
         $total_amount =$this->input->post('total_price', TRUE);
         $net_pay =$this->input->post('net_pay', TRUE);
         $total =$this->input->post('total', TRUE);
@@ -453,17 +469,17 @@ class Returnse extends CI_Model
         $pay_person =$this->input->post('pay_person', TRUE);
         $is_replace =$this->input->post('is_replace', TRUE);
 
-        $rep_quantity =$this->input->post('rep_qty', TRUE);
-        $rep_rate =$this->input->post('replace_rate', TRUE);
-        $rep_p_id =$this->input->post('rep_pr_id', TRUE);
+        $rep_quantity =$this->input->post('re_product_quantity', TRUE);
+        $re_warrenty_date =$this->input->post('re_warrenty_date', TRUE);
+        $re_expiry_date =$this->input->post('re_expiry_date', TRUE);
+       $re_discount =$this->input->post('re_discount', TRUE);
+       $re_comm =$this->input->post('re_comm', TRUE);
+       $re_perc_discount =$this->input->post('re_discount', TRUE);
+       $re_total_price =$this->input->post('re_total_price', TRUE);
+       $re_total_price_wd =$this->input->post('re_total_price_wd', TRUE);
+       $re_total_comm =$this->input->post('re_total_comm', TRUE);
+        $rep_rate =$this->input->post('re_product_rate', TRUE);
         $rep_item_total =$this->input->post('rep_item_total', TRUE);
-
-        $rep_cus_return =$this->input->post('rep_grand', TRUE);
-        $rep_cash_cost ='';
-        $rep_add_cost =$this->input->post('rep_deduction', TRUE);
-        $rep_grand_total =$this->input->post('rep_total_cost', TRUE);
-        $rep_base_total =$this->input->post('rep_total', TRUE);
-
         $invoice =$this->input->post('invoice', TRUE);
 
         $courier_id =$this->input->post('courier_id', TRUE);
@@ -580,6 +596,7 @@ class Returnse extends CI_Model
                 'payment_type'=> 1,
 
 
+
             );
           //echo '<pre>'; print_r($data_new_inv); exit();
             $inv=$this->db->insert('invoice', $data_new_inv);
@@ -597,17 +614,20 @@ class Returnse extends CI_Model
 
                 $data1 =array(
                     'invoice_details_id'=> $this->generator(15),
-                    'invoice_id'=> $invoice_id,
+                    'invoice_id'=> $invoice_id_new,
                     'product_id'=> $product_id,
                     'quantity'=> -$product_quantity,
                     'rate'=> $product_rate,
                     'discount'=> -is_numeric($discount),
                     'tax'=> $tax,
+                    'description'        => 'Return',
                     'supplier_rate'=> $supplier_rate[0]['supplier_price'],
                     'paid_amount'=> -$total,
                     'total_price'=> -$total_price,
-                    'total_price_wd'=> $product_quantity*$product_rate,
-                    'status'=> 2);
+                    'total_price_wd'=> -($product_quantity*$product_rate),
+                    'status'=> 2,
+                    'is_return'=> 1,
+                );
                 $this->db->insert('invoice_details', $data1);
 
                 $data_new =array(
@@ -663,17 +683,13 @@ class Returnse extends CI_Model
                 $after_return_total=$old_total-$base_total;
                 $due_amount=$after_return_total-$old_paid;
 
-                $this->db->set('total_amount', $after_return_total);
-                $this->db->set('due_amount', $due_amount);
-                $this->db->where('invoice_id', $invoice_id);
-                $this->db->update('invoice');
+//                $this->db->set('total_amount', $after_return_total);
+//                $this->db->set('due_amount', $due_amount);
+//                $this->db->where('invoice_id', $invoice_id);
+//                $this->db->update('invoice');
             }
             redirect(base_url('Cinvoice/invoice_inserted_data/' . $invoice_id_new));
         }
-
-
-
-
 
         if ($is_replace ==1) {
 
@@ -682,16 +698,24 @@ class Returnse extends CI_Model
             $datainv =array('invoice_id'=> $invoice_id_new,
                 'customer_id'=> $customer_id,
                 'date'=>date('Y-m-d'),
+                'time'    =>date("h:i A") ,
                 'agg_id'=> ( !empty($agg_id) ? $agg_id : NULL),
-                'total_amount'=> $rep_grand_total,
+                'total_amount'=> $this->input->post('re_grandTotal', TRUE),
                 'invoice'=> $invoice_no_generated,
-                'paid_amount'=> $this->input->post('paid_amount', TRUE),
-                'due_amount'=> $this->input->post('due_amount', TRUE),
-                //                    'prevous_due'     => $this->input->post('previous', TRUE),
+                'invoice_details' => (!empty($this->input->post('re_inva_details', TRUE)) ? $this->input->post('re_inva_details', TRUE) : ''),
+                'invoice_discount' => $this->input->post('re_invoice_discount', TRUE),
+                'perc_discount' => $this->input->post('re_perc_discount', TRUE),
+                'total_discount'  => $this->input->post('re_total_discount', TRUE),
+                'total_commission'  => $this->input->post('re_total_commission', TRUE),
+                'comm_type'  => $this->input->post('commission_type', TRUE),
+                'paid_amount'=> $this->input->post('re_paid_amount', TRUE),
+                'due_amount'=> $this->input->post('re_due_amount', TRUE),
+                'prevous_due'     => $this->input->post('previous', TRUE),
+                'commission'   => $this->input->post('commission', TRUE),
                 'shipping_cost'=> ( !empty($add_cost) ? $add_cost : null),
-                //                    'condition_cost'   => $this->input->post('condition_cost', TRUE),
-                'sale_type'=> $this->input->post('sale_type', TRUE),
-                'courier_condtion'=> $this->input->post('courier_condtion', TRUE),
+                 'condition_cost'   => $this->input->post('re_condition_cost', TRUE),
+                'sale_type'=> $this->input->post('sel_type', TRUE),
+                'courier_condtion'=> $this->input->post('re_courier_condtion', TRUE),
                 'sales_by'=> $createby,
                 'status'=> 2,
                 'payment_type'=> 1,
@@ -710,28 +734,94 @@ class Returnse extends CI_Model
             // echo '<pre>'; print_r($datainv); exit();
             $inv=$this->db->insert('invoice', $datainv);
 
+            for ($i =0; $i < count($p_id); $i++) {
 
-            for ($i =0; $i < count($rep_p_id); $i++) {
-
-                $product_quantity =$rep_quantity[$i];
-                $product_rate =$rep_rate[$i];
-                $product_id =$rep_p_id[$i];
-                $total_price =$rep_item_total[$i];
+                $product_quantity =$quantity[$i];
+                $product_rate =$rate[$i];
+                $product_id =$p_id[$i];
+                $sqty =$soldqty[$i];
+                $total_price =$total_amount[$i];
                 $supplier_rate =$this->supplier_rate($product_id);
-                // $discount         = $discount_rate[$i];
-                // $tax              = -$tax_amount[$i];
+                $discount =$discount_rate[$i];
+                $tax =-$tax_amount[$i];
 
-                $data1 =array('invoice_details_id'=> $this->generator(15),
+                $data1 =array(
+                    'invoice_details_id'=> $this->generator(15),
                     'invoice_id'=> $invoice_id_new,
                     'product_id'=> $product_id,
-                    'quantity'=> $product_quantity,
+                    'quantity'=> -$product_quantity,
                     'rate'=> $product_rate,
-                    // 'discount'          => is_numeric($discount),
-                    // 'tax'               => $tax,
+                    'description'        => 'Return',
+                    'discount'=> -is_numeric($discount),
+                    'tax'=> $tax,
                     'supplier_rate'=> $supplier_rate[0]['supplier_price'],
-                    'paid_amount'=> $total_price,
-                    'total_price'=> $total_price,
-                    'status'=> 2);
+                    'paid_amount'=> -$total,
+                    'total_price'=> -$total_price,
+                    'total_price_wd'=> $product_quantity*$product_rate,
+                    'status'=> 2,
+                     'is_return'=> 1,
+                );
+                $this->db->insert('invoice_details', $data1);
+
+                $usabilty='';
+
+                if ($is_cash_return ==1) {
+                    $usabilty=1;
+                }
+
+                if ($is_replace ==1) {
+                    $usabilty=2;
+                }
+
+                $returns =array('outlet_id'=> $this->input->post('outlet_id', TRUE),
+                    'return_id'=> $this->generator(15),
+                    'invoice_id'=> $invoice_id,
+                    'invoice_id_new'=>  $invoice_id_new ,
+                    'product_id'=> $product_id,
+                    'customer_id'=> $this->input->post('customer_id', TRUE),
+                    'ret_qty'=> $product_quantity,
+                    'byy_qty'=> $sqty,
+                    'date_purchase'=> $this->input->post('invoice_date', TRUE),
+                    'date_return'=> $date,
+                    'product_rate'=> $product_rate,
+                    'deduction'=> $discount,
+                    'total_deduct'=> $this->input->post('total_discount', TRUE),
+                    'delivery_charge'=> $add_cost,
+                    //                'total_tax'     => $this->input->post('total_tax', TRUE),
+                    'total_ret_amount'=> $total_price,
+                    'net_total_amount'=> $this->input->post('grand_total_price', TRUE),
+                    'reason'=> $this->input->post('details', TRUE),
+                    'usablity'=> $usabilty );
+
+                $this->db->insert('product_return', $returns);
+
+            }
+            for ($i =0; $i < count($re_p_id); $i++) {
+
+                $product_rate = $rep_rate [$i];
+                $product_id = $re_p_id[$i];
+                $product_quantity = $rep_quantity[$i];
+                $total_price = $re_total_price[$i];
+                $total_price_wd = (!empty($re_total_price_wd[$i]) ? $re_total_price_wd[$i] : $total_price);
+                $supplier_rate = $this->supplier_price($product_id);
+                $disper = $re_discount[$i];
+                $comm = $re_comm[$i];
+
+                $data1 =array(
+                    'invoice_details_id' => $this->generator(15),
+                    'invoice_id'         => $invoice_id_new,
+                    'product_id'         => $product_id,
+                    'quantity'           => $product_quantity,
+                    'rate'               => $product_rate,
+//                    'discount'           => $discount,
+                    'description'        => 'Replacement',
+                    'discount_per'       => $disper,
+                    'commission_per'       => $comm,
+                    'supplier_rate'      => $supplier_rate,
+                    'total_price'        => $total_price,
+                    'total_price_wd'        => $total_price_wd,
+                    'status'             => 2
+                );
 
                 $inv_dt=$this->db->insert('invoice_details', $data1);
             }

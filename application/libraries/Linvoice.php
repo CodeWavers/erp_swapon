@@ -944,6 +944,7 @@ class Linvoice
             'subTotal_quantity' => $subTotal_quantity,
             'invoice_discount'    => number_format($invoice_detail[0]['invoice_discount'], 2, '.', ','),
             'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
+            'sub_total'    => number_format($invoice_detail[0]['total_discount']+$invoice_detail[0]['total_amount'], 2, '.', ','),
             'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
             'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
             'paid_amount'       => number_format(round($invoice_detail[0]['paid_amount']), 2, '.', ','),

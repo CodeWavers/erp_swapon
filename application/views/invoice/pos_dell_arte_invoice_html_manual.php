@@ -246,10 +246,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td> -->
 
                                             <td align="center">
-                                                <?php if ($sales_return > 0) { ?>
-                                                <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')(RET)'; ?>
-                                                <?php }else{ ?>
+                                                <?php if ($invoice_data['is_return'] == 0) { ?>
                                                     <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
+
+                                                <?php }else{ ?>
+                                                    <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')(RET)'; ?>
 
                                                 <?php } ?>
 
@@ -259,7 +260,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
                                             <td align="center" class="td-style" width="10%" >
-                                                <?php echo html_escape($invoice_data['sum_quantity']); ?>
+                                                <?php echo html_escape($invoice_data['quantity']); ?>
                                             </td>
 
                                             <!-- <td align="right" class="td-style">
@@ -294,11 +295,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <?php
                                                 if ($position == 0) {
-                                                    echo  $currency . ' ' . html_escape($invoice_data['sum_amount']);
+                                                    echo  $currency . ' ' . html_escape($invoice_data['total_price_wd']);
                                                 } else {
-                                                    echo html_escape($invoice_data['sum_amount']) . ' ' . $currency;
+                                                    echo html_escape($invoice_data['total_price_wd']) . ' ' . $currency;
                                                 }
-                                                $s_total += $invoice_data['sum_amount'];
+//                                                $s_total += $invoice_data['total_price_wd'];
                                                 ?>
 
                                             </td>
@@ -316,11 +317,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
-                                                <?php if ($position == 0) {
-                                                    echo  $currency . ' ' . html_escape(number_format($s_total, 2, '.', ','));
-                                                } else {
-                                                    echo html_escape(number_format($s_total, 2, '.', ',')) . ' ' . $currency;
-                                                } ?>
+                                                <?php echo html_escape((($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency")) ?>
                                             </nobr>
                                         </td>
                                     </tr>

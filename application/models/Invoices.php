@@ -1537,7 +1537,7 @@ class Invoices extends CI_Model
         $p_id                = $this->input->post('product_id', TRUE);
         $total_amount        = $this->input->post('total_price', TRUE);
         $total_amount_wd        = $this->input->post('total_price_wd', TRUE);
-        $discount_rate       = $this->input->post('total_discount', TRUE);
+//        $discount_rate       = $this->input->post('total_discount', TRUE);
         $discount_per        = $this->input->post('discount', TRUE);
         $commission_per        = $this->input->post('comm', TRUE);
         // $tax_amount          = $this->input->post('tax',TRUE);
@@ -1557,7 +1557,7 @@ class Invoices extends CI_Model
             $product_id = $p_id[$i];
             $serial_no  = (!empty($serial_n[$i]) ? $serial_n[$i] : null);
             $total_price = $total_amount[$i];
-            $total_price_wd = (!empty($total_amount_wd[$i]) ? $total_amount_wd[$i] : $total_amount);
+            $total_price_wd = (!empty($total_amount_wd[$i]) ? $total_amount_wd[$i] : $total_price);
             $supplier_rate = $this->supplier_price($product_id);
             $disper = $discount_per[$i];
             $comm = $commission_per[$i];
@@ -1576,7 +1576,7 @@ class Invoices extends CI_Model
                 // 'expiry_date'      => $expiry_date,
                 // 'warehouse'          => $war,
                 'rate'               => $product_rate,
-                'discount'           => $discount,
+//                'discount'           => $discount,
                 'description'        => 'Manual Sales',
                 'discount_per'       => $disper,
                 'commission_per'       => $comm,
@@ -2664,6 +2664,7 @@ class Invoices extends CI_Model
 
         $this->db->join('product_information d', 'd.product_id = c.product_id');
         $this->db->where('a.invoice_id', $invoice_id);
+        $this->db->where('c.is_return', 0);
         $this->db->group_by('d.product_id');
 
         $query = $this->db->get();
@@ -3473,7 +3474,8 @@ class Invoices extends CI_Model
                         f.courier_name,
                         o.receiver_name,
                         a.receiver_number as rec_num,
-                         sum(c.quantity) as sum_quantity,sum(c.total_price_wd) as sum_amount
+                        c.quantity,c.total_price_wd,
+                        c.is_return
                        '
 
         );
@@ -3487,6 +3489,7 @@ class Invoices extends CI_Model
         $this->db->join('courier_name f', 'f.courier_id = a.courier_id', 'left');
         $this->db->join('receiever_info o', 'o.id = a.reciever_id', 'left');
         $this->db->where('a.invoice_id', $invoice_id);
+      //  $this->db->where('c.is_return', 0);
 //        $this->db->where('c.quantity >', 0);
         $this->db->group_by('d.product_id');
         $query = $this->db->get();
