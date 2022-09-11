@@ -612,6 +612,9 @@ class Returnse extends CI_Model
                 $discount =$discount_rate[$i];
                 $tax =-$tax_amount[$i];
 
+
+
+
                 $data1 =array(
                     'invoice_details_id'=> $this->generator(15),
                     'invoice_id'=> $invoice_id_new,
@@ -629,7 +632,6 @@ class Returnse extends CI_Model
                     'is_return'=> 1,
                 );
                 $this->db->insert('invoice_details', $data1);
-
                 $data_new =array(
                     'invoice_details_id'=> $this->generator(15),
                     'invoice_id'=> $invoice_id_new,

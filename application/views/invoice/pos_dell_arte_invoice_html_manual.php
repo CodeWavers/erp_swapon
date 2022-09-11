@@ -389,7 +389,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <nobr></nobr>
                                         </td>
                                         <td align="right" colspan="2">
-                                            <nobr>Customer Account(Adjust)</nobr>
+                                            <nobr>Customer A/C(Adjust)</nobr>
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
