@@ -636,14 +636,14 @@ class Returnse extends CI_Model
                     'invoice_details_id'=> $this->generator(15),
                     'invoice_id'=> $invoice_id_new,
                     'product_id'=> $product_id,
-                    'quantity'=> $product_quantity,
+                    'quantity'=> $sqty-$product_quantity,
                     'rate'=> $product_rate,
                     'discount'=> is_numeric($discount),
                     'tax'=> $tax,
                     'supplier_rate'=> $supplier_rate[0]['supplier_price'],
                     'paid_amount'=> $total,
                     'total_price'=> $total_price,
-                    'total_price_wd'=> $product_quantity*$product_rate,
+                    'total_price_wd'=> ($sqty-$product_quantity)*$product_rate,
                     'status'=> 2);
                 $this->db->insert('invoice_details', $data_new);
 

@@ -3491,7 +3491,7 @@ class Invoices extends CI_Model
         $this->db->where('a.invoice_id', $invoice_id);
       //  $this->db->where('c.is_return', 0);
 //        $this->db->where('c.quantity >', 0);
-        $this->db->group_by('d.product_id');
+      //  $this->db->group_by('d.product_id');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
