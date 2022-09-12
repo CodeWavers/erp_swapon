@@ -225,7 +225,7 @@ class Linvoice
         $CI->load->model('Settings');
         $CI->load->model('Aggre');
 
-        $card_list = $CI->Settings->get_real_card_data();
+
         $employee_list    = $CI->Service->employee_list();
         $customer_details = $CI->Invoices->pos_customer_setup();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
@@ -233,9 +233,7 @@ class Linvoice
             ->from('tax_settings')
             ->get()
             ->result_array();
-        $bank_list          = $CI->Web_settings->bank_list();
-        $bkash_list        = $CI->Web_settings->bkash_list();
-        $nagad_list        = $CI->Web_settings->nagad_list();
+
         $courier_list        = $CI->Courier->get_courier_list();
         $branch_list        = $CI->Courier->get_branch_list();
         $outlet_user        = $CI->Warehouse->get_outlet_user();
@@ -254,10 +252,10 @@ class Linvoice
             'customer_name' => $customer_details[0]['customer_name'],
             'customer_id'   => $customer_details[0]['customer_id'],
             'customer_id_two'   => $customer_details[0]['customer_id_two'],
-            'card_list'     => $card_list,
-            'bank_list'     => $bank_list,
-            'bkash_list'     => $bkash_list,
-            'nagad_list'     => $nagad_list,
+            'card_list'     => $CI->Settings->get_real_card_data(),
+            'bank_list'     => $CI->Web_settings->bank_list(),
+            'bkash_list'     => $CI->Web_settings->bkash_list(),
+            'nagad_list'     => $CI->Web_settings->nagad_list(),
             'courier_list'     => $courier_list,
             'branch_list'     => $branch_list,
             'outlet_list'     => $outlet_user,

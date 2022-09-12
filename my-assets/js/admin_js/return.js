@@ -220,12 +220,17 @@ function calculateSum() {
     $("#re_grandTotal").val(test.toFixed(2, 2));
   }
 
-  var gt = $("#re_grandTotal").val();
+  var gt = parseFloat($("#re_grandTotal").val());
   //var invdis = $("#invoice_discount").val();
+ var x = parseFloat($("#total_refund").val());
 
   var grnt_totals = gt;
+  var grnt_totals_ref = gt+x;
   invoice_paidamount();
-  $("#re_grandTotal").val(grnt_totals);
+  $("#grandTotal").val(grnt_totals.toFixed(2,2));
+
+  $("#re_grandTotal").val(grnt_totals_ref.toFixed(2,2));
+
 
 
 
@@ -308,10 +313,18 @@ function quantity_calculate(item) {
 
   var sales_return=a-sku_wise_t_dis;
   $("#sales_return").val(sales_return.toFixed(2,2));
-  $("#customer_ac").val(sales_return.toFixed(2,2));
+
 
   var net_pay=sku_wise_t_dis-a;
   $("#net_pay").val(net_pay.toFixed(2,2));
+  var paid_amount=parseFloat($("#paid_amount").val());
+
+  var total_refund=invoice_value-sales_return-paid_amount;
+  $("#customer_ac").val(total_refund.toFixed(2,2));
+  // console.log(paid_amount)
+  // console.log(total_refund)
+  $("#total_refund").val(total_refund.toFixed(2,2));
+  $("#refunded_amt").val(total_refund.toFixed(2,2));
 
   //
   // if (due > 0){
@@ -334,7 +347,234 @@ function quantity_calculate(item) {
 
 
 }
+"use strict";
+function bank_paymet(val, sl){
 
+  if (val==2 || 3 || 4 || 5 || 6){
+
+    if(val==2){
+      var style = 'block';
+      document.getElementById('bank_id_'+sl).setAttribute("required", true);
+      document.getElementById('ammnt_' + sl).style.display = 'none';
+    }else{
+      var style ='none';
+      document.getElementById('bank_id_' + sl).removeAttribute("required");
+      document.getElementById('ammnt_' + sl).style.display = 'block';
+    }
+
+    document.getElementById('bank_div_' + sl).style.display = style;
+
+    if(val==3){
+      var style = 'block';
+      document.getElementById('bkash_id_' + sl).setAttribute("required", true);
+
+    }else{
+      var style ='none';
+      document.getElementById('bkash_id_'+sl).removeAttribute("required");
+
+    }
+
+    document.getElementById('bkash_div_'+sl).style.display = style;
+
+
+    if(val==4){
+      var style = 'block';
+      document.getElementById('bank_id_m_'+sl).setAttribute("required", true);
+    }else{
+      var style ='none';
+      document.getElementById('bank_id_m_'+sl).removeAttribute("required");
+    }
+
+    document.getElementById('bank_div_m_'+sl).style.display = style;
+
+    if(val==5){
+      var style = 'block';
+      document.getElementById('nagad_id_'+sl).setAttribute("required", true);
+    }else{
+      var style ='none';
+      document.getElementById('nagad_id_'+sl).removeAttribute("required");
+    }
+
+    document.getElementById('nagad_div_'+sl).style.display = style;
+
+    if(val==6){
+      var style = 'block';
+      document.getElementById('card_id_'+sl).setAttribute("required", true);
+    }else{
+      var style ='none';
+      document.getElementById('card_id_'+sl).removeAttribute("required");
+    }
+
+    document.getElementById('card_div_'+sl).style.display = style;
+
+
+  }
+
+
+
+}
+
+
+"use strict";
+function add_pay_row(sl) {
+  var count = $("#count");
+  sl = count.val();
+  sl += 1;
+  var bkash_list = $("#bkash_list").val();
+  var nagad_list = $("#nagad_list").val();
+  var bank_list = $("#bank_list").val();
+  var card_list = $("#card_list").val();
+  var pay_div = $("#pay_div");
+  pay_div.append(
+      '<div class="row margin-top10"  >'
+      + '<div class="col-sm-4">'
+      + '<label for="payment_type" class="col-sm-5 col-form-label">Payment Type <i class="text-danger">*</i></label>'
+      + '<div class="col-sm-7">'
+      + '<select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, '+sl+')" tabindex="3">'
+      + '<option value="1">Cash Payment</option>'
+      + '<option value="2">Cheque Payment</option>'
+      + '<option value="4">Bank Payment</option>'
+      + ' <option value="3">Bkash Payment</option>'
+      + ' <option value="5">Nagad Payment</option>'
+      + ' <option value="6">Card Payment</option>'
+
+      + '</select>'
+
+      + '</div>'
+
+      + '</div>'
+
+      + '<div class="col-sm-4" id="bank_div_'+sl+'"  style="display:none;">'
+      + ' <div class="form-group row">'
+      + '<label for="bank" class="col-sm-3 col-form-label">Bank<i class="text-danger">*</i></label>'
+      + ' <div class="col-sm-7">'
+
+      + ' <input type="text" name="bank_id" class="form-control" id="bank_id_'+sl+'" placeholder="Bank">'
+
+      + ' </div>'
+
+      + '<div class="col-sm-1">'
+      + ' <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cheque_info"><i class="ti-plus m-r-2"></i></a>'
+      + '</div>'
+      + ' </div>'
+
+      + '</div>'
+
+
+
+      + '<div class="col-sm-4" id="bank_div_m_'+sl+'" style="display:none;">'
+      + ' <div class="form-group row">'
+      + '<label for="bank" class="col-sm-5 col-form-label"> Bank <i class="text-danger">*</i></label>'
+      + '<div class="col-sm-7">'
+      + '<select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_'+sl+'">'
+      + bank_list
+
+      + '</select>'
+
+
+      + '</div>'
+
+
+      + ' </div>'
+      + '</div>'
+
+
+      + '<div class="col-sm-4" style="display: none" id="bkash_div_'+sl+'">'
+      + '<div class="form-group row">'
+      + '<label for="bkash" class="col-sm-5 col-form-label">Bkash Number <i class="text-danger">*</i></label>'
+      + '<div class="col-sm-7">'
+      + '<select name="bkash_id[]" class="form-control bankpayment" id="bkash_id_'+sl+'">'
+      + bkash_list
+
+      + '</select>'
+
+      + ' </div>'
+
+      + '</div>'
+      + '</div>'
+
+      + '<div class="col-sm-4" style="display: none" id="nagad_div_'+sl+'">'
+      + '<div class="form-group row">'
+      + '<label for="nagad" class="col-sm-5 col-form-label">Nagad Number <i class="text-danger">*</i></label>'
+      + '<div class="col-sm-7">'
+      + '<select name="nagad_id[]" class="form-control bankpayment" id="nagad_id_'+sl+'">'
+      + nagad_list
+      + ' </select>'
+
+      + '</div>'
+
+
+      + '</div>'
+      + ' </div>'
+      +'<div class="col-sm-4" style="display: none" id="card_div_'+sl+'">'
+      +     '<div class="form-group row">'
+      +        '<label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>'
+      +        '<div class="col-sm-7">'
+      +            '<select name="card_id" class="form-control bankpayment" id="card_id_'+sl+'">'
+      +                '<option value="">Select One</option>'
+      +   card_list
+      +           '</select>'
+
+
+      +       ' </div>'
+
+
+      +    ' </div>'
+      +   '</div>'
+
+      + '<div class="col-sm-3"id="ammnt_'+sl+'" >'
+      + '<label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>'
+      + '<div class="col-sm-7">'
+      + '<input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">'
+      + '</div>'
+      + '</div>'
+      +'<div class="col-sm-1">'
+      + '<a id="delete_btn" onclick="delete_row(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>'
+      + '</div>'
+
+
+      +'</div > '
+  );
+  count.val(sl + 1);
+}
+
+'use strict';
+function delete_row(e) {
+  e.closest('.row').remove();
+}
+
+$( document ).ready(function() {
+  "use strict";
+  var paytype = $("#editpayment_type").val();
+  if(paytype == 2){
+    $("#bank_div").css("display", "block");
+  }else{
+    $("#bank_div").css("display", "none");
+  }
+
+  if(paytype == 3){
+    $("#bkash_div").css("display", "block");
+  }else{
+    $("#bkash_div").css("display", "none");
+  }
+
+  $(".bankpayment").css("width", "100%");
+});
+
+
+"use strict"
+function calc_paid(){
+  var pt = 0;
+
+  // var paid_amount = (parseFloat($("#paid_amount").val()) ? parseFloat($("#paid_amount").val()) : 0);
+
+  $(".p_amount").each(function () {
+    isNaN(this.value) || 0 == this.value.length || (pt += parseFloat(this.value))
+  });
+
+  $("#re_paidAmount").val((pt).toFixed(2,2));
+  invoice_paidamount();
+}
 "use strict";
 function invoice_productList(sl) {
 
@@ -454,6 +694,12 @@ function invoice_paidamount() {
   d = a - nt;
   $("#re_n_total").val(Math.round(nt).toFixed(2, 2));
   $('#re_rounding').val(re_r.toFixed(2,2));
+
+  if (nt < 0){
+    $('.re_hide_tr').removeClass('d-none')
+  }else{
+    $('.re_hide_tr').addClass('d-none')
+  }
   if(f > 0){
     $("#re_dueAmmount").val(Math.round(f).toFixed(2,2));
     if(a <= f){
@@ -897,21 +1143,21 @@ function replace_calculate(sl) {
 }
 
 $(document).ready(function () {
+
   $("#rep_toggle").click(function () {
     $("#replace_table").toggle("fade", { direction: "right" }, 400);
-    // if ($("#rep_toggle").html() == 'Replace <i class="fa fa-arrow-circle-down"></i>') {
-    //   $("#rep_toggle").html('Replace <i class="fa fa-arrow-circle-up"></i>');
-    // } else {
-    //   $("#rep_toggle").html('Replace <i class="fa fa-arrow-circle-down"></i>');
-    // }
+
+
 
     if ($("#cash_return").is(":checked")) {
       $("#cash_return").prop("checked", false);
     }
 
     if ($("#is_replace").val() == 0) {
+      $('.hide_tr').addClass('d-none')
       $("#is_replace").val(1);
     } else {
+      $('.hide_tr').removeClass('d-none')
       $("#is_replace").val(0);
     }
 
@@ -919,6 +1165,7 @@ $(document).ready(function () {
   });
 
   $("#cash_return").click(function () {
+    $('.hide_tr').removeClass('d-none')
     if ($("#rep_toggle").is(":checked")) {
       $("#rep_toggle").trigger("click");
       $("#cash_return").prop("checked", true);

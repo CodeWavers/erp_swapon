@@ -28,6 +28,7 @@ class Lreturn
         $CI->load->model('Invoices');
         $CI->load->model('Courier');
         $CI->load->model('Web_settings');
+        $CI->load->model('Settings');
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
 
 //        echo '<pre>';print_r($invoice_detail);exit();
@@ -81,7 +82,6 @@ class Lreturn
             'branch_name'          => $invoice_detail[0]['branch_name'],
             'rid'         => $invoice_detail[0]['rid'],
             'receiver_name'         => $invoice_detail[0]['receiver_name'],
-            'receiver_number'         => $invoice_detail[0]['receiver_number'],
             'total_amount'  => $invoice_detail[0]['total_amount'],
             'paid_amount'   => $invoice_detail[0]['p_amnt'],
             'due_amount'    => $invoice_detail[0]['due_amount'],
@@ -102,6 +102,10 @@ class Lreturn
             'commission'     => $invoice_detail[0]['commission'],
             'comm_type'     => $invoice_detail[0]['comm_type'],
             'total_commission'     => $invoice_detail[0]['total_commission'],
+            'card_list'     => $CI->Settings->get_real_card_data(),
+            'bank_list'     => $CI->Web_settings->bank_list(),
+            'bkash_list'     => $CI->Web_settings->bkash_list(),
+            'nagad_list'     => $CI->Web_settings->nagad_list(),
         );
 
 //        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();

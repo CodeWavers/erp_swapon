@@ -537,8 +537,18 @@
                                                  </td>
                                              </tr>
 
-
                                              <tr>
+                                                 <td colspan="1" class="text-right"><b class="due_cus">Total Refund:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="total_refund" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control  font-bold  text-right" name="cash_refund" value="" placeholder="0.00"  />
+                                                     <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
+
+                                                     <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
+
+                                                 </td>
+
+                                             </tr>
+                                             <tr class="hide_tr d-none">
                                                  <td colspan="1" class="text-right"><b class="due_cus">Cash Refund:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="cash_refund" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control  font-bold  text-right" name="cash_refund" value="" placeholder="0.00"  />
@@ -546,14 +556,12 @@
 
                                              </tr>
 
-                                             <tr>
+                                             <tr class="hide_tr d-none">
                                                  <td colspan="1" class="text-right"><b class="due_cus"> Customer A/C(Adjust):</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="customer_ac" class="form-control  font-bold  text-right" name="customer_ac" value="0.00" placeholder="0.00" readonly />
                                                  </td>
 
-                                                 <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
-                                                 <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
                                              </tr>
 
 
@@ -756,9 +764,20 @@
                                                      <input type="text" id="re_commission" class="form-control text-right" name="re_commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="0.00"  />
                                                  </td>
                                              </tr>
-
                                              <tr>
-                                                 <td colspan="8" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                             <td colspan="8" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                             <td class="text-right">
+                                                 <input type="text" id="grandTotal" class="form-control text-right" name="grandTotal" value="0.00" readonly="readonly" />
+                                             </td>
+                                             </tr>
+                                             <tr>
+                                                 <td colspan="8" class="text-right"><b>Refunded Amount:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="refunded_amt" class="form-control text-right" name="refunded_amt" value="0.00" readonly="readonly" />
+                                                 </td>
+                                             </tr>
+                                             <tr>
+                                                 <td colspan="8" class="text-right"><b><?php echo display('grand_total') ?>(With Refund):</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="re_grandTotal" class="form-control text-right" name="re_grandTotal" value="0.00" readonly="readonly" />
                                                  </td>
@@ -789,6 +808,23 @@
                                                      <input type="text" id="re_paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="re_paid_amount" placeholder="0.00" tabindex="15" value="" readonly />
                                                  </td>
                                              </tr>
+
+                                             <tr class="re_hide_tr d-none" >
+                                                 <td colspan="8" class="text-right"><b class="due_cus">Cash Refund:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="re_cash_refund" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control  font-bold  text-right" name="re_cash_refund" value="" placeholder="0.00"  />
+                                                 </td>
+
+                                             </tr>
+
+                                             <tr class="re_hide_tr d-none">
+                                                 <td colspan="8" class="text-right"><b class="due_cus"> Customer A/C(Adjust):</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="re_customer_ac" class="form-control  font-bold  text-right" name="re_customer_ac" value="0.00" placeholder="0.00" readonly />
+                                                 </td>
+
+                                             </tr>
+
                                              <tr>
 
 
@@ -807,6 +843,268 @@
                                              </tr>
                                              </tfoot>
                                          </table>
+                                     </div>
+
+                                     <div class="row " >
+                                         <div class="col-sm-12" id="payment_div">
+                                             <div class="panel panel-bd lobidrag">
+                                                 <div class="panel-heading">
+                                                     <div class="panel-title">
+                                                         <h3>Payment</h3>
+                                                         <input type="hidden" id="count" value="2">
+                                                     </div>
+                                                 </div>
+
+                                                 <div class="panel-body">
+                                                     <div id="pay_div" style="margin: 10px 3px; padding:10px 0">
+                                                         <div class="row margin-top10">
+                                                             <div class="col-sm-4">
+                                                                 <label for="payment_type" class="col-sm-5 col-form-label"><?php
+                                                                     echo display('payment_type');
+                                                                     ?> <i class="text-danger">*</i></label>
+                                                                 <div class="col-sm-7">
+                                                                     <select name="paytype[]" class="form-control pay_type" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
+                                                                         <option value="1"><?php echo display('cash_payment') ?></option>
+                                                                         <option value="2"><span class="">Cheque Payment</span></option>
+                                                                         <option value="4"><?php echo display('bank_payment') ?></option>
+                                                                         <option value="3">Bkash Payment</option>
+                                                                         <option value="5">Nagad Payment</option>
+                                                                         <option value="6">Card Payment</option>
+
+                                                                     </select>
+
+                                                                 </div>
+
+                                                             </div>
+
+                                                             <div class="col-sm-4" id="bank_div_1" style="display:none;">
+                                                                 <div class="form-group row">
+                                                                     <label for="bank" class="col-sm-3 col-form-label"><?php
+                                                                         echo display('bank');
+                                                                         ?> <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-7">
+
+                                                                         <input type="text" name="bank_id" class="form-control" id="bank_id_1" placeholder="Bank">
+
+                                                                     </div>
+
+                                                                     <div class="col-sm-1">
+                                                                         <a href="#" class="client-add-btn btn btn-sm btn-info" aria-hidden="true" data-toggle="modal" data-target="#cheque_info"><i class="fa fa-file m-r-2"></i></a>
+                                                                     </div>
+                                                                 </div>
+
+                                                             </div>
+
+
+
+                                                             <div class="col-sm-4" id="bank_div_m_1" style="display:none;">
+                                                                 <div class="form-group row">
+                                                                     <label for="bank" class="col-sm-5 col-form-label"><?php
+                                                                         echo display('bank');
+                                                                         ?> <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-7">
+                                                                         <select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_1">
+                                                                             <option value="">Select One</option>
+                                                                             <?php foreach ($bank_list as $bank) { ?>
+                                                                                 <option value="<?php echo html_escape($bank['bank_id']) ?>"><?php echo html_escape($bank['bank_name']) . '(' . html_escape($bank['ac_number']) . ')'; ?></option>
+                                                                             <?php } ?>
+                                                                         </select>
+
+                                                                         <input type="hidden" id="bank_list" value='<option value="">Select One</option>
+                                            <?php foreach ($bank_list as $bank) { ?>
+                                                <option value="<?php echo html_escape($bank['bank_id']) ?>"><?php echo html_escape($bank['bank_name']) . '(' . html_escape($bank['ac_number']) . ')'; ?></option>
+                                            <?php } ?>'>
+
+
+                                                                     </div>
+
+
+                                                                 </div>
+                                                             </div>
+
+
+
+                                                             <div class="col-sm-4" style="display: none" id="bkash_div_1">
+
+                                                                 <div class="form-group row">
+                                                                     <label for="bkash" class="col-sm-5 col-form-label">Bkash Number <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-7">
+                                                                         <select name="bkash_id[]" class="form-control bankpayment" id="bkash_id_1">
+                                                                             <option value="">Select One</option>
+                                                                             <?php foreach ($bkash_list as $bkash) { ?>
+                                                                                 <option value="<?php echo html_escape($bkash['bkash_id']) ?>"><?php echo html_escape($bkash['bkash_no']); ?> (<?php echo html_escape($bkash['ac_name']); ?>)</option>
+                                                                             <?php } ?>
+                                                                         </select>
+                                                                         <input type="hidden" id="bkash_list" value='<option value="">Select One</option>
+                                            <?php foreach ($bkash_list as $bkash) { ?>
+                                                <option value="<?php echo html_escape($bkash['bkash_id']) ?>"><?php echo html_escape($bkash['bkash_no']); ?> (<?php echo html_escape($bkash['ac_name']); ?>)</option>
+                                            <?php } ?>'>
+                                                                     </div>
+
+                                                                 </div>
+                                                             </div>
+
+                                                             <div class="col-sm-4" style="display: none" id="nagad_div_1">
+                                                                 <div class="form-group row">
+                                                                     <label for="nagad" class="col-sm-5 col-form-label">Nagad Number <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-7">
+                                                                         <select name="nagad_id[]" class="form-control bankpayment" id="nagad_id_1">
+                                                                             <option value="">Select One</option>
+                                                                             <?php foreach ($nagad_list as $nagad) { ?>
+                                                                                 <option value="<?php echo html_escape($nagad['nagad_id']) ?>"><?php echo html_escape($nagad['nagad_no']); ?> (<?php echo html_escape($nagad['ac_name']); ?>)</option>
+                                                                             <?php } ?>
+                                                                         </select>
+
+                                                                         <input type="hidden" id="nagad_list" value='<option value="">Select One</option>
+                                            <?php foreach ($nagad_list as $nagad) { ?>
+                                                <option value="<?php echo html_escape($nagad['nagad_id']) ?>"><?php echo html_escape($nagad['nagad_no']); ?> (<?php echo html_escape($nagad['ac_name']); ?>)</option>
+                                            <?php } ?>'>
+
+                                                                     </div>
+
+
+                                                                 </div>
+                                                             </div>
+
+                                                             <div class="col-sm-4" style="display: none" id="card_div_1">
+                                                                 <div class="form-group row">
+                                                                     <label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-7">
+                                                                         <select name="card_id[]" class="form-control bankpayment" id="card_id_1" onchange="">
+                                                                             <option value="">Select One</option>
+                                                                             <?php foreach ($card_list as $card) { ?>
+                                                                                 <option value="<?php echo html_escape($card['card_no_id']) ?>"><?php echo html_escape($card['card_no'] . ' (' . $card['card_name'] . ')'); ?></option>
+                                                                             <?php } ?>
+                                                                         </select>
+
+                                                                         <input type="hidden" id="card_list" value='<option value="">Select One</option>
+                                                            <?php foreach ($card_list as $card) { ?>
+                                                                <option value="<?php echo html_escape($card['card_no_id']) ?>"><?php echo html_escape($card['card_no'] . ' (' . $card['card_name'] . ')'); ?></option>
+                                                            <?php } ?>'>
+
+                                                                     </div>
+
+
+                                                                 </div>
+
+                                                                 <div class="form-group row">
+                                                                     <label for="cus_card" class="col-sm-5 col-form-label">Customer Card No.</label>
+                                                                     <div class="col-sm-7">
+                                                                         <input type="text" class="form-control" id="cus_card" name="cus_card">
+                                                                     </div>
+                                                                 </div>
+                                                             </div>
+
+                                                             <div class="col-sm-3" id="ammnt_1">
+                                                                 <label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>
+                                                                 <div class="col-sm-7">
+                                                                     <input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">
+                                                                 </div>
+
+
+                                                             </div>
+                                                             <div class="col-sm-1">
+                                                                 <a id="add_pt_btn" onclick="add_pay_row(1)" class="btn btn-success"><i class="fa fa-plus"></i></a>
+                                                             </div>
+
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+
+                                         <div class="modal fade modal-success" id="cheque_info" role="dialog">
+                                             <div class="modal-dialog" role="document">
+                                                 <div class="modal-content">
+                                                     <div class="modal-header">
+
+                                                         <a href="#" class="close" data-dismiss="modal">&times;</a>
+                                                         <h3 class="modal-title">Add Cheque</h3>
+                                                     </div>
+
+                                                     <div class="modal-body">
+                                                         <div id="customeMessage" class="alert hide"></div>
+
+                                                         <div class="panel-body">
+                                                             <div class="addCheque">
+                                                                 <div id="cheque" class="cheque">
+                                                                     <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+                                                                     <label for="bank" class="col-sm-4 col-form-label">Cheque type:
+                                                                         <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-6">
+                                                                         <input type="text" name="cheque_type[]" class=" form-control" placeholder="" autocomplete="off" />
+                                                                         <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                                         ?>
+                                                                         <!--" autocomplete="off"/>-->
+                                                                     </div>
+
+                                                                     <label for="bank" class="col-sm-4 col-form-label">Cheque NO:
+                                                                         <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-6">
+                                                                         <input type="number" name="cheque_no[]" class=" form-control" placeholder="" autocomplete="off" />
+                                                                         <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                                         ?>
+                                                                         <!--" autocomplete="off"/>-->
+                                                                     </div>
+
+
+                                                                     <label for="date" class="col-sm-4 col-form-label">Due Date <i class="text-danger">*</i></label>
+                                                                     <div class="col-sm-6">
+
+                                                                         <input class="form-control" type="date" size="50" name="cheque_date[]" id="" value="" tabindex="4" autocomplete="off" placeholder="mm/dd/yyyy" />
+                                                                     </div>
+
+                                                                     <label for="bank" class="col-sm-4 col-form-label">Amount:
+                                                                         <i class="text-danger">*</i></label>
+
+                                                                     <div class="col-sm-6">
+                                                                         <input type="number" name="amount[]" class=" form-control" placeholder="" autocomplete="off" />
+                                                                         <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                                         ?>
+                                                                         <!--" autocomplete="off"/>-->
+                                                                     </div>
+
+                                                                     <label for="bank" class="col-sm-4 col-form-label">Image:
+                                                                         <i class="text-danger">*</i></label>
+
+                                                                     <div class="col-sm-6" style="padding-bottom:10px ">
+                                                                         <input type="file" name="image[]" class="form-control" id="image" tabindex="4">
+                                                                         <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                                         ?>
+                                                                         <!--" autocomplete="off"/>-->
+                                                                     </div>
+
+
+
+
+                                                                     <div class=" col-sm-1">
+                                                                         <a href="javascript:" id="Add_cheque" class="client-add-btn btn btn-primary add_cheque"><i class="fa fa-plus-circle m-r-2"></i></a>
+                                                                     </div>
+
+
+                                                                 </div>
+                                                             </div>
+
+                                                             <!---->
+
+                                                         </div>
+
+                                                     </div>
+
+                                                     <div class="modal-footer">
+
+                                                         <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+
+
+                                                     </div>
+
+                                                 </div><!-- /.modal-content -->
+                                             </div><!-- /.modal-dialog -->
+                                         </div><!-- /.modal -->
+
+
                                      </div>
 
                                  </div>
@@ -882,13 +1180,34 @@
      $("#cash_refund").change(function(){
 
          var sales_return = (parseFloat($("#sales_return").val()) ? parseFloat($("#sales_return").val()) : 0);
+         var total_refund = (parseFloat($("#total_refund").val()) ? parseFloat($("#total_refund").val()) : 0);
          var cash_refund = (parseFloat($("#cash_refund").val()) ? parseFloat($("#cash_refund").val()) : 0);
-         var customer_ac=sales_return-cash_refund;
+
+         var abs_refund=Math.abs(total_refund)
+         var customer_ac=total_refund+cash_refund;
          $('#customer_ac').val(customer_ac.toFixed(2,2));
-         if (cash_refund > sales_return){
+         if (abs_refund < cash_refund){
              $("#cash_refund").val('')
-             $("#customer_ac").val(sales_return.toFixed(2,2))
+             $("#customer_ac").val(total_refund.toFixed(2,2))
              toastr.error('Cash Refund must be smaller than Total Sales Return');
+             // alert('ASS')
+
+         }
+     });
+
+     $("#re_cash_refund").change(function(){
+
+
+         var total_refund = (parseFloat($("#re_n_total").val()) ? parseFloat($("#re_n_total").val()) : 0);
+         var cash_refund = (parseFloat($("#re_cash_refund").val()) ? parseFloat($("#re_cash_refund").val()) : 0);
+
+         var abs_refund=Math.abs(total_refund)
+         var customer_ac=total_refund+cash_refund;
+         $('#re_customer_ac').val(customer_ac.toFixed(2,2));
+         if (abs_refund < cash_refund){
+             $("#re_cash_refund").val('')
+             $("#re_customer_ac").val(total_refund.toFixed(2,2))
+             toastr.error('Cash Refund must be smaller than Net Pay');
              // alert('ASS')
 
          }
