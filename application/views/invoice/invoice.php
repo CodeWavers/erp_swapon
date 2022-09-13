@@ -197,9 +197,9 @@
                             <div class="col-sm-6" id="payment_from_1">
                                 <div class="form-group row">
                                     <label for="payment_type" class="col-sm-4 col-form-label">
-                                        Pay Amount <i class="text-danger">*</i></label>
+                                        Receive Amount <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="pay_amount" name="pay_amount" placeholder="0.00" onkeypress="calculation_due()" onchange="calculation_due()">
+                                        <input type="text" class="form-control" id="pay_amount" name="pay_amount" placeholder="0.00" onkeyup="calculation_due()" onkeypress="calculation_due()" onchange="calculation_due()">
 
                                     </div>
 
@@ -335,12 +335,13 @@
             d=0;
 
         var pay_amount=parseFloat($('#pay_amount').val());
+        var total_amount=parseFloat($('#totalAmount').val());
         var due_amount=parseFloat($('#dueAmount').val());
         var paid_amount=parseFloat($('#paidAmount').val());
 
 
         p=paid_amount+pay_amount;
-        d=due_amount-pay_amount
+        d=total_amount-p
 
         $('#paid_amount').val(p.toFixed(2,2))
         $('#due_amount').val(d.toFixed(2,2));

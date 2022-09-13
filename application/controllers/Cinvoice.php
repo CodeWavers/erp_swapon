@@ -454,7 +454,7 @@ class Cinvoice extends CI_Controller
                 'Vtype' => 'INVOICE',
                 'VDate' => $createdate,
                 'COAID' => $bkashcoaid,
-                'Narration' => 'Customer Bkash Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Costomer- ' . $cs_name .'in'.$bkashname,
+                'Narration' => 'Customer Bkash Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$bkashname,
                 'Debit' => $pay_amount,
                 'Credit' => 0,
                 'IsPosted' => 1,
