@@ -319,6 +319,224 @@ class Cinvoice extends CI_Controller
         $content     = $CI->linvoice->search_inovoice_item($customer_id);
         $this->template->full_admin_html_view($content);
     }
+    //Due Collection
+
+    public function due_payment()
+    {
+        $invoice_id = $this->input->post('invoice_id');
+
+        $inv_details=$this->db->from('invoice')->where('invoice_id',$invoice_id)->get()->row();
+
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+
+        //echo '<pre>';print_r($coainfo_cor);exit();
+        $bank_id = $this->input->post('bank_id');
+        $bkash_id = $this->input->post('bkash_id');
+        $nagad_id = $this->input->post('nagad_id');
+        $paytype = $this->input->post('paytype');
+
+        $total_amount = $this->input->post('total_amount');
+        $due_amount = $this->input->post('due_amount');
+        $paid_amount = $this->input->post('paid_amount');
+        $pay_amount = $this->input->post('pay_amount');
+
+        if ($inv_details->sel_type == 1 || 2) {
+
+
+            $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $inv_details->customer_id)->get()->row();
+            $headn = $customer_id . '-' . $cusifo->customer_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->customer_name;
+
+        } else if ($inv_details->sel_type == 3){
+
+            $cusifo = $this->db->select('*')->from('aggre_list')->where('id', $inv_details->agg_id)->get()->row();
+            $headn =  $inv_details->agg_id . '-' . $cusifo->aggre_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->aggre_name;
+        }
+
+
+        if (!empty($bank_id)) {
+            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+
+            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+        } else {
+            $bankcoaid = '';
+        }
+        if (!empty($bkash_id)) {
+            $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id)->get()->row()->bkash_no;
+
+            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+        } else {
+            $bkashcoaid = '';
+        }
+        if (!empty($nagad_id)) {
+            $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id)->get()->row()->nagad_no;
+
+            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+        } else {
+            $nagadcoaid = '';
+        }
+
+       // $this->db->insert('acc_transaction', $cordr);
+
+        if ($paytype == 1) {
+            $data3 = array(
+                'VNo'            =>  $invoice_id,
+                //'cheque_id' => $cheque_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  1020101,
+                'Narration'      =>  'Customer Cash Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       => 1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1,
+                //'paytype'=>$paytype
+
+            );
+            //  echo '<pre>';print_r($data3);exit();
+            $ddd = $this->db->insert('acc_transaction', $data3);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'COAID'         => 1020101
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+        }
+        if ($paytype == 2) {
+
+            $bankc = array(
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $createdate,
+                'COAID' => $bankcoaid,
+                'Narration' => 'Customer Bank Debit Due Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$bankname,
+                'Debit' => $pay_amount,
+                'Credit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+            $this->db->insert('acc_transaction', $bankc);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => 4,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'COAID'         => $bankcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+        }
+        if ($paytype == 3) {
+            $bkashc = array(
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $createdate,
+                'COAID' => $bkashcoaid,
+                'Narration' => 'Customer Bkash Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Costomer- ' . $cs_name .'in'.$bkashname,
+                'Debit' => $pay_amount,
+                'Credit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+            $this->db->insert('acc_transaction', $bkashc);
+
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => 3,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'COAID'         => $bkashcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+
+        }
+        if ($paytype == 4) {
+            $nagadc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $nagadcoaid,
+                'Narration'      =>  'Customer Nagad Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$nagadname,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $this->db->insert('acc_transaction', $nagadc);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => 5,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'COAID'         => $nagadcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+
+
+        }
+
+        $data=array(
+
+            'total_amount' => $total_amount,
+            'due_amount' => $due_amount,
+            'paid_amount' => $paid_amount,
+        );
+
+
+        $this->db->where('invoice_id',$invoice_id);
+        $this->db->update('invoice',$data);
+
+
+//
+
+
+        $this->session->set_userdata(array('message' => 'Payment Success'));
+        redirect(base_url('Cinvoice/manage_invoice'));
+
+
+
+
+    }
+
 
     //Manage invoice list
     public function manage_invoice()

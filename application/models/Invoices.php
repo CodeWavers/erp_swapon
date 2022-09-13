@@ -150,6 +150,7 @@ class Invoices extends CI_Model
                 $button .= ' <a href="' . $base_url . 'Cinvoice/invoice_update_form/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
             }
             $button .= ' <a href="' . $base_url . 'Cretrun_m/invoice_return_form_c/' . $record->invoice_id . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="Return"><i class="fa fa-retweet" aria-hidden="true"></i></a> ';
+            $button .= ' <a  class="btn btn-black btn-sm" data-toggle="tooltip" data-placement="left" title="Payment" onclick="payment_modal('.$record->invoice_id.','.$record->total_amount.','.$record->paid_amount.','.$record->due_amount.')"><i class="fa fa-money" aria-hidden="true"></i></a> ';
 
 
 

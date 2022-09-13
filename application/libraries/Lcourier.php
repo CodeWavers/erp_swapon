@@ -211,9 +211,6 @@ class Lcourier {
         $CI->load->model('Web_settings');
 
         $rqsn_list = $CI->Courier->get_invoice_data();
-        $bank_list        = $CI->Web_settings->bank_list();
-        $bkash_list        = $CI->Web_settings->bkash_list();
-        $nagad_list        = $CI->Web_settings->nagad_list();
 
         $i = 0;
         foreach ($rqsn_list as $k => $v) {
@@ -224,9 +221,9 @@ class Lcourier {
         $data = array(
             'title'     => 'Courier Status',
             'pur_list'  => $rqsn_list,
-            'bank_list'        => $bank_list,
-            'bkash_list'        => $bkash_list,
-            'nagad_list'        => $nagad_list,
+            'bank_list'        => $CI->Web_settings->bank_list(),
+            'bkash_list'        =>$CI->Web_settings->bkash_list(),
+            'nagad_list'        =>  $CI->Web_settings->nagad_list(),
         );
 //         echo '<pre>'; print_r($rqsn_list); die();
 
