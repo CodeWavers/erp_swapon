@@ -251,7 +251,6 @@ class Purchases extends CI_Model
     public function purchase_entry()
     {
         $purchase_id = date('YmdHis');
-
         $p_id = $this->input->post('product_id', TRUE);
         $supplier_id = $this->input->post('supplier_id', TRUE);
         $supinfo = $this->db->select('*')->from('supplier_information')->where('supplier_id', $supplier_id)->get()->row();
@@ -260,23 +259,16 @@ class Purchases extends CI_Model
         $receive_by = $this->session->userdata('user_id');
         $receive_date = date('Y-m-d');
         $createdate = date('Y-m-d H:i:s');
+        $createby = $this->session->userdata('user_id');
+        $VDate = $this->input->post('purchase_date', TRUE);
+        $bank_id = $this->input->post('bank_id', TRUE);
+
+
         $paid_amount = $this->input->post('paid_amount', TRUE);
         $due_amount = $this->input->post('due_amount', TRUE);
         $discount = $this->input->post('discount', TRUE);
-        $bank_id = $this->input->post('bank_id', TRUE);
-        $createby = $this->session->userdata('user_id');
-        $VDate = $this->input->post('purchase_date', TRUE);
-
-        //supplier & product id relation ship checker.
-//        for ($i = 0, $n = count($p_id); $i < $n; $i++) {
-//            $product_id = $p_id[$i];
-//            $value = $this->product_supplier_check($product_id, $supplier_id);
-//            if ($value == 0) {
-//                $this->session->set_flashdata('error_message', display('product_and_supplier_did_not_match'));
-//                redirect(base_url('Cpurchase'));
-//                exit();
-//            }
-//        }
+        $grand_total=$this->input->post('grand_total_price', TRUE);
+        $total=$this->input->post('total', TRUE);
 
         if ($this->input->post('paid_amount') <= 0) {
 
@@ -318,20 +310,7 @@ class Purchases extends CI_Model
         }
         //Supplier Credit
 
-        ///Inventory Debit
-        $coscr = array(
-            'VNo'            =>  $purchase_id,
-            'Vtype'          =>  'Purchase',
-            'VDate'          =>  $this->input->post('purchase_date', TRUE),
-            'COAID'          =>  10204,
-            'Narration'      =>  'Inventory Debit For Supplier ' . $supinfo->supplier_name,
-            'Debit'          =>  $this->input->post('grand_total_price', TRUE),
-            'Credit'         =>  0, //purchase price asbe
-            'IsPosted'       => 1,
-            'CreateBy'       => $receive_by,
-            'CreateDate'     => $createdate,
-            'IsAppove'       => 1
-        );
+
 
         // Expense for company
         $expense = array(
@@ -340,26 +319,16 @@ class Purchases extends CI_Model
             'VDate'          => $this->input->post('purchase_date', TRUE),
             'COAID'          => 402,
             'Narration'      => 'Company Debit For  ' . $supinfo->supplier_name,
-            'Debit'          => $this->input->post('grand_total_price', TRUE),
-            'Credit'         => 0, //purchase price asbe
+            'Debit'          => (!empty($discount)) ? $total : $grand_total,
+            'Credit'         => 0,
             'IsPosted'       => 1,
             'CreateBy'       => $receive_by,
             'CreateDate'     => $createdate,
             'IsAppove'       => 1
         );
-        $cashinhand = array(
-            'VNo'            =>  $purchase_id,
-            'Vtype'          =>  'Purchase',
-            'VDate'          =>  $this->input->post('purchase_date', TRUE),
-            'COAID'          =>  1020101,
-            'Narration'      =>  'Cash in Hand For Supplier ' . $supinfo->supplier_name,
-            'Debit'          =>  0,
-            'Credit'         =>  $paid_amount,
-            'IsPosted'       =>  1,
-            'CreateBy'       =>  $receive_by,
-            'CreateDate'     =>  $createdate,
-            'IsAppove'       =>  1
-        );
+
+        $this->db->insert('acc_transaction', $expense);
+
 
 
 
@@ -377,9 +346,8 @@ class Purchases extends CI_Model
             'IsAppove'       =>  1
         );
 
-        $this->db->insert('acc_transaction', $coscr);
         $this->db->insert('acc_transaction', $purchasecoatran);
-        $this->db->insert('acc_transaction', $expense);
+
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
         $bkash_id = $this->input->post('bkash_id', TRUE);
@@ -439,6 +407,8 @@ class Purchases extends CI_Model
                         'CreateDate'     =>  $receive_date,
                         'IsAppove'       =>  1
                     );
+
+
 
                     if ($paid[$i] > 0) {
                         $this->db->insert('acc_transaction', $supplierdebit);
