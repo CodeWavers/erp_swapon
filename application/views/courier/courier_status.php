@@ -135,7 +135,7 @@
                                         <td><?php echo $row['courier_name']?></td>
                                         <td><?php echo $row['branch_name']?></td>
                                         <td><?php echo $courier_condition?></td>
-                                        <td><?php echo $row['shipping_cost']?></td>
+                                        <td><?php echo $row['delivery_ac']?></td>
                                         <td><?php echo $row['condition_cost']?></td>
                                         <td class="col-sm-2">
 
