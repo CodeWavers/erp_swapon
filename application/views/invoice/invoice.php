@@ -346,6 +346,13 @@
         $('#paid_amount').val(p.toFixed(2,2))
         $('#due_amount').val(d.toFixed(2,2));
 
+        if (due_amount < pay_amount){
+            toastr.error("You can't receive greater than customer due amount!")
+            $('#pay_amount').val('')
+            $('#due_amount').val(due_amount.toFixed(2,2))
+            $('#paid_amount').val(paid_amount.toFixed(2,2))
+        }
+
     }
 
     "use strict";
