@@ -224,8 +224,8 @@ function add_pay_row(sl) {
         '<option value="4">Bank Payment</option>' +
         '<option value="3">Bkash Payment</option>' +
         '<option value="5">Nagad Payment</option>' +
-        '<option value="6">TT Payment</option>' +
-        '<option value="7">LC Payment</option>' +
+        //'<option value="6">TT Payment</option>' +
+        //'<option value="7">LC Payment</option>' +
         "</select>" +
         "</div>" +
         "</div>" +

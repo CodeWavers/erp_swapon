@@ -47,7 +47,7 @@ class Ccourier extends CI_Controller {
         if ($coa->HeadCode != NULL) {
             $headcode = $coa->HeadCode + 1;
         } else {
-            $headcode = "1020601";
+            $headcode = "1040601";
         }
         $c_acc = $courier_id . '-' . $this->input->post('category_name', TRUE);
         $createby = $this->session->userdata('user_id');

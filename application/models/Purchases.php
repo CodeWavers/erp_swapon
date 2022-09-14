@@ -270,6 +270,8 @@ class Purchases extends CI_Model
         $grand_total=$this->input->post('grand_total_price', TRUE);
         $total=$this->input->post('total', TRUE);
 
+        $product_type=$this->input->post('product_status', TRUE);
+
         if ($this->input->post('paid_amount') <= 0) {
 
             $data = array(
@@ -313,13 +315,17 @@ class Purchases extends CI_Model
 
 
         // Expense for company
+
+       if ($product_type == 1){$expense_code= 402;}
+       if ($product_type == 2){$expense_code=405;}
+       if ($product_type == 3){$expense_code=404;}
         $expense = array(
             'VNo'            => $purchase_id,
             'Vtype'          => 'Purchase',
             'VDate'          => $this->input->post('purchase_date', TRUE),
-            'COAID'          => 402,
+            'COAID'          => $expense_code,
             'Narration'      => 'Company Debit For  ' . $supinfo->supplier_name,
-            'Debit'          => (!empty($discount)) ? $total : $grand_total,
+            'Debit'          => ($discount > 0) ? $total : $grand_total,
             'Credit'         => 0,
             'IsPosted'       => 1,
             'CreateBy'       => $receive_by,
@@ -339,7 +345,7 @@ class Purchases extends CI_Model
             'COAID'          =>  $sup_coa->HeadCode,
             'Narration'      =>  'Supplier .' . $supinfo->supplier_name,
             'Debit'          =>  0,
-            'Credit'         =>  $this->input->post('grand_total_price', TRUE),
+            'Credit'         =>  ($discount > 0) ? $total : $grand_total,
             'IsPosted'       =>  1,
             'CreateBy'       =>  $receive_by,
             'CreateDate'     =>  $receive_date,
@@ -347,6 +353,47 @@ class Purchases extends CI_Model
         );
 
         $this->db->insert('acc_transaction', $purchasecoatran);
+
+        if ($due_amount > 0){
+            $supplier_due_cr = array(
+                'VNo'            =>  $purchase_id,
+                'Vtype'          =>  'Purchase',
+                'VDate'          =>  $this->input->post('purchase_date', TRUE),
+                'COAID'          =>  $sup_coa->HeadCode,
+                'Narration'      =>  'Supplier .' . $supinfo->supplier_name,
+                'Debit'          =>  0,
+                'Credit'         =>  ($discount > 0) ? ($due_amount-$discount) : $due_amount,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $receive_by,
+                'CreateDate'     =>  $receive_date,
+                'IsAppove'       =>  1
+            );
+        }
+
+
+        $this->db->insert('acc_transaction', $supplier_due_cr);
+
+        if ($discount > 0){
+
+            $dis_transaction=array(
+
+                'VNo'            =>  $purchase_id,
+                'Vtype'          =>  'Purchase',
+                'VDate'          =>  $VDate,
+                'COAID'          =>  301,
+                'Narration'      =>  'Purchase Discount for Purchase ID - ' . $purchase_id,
+                'Credit'         =>  $discount,
+                'Debit'          =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $this->db->insert('acc_transaction', $dis_transaction);
+        }
+
 
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
@@ -394,24 +441,25 @@ class Purchases extends CI_Model
                     );
 
 
-                    $supplierdebit = array(
-                        'VNo'            =>  $purchase_id,
-                        'Vtype'          =>  'Purchase',
-                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                        'COAID'          =>  $sup_coa->HeadCode,
-                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (cash in hand) for Purchase Id - ' . $purchase_id,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $receive_by,
-                        'CreateDate'     =>  $receive_date,
-                        'IsAppove'       =>  1
-                    );
+//
+//                    $supplierdebit = array(
+//                        'VNo'            =>  $purchase_id,
+//                        'Vtype'          =>  'Purchase',
+//                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
+//                        'COAID'          =>  $sup_coa->HeadCode,
+//                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (cash in hand) for Purchase Id - ' . $purchase_id,
+//                        'Debit'          =>  $paid[$i],
+//                        'Credit'         =>  0,
+//                        'IsPosted'       =>  1,
+//                        'CreateBy'       =>  $receive_by,
+//                        'CreateDate'     =>  $receive_date,
+//                        'IsAppove'       =>  1
+//                    );
 
 
 
                     if ($paid[$i] > 0) {
-                        $this->db->insert('acc_transaction', $supplierdebit);
+                      //  $this->db->insert('acc_transaction', $supplierdebit);
                         $this->db->insert('purchase_payment', $data);
                         $this->db->insert('acc_transaction', $cc);
                     }
@@ -450,22 +498,22 @@ class Purchases extends CI_Model
                     );
 
 
-                    $supplierdebit = array(
-                        'VNo'            =>  $purchase_id,
-                        'Vtype'          =>  'Purchase',
-                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                        'COAID'          =>  $sup_coa->HeadCode,
-                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (Cash at bank) for Purchase Id - ' . $purchase_id,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $receive_by,
-                        'CreateDate'     =>  $receive_date,
-                        'IsAppove'       =>  1
-                    );
+//                    $supplierdebit = array(
+//                        'VNo'            =>  $purchase_id,
+//                        'Vtype'          =>  'Purchase',
+//                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
+//                        'COAID'          =>  $sup_coa->HeadCode,
+//                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (Cash at bank) for Purchase Id - ' . $purchase_id,
+//                        'Debit'          =>  $paid[$i],
+//                        'Credit'         =>  0,
+//                        'IsPosted'       =>  1,
+//                        'CreateBy'       =>  $receive_by,
+//                        'CreateDate'     =>  $receive_date,
+//                        'IsAppove'       =>  1
+//                    );
 
                     if ($paid[$i] > 0) {
-                        $this->db->insert('acc_transaction', $supplierdebit);
+                    //    $this->db->insert('acc_transaction', $supplierdebit);
                         $this->db->insert('acc_transaction', $bankc);
                         $this->db->insert('purchase_payment', $data);
                     }
@@ -503,23 +551,23 @@ class Purchases extends CI_Model
                         'account'       => $bkashname
                     );
 
-
-                    $supplierdebit = array(
-                        'VNo'            =>  $purchase_id,
-                        'Vtype'          =>  'Purchase',
-                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                        'COAID'          =>  $sup_coa->HeadCode,
-                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (Cash at bKash) for Purchase Id - ' . $purchase_id,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $receive_by,
-                        'CreateDate'     =>  $receive_date,
-                        'IsAppove'       =>  1
-                    );
+//
+//                    $supplierdebit = array(
+//                        'VNo'            =>  $purchase_id,
+//                        'Vtype'          =>  'Purchase',
+//                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
+//                        'COAID'          =>  $sup_coa->HeadCode,
+//                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (Cash at bKash) for Purchase Id - ' . $purchase_id,
+//                        'Debit'          =>  $paid[$i],
+//                        'Credit'         =>  0,
+//                        'IsPosted'       =>  1,
+//                        'CreateBy'       =>  $receive_by,
+//                        'CreateDate'     =>  $receive_date,
+//                        'IsAppove'       =>  1
+//                    );
 
                     if ($paid[$i] > 0) {
-                        $this->db->insert('acc_transaction', $supplierdebit);
+                      //  $this->db->insert('acc_transaction', $supplierdebit);
                         $this->db->insert('acc_transaction', $bkashc);
                         $this->db->insert('purchase_payment', $data);
                     }
@@ -557,162 +605,162 @@ class Purchases extends CI_Model
                         'account'       => $nagadname
                     );
 
-
-                    $supplierdebit = array(
-                        'VNo'            =>  $purchase_id,
-                        'Vtype'          =>  'Purchase',
-                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                        'COAID'          =>  $sup_coa->HeadCode,
-                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (Cash at Nagad) for Purchase Id - ' . $purchase_id,
-                        'Debit'          =>  $paid[$i],
-                        'Credit'         =>  0,
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $receive_by,
-                        'CreateDate'     =>  $receive_date,
-                        'IsAppove'       =>  1
-                    );
+//
+//                    $supplierdebit = array(
+//                        'VNo'            =>  $purchase_id,
+//                        'Vtype'          =>  'Purchase',
+//                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
+//                        'COAID'          =>  $sup_coa->HeadCode,
+//                        'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' (Cash at Nagad) for Purchase Id - ' . $purchase_id,
+//                        'Debit'          =>  $paid[$i],
+//                        'Credit'         =>  0,
+//                        'IsPosted'       =>  1,
+//                        'CreateBy'       =>  $receive_by,
+//                        'CreateDate'     =>  $receive_date,
+//                        'IsAppove'       =>  1
+//                    );
 
                     if ($paid[$i] > 0) {
-                        $this->db->insert('acc_transaction', $supplierdebit);
+                      //  $this->db->insert('acc_transaction', $supplierdebit);
                         $this->db->insert('acc_transaction', $nagadc);
                         $this->db->insert('purchase_payment', $data);
                     }
                     $nagad_count++;
                 }
 
-                if ($pay_type[$i] == 6) {
-                    // for ($j = 0; $j < count($tt_id); $j++) {
-                    if ($tt_id[$i] == 1) {
-                        if (!empty($tt_bank_id)) {
-                            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $tt_bank_id[$i])->get()->row()->bank_name;
-
-                            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-                        } else {
-                            $bankcoaid = '';
-                        }
-
-                        $bankc = array(
-                            'VNo'            =>  $purchase_id,
-                            'Vtype'          =>  'Purchase',
-                            'VDate'          =>  $VDate,
-                            'COAID'          =>  $bankcoaid,
-                            'Narration'      =>  'Credit for company in bank (TT) for Purchase ID - ' . $purchase_id,
-                            'Credit'         =>  $paid[$i],
-                            'Debit'          =>  0,
-                            'IsPosted'       =>  1,
-                            'CreateBy'       =>  $createby,
-                            'CreateDate'     =>  $createdate,
-                            'IsAppove'       =>  1,
-
-                        );
-                        // echo '<pre>';
-                        // print_r($bankc);
-
-                        $data = array(
-                            'purchase_id'    => $purchase_id,
-                            'pay_type'      => $pay_type[$i],
-                            'pay_subtype'   => $tt_id[$i],
-                            'amount'        => $paid[$i],
-                            'account'       => $bankname
-                        );
-
-
-                        $supplierdebit = array(
-                            'VNo'            =>  $purchase_id,
-                            'Vtype'          =>  'Purchase',
-                            'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                            'COAID'          =>  $sup_coa->HeadCode,
-                            'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' Cash at bank (TT) for Purchase Id - ' . $purchase_id,
-                            'Debit'          =>  $paid[$i],
-                            'Credit'         =>  0,
-                            'IsPosted'       =>  1,
-                            'CreateBy'       =>  $receive_by,
-                            'CreateDate'     =>  $receive_date,
-                            'IsAppove'       =>  1
-                        );
-                        if ($paid[$i] > 0) {
-                            $this->db->insert('acc_transaction', $supplierdebit);
-                            $this->db->insert('acc_transaction', $bankc);
-                            $this->db->insert('purchase_payment', $data);
-                        }
-                        $tt_bank_count++;
-                    }
-                    if ($tt_id[$i] == 2) {
-                        $cc = array(
-
-                            'VNo'            =>  $purchase_id,
-                            'Vtype'          =>  'Purchase',
-                            'VDate'          =>  $VDate,
-                            'COAID'          =>  1020101,
-                            'Narration'      =>  'Cash in Hand (TT) for Purchase ID - ' . $purchase_id,
-                            'Credit'         =>  $paid[$i],
-                            'Debit'          =>  0,
-                            'IsPosted'       =>  1,
-                            'CreateBy'       =>  $createby,
-                            'CreateDate'     =>  $createdate,
-                            'IsAppove'       =>  1,
-
-                        );
-
-                        $data = array(
-                            'purchase_id'    => $purchase_id,
-                            'pay_type'      => $pay_type[$i],
-                            'pay_subtype'   => $tt_id[$i],
-                            'amount'        => $paid[$i],
-                            'account'       => ''
-                        );
-
-                        $supplierdebit = array(
-                            'VNo'            =>  $purchase_id,
-                            'Vtype'          =>  'Purchase',
-                            'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                            'COAID'          =>  $sup_coa->HeadCode,
-                            'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' Cash in hand (TT) for Purchase Id - ' . $purchase_id,
-                            'Debit'          =>  $paid[$i],
-                            'Credit'         =>  0,
-                            'IsPosted'       =>  1,
-                            'CreateBy'       =>  $receive_by,
-                            'CreateDate'     =>  $receive_date,
-                            'IsAppove'       =>  1
-                        );
-
-                        if ($paid[$i] > 0) {
-                            $this->db->insert('acc_transaction', $supplierdebit);
-                            $this->db->insert('acc_transaction', $cc);
-                            $this->db->insert('purchase_payment', $data);
-                        }
-                    }
-                }
-
-                if ($pay_type[$i] == 7) {
-
-                    $lc_liablities = array(
-                        'VNo'            =>  $purchase_id,
-                        'Vtype'          =>  'Purchase',
-                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                        'COAID'          =>  503,
-                        'Narration'      =>  'LC Liabilities Credit for purchase no. ' . $purchase_id . ', LC No. ' . $lc_no[$i],
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $receive_by,
-                        'CreateDate'     =>  $receive_date,
-                        'IsAppove'       =>  1
-                    );
-                    $this->db->insert('acc_transaction', $lc_liablities);
-
-
-                    $data = array(
-                        'lc_no'   => $lc_no[$i],
-                        'purchase_id'   => $purchase_id,
-                        'amount'        => $paid[$i],
-                        'status'        => 1,
-                    );
-
-                    $this->db->insert('lc_list', $data);
-
-                    /** Accounts (later) */
-                }
+//                if ($pay_type[$i] == 6) {
+//                    // for ($j = 0; $j < count($tt_id); $j++) {
+//                    if ($tt_id[$i] == 1) {
+//                        if (!empty($tt_bank_id)) {
+//                            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $tt_bank_id[$i])->get()->row()->bank_name;
+//
+//                            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+//                        } else {
+//                            $bankcoaid = '';
+//                        }
+//
+//                        $bankc = array(
+//                            'VNo'            =>  $purchase_id,
+//                            'Vtype'          =>  'Purchase',
+//                            'VDate'          =>  $VDate,
+//                            'COAID'          =>  $bankcoaid,
+//                            'Narration'      =>  'Credit for company in bank (TT) for Purchase ID - ' . $purchase_id,
+//                            'Credit'         =>  $paid[$i],
+//                            'Debit'          =>  0,
+//                            'IsPosted'       =>  1,
+//                            'CreateBy'       =>  $createby,
+//                            'CreateDate'     =>  $createdate,
+//                            'IsAppove'       =>  1,
+//
+//                        );
+//                        // echo '<pre>';
+//                        // print_r($bankc);
+//
+//                        $data = array(
+//                            'purchase_id'    => $purchase_id,
+//                            'pay_type'      => $pay_type[$i],
+//                            'pay_subtype'   => $tt_id[$i],
+//                            'amount'        => $paid[$i],
+//                            'account'       => $bankname
+//                        );
+//
+//
+////                        $supplierdebit = array(
+////                            'VNo'            =>  $purchase_id,
+////                            'Vtype'          =>  'Purchase',
+////                            'VDate'          =>  $this->input->post('purchase_date', TRUE),
+////                            'COAID'          =>  $sup_coa->HeadCode,
+////                            'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' Cash at bank (TT) for Purchase Id - ' . $purchase_id,
+////                            'Debit'          =>  $paid[$i],
+////                            'Credit'         =>  0,
+////                            'IsPosted'       =>  1,
+////                            'CreateBy'       =>  $receive_by,
+////                            'CreateDate'     =>  $receive_date,
+////                            'IsAppove'       =>  1
+////                        );
+//                        if ($paid[$i] > 0) {
+//                         //   $this->db->insert('acc_transaction', $supplierdebit);
+//                            $this->db->insert('acc_transaction', $bankc);
+//                            $this->db->insert('purchase_payment', $data);
+//                        }
+//                        $tt_bank_count++;
+//                    }
+//                    if ($tt_id[$i] == 2) {
+//                        $cc = array(
+//
+//                            'VNo'            =>  $purchase_id,
+//                            'Vtype'          =>  'Purchase',
+//                            'VDate'          =>  $VDate,
+//                            'COAID'          =>  1020101,
+//                            'Narration'      =>  'Cash in Hand (TT) for Purchase ID - ' . $purchase_id,
+//                            'Credit'         =>  $paid[$i],
+//                            'Debit'          =>  0,
+//                            'IsPosted'       =>  1,
+//                            'CreateBy'       =>  $createby,
+//                            'CreateDate'     =>  $createdate,
+//                            'IsAppove'       =>  1,
+//
+//                        );
+//
+//                        $data = array(
+//                            'purchase_id'    => $purchase_id,
+//                            'pay_type'      => $pay_type[$i],
+//                            'pay_subtype'   => $tt_id[$i],
+//                            'amount'        => $paid[$i],
+//                            'account'       => ''
+//                        );
+//
+////                        $supplierdebit = array(
+////                            'VNo'            =>  $purchase_id,
+////                            'Vtype'          =>  'Purchase',
+////                            'VDate'          =>  $this->input->post('purchase_date', TRUE),
+////                            'COAID'          =>  $sup_coa->HeadCode,
+////                            'Narration'      =>  'Supplier .' . $supinfo->supplier_name . ' Cash in hand (TT) for Purchase Id - ' . $purchase_id,
+////                            'Debit'          =>  $paid[$i],
+////                            'Credit'         =>  0,
+////                            'IsPosted'       =>  1,
+////                            'CreateBy'       =>  $receive_by,
+////                            'CreateDate'     =>  $receive_date,
+////                            'IsAppove'       =>  1
+////                        );
+//
+//                        if ($paid[$i] > 0) {
+//                           // $this->db->insert('acc_transaction', $supplierdebit);
+//                            $this->db->insert('acc_transaction', $cc);
+//                            $this->db->insert('purchase_payment', $data);
+//                        }
+//                    }
+//                }
+//
+//                if ($pay_type[$i] == 7) {
+//
+//                    $lc_liablities = array(
+//                        'VNo'            =>  $purchase_id,
+//                        'Vtype'          =>  'Purchase',
+//                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
+//                        'COAID'          =>  503,
+//                        'Narration'      =>  'LC Liabilities Credit for purchase no. ' . $purchase_id . ', LC No. ' . $lc_no[$i],
+//                        'Debit'          =>  0,
+//                        'Credit'         =>  $paid[$i],
+//                        'IsPosted'       =>  1,
+//                        'CreateBy'       =>  $receive_by,
+//                        'CreateDate'     =>  $receive_date,
+//                        'IsAppove'       =>  1
+//                    );
+//                    $this->db->insert('acc_transaction', $lc_liablities);
+//
+//
+//                    $data = array(
+//                        'lc_no'   => $lc_no[$i],
+//                        'purchase_id'   => $purchase_id,
+//                        'amount'        => $paid[$i],
+//                        'status'        => 1,
+//                    );
+//
+//                    $this->db->insert('lc_list', $data);
+//
+//                    /** Accounts (later) */
+//                }
             }
         }
 
@@ -724,7 +772,6 @@ class Purchases extends CI_Model
         $warrenty = $this->input->post('warrenty_date', TRUE);
         $expired = $this->input->post('expired_date', TRUE);
         $t_price = $this->input->post('total_price', TRUE);
-        $discount = $this->input->post('discount', TRUE);
         $damaged_qty = $this->input->post('damaged_qty', TRUE);
 
         for ($i = 0, $n = count($p_id); $i < $n; $i++) {

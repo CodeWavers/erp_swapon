@@ -135,8 +135,8 @@
                                     <label for="product_status" class="col-sm-2 col-form-label"> Product Type <i class="text-danger">*</i></label>
                                     <div class="col-sm-3">
                                         <select name="product_status" id="product_status" class="form-control" required">
-                                            <option value="">Select One</option>
-                                            <option value="1">Finished Goods</option>
+
+                                            <option value="1" selected>Finished Goods</option>
                                             <option value="2">Raw Materials</option>
                                             <option value="3">Tools</option>
                                         </select>
@@ -401,8 +401,8 @@
                                                             <option value="4"><?php echo display('bank_payment') ?></option>
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
-                                                            <option value="6">TT</option>
-                                                            <option value="7">LC</option>
+<!--                                                            <option value="6">TT</option>-->
+<!--                                                            <option value="7">LC</option>-->
 
                                                         </select>
 
