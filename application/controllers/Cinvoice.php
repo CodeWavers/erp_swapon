@@ -345,7 +345,7 @@ class Cinvoice extends CI_Controller
 
 
             $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $inv_details->customer_id)->get()->row();
-            $headn = $customer_id . '-' . $cusifo->customer_name;
+            $headn = $inv_details->customer_id . '-' . $cusifo->customer_name;
             $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
             $customer_headcode = $coainfo->HeadCode;
             $cs_name= $cusifo->customer_name;
@@ -382,7 +382,20 @@ class Cinvoice extends CI_Controller
             $nagadcoaid = '';
         }
 
-       // $this->db->insert('acc_transaction', $cordr);
+        $cosdr= array(
+            'VNo' => $invoice_id,
+            'Vtype' => 'INV',
+            'VDate' => $createdate,
+            'COAID' => $customer_headcode,
+            'Narration' => 'Customer debit For Invoice No -  ' . $inv_details->invoice . ' Customer ' . $cs_name,
+            'Debit' => 0,
+            'Credit' => $pay_amount,
+            'IsPosted' => 1,
+            'CreateBy' => $createby,
+            'CreateDate' => $createdate,
+            'IsAppove' => 1
+        );
+        $this->db->insert('acc_transaction', $cosdr);
 
         if ($paytype == 1) {
             $data3 = array(

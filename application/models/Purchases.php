@@ -352,7 +352,7 @@ class Purchases extends CI_Model
             'IsAppove'       =>  1
         );
 
-        $this->db->insert('acc_transaction', $purchasecoatran);
+        //this->db->insert('acc_transaction', $purchasecoatran);
 
         if ($due_amount > 0){
             $supplier_due_cr = array(
@@ -362,16 +362,17 @@ class Purchases extends CI_Model
                 'COAID'          =>  $sup_coa->HeadCode,
                 'Narration'      =>  'Supplier .' . $supinfo->supplier_name,
                 'Debit'          =>  0,
-                'Credit'         =>  ($discount > 0) ? ($due_amount-$discount) : $due_amount,
+                'Credit'         =>  ($discount > 0) ? ($due_amount) : $due_amount,
                 'IsPosted'       =>  1,
                 'CreateBy'       =>  $receive_by,
                 'CreateDate'     =>  $receive_date,
                 'IsAppove'       =>  1
             );
+            $this->db->insert('acc_transaction', $supplier_due_cr);
+
         }
 
 
-        $this->db->insert('acc_transaction', $supplier_due_cr);
 
         if ($discount > 0){
 

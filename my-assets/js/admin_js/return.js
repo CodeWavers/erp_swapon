@@ -692,7 +692,7 @@ function invoice_paidamount() {
       nt = parseFloat(t, 10) + pr,
       re_r =Math.round(nt)-nt,
   d = a - nt;
-  $("#re_n_total").val(Math.round(nt).toFixed(2, 2));
+  $("#re_n_total").val(nt.toFixed(2, 2));
   $('#re_rounding').val(re_r.toFixed(2,2));
 
   if (nt < 0){

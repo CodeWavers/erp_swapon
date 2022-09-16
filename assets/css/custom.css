@@ -126,6 +126,36 @@ body {
     margin-left: 0
 }
 
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background:white;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--main-color);
+}
+
+::-webkit-input-placeholder {color: pink;} /* Chrome/Opera/Safari */
+::-moz-placeholder { color: pink;} /* Firefox 19+ */
+:-ms-input-placeholder { color: pink;} /* IE 10+ */
+:-moz-placeholder {color: pink;}  /* Firefox 18- */
+
+
 @media (max-width:767px) {
     .content-wrapper,
     .main-footer,
