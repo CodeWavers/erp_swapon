@@ -1106,7 +1106,8 @@ class Settings extends CI_Model
     $loggedInOutlet = $CI->warehouse->outlet_or_cw_logged_in();
 
     $this->db->select('*')
-      ->from('card_list a');
+      ->from('card_list a')
+      ->join('bank_add c','a.bank_id=c.bank_id','left');
     // ->where('a.outlet_id', $loggedInOutlet[0]['outlet_id']);
 
     if ($card_no_id) {

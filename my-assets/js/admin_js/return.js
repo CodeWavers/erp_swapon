@@ -244,6 +244,8 @@ function quantity_calculate(item) {
       x = 0,
       y = 0,
       z = 0,
+      r = 0,
+      g = 0,
       p = 0;
   var pa_total_price = $("#pa_total_price_" + item).val();
   var sold_qty = $("#sold_qty_" + item).val();
@@ -260,9 +262,17 @@ function quantity_calculate(item) {
   var dis = price * (discount / 100);
   var diss = price * (disc / 100);
   $("#all_discount_" + item).val(diss);
+  $("#return_val_" + item).val(price);
   var ttldis = $("#all_discount_" + item).val();
   var total_d = $("#total_discount_ammount").val();
 
+  $(".return_val").each(function () {
+    isNaN(this.value) || r == this.value.length || (r += parseFloat(this.value));
+  });
+
+  $(".total_p").each(function () {
+    isNaN(this.value) || g == this.value.length || (g += parseFloat(this.value));
+  });
   $(".total_price").each(function () {
     isNaN(this.value) || a == this.value.length || (a += parseFloat(this.value));
   });
@@ -290,13 +300,17 @@ function quantity_calculate(item) {
   })
   var total=parseFloat($('#total_amount').val());
   var total_discount=parseFloat($('#total_discount_ammount').val());
-   var invoice_value=total+total_discount;
+  var invoice_value=total+total_discount;
 
-  var sku_flat_discount=(invoice_discount/invoice_value)*price;
-  var sku_percent_discount=(pds/invoice_value)*price;
 
-  var sku_wise_t_dis=sku_flat_discount+sku_percent_discount;
 
+
+  var sale_discount=invoice_discount/invoice_value*r;
+  var sale_discount_perc=pds/g*a;
+  var sku_wise_t_dis=sale_discount+sale_discount_perc+d;
+  $('#total_return').val(r);
+  $('#sub_total').val(a.toFixed(2,2));
+  $('#sale_discount_perc').val(sale_discount_perc  .toFixed(2,2));
   $('#sku_discount').val(sku_wise_t_dis.toFixed(2,2));
 
 
@@ -307,19 +321,19 @@ function quantity_calculate(item) {
   $("#payable_" + item).val(paya.toFixed(2,2)); //
 
 
-  var new_discount= pa_total_price * (perc_dis / 100)+d+invoice_discount;
-  // $("#new_discount").val(new_discount.toFixed(2, 2));
 
 
-  var sales_return=a-sku_wise_t_dis;
+
+  var sales_return=r-sku_wise_t_dis;
+  $("#sale_discount").val(sale_discount.toFixed(2,2));
   $("#sales_return").val(sales_return.toFixed(2,2));
 
 
-  var net_pay=sku_wise_t_dis-a;
+  var net_pay=sku_wise_t_dis-r;
   $("#net_pay").val(net_pay.toFixed(2,2));
   var paid_amount=parseFloat($("#paid_amount").val());
 
-  var total_refund=invoice_value-sales_return-paid_amount;
+  var total_refund=total-sales_return-paid_amount;
   $("#customer_ac").val(total_refund.toFixed(2,2));
   // console.log(paid_amount)
   // console.log(total_refund)

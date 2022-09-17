@@ -183,6 +183,8 @@
         var total_discount_ammount = $("#total_discount_ammount").val();
         var ttl_discount = parseFloat(total_discount_ammount)+pds;
         //var ttl_cms = +commission;
+        $("#sub_total").val(t.toFixed(2, 2));
+
         $("#total_discount_ammount").val(ttl_discount.toFixed(2,2));
         //ds =+(t) * (perc_discount / 100);
 
@@ -224,11 +226,14 @@ function invoice_paidamount() {
             a = $("#paidAmount").val(),
             e = t - a,
             f = e + pr,
-            nt = parseFloat(t, 10) + pr;
+            nt = parseFloat(t, 10) + pr,
+        re_r =Math.round(nt)-nt,
             d = a - nt;
-    $("#n_total").val(nt.toFixed(2, 2));
-     if(f > 0){
-    $("#dueAmmount").val(f.toFixed(2,2));
+    $("#n_total").val(Math.round(nt).toFixed(2, 2));
+    $('#rounding').val(re_r.toFixed(2,2));
+
+    if(f > 0){
+    $("#dueAmmount").val(Math.round(f).toFixed(2,2));
     if(a <= f){
      $("#change").val(0);
     }

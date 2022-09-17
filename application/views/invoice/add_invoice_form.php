@@ -470,12 +470,18 @@
                                     </tr>
                                 </tbody>
                                 <tfoot>
-
+                                <tr>
+                                    <td colspan="6" rowspan="2">
+                                        <center><label class="text-center" for="details" class="  col-form-label"><?php echo display('invoice_details') ?></label></center>
+                                        <textarea name="inva_details" class="form-control" placeholder="<?php echo display('invoice_details') ?>"></textarea>
+                                    </td>
+                                    <td class="text-right" colspan="2"><b>Sub Total:</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="sub_total" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sub_total" value="" placeholder="0.00" readonly/>
+                                    </td>
+                                </tr>
                                     <tr>
-                                        <td colspan="6" rowspan="2">
-                                            <center><label for="details" class="  col-form-label text-center"><?php echo display('invoice_details') ?></label></center>
-                                            <textarea name="inva_details" id="details" class="form-control" placeholder="<?php echo display('invoice_details') ?>" tabindex="12"></textarea>
-                                        </td>
+
                                         <td class="text-right" colspan="2"><b><?php echo display('invoice_discount') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="invoice_discount" class="form-control text-right total_discount" name="invoice_discount" placeholder="0.00" tabindex="13" />
@@ -484,7 +490,7 @@
                                         <td><a id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" tabindex="11"><i class="fa fa-plus"></i></a></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="2"><b>Sale Discount(%):</b></td>
+                                        <td class="text-right" colspan="8"><b>Sale Discount(%):</b></td>
                                         <td class="text-right">
                                             <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="" placeholder="0.00" />
                                         </td>
@@ -567,6 +573,13 @@
                                             <input type="text" id="previous" class="form-control text-right" name="previous" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
+
+                                <tr>
+                                    <td class="text-right" colspan="8"><b>Rounding:</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="rounding" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="rounding" value="" placeholder="0.00" readonly />
+                                    </td>
+                                </tr>
                                     <tr>
                                         <td colspan="8" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
                                         <td class="text-right">

@@ -329,7 +329,7 @@
                                                  <th class="text-center"><?php echo display('rate') ?> <i class="text-danger"></i></th>
                                                  <th class="text-center">Discount %  <?php  if ($sel_type == 1 && $comm_type==1){?> <span class="comm_th">| Commission % </span><?php } ?></th>
                                                  <th class="text-center">Return Amount</th>
-                                                 <th class="text-center">Payable</th>
+<!--                                                 <th class="text-center">Payable</th>-->
                                                  <th class="text-center"><?php echo display('check_return') ?> <i class="text-danger">*</i></th>
                                              </tr>
                                          </thead>
@@ -374,12 +374,15 @@
 
                                                  <td>
                                                      <input class="total_price form-control text-right" type="text" id="total_price_{sl}" value="0" name="" readonly="readonly" placeholder="0.00" />
+                                                     <input class="total_p form-control text-right" type="hidden" id="total_p_{sl}" value="{total_price}" name="" readonly="readonly" placeholder="0.00" />
 
                                                      <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
+                                                     <input class=" form-control text-right return_val" type="hidden" id="return_val_{sl}" value="0" placeholder="0.00" readonly="readonly" />
+
                                                  </td>
 
-                                                 <td>
-                                                     <input class=" form-control text-right payable" type="text" id="payable_{sl}" value="0" placeholder="0.00" readonly="readonly" />
+                                                 <td hidden>
+                                                     <input class=" form-control text-right payable" type="hidden" id="payable_{sl}" value="0" placeholder="0.00" readonly="readonly" />
                                                      <input class=" form-control text-right paya_total" type="hidden" id="pa_total_price_{sl}" value="{total_price}" placeholder="0.00" readonly="readonly" />
                                                      <input class=" form-control text-right dis_amount" type="hidden" id="dis_amount_{sl}" value="0" placeholder="0.00" readonly="readonly" />
 
@@ -412,7 +415,7 @@
                                          <tfoot>
 
                                              <tr>
-                                                 <td colspan="6" rowspan="13">
+                                                 <td colspan="5" rowspan="13">
                                                      <center><label for="details" class="  col-form-label text-center"><?php echo display('reason') ?></label></center>
                                                      <textarea class="form-control" name="details" id="details" placeholder="<?php echo display('reason') ?>"></textarea> <br>
                                                      <!-- <span class="usablity"><?php echo display('usablilties') ?> </span><br> -->
@@ -446,20 +449,31 @@
                                                      <input type="text" id="total_d" class="form-control text-right" name="total_d" value="" readonly="readonly" />
                                                  </td>
                                              </tr>
+
+                                             <tr>
+                                                 <td class="text-right" colspan="1"><b>Sub Total:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="sub_total" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sub_total" value="" placeholder="0.00" />
+                                                     <input type="hidden" id="total_return" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="total_return" value="" placeholder="0.00" />
+
+                                                 </td>
+                                             </tr>
                                              <tr>
                                                  <td class="text-right" colspan="1"><b>Sale Discount:</b></td>
                                                  <td class="text-right">
                                                      <input type="hidden" id="total" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="total" value="0" placeholder="0.00" />
-                                                     <input type="text" id="invoice_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="invoice_discount" value="{invoice_discount}" placeholder="0.00" />
+                                                     <input type="text" id="sale_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sale_discount" value="{invoice_discount}" placeholder="0.00" />
+                                                     <input type="hidden" id="invoice_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="invoice_discount" value="{invoice_discount}" placeholder="0.00" />
                                                  </td>
                                              </tr>
                                              <tr>
                                                  <td class="text-right" colspan="1"><b>Sale Discount(%):</b></td>
                                                  <td class="text-right">
-                                                     <input type="text" id="perc_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" placeholder="0.00" />
+                                                     <input type="text" id="sale_discount_perc" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sale_discount_perc" value="{perc_discount}" placeholder="0.00" />
+                                                     <input type="hidden" id="perc_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="{perc_discount}" placeholder="0.00" />
                                                  </td>
                                              </tr>
-                                             <tr>
+                                             <tr hidden>
                                                  <td class="text-right" colspan="1"><b><?php echo display('total_discount') ?>:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="{total_discount}" readonly="readonly" />
@@ -467,7 +481,7 @@
                                              </tr>
 
                                              <tr>
-                                                 <td class="text-right" colspan="1"><b>Discount:</b></td>
+                                                 <td class="text-right" colspan="1"><b>Total Discount:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="sku_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sku_discount" value="" placeholder="0.00" />
 
@@ -540,7 +554,7 @@
                                              <tr>
                                                  <td colspan="1" class="text-right"><b class="due_cus">Total Refund:</b></td>
                                                  <td class="text-right">
-                                                     <input type="text" id="total_refund" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control  font-bold  text-right" name="cash_refund" value="" placeholder="0.00"  />
+                                                     <input type="text" id="total_refund" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control  font-bold  text-right" name="cash_refund" value="" placeholder="0.00" re />
                                                      <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
 
                                                      <input type="hidden" name="invoice_id" id="invoice_id" value="{invoice_id}" />
