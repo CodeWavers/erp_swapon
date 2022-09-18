@@ -3068,7 +3068,7 @@ class Invoices extends CI_Model
     {
         $this->db->select(
             'a.total_tax,
-                        a.*,
+                        a.*,a.paid_amount as paid,
                         b.*,
                         c.*,
                         d.product_id,
@@ -3088,7 +3088,8 @@ class Invoices extends CI_Model
                         o.receiver_name,
                         a.receiver_number as rec_num,
                         c.quantity,c.total_price_wd,
-                        c.is_return
+                        c.is_return,
+                        
                        '
 
         );

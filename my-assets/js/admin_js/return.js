@@ -337,25 +337,20 @@ function quantity_calculate(item) {
   $("#customer_ac").val(total_refund.toFixed(2,2));
   // console.log(paid_amount)
   // console.log(total_refund)
-  $("#total_refund").val(total_refund.toFixed(2,2));
-  $("#refunded_amt").val(total_refund.toFixed(2,2));
 
-  //
-  // if (due > 0){
-  //
-  //   $('.due_cus').html('Customer Receivable:')
-  //
-  //   $('.due_cus').removeClass('text-danger')
-  //   $('#due_amount').removeClass('label-danger-outline')
-  //   $('.due_cus').addClass('text-success')
-  //   $('#due_amount').addClass('label-success-outline')
-  // }else{
-  //   $('.due_cus').html('Due:')
-  //   $('.due_cus').removeClass('text-success')
-  //   $('#due_amount').removeClass('label-success-outline')
-  //   $('.due_cus').addClass('text-danger')
-  //   $('#due_amount').addClass('label-danger-outline')
-  // }
+  var rounding=Math.round(total_refund)-total_refund;
+  $("#rounding").val(rounding.toFixed(2,2));
+  $("#total_refund").val(Math.round(total_refund).toFixed(2,2));
+  $("#dueAmmount").val(Math.round(total_refund).toFixed(2,2));
+  $("#refunded_amt").val(Math.round(total_refund).toFixed(2,2));
+  $("#re_dueAmmount").val(Math.round(total_refund).toFixed(2,2));
+  if (total_refund < 0){
+    $('.hide_tr').removeClass('d-none')
+    $('.due_tr').addClass('d-none')
+  }else{
+    $('.hide_tr').addClass('d-none')
+    $('.due_tr').removeClass('d-none')
+  }
 
 
 
@@ -587,6 +582,7 @@ function calc_paid(){
   });
 
   $("#re_paidAmount").val((pt).toFixed(2,2));
+  $("#paidAmmount").val((pt).toFixed(2,2));
   invoice_paidamount();
 }
 "use strict";
@@ -701,14 +697,17 @@ function invoice_paidamount() {
   }
   var t = $("#re_grandTotal").val(),
       a = $("#re_paidAmount").val(),
+      x = $("#paidAmmount").val(),
+      tf = parseFloat($("#total_refund").val()),
       e = t - a,
+      y = tf - x,
       f = e + pr,
       nt = parseFloat(t, 10) + pr,
       re_r =Math.round(nt)-nt,
   d = a - nt;
   $("#re_n_total").val(nt.toFixed(2, 2));
   $('#re_rounding').val(re_r.toFixed(2,2));
-
+  $("#dueAmmount").val(Math.round(y).toFixed(2,2));
   if (nt < 0){
     $('.re_hide_tr').removeClass('d-none')
   }else{
@@ -716,6 +715,7 @@ function invoice_paidamount() {
   }
   if(f > 0){
     $("#re_dueAmmount").val(Math.round(f).toFixed(2,2));
+
     if(a <= f){
       $("#re_change").val(0);
     }
@@ -727,6 +727,7 @@ function invoice_paidamount() {
       $("#re_change").val(d.toFixed(2,2))
     }
     $("#re_dueAmmount").val(0)
+    // $("#dueAmmount").val(0)
 
   }
 }
@@ -1168,10 +1169,12 @@ $(document).ready(function () {
     }
 
     if ($("#is_replace").val() == 0) {
-      $('.hide_tr').addClass('d-none')
+      $('.due_tr').addClass('d-none')
+      $('.hide_tr').removeClass('d-none')
       $("#is_replace").val(1);
     } else {
-      $('.hide_tr').removeClass('d-none')
+      $('.due_tr').removeClass('d-none')
+      $('.hide_tr').addClass('d-none')
       $("#is_replace").val(0);
     }
 
@@ -1179,7 +1182,7 @@ $(document).ready(function () {
   });
 
   $("#cash_return").click(function () {
-    $('.hide_tr').removeClass('d-none')
+  //  $('.due_tr').removeClass('d-none')
     if ($("#rep_toggle").is(":checked")) {
       $("#rep_toggle").trigger("click");
       $("#cash_return").prop("checked", true);

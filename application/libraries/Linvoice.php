@@ -828,6 +828,7 @@ class Linvoice
         $subTotal_cartoon = 0;
         $subTotal_discount = 0;
         $subTotal_ammount = 0;
+        $subTotal_ammount_wd = 0;
         $descript = 0;
         $isserial = 0;
         $isunit = 0;
@@ -836,6 +837,7 @@ class Linvoice
                 $invoice_detail[$k]['final_date'] = $CI->occational->dateConvert($invoice_detail[$k]['date']);
                 $subTotal_quantity = $subTotal_quantity + $invoice_detail[$k]['quantity'];
                 $subTotal_ammount = $subTotal_ammount + $invoice_detail[$k]['total_price'];
+                $subTotal_ammount_wd = $subTotal_ammount_wd + $invoice_detail[$k]['total_price_wd'];
             }
 
             $i = 0;
@@ -945,7 +947,8 @@ class Linvoice
             'subTotal_quantity' => $subTotal_quantity,
             'invoice_discount'    => number_format($invoice_detail[0]['invoice_discount'], 2, '.', ','),
             'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
-            'sub_total'    => number_format($invoice_detail[0]['total_discount']+$invoice_detail[0]['total_amount'], 2, '.', ','),
+//            'sub_total'    => number_format($invoice_detail[0]['total_discount']+$invoice_detail[0]['total_amount'], 2, '.', ','),
+            'sub_total'    => number_format($subTotal_ammount_wd, 2, '.', ','),
             'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
             'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
             'paid_amount'       => number_format(round($invoice_detail[0]['paid_amount']), 2, '.', ','),
@@ -977,9 +980,9 @@ class Linvoice
 
         );
 
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
+//         echo '<pre>';
+//         print_r($data);
+//         exit();
         $pay_type=$invoice_detail[0]['sale_type'];
 
         if ($pay_type == 2 ){
