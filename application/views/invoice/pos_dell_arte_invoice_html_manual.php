@@ -190,7 +190,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             <div class="row" style="font-size: 11px; margin-top: 0.2cm !important">
 
                                 <div class="col-xs-6">
-                                   
+
                                 </div>
 
                                 <div class="col-xs-6 text-right m-0">
