@@ -272,7 +272,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
                                             <td align="center" class="td-style" width="10%" >
-                                                <?php echo html_escape($invoice_data['quantity']); ?>
+                                                <?php echo html_escape(abs($invoice_data['quantity'])); ?>
                                             </td>
 
                                             <!-- <td align="right" class="td-style">
@@ -307,7 +307,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <?php
                                                 if ($position == 0) {
-                                                    echo  $currency . ' ' . html_escape($invoice_data['total_price_wd']);
+                                                    echo  $currency . ' ' . html_escape(abs($invoice_data['total_price_wd']));
                                                 } else {
                                                     echo html_escape($invoice_data['total_price_wd']) . ' ' . $currency;
                                                 }

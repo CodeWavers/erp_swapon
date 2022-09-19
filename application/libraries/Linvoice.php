@@ -837,7 +837,10 @@ class Linvoice
                 $invoice_detail[$k]['final_date'] = $CI->occational->dateConvert($invoice_detail[$k]['date']);
                 $subTotal_quantity = $subTotal_quantity + $invoice_detail[$k]['quantity'];
                 $subTotal_ammount = $subTotal_ammount + $invoice_detail[$k]['total_price'];
-                $subTotal_ammount_wd = $subTotal_ammount_wd + $invoice_detail[$k]['total_price_wd'];
+                if ($invoice_detail[$k]['total_price_wd'] > 0){
+                    $subTotal_ammount_wd = $subTotal_ammount_wd + $invoice_detail[$k]['total_price_wd'];
+
+                }
             }
 
             $i = 0;
