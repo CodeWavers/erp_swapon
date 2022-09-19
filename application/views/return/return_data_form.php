@@ -548,6 +548,7 @@
                                                  <td colspan="1" class="text-right"><b> Previous Paid:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="paid_amount" class="form-control text-right" name="paid_amount" value="{paid_amount}" readonly="readonly" />
+                                                     <input type="hidden" id="" class="form-control text-right" name="dueAmount" value="{due_amount}" readonly="readonly" />
                                                  </td>
                                              </tr>
                                              <tr>
@@ -587,7 +588,7 @@
                                              </tr>
 
                                              <tr class="hide_tr d-none">
-                                                 <td colspan="1" class="text-right"><b class="due_cus"> Customer A/C(Adjust):</b></td>
+                                                 <td colspan="1" class="text-right"><b class="due_cus"> Customer Receivable:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="customer_ac" class="form-control  font-bold  text-right" name="customer_ac" value="0.00" placeholder="0.00" readonly />
                                                  </td>
@@ -830,12 +831,29 @@
                                                      <input type="text" id="re_n_total" class="form-control text-right" name="re_n_total" value="0" readonly="readonly" placeholder="" />
                                                  </td>
                                              </tr>
-                                             <tr>
+                                             <tr class="re_due_cus d-none">
 
                                                  <td class="text-right" colspan="8"><b><?php echo display('paid_ammount') ?>:</b></td>
                                                  <td class="text-right">
                                                      <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                                      <input type="text" id="re_paidAmount" onkeyup="invoice_paidamount();" class="form-control text-right" name="re_paid_amount" placeholder="0.00" tabindex="15" value="" readonly />
+                                                 </td>
+                                             </tr>
+
+
+
+                                             <tr class="re_due_cus d-none">
+                                                 <td class="text-right" colspan="8"><b><?php echo display('due') ?>:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="re_dueAmmount" class="form-control text-right" name="re_due_amount" value="0.00" readonly="readonly" />
+
+                                                 </td>
+                                             </tr>
+                                             <tr class="re_due_cus d-none">
+
+                                                 <td colspan="8" class="text-right"><b><?php echo display('change'); ?>:</b></td>
+                                                 <td class="text-right">
+                                                     <input type="text" id="re_change" class="form-control text-right" name="change" value="0" readonly="readonly" placeholder="" />
                                                  </td>
                                              </tr>
 
@@ -848,28 +866,11 @@
                                              </tr>
 
                                              <tr class="re_hide_tr d-none">
-                                                 <td colspan="8" class="text-right"><b class="due_cus"> Customer A/C(Adjust):</b></td>
+                                                 <td colspan="8" class="text-right"><b class="due_cus"> Customer Receivable:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="re_customer_ac" class="form-control  font-bold  text-right" name="re_customer_ac" value="0.00" placeholder="0.00" readonly />
                                                  </td>
 
-                                             </tr>
-
-                                             <tr>
-
-
-                                                 <td class="text-right" colspan="8"><b><?php echo display('due') ?>:</b></td>
-                                                 <td class="text-right">
-                                                     <input type="text" id="re_dueAmmount" class="form-control text-right" name="re_due_amount" value="0.00" readonly="readonly" />
-
-                                                 </td>
-                                             </tr>
-                                             <tr>
-
-                                                 <td colspan="8" class="text-right"><b><?php echo display('change'); ?>:</b></td>
-                                                 <td class="text-right">
-                                                     <input type="text" id="re_change" class="form-control text-right" name="change" value="0" readonly="readonly" placeholder="" />
-                                                 </td>
                                              </tr>
                                              </tfoot>
                                          </table>

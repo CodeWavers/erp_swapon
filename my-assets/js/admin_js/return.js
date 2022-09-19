@@ -310,7 +310,7 @@ function quantity_calculate(item) {
   var sku_wise_t_dis=sale_discount+sale_discount_perc+d;
   $('#total_return').val(r);
   $('#sub_total').val(a.toFixed(2,2));
-  $('#sale_discount_perc').val(sale_discount_perc  .toFixed(2,2));
+ // $('#sale_discount_perc').val(sale_discount_perc  .toFixed(2,2));
   $('#sku_discount').val(sku_wise_t_dis.toFixed(2,2));
 
 
@@ -706,12 +706,15 @@ function invoice_paidamount() {
       re_r =Math.round(nt)-nt,
   d = a - nt;
   $("#re_n_total").val(nt.toFixed(2, 2));
+  $("#re_customer_ac").val(nt.toFixed(2, 2));
   $('#re_rounding').val(re_r.toFixed(2,2));
   $("#dueAmmount").val(Math.round(y).toFixed(2,2));
   if (nt < 0){
     $('.re_hide_tr').removeClass('d-none')
+    $('.re_due_cus').addClass('d-none')
   }else{
     $('.re_hide_tr').addClass('d-none')
+    $('.re_due_cus').removeClass('d-none')
   }
   if(f > 0){
     $("#re_dueAmmount").val(Math.round(f).toFixed(2,2));
