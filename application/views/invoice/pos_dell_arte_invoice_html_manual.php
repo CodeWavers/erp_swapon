@@ -325,7 +325,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <nobr></nobr>
                                         </td>
                                         <td align="right" colspan="2">
-                                            <nobr>Sub Total</nobr>
+                                            <nobr>Sales Total</nobr>
                                         </td>
                                         <td align="right" class="td-style">
                                             <?php if ($sub_total < 0) { ?>
@@ -355,7 +355,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                         </tr>
                                     <?php } ?>
-                                    <?php if ($total_discount > 0) { ?>
+<!--                                    --><?php //if ($total_discount > 0) { ?>
                                         <tr>
                                             <td align="left">
                                                 <nobr></nobr>
@@ -369,7 +369,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 </nobr>
                                             </td>
                                         </tr>
-                                    <?php } ?>
+<!--                                    --><?php //} ?>
                                     <?php if ($sales_return > 0) { ?>
                                     <tr>
                                         <td align="left">
@@ -406,7 +406,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                             <td align="right" colspan="2">
 
-                                                <nobr><strong><?=  ($total_amount < 0) ? 'Total Refund'  : 'Payable (Including Vat)';?></strong></nobr>
+                                                <nobr><strong>Payable (Including Vat)</strong></nobr>
 
                                             </td>
                                             <td align="right" class="td-style">
@@ -470,13 +470,13 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </td>
                                     </tr>
 
-
+                                        <?php if ($customer_ac > 0) { ?>
                                     <tr>
                                         <td align="left">
                                             <nobr></nobr>
                                         </td>
                                         <td align="right" colspan="2">
-                                            <nobr>Customer A/C(Adjust)</nobr>
+                                            <nobr>Customer Receivable</nobr>
                                         </td>
                                         <td align="right" class="td-style">
                                             <nobr>
@@ -485,6 +485,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </nobr>
                                         </td>
                                     </tr>
+                                        <?php } ?>
                                         <?php } ?>
 
                                         <?php foreach ($payment_info as $pay){?>

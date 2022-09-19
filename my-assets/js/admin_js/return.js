@@ -284,9 +284,9 @@ function quantity_calculate(item) {
     isNaN(this.value) || y == this.value.length || (y += parseFloat(this.value));
   });
 
-  // $(".total_discount").each(function () {
-  //   isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
-  // })
+  $(".total_discount").each(function () {
+    isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
+  })
 //per sku discount calculation
   var invoice_discount = parseFloat($("#invoice_discount").val());
   var perc_dis = parseFloat($("#perc_discount").val());
