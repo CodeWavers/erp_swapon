@@ -349,7 +349,7 @@
                                                      <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{sum_quantity}" readonly="" />
                                                  </td>
                                                  <td>
-                                                     <input type="text" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" value="" min="0" placeholder="0.00" tabindex="4" />
+                                                     <input type="number" onkeyup="quantity_calculate({sl});" onkeypress="quantity_calculate({sl});" class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" value="" min="0" placeholder="0.00" tabindex="4" />
                                                  </td>
 
                                                  <td>
@@ -368,7 +368,7 @@
 
                                                  <td hidden>
                                                  <td hidden>
-                                                     <input type="hidden" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="" min="0" tabindex="6" />
+                                                     <input type="hidden" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="discount_{sl}" class="form-control text-right" placeholder="0.00" value="0" min="0" tabindex="6" />
                                                      <input type="hidden" value="<?php echo $discount_type ?>" name="discount_type" id="discount_type_{sl}">
                                                  </td>
 
@@ -395,7 +395,7 @@
                                                      <!-- Tax calculate end-->
 
                                                      <!-- Discount calculate start-->
-                                                     <input type="hidden" id="total_discount_{sl}" class="" value="" />
+                                                     <input type="hidden" id="total_discount_{sl}" class="" value="0" />
 
                                                      <input type="hidden" id="all_discount_{sl}" class="total_discount" value="" />
                                                      <!-- Discount calculate end -->
@@ -483,7 +483,7 @@
                                              <tr>
                                                  <td class="text-right" colspan="1"><b>Total Discount:</b></td>
                                                  <td class="text-right">
-                                                     <input type="text" id="sku_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sku_discount" value="" placeholder="0.00" />
+                                                     <input type="text" id="sku_discount" readonly onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sku_discount" value="0.00" placeholder="0.00" />
 
                                                  </td>
                                              </tr>

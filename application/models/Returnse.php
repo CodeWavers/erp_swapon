@@ -964,7 +964,7 @@ class Returnse extends CI_Model
                     'supplier_rate'=> $supplier_rate[0]['supplier_price'],
                     'paid_amount'=> -$total,
                     'total_price'=> -$total_price,
-                    'total_price_wd'=> $product_quantity*$product_rate,
+                    'total_price_wd'=> -($product_quantity*$product_rate),
                     'status'=> 2,
                      'is_return'=> 1,
                 );

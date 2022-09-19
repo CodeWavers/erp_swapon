@@ -284,9 +284,9 @@ function quantity_calculate(item) {
     isNaN(this.value) || y == this.value.length || (y += parseFloat(this.value));
   });
 
-  $(".total_discount").each(function () {
-    isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
-  })
+  // $(".total_discount").each(function () {
+  //   isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
+  // })
 //per sku discount calculation
   var invoice_discount = parseFloat($("#invoice_discount").val());
   var perc_dis = parseFloat($("#perc_discount").val());
@@ -1113,6 +1113,8 @@ function delete_replace_row(e) {
 ("use strict");
 function replace_calculate(sl) {
   var qty = $("#replace_qty_" + sl).val();
+
+  //var qty= (parseFloat($("#replace_qty_" + sl).val()) ? parseFloat($("#replace_qty_" + sl).val()) : 0);
   var price = $("#replace_price_" + sl).val();
   var dis = $("#replace_dis_" + sl).val();
   var a = 0;
@@ -1269,7 +1271,7 @@ function quantity_calculateSreturn(item) {
     }),
         $("#grandTotal").val(a.toFixed(2, 2));
     $(".total_discount").each(function () {
-      isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
+      isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
     }),
         $("#total_discount_ammount").val(d.toFixed(2, 2));
   }
