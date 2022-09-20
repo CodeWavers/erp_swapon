@@ -806,6 +806,7 @@ class Returnse extends CI_Model
                 'total_discount'=> $this->input->post('sku_discount', TRUE),
                 'cash_refund'=> $this->input->post('cash_refund', TRUE),
                 'customer_ac'=> $this->input->post('customer_ac', TRUE),
+                'previous_paid'=> $this->input->post('paid_amount', TRUE),
                 'sales_by'=> $createby,
                 'status'=> 2,
                 'payment_type'=> 1,
@@ -847,20 +848,7 @@ class Returnse extends CI_Model
                     'is_return'=> 1,
                 );
                 $this->db->insert('invoice_details', $data1);
-                $data_new =array(
-                    'invoice_details_id'=> $this->generator(15),
-                    'invoice_id'=> $invoice_id_new,
-                    'product_id'=> $product_id,
-                    'quantity'=> $sqty-$product_quantity,
-                    'rate'=> $product_rate,
-                    'discount'=> is_numeric($discount),
-                    'tax'=> $tax,
-                    'supplier_rate'=> $supplier_rate[0]['supplier_price'],
-                    'paid_amount'=> $total,
-                    'total_price'=> $total_price,
-                    'total_price_wd'=> ($sqty-$product_quantity)*$product_rate,
-                    'status'=> 2);
-              //  $this->db->insert('invoice_details', $data_new);
+
 
 
                 $usabilty='';
@@ -937,6 +925,7 @@ class Returnse extends CI_Model
                 'reciever_id'=> $this->input->post('reciever_id', TRUE),
                 'receiver_number'=> $this->input->post('receiver_number', TRUE),
                 'courier_status'=> $this->input->post('courier_status', TRUE),
+                'previous_paid'=> $this->input->post('paid_amount', TRUE),
 
 
             );

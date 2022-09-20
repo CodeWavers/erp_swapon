@@ -80,10 +80,13 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     font-size: 11px !important;
                                 }
 
-                                /*
-                                table>thead>th.pr {
-                                    min-width: 50%;
-                                } */
+
+                                /*table>thead>th.pr {*/
+                                /*    width: 70%;*/
+                                /*}*/
+                                /*table>thead>th.ur {*/
+                                /*    width:10%;*/
+                                /*}*/
 
 
 
@@ -189,11 +192,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             </div>
                             <div class="row" style="font-size: 11px; margin-top: 0.2cm !important">
 
-                                <div class="col-xs-6">
+                                <div class="col-xs-4">
 
                                 </div>
 
-                                <div class="col-xs-6 text-right m-0">
+                                <div class="col-xs-8 text-right m-0">
                                     <nobr>  Served By:<?= '{users_name}' ?></nobr>
                                 </div>
 
@@ -242,10 +245,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <!-- <th class="pprint-unit td-style"><?php if ($is_unit != 0) {
                                                                                     echo display('unit');
                                                                                 } ?></th> -->
-                                        <th class="text-center td-style" >Qty</th>
+                                        <th class="text-center td-style ur" >Qty</th>
 <!--                                         <th class="text-center td-style">Unit</th>-->
-                                         <th class="text-center td-style">U.Price</th>
-                                        <th class="text-center td-style">T.Price</th>
+                                         <th class="text-center td-style ur">U.Price</th>
+                                        <th class="text-center td-style ur">T.Price</th>
                                     </thead>
 
                                     <?php
@@ -257,7 +260,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <nobr><?php echo $sl; ?></nobr>
                                             </td> -->
 
-                                            <td align="center">
+                                            <td align="center" >
                                                 <?php if ($invoice_data['is_return'] == 0) { ?>
                                                     <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
 
@@ -402,11 +405,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </tr>
                                         <tr>
                                             <td align="right">
-
+                                                <nobr>  <strong>Payable</strong></nobr>
                                             </td>
                                             <td align="right" colspan="2">
 
-                                                <nobr><strong>Payable (Including Vat)</strong></nobr>
+                                                <nobr><strong>(Including Vat)</strong></nobr>
 
                                             </td>
                                             <td align="right" class="td-style">
@@ -419,6 +422,24 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             </td>
                                             </td>
                                         </tr>
+                                        <?php if ($previous_paid > 0) { ?>
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="2">
+                                                    <strong> <nobr>
+                                                          Previous Paid
+                                                        </nobr>
+                                                    </strong>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <strong> <nobr>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {previous_paid}" : "{previous_paid} $currency")) ?>
+                                                        </nobr>   </strong>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
                                         <?php if ($paid_amount > 0) { ?>
                                             <tr>
                                                 <td align="left">
@@ -426,7 +447,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 </td>
                                                 <td align="right" colspan="2">
                                                     <strong> <nobr>
-                                                            <?=  ($cash_refund > 0) ? 'Previous Paid'  : 'Total Paid';?>
+                                                             Total Paid
                                                         </nobr>
                                                     </strong>
                                                 </td>
