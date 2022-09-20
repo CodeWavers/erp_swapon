@@ -538,6 +538,7 @@ class Ccourier extends CI_Controller {
         $nagad_id = $this->input->post('nagad_id');
         $paytype = $this->input->post('paytype');
         $condition_cost = $this->input->post('condition_cost');
+        $delivery_ac = $this->input->post('delivery_ac');
         if (!empty($bank_id)) {
             $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
 
@@ -687,6 +688,7 @@ class Ccourier extends CI_Controller {
         );
         $this->db->insert('acc_transaction', $condition_charge);
 
+            $this->db->set('delivery_ac',$delivery_ac);
             $this->db->set('condition_cost',$condition_cost);
             $this->db->set('courier_paid',1);
             $this->db->where('invoice_id',$invoice_id);

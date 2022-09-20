@@ -135,7 +135,7 @@
                                         <td><?php echo $row['courier_name']?></td>
                                         <td><?php echo $row['branch_name']?></td>
                                         <td><?php echo $courier_condition?></td>
-                                        <td><?php echo $row['delivery_ac']?></td>
+                                        <td><?php echo $adc=$row['delivery_ac']?></td>
                                         <td><?php echo $row['condition_cost']?></td>
                                         <td class="col-sm-2">
 
@@ -162,7 +162,7 @@
                                                     style="border:none; outline:none"
                                                     data-sl="<?php echo $row['sl']?>"
                                                     data-invoice="<?php echo $row['invoice']?>"
-                                                    data-shipping_cost="<?php echo $row['shipping_cost']?>"
+                                                    data-shipping_cost="<?php echo $row['delivery_ac']?>"
                                                     data-condition_cost="<?php echo $row['condition_cost']?>"
                                                     data-invoice_id="<?php echo $invoice_id=$row['invoice_id']?>"
                                                     data-courier_id="<?php echo $row['c_id']?>"
@@ -173,7 +173,7 @@
 
 
                                             <a href="<?php echo base_url("Cretrun_m/invoice_return_form_c/$invoice_id") ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="Return"><i class="fa fa-retweet"></i></a>
-                                            <a  class="btn btn-black btn-sm "  onclick="payment_modal(<?php echo $invoice_id?>)" id="editable_table" data-toggle="tooltip" data-placement="left" title="Courier Payment"><i class="fa fa-money"></i></a>
+                                            <a  class="btn btn-black btn-sm "  onclick="payment_modal(<?php echo $invoice_id?>,<?php echo $adc?>)" id="editable_table" data-toggle="tooltip" data-placement="left" title="Courier Payment"><i class="fa fa-money"></i></a>
 
 
 
@@ -226,6 +226,17 @@
                                                 </select>
 
 
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6" id="payment_from_1">
+                                        <div class="form-group row">
+                                            <label for="payment_type" class="col-sm-4 col-form-label">
+                                               ADC <i class="text-danger">*</i></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="delivery_ac" name="delivery_ac">
 
                                             </div>
 
@@ -332,11 +343,12 @@
 
 <script type="text/javascript">
 
-        function payment_modal(id){
+        function payment_modal(id,adc){
 
-            // alert(id)
+            // alert(adc)
             $('#updateProjectModal').modal('show');
             $('#invoice_id').val(id)
+            $('#delivery_ac').val(adc)
 
         }
 
