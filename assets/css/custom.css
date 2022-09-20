@@ -150,10 +150,10 @@ body {
     background: var(--main-color);
 }
 
-::-webkit-input-placeholder {color: pink;} /* Chrome/Opera/Safari */
-::-moz-placeholder { color: pink;} /* Firefox 19+ */
-:-ms-input-placeholder { color: pink;} /* IE 10+ */
-:-moz-placeholder {color: pink;}  /* Firefox 18- */
+/*::-webkit-input-placeholder {color: pink;} !* Chrome/Opera/Safari *!*/
+/*::-moz-placeholder { color: pink;} !* Firefox 19+ *!*/
+/*:-ms-input-placeholder { color: pink;} !* IE 10+ *!*/
+/*:-moz-placeholder {color: pink;}  !* Firefox 18- *!*/
 
 
 @media (max-width:767px) {

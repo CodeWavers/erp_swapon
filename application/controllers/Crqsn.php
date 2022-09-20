@@ -396,7 +396,7 @@ class Crqsn extends CI_Controller
         $data['title'] = 'Outlet Approve';
         $data['t'] = $this->Rqsn->approve_outlet();
 
-     //   echo '<pre>';print_r($data);exit();
+
         $content = $this->parser->parse('rqsn/rqsn_approve_outlet', $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -506,6 +506,8 @@ class Crqsn extends CI_Controller
     {
         $CI = &get_instance();
         $CI->load->model('Rqsn');
+        $user_id = $this->session->userdata('user_id');
+        $Vdate=date('Y-m-d');
         $action = ($action == 'active' ? 3 : 2);
         $postData = array(
             'rqsn_detail_id'     => $id,
@@ -513,9 +515,75 @@ class Crqsn extends CI_Controller
             'isrcv' => 1
         );
 
+        $item_total=$this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id',$id)->get()->row()->item_total;
+
         //        print_r($postData);
         //        die();
+        //Income Credit
 
+        if ($item_total > 0){
+
+
+        $incCr = array(
+            'VNo'            =>  $id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  306,
+            'Narration'      =>  'Income For ID -  ' . $id ,
+            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
+            'Debit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $incCr);
+//Current Asset Receivable
+        $curDr = array(
+            'VNo'            =>  $id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  1020303,
+            'Narration'      =>  'Receivable For ID -  ' . $id ,
+            'Credit'          =>  0,
+            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $curDr);
+        //Current Liabilties Payable
+        $curLCr = array(
+            'VNo'            =>  $id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  50201,
+            'Narration'      =>  'Payable For  ID -  '  . $id,
+            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
+            'Debit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $curLCr);
+        //Expense Debit
+        $exDr = array(
+            'VNo'            =>  $id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  407,
+            'Narration'      =>  'Expense For ID -  ' . $id,
+            'Credit'          => 0,
+            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $exDr);
+        }
 
         if ($this->Rqsn->received($postData)) {
             $this->session->set_flashdata('message', display('successfully_approved'));

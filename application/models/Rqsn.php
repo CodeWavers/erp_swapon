@@ -151,41 +151,37 @@ class Rqsn extends CI_Model
 
         return $rqsn_id;
     }
-    public function transfer_entry()
+    public function  transfer_entry()
     {
         $this->load->model('Web_settings');
         $rqsn_id = mt_rand();
         $user_id = $this->session->userdata('user_id');
         //    echo "Ok";exit();
-
+        $Vdate =date('Y-m-d');
         //Data inserting into invoice table
         $datarq = array(
             'rqsn_id'     => $rqsn_id,
             'date'            => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
-            'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Requisition'),
+            'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Transfer'),
             'from_id' => $this->input->post('to_id', true),
             'to_id'  => $this->input->post('from_id', true),
-            'user_id'  => $user_id,
+            'grand_total'  => $this->input->post('total_expense', true),
+            'send_by'  => $user_id,
             'status'   => 1,
         );
-        //        $datarq = array(
-        //            'rqsn_id'     => 1,
-        //            'date'            => '22/1/2012',
-        //            'details'         => 'Regs',
-        //            'from_id'=> 'abc',
-        //            'to_id'  =>'765t',
-        //            'status'   => 1,
-        //        );
-
-        //  echo '<pre>';print_r($datarq);exit();
 
         $this->db->insert('rqsn', $datarq);
+
+        $outlet_name=$this->db->select('outlet_name')->from('outlet_warehouse')->where('outlet_id',$this->input->post('to_id', true))->get()->row()->outlet_name;
+
+
 
 
         $quantity            = $this->input->post('product_quantity', true);
         $p_id             = $this->input->post('product_id', true);
         $unit             = $this->input->post('unit', true);
         $qty_price             = $this->input->post('qty_price', true);
+        $total_price             = $this->input->post('total_price', true);
 
 
         for ($i = 0, $n   = count($p_id); $i < $n; $i++) {
@@ -193,6 +189,7 @@ class Rqsn extends CI_Model
             $un  = $unit[$i];
             $product_id   = $p_id[$i];
             $rate   = $qty_price[$i];
+            $t_price   = $total_price[$i];
 
 
             $rqsn_details = array(
@@ -206,6 +203,7 @@ class Rqsn extends CI_Model
 
                 //temporary added
                 'rate' =>$rate,
+                'item_total' =>$t_price,
                 'a_qty' =>$qty,
                 'isaprv'                => 1,
 //                'isrcv'                => 1,
@@ -215,6 +213,66 @@ class Rqsn extends CI_Model
                 $this->db->insert('rqsn_details', $rqsn_details);
             }
         }
+//        //Income Credit
+//        $incCr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  306,
+//            'Narration'      =>  'Income For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'Debit'         =>  0,
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $incCr);
+////Current Asset Receivable
+//        $curDr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  1020303,
+//            'Narration'      =>  'Receivable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          =>  0,
+//            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $curDr);
+//        //Current Liabilties Payable
+//        $curLCr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  50201,
+//            'Narration'      =>  'Payable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'Debit'         =>  0,
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $curLCr);
+//        //Expense Debit
+//        $exDr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  407,
+//            'Narration'      =>  'Transfer Expense For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          => 0,
+//            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $exDr);
 
         return $rqsn_id;
     }
@@ -1271,17 +1329,16 @@ class Rqsn extends CI_Model
             ->from('rqsn a')
             ->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id')
             ->join('outlet_warehouse c', 'c.outlet_id=a.from_id')
-            ->join('central_warehouse e', 'e.warehouse_id=a.to_id')
+            ->join('central_warehouse e', 'e.warehouse_id=a.to_id','left')
             ->join('product_information d', 'd.product_id=b.product_id')
-            ->join('size_list sz', 'd.size=sz.size_id', 'left')
-            ->join('color_list cl', 'd.color=cl.color_id', 'left')
+
 
             ->where('b.status', 2)
             // ->where('b.isaprv',1)
             ->where('c.user_id', $user_id)
             ->get()
             ->result();
-
+        //echo '<pre>';print_r($approveinfo);exit();
 
 
         foreach ($approveinfo as $record) {
@@ -1316,7 +1373,7 @@ class Rqsn extends CI_Model
                 'from' => $to->outlet_name,
                 'to' => $from->outlet_name,
                 'date' => $record->date,
-                'product_name' => $record->product_name . ' - ' . $record->product_model . ' - ' . $record->color_name . ' - ' . $record->size_name,
+                'product_name' =>  '(' . $record->sku . ' )'.$record->product_name  ,
                 'a_qty' => $record->a_qty,
                 'unit' => $record->unit,
                 'details' => $record->details,
