@@ -102,7 +102,7 @@
                                 <div class="form-group row">
                                     <label for="payment_type" class="col-sm-3 col-form-label">From<i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <select name="from_id" class="form-control" required=""  tabindex="3">
+                                        <select name="from_id" class="form-control" id="from_id" required=""  tabindex="3">
                                             <?php foreach($outlet_list as $outlet){?>
                                                 <option value="<?php echo html_escape($outlet['outlet_id'])?>"><?php echo html_escape($outlet['outlet_name']) ;?></option>
                                             <?php }?>
@@ -168,8 +168,8 @@
                                     <th class="text-center " width="25%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
 
                                     <th class="text-center"><?php echo display('unit') ?></th>
+                                    <th class="text-center">Stock</th>
                                     <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
-
                                     <th class="text-center">Sale Price</th>
                                     <th class="text-center">Total</th>
                                     <th class="text-center"><?php echo display('action') ?></th>
@@ -185,8 +185,12 @@
                                         <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
                                     </td>
 
+
                                     <td>
                                         <input name="unit[]" id="unit_1" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="available_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="available_quantity_1 form-control text-right" id="available_quantity_1" placeholder="0.00" min="0" tabindex="8"  value="" readonly />
                                     </td>
                                     <td>
                                         <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8"  value="" />
@@ -211,7 +215,7 @@
                                 <tfoot>
 
                                 <tr>
-                                    <td colspan="3" rowspan="3">
+                                    <td colspan="4" rowspan="3">
                                         <center><label  for="details" class="  col-form-label text-center">Remark...</label></center>
                                         <textarea name="inva_details" id="details" class="form-control" placeholder="Remark..." ></textarea>
                                     </td>

@@ -177,7 +177,7 @@ function quantity_calculate(item) {
     var dis_type = $("#discount_type_" + item).val();
     if (parseInt(quantity) > parseInt(available_quantity)) {
         var message = "You can Sale maximum " + available_quantity + " Items";
-        alert(message);
+        toastr.error(message);
         $("#total_qntt_" + item).val('');
         var quantity = 0;
         $("#total_price_" + item).val(0);
