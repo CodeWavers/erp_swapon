@@ -384,9 +384,7 @@ class Cproduction extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Web_settings');
         $CI->load->model('Reports');
-        $user_id = $this->session->userdata('user_id');
 
-        $outlet_id = $this->input->post('outlet_id', TRUE);
         $product_id = $this->input->post('product_id', TRUE);
         $customer_id = $this->input->post('customer_id', TRUE);
 
@@ -404,9 +402,7 @@ class Cproduction extends CI_Controller
 
         $rqsn_quantity=$this->db->select('*')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row();
         $rcv_qty=$this->db->select('SUM(rcv_qty) as rc_qty')->from('production_goods')->where('product_id',$product_id)->get()->row();
-      //  echo '<pre>';print_r($rcv_qty);exit();
-//        $qty= $rqsn_quantity->isrcv == 1 ? 0 : $rqsn_quantity->finished_qty;
-//
+
         if (!empty($rqsn_quantity)){
             $quantity=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
 
@@ -427,7 +423,7 @@ class Cproduction extends CI_Controller
 
         $data2['unit']           = $product_information->unit;
 
-        echo json_encode($data2) ;
+         echo json_encode($data2) ;
     }
 
 

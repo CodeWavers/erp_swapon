@@ -487,10 +487,19 @@ class Production extends CI_Model
         return $data2;
     }
 
+    public function get_receive_product(){
+
+        return  $this->db->select('a.*,b.product_name,b.sku,b.unit,c.production_cost')
+            ->from('pr_rqsn_details a ')
+            ->join('product_information b','a.product_id=b.product_id','left')
+            ->join('production_cost c','a.product_id=c.product_id','left')
+            ->get()->result_array();
+    }
+
     // outlet list
     public function cw_list()
     {
-        return $list = $this->db->select('*')
+        return  $this->db->select('*')
             ->from('central_warehouse a')
             // ->join('outlet_warehouse b','a.warehouse_id=b.warehouse_id')
             ->get()->result_array();

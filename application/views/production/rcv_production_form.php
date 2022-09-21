@@ -129,15 +129,18 @@
                                     <tr>
                                         <th class="text-center " width="25%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
 
-                                        <th class="text-center">Stock</th>
-                                        <th class="text-center"><?php echo display('unit') ?></th>
-                                        <th class="text-center">Quantity <i class="text-danger">*</i></th>
 
+                                        <th class="text-center">SKU</th>
+                                        <th class="text-center"><?php echo display('unit') ?></th>
+                                        <th class="text-center">Stock</th>
+                                        <th class="text-center">Quantity <i class="text-danger">*</i></th>
                                         <th class="text-center">Receive QTY</th>
+                                        <th class="text-center">Production Cost</th>
+                                        <th class="text-center">Total</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody id="addinvoiceItem">
+                                <tbody class="d-none">
                                     <tr>
                                         <td class="product_field">
                                             <input type="text" autocomplete="off" required name="product_name" onkeypress="invoice_productList_rcv(1)" id="product_name_1" class="form-control productSelection" placeholder="Product Name" tabindex="5" value="<?= (isset($isedit) ? $pr_details : '') ?>">
@@ -171,27 +174,53 @@
                                     </tr>
 
                                 </tbody>
+
+                                <tbody>
+
+                                {product_list}
+                                <tr>
+                                    <td>{product_name}</td>
+                                    <td>{sku}</td>
+                                    <td>{unit}</td>
+                                    <td>{stock}</td>
+                                    <td>{rc_qty}</td>
+                                    <td> <input type="text" name="rcv_qty[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="rcv_qty form-control text-right" id="rcv_qty_1" placeholder="0.00" value="{rc_qty}" tabindex="8" /></td>
+                                    <td> <input type="text" name="production_cost[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="cost form-control text-right" id="cost_1" placeholder="0.00" value="{production_cost}" tabindex="8" /></td>
+                                    <td> <input type="text" name="total_price[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="total_price form-control text-right" id="total_price_1" placeholder="0.00" value="{row_total}" tabindex="8" /></td>
+
+                                    <td> <button class='btn btn-danger text-right' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-remove'></i></button></td>
+
+
+                                </tr>
+                                {/product_list}
+
+                                </tbody>
                                 <tfoot>
 
-<!--                                    <tr>-->
-<!--                                        <td class="text-right" colspan="4"><b>--><?php //echo display('total') ?><!--:</b></td>-->
-<!--                                        <td class="text-right">-->
-<!--                                            <input type="text" id="Total" class="text-right form-control" name="total" value="--><?//= (isset($isedit) ? $pr_total_price : '0.00') ?><!--" readonly="readonly" />-->
-<!--                                        </td>-->
-<!---->
-<!--                                        <td></td>-->
-<!--                                    </tr>-->
-                                    <tr>
-                                        <td colspan="5" rowspan="1">
-                                            <center><label for="details" class="  col-form-label text-center">Remark</label></center>
-                                            <textarea name="inva_details" id="details" class="form-control" placeholder="Remark"><?= (isset($isedit) ? $remark : '') ?></textarea>
-                                        </td>
+                                <tfoot>
+
+                                <tr>
+                                    <td colspan="6" rowspan="3">
+                                        <center><label  for="details" class="  col-form-label text-center">Remark...</label></center>
+                                        <textarea name="inva_details" id="details" class="form-control" placeholder="Remark..." ></textarea>
+                                    </td>
+                                    <td colspan="1" class="text-right">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td>
+
+                                        <input class="form-control text-right" type="text" name="total_expense" id="total_expense" placeholder="0.00" readonly>
+                                    </td>
+                                </tr>
 
 
-                                    </tr>
 
 
-                                    <tr>
+
+                                </tfoot>
+
+
+
 
                                 </tfoot>
                             </table>
