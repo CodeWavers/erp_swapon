@@ -201,7 +201,47 @@ class reports extends CI_Model
         }
         return false;
     }
+    public function wastage_entry(){
+        $this->load->model('Web_settings');
+        $this->load->model('warehouse');
 
+        $quantity            = $this->input->post('product_quantity',true);
+        $p_id             = $this->input->post('product_id',true);
+        //  $unit             = $this->input->post('unit',true);
+
+
+        $outlet_id=$this->warehouse->get_outlet_user()[0]['outlet_id'];
+        if (empty($outlet_id)){
+            $out='HK7TGDT69VFMXB7';
+        }else{
+            $out=$outlet_id;
+        }
+
+        for ($i = 0, $n   = count($p_id); $i < $n; $i++) {
+            $qty  = $quantity[$i];
+            //   $un  = $unit[$i];
+            $product_id   = $p_id[$i];
+
+            $data = array(
+                'outlet_id' => $out,
+                'product_id'=>$product_id,
+                'wastage_quantity'=>$qty,
+                'date'=>date('Y-m-d'),
+                'status'=>1
+
+
+            );
+            if (!empty($quantity)) {
+                $this->db->insert('wastage_dec', $data);
+
+
+            }
+
+
+        }
+
+        return $data;
+    }
 
     public function totalnumberof_product()
     {

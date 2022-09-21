@@ -1248,6 +1248,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('stock_report', 'read')->access() ||
         $this->permission1->method('stock_report_sp_wise', 'read')->access() ||
         $this->permission1->method('stock_report_pro_wise', 'read')->access() ||
+        $this->permission1->method('wastage_dec', 'read')->access() ||
         $this->permission1->method('outlet_stock', 'read')->access() ||
         $this->permission1->method('outlet_stock', 'read')->access() ||
         $this->permission1->method('outlet_stock', 'read')->access()
@@ -1299,39 +1300,15 @@ $birthday = $CI->Reports->birthday_noti();
                   } ?>"><a href="<?php echo base_url('Creport/manage_stock_taking'); ?>">Manage Stock Taking</a></li>
               <?php } ?>
 
-<!--            --><?php //if ($this->permission1->method('stock_report', 'read')->access()) { ?>
-<!--              <li class="treeview --><?php //if (
-//                                    $this->uri->segment('1') == "Creport" &&
-//                                    $this->uri->segment('2') == "raw_stock"
-//                                  ) {
-//                                    echo "active";
-//                                  } else {
-//                                    echo " ";
-//                                  } ?><!--"><a href="--><?php //echo base_url('Creport/raw_stock'); ?><!--">Raw Materials Stock</a></li>-->
-<!--            --><?php //} ?>
-<!---->
-<!--            --><?php //if ($this->permission1->method('stock_report', 'read')->access()) { ?>
-<!--              <li class="treeview --><?php //if (
-//                                    $this->uri->segment('1') == "Creport" &&
-//                                    $this->uri->segment('2') == "tools_stock"
-//                                  ) {
-//                                    echo "active";
-//                                  } else {
-//                                    echo " ";
-//                                  } ?><!--"><a href="--><?php //echo base_url('Creport/tools_stock'); ?><!--">Tools Stock</a></li>-->
-<!--            --><?php //} ?>
 
-<!--            --><?php //if ($this->permission1->method('sms_configure', 'create')->access()) { ?>
-<!--              <li class="treeview --><?php //if (
-//                                    $this->uri->segment('1') == "Crqsn" &&
-//                                    $this->uri->segment('2') == "outlet_stock_entry"
-//                                  ) {
-//                                    echo "active";
-//                                  } else {
-//                                    echo " ";
-//                                  } ?><!--"><a href="--><?php //echo base_url('Crqsn/outlet_stock_entry'); ?><!--">Outlet Stock Entry</a></li>-->
-<!--            --><?php //} ?>
-
+              <?php if ($this->permission1->method('wastage_dec', 'create')->access()) { ?>
+                  <li class="treeview <?php if ($this->uri->segment('1') == ("Creport") && $this->uri->segment('2') == ("")) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url('Creport/wastage_dec') ?>">Wastage Declaration</a>
+                  </li>
+              <?php } ?>
 
 
             <!-- outlet stock start -->

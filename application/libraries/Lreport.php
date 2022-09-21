@@ -11,6 +11,26 @@ class Lreport extends CI_Model
         $this->load->database();
     }
 
+    public function wastage_dec() {
+        $CI = & get_instance();
+        $CI->load->model('Rqsn');
+        $CI->load->model('Web_settings');
+        $CI->load->model('warehouse');
+
+        $outlet_id=$this->warehouse->get_outlet_user()[0]['outlet_id'];
+
+        $data = array(
+            'title'         => "Wastage Declaration",
+            "outlet_id" => $outlet_id,
+
+        );
+       // echo '<pre'; print_r($data);exit();
+
+        //    die();
+        $invoiceForm = $CI->parser->parse('wastage/wastage_dec', $data, true);
+        return $invoiceForm;
+    }
+
     // Retrieve All Stock Report
     public function stock_report($limit, $page, $links)
     {
