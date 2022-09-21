@@ -1130,7 +1130,7 @@ $birthday = $CI->Reports->birthday_noti();
       <!-- Production menu start -->
       <?php if ($this->permission1->method('add_production', 'create')->access()) { ?>
         <li class="treeview <?php
-                            if ($this->uri->segment('2') == ("receive_production") || $this->uri->segment('2') == ("transfer_production") || $this->uri->segment('2') == ("manage_production") || $this->uri->segment('2') == ("pr_rqsn_form") && $this->uri->segment('2') == ("production_list") || $this->uri->segment('2') == ("item_finalize") ) {
+                            if ($this->uri->segment('2') == ("receive_production") || $this->uri->segment('2') == ("production_cost") ||$this->uri->segment('2') == ("transfer_production") || $this->uri->segment('2') == ("manage_production") || $this->uri->segment('2') == ("pr_rqsn_form") && $this->uri->segment('2') == ("production_list") || $this->uri->segment('2') == ("item_finalize") ) {
                               echo "active";
                             } else {
                               echo " ";
@@ -1144,30 +1144,13 @@ $birthday = $CI->Reports->birthday_noti();
           </a>
           <ul class="treeview-menu">
 
-
-<!--            --><?php //if ($this->permission1->method('production_mix', 'create')->access()) { ?>
-<!--              <li class="treeview --><?php //if ($this->uri->segment('1') == ("Cproduction") && $this->uri->segment('2') == ("index")) {
-//                                    echo "active";
-//                                  } else {
-//                                    echo " ";
-//                                  } ?><!--"><a href="--><?php //echo base_url('Cproduction/production_mix') ?><!--">Production Mix</a></li>-->
-<!--            --><?php //} ?>
-<!--            --><?php //if ($this->permission1->method('production_mix', 'create')->access()) { ?>
-<!--              <li class="treeview --><?php //if ($this->uri->segment('1') == ("Cproduction") && $this->uri->segment('2') == ("manage_production_mix")) {
-//                                    echo "active";
-//                                  } else {
-//                                    echo " ";
-//                                  } ?><!--"><a href="--><?php //echo base_url('Cproduction/manage_production_mix') ?><!--">Manage Production Mix</a></li>-->
-<!--            --><?php //} ?>
-
-<!--            --><?php //if ($this->permission1->method('add_production', 'create')->access()) { ?>
-<!--              <li class="treeview --><?php //if ($this->uri->segment('1') == ("Cproduction") && $this->uri->segment('2') == ("index")) {
-//                                    echo "active";
-//                                  } else {
-//                                    echo " ";
-//                                  } ?><!--"><a href="--><?php //echo base_url('Cproduction/production') ?><!--">Production</a></li>-->
-<!--            --><?php //} ?>
-
+              <?php if ($this->permission1->method('production_cost', 'create')->access()) { ?>
+                  <li class="treeview <?php if ($this->uri->segment('1') == ("Cproduction") && $this->uri->segment('2') == ("index")) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url('Cproduction/production_cost') ?>"> Cost Declare</a></li>
+              <?php } ?>
 
               <?php if ($this->permission1->method('add_production', 'create')->access()) { ?>
                   <li class="treeview <?php if ($this->uri->segment('1') == ("Cproduction") && $this->uri->segment('2') == ("index")) {

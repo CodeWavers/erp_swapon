@@ -25,6 +25,120 @@ class Cproduction extends CI_Controller
         $content = $this->lproduction->rqsn_add_form();
         $this->template->full_admin_html_view($content);
     }
+
+    public function production_cost(){
+
+        $data = array(
+            'title'     => 'Production Cost Declare'
+
+        );
+
+
+        $view = $this->parser->parse('production/cost_dec', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+    public function append_product()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Products');
+        $product_id = $this->input->post('product_id', TRUE);
+        $rowCount = $this->input->post('rowCount', TRUE);
+
+
+        $product_details  = $CI->Products->product_details($product_id)[0];
+        $product_cost = $this->db->select('production_cost')->from('production_cost')->where('product_id', $product_id)->get()->row()->production_cost;
+
+       // echo '<pre>';print_r($product_cost);exit();
+        $tr = " ";
+        if (!empty($product_details)) {
+            $qty=0;
+//         $sl=$rowCount+1;
+
+            $tr .= "
+            <tr id=\"row_" . $product_details->product_id . "\">
+                        <td style=\"width: 5%\">
+                                    $rowCount
+                        </td>
+                        <td style=\"width: 30%\">
+                                $product_details->sku
+                        </td>
+						<td class=\"\" style=\"width: 30%\">
+
+                            $product_details->product_name
+
+							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+
+						</td>
+                         <td style=\"width: 10%\">
+                                $product_details->unit
+                        </td>
+
+                        <td style=\"width:20%\">
+                            <input type=\"text\" name=\"production_cost[]\" class=\"cost_" . $product_details->product_id . " form-control text-right\" id=\"cost_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value=\"$product_cost\"/>
+                        </td>
+
+                      
+						<td>";
+            $sl = 0;
+
+
+            $tr .= "<button  class=\"btn btn-danger btn-md text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+						</td>
+					</tr>";
+            echo $tr;
+        } else {
+            return false;
+        }
+    }
+
+    public function save_production_cost()
+    {
+        $date = date('Y-m-d');
+
+        $product_id = $this->input->post('product_id', TRUE);
+        $production_cost = $this->input->post('production_cost', TRUE);
+
+
+        if (empty($production_cost)){
+            $this->session->set_userdata(array('error_message' => 'Production Cost is empty!!'));
+            redirect(base_url('Cproduction/production_cost'));
+            exit();
+        }
+
+        for ($i = 0; $i < count($product_id); $i++) {
+            $pr_id = $product_id[$i];
+            $pro_cost = $production_cost[$i];
+
+            $data2 = array(
+                'product_id' =>$pr_id,
+                'production_cost' =>$pro_cost,
+
+
+
+            );
+            $check_product = $this->db->select('product_id')->from('production_cost')->where('product_id', $pr_id)->get()->row();
+            if (!empty($check_product)) {
+                $this->db->where('product_id', $pr_id);
+                $this->db->update('production_cost', $data2);
+            }else{
+                if (!empty($pro_cost)) {
+                    $this->db->insert('production_cost', $data2);
+                }
+
+            }
+
+
+
+        }
+        $this->session->set_userdata(array('message' => 'Successfully Added'));
+        redirect(base_url('Cproduction/production_cost'));
+    }
+
     public function autocompleteprsearch()
     {
         $CI = &get_instance();
