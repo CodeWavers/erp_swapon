@@ -313,7 +313,8 @@ class reports extends CI_Model
         $product_sku = $this->input->post('product_sku', TRUE);
         $date = date('Y-m-d');
 
-
+        $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
 
         ## Read value
         if (!$post_product_id) {
@@ -443,17 +444,74 @@ class reports extends CI_Model
 
 
         foreach ($records as $record) {
+            if ($from_date) {
+                $this->db->where('b.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('b.date <=', $to_date);
+            }
             $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('a.pre_order', 1)->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
             $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
             //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
-            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->from('product_purchase_details')->where('status', 2)->where('product_id', $record->product_id)->get()->row();
-            $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')->from('rqsn_details')->where('isaprv', 1)->where('isrcv', 1)->where('product_id', $record->product_id)->get()->row();
 
+            if ($from_date) {
+                $this->db->where('product_purchase.purchase_date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('product_purchase.purchase_date <=', $to_date);
+            }
+            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->from('product_purchase_details')->where('status', 2)->where('product_id', $record->product_id)->get()->row();
+            if ($from_date) {
+                $this->db->where('rqsn.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('rqsn.date <=', $to_date);
+            }
+            //$stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')->from('rqsn_details')->where('isaprv', 1)->where('isrcv', 1)->where('product_id', $record->product_id)->get()->row();
+
+
+
+            $stockin_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                ->from('rqsn_details')
+                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                ->where('rqsn.from_id', 'HK7TGDT69VFMXB7')
+                ->where('isaprv', 1)
+                ->where('isrcv', 1)
+                ->where('product_id', $record->product_id)
+                ->get()
+                ->row();
+
+            if ($from_date) {
+                $this->db->where('rqsn.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('rqsn.date <=', $to_date);
+            }
+            $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                ->from('rqsn_details')
+                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                ->where('rqsn.to_id', 'HK7TGDT69VFMXB7')
+                ->where('isaprv', 1)
+                ->where('isrcv', 1)
+                ->where('product_id', $record->product_id)
+                ->get()
+                ->row();
             $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
 
 
-
+            if ($from_date) {
+                $this->db->where('opening_inventory.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('opening_inventory.date <=', $to_date);
+            }
             $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
+            if ($from_date) {
+                $this->db->where('production.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('production.date <=', $to_date);
+            }
             $production_qty = $this->db->select('SUM(quantity) as pro_qty')
                 ->from('production_goods')
                 ->where('product_id', $record->product_id)
@@ -461,6 +519,12 @@ class reports extends CI_Model
                 ->get()
                 ->row();
 
+            if ($from_date) {
+                $this->db->where('production.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('production.date <=', $to_date);
+            }
             $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
                 ->from('item_usage')
                 ->where('item_id', $record->product_id)
@@ -511,6 +575,170 @@ class reports extends CI_Model
 
 
 
+            /************************
+             *  Opening Stock Start *
+             * **********************/
+
+            if ($from_date) {
+                $this->db->where('b.date <=', $from_date);
+                $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
+                $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
+                //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
+
+                $this->db->where('product_purchase.purchase_date <=', $from_date);
+
+                $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+                    ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                    ->from('product_purchase_details')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+
+                $this->db->where('rqsn.date <=', $from_date);
+                $this->db->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id');
+                $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                    ->from('rqsn_details')
+                    ->where('isaprv', 1)
+                    ->where('isrcv', 1)
+                    ->where('rqsn.to_id', 'HK7TGDT69VFMXB7')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+                $this->db->where('rqsn.date <=', $from_date);
+                $stockin_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where('isaprv', 1)
+                    ->where('isrcv', 1)
+                    ->where('rqsn.from_id', 'HK7TGDT69VFMXB7')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+                $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
+
+                // echo '<pre>';
+                // print_r($product_supplier_price[0]);
+                // exit();
+
+                $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
+
+                $this->db->where('production.date <=', $from_date);
+                $production_qty = $this->db->select('SUM(quantity) as pro_qty')
+                    ->from('production_goods')
+                    ->join('production', 'production.pro_id = production_goods.pro_id', 'left')
+                    ->where('product_id', $record->product_id)
+                    ->group_by('product_id')
+                    ->get()
+                    ->row();
+
+
+                $this->db->where('production.date <=', $from_date);
+                $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                    ->from('item_usage')
+                    ->join('production', 'production.pro_id = item_usage.production_id', 'left')
+                    ->where('item_id', $record->product_id)
+                    ->group_by('item_id')
+                    ->get()
+                    ->row();
+
+
+                $sprice = (!empty($record->price) ? $record->price : 0);
+                $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
+                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet
+                        ->totaloutletQnty) ? $stockin_outlet
+                        ->totaloutletQnty : 0);
+                $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+
+                $opening_stock = $opening_total_in - $opening_total_out;
+            } else {
+                $opening_stock = $stock;
+            }
+            // Opening Stock End
+
+
+
+
+            /*********************
+             *
+             *  Closing Stock Start
+             *
+             * ********************/
+            if ($to_date) {
+                $this->db->where('b.date <=', $to_date);
+                $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
+                $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
+                //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
+
+                $this->db->where('product_purchase.purchase_date <=', $to_date);
+
+                $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')->from('product_purchase_details')->where('product_id', $record->product_id)->get()->row();
+
+                $this->db->where('rqsn.date <=', $from_date);
+                $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where('isaprv', 1)
+                    ->where('isrcv', 1)
+                    ->where('rqsn.to_id', 'HK7TGDT69VFMXB7')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+                $this->db->where('rqsn.date <=', $from_date);
+                $stockin_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where('isaprv', 1)
+                    ->where('isrcv', 1)
+                    ->where('rqsn.from_id', 'HK7TGDT69VFMXB7')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+                $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
+
+                // echo '<pre>';
+                // print_r($product_supplier_price[0]);
+                // exit();
+
+                $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
+
+                $this->db->where('production.date <=', $to_date);
+                $production_qty = $this->db->select('SUM(quantity) as pro_qty')
+                    ->from('production_goods')
+                    ->join('production', 'production.pro_id = production_goods.pro_id', 'left')
+                    ->where('product_id', $record->product_id)
+                    ->group_by('product_id')
+                    ->get()
+                    ->row();
+
+                $this->db->where('production.date <=', $to_date);
+
+
+                $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                    ->from('item_usage')
+                    ->join('production', 'production.pro_id = item_usage.production_id', 'left')
+                    ->where('item_id', $record->product_id)
+                    ->group_by('item_id')
+                    ->get()
+                    ->row();
+
+
+
+                $sprice = (!empty($record->price) ? $record->price : 0);
+                $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
+                $closing_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet->totaloutletQnty) ? $stockin_outlet->totaloutletQnty : 0);
+                $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+                $closing_stock = $closing_total_in - $closing_total_out;
+            } else {
+                $closing_stock = $stock;
+            }
+            // Closing Stock End
+
+
 
             $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
             $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
@@ -530,6 +758,7 @@ class reports extends CI_Model
                 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                 'stok_quantity' => sprintf('%0.2f',$stock),
+                'opening_stock'     => $opening_stock,
                 'total_sale_price' => $stock * $sprice,
                 'purchase_total' => (($stock * $pprice) != 0)
                     ? ($stock * $pprice)

@@ -1,6 +1,6 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/shopswaponsworld/public_html/erp_swapon
+    - export DEPLOYPATH=/home/codew/public_html/erp_swapon
     - /bin/cp index.html $DEPLOYPATH
     - /bin/cp style.css $DEPLOYPATH

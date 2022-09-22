@@ -912,10 +912,17 @@ $(document).ready(function () {
   var cat_id = $("#cat_list").val();
   var outlet_id = $("#outlet").val();
 
-  $("#cat_list").on("change", function (e) {
+
+
+  var from_date = $("#from_date").val();
+  var to_date = $("#to_date").val();
+
+
+  $("#cat_list,#from_date,#to_date").on("change", function (e) {
     var valueSelected = this.value;
     cat_id = valueSelected;
-
+    from_date = $("#from_date").val();
+    to_date = $("#to_date").val();
     table.ajax.reload();
   });
 
@@ -1000,9 +1007,11 @@ $(document).ready(function () {
       },
       { data: "totalPurchaseQnty", class: "text-right" },
       { data: "totalSalesQnty", class: "text-right" },
-      { data: "return_given", class: "text-right" },
+      { data: "return_given", class: " stock text-right" },
       //   { data: 'warrenty_stock' ,class:"stock text-right" },
       { data: "stok_quantity", class: "stock text-right" },
+      { data: "stok_quantity", class: "stock text-right" },
+
       {
         data: "total_sale_price",
         class: "total_sale text-right",
@@ -1255,13 +1264,15 @@ $(document).ready(function () {
   var total_stock = $("#total_stock").val();
   var product_status = $("#product_status").val();
   var product_sku = $("#product_sku").val();
-
+  var from_date = $("#from_date").val();
+  var to_date = $("#to_date").val();
   var pr_status = $("#pr_status").val();
 
-  $("#product_status").on("change", function (e) {
+  $("#product_status,#from_date, #to_date").on("change", function (e) {
     var valueSelected = this.value;
     product_status = valueSelected;
-
+    from_date = $("#from_date").val();
+    to_date = $("#to_date").val();
     table.ajax.reload();
   });
 
@@ -1348,6 +1359,8 @@ $(document).ready(function () {
         d.pr_status = pr_status;
         d.product_status = product_status;
         d.product_sku = $('.product_sku').val();
+        d.from_date = from_date;
+        d.to_date = to_date;
       },
     },
     columns: [
@@ -1370,6 +1383,7 @@ $(document).ready(function () {
       { data: "totalPurchaseQnty", class: "text-right" },
       { data: "damagedQnty", class: "text-right" },
       { data: "totalSalesQnty", class: "text-right" },
+      { data: "opening_stock", class: "stock text-right" },
       { data: "stok_quantity", class: "stock text-right" },
       {
         data: "total_sale_price",

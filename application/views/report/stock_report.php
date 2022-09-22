@@ -54,6 +54,15 @@
                         <input type="hidden" name="" id="pr_status" value="<?= $pr_status ?>">
 
                         <div class="row">
+                            <div class="col-sm-6">
+                                <label class="" for="from_date"><?php echo display('start_date') ?></label>
+                                <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="" autocomplete="off">
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="" for="to_date"><?php echo display('end_date') ?></label>
+                                <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="" autocomplete="off">
+                            </div>
+
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Product Type : </label>
                                 <select name="product_status" id="product_status" class="form-control"  >
@@ -102,8 +111,9 @@
                                             <th class="text-center"><?php echo display('in_qnty') ?></th>
                                             <th class="text-center">Damaged Quantity</th>
                                             <th class="text-center"><?php echo display('out_qnty') ?></th>
+                                            <th class="text-center">Opening Stock</th>
+                                            <th class="text-center">Closing Stock</th>
 
-                                            <th class="text-center">Central Stock</th>
 
                                             <th class="text-center"><?php echo display('stock_sale') ?></th>
                                             <th class="text-center"><?php echo display('stock_purchase_price') ?></th>
@@ -112,19 +122,12 @@
                                     <tbody>
                                     <tfoot>
                                         <tr>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th class="text-right"><?php echo display('total') ?> :</th>
+                                            <th colspan="10" class="text-right"><?php echo display('total') ?> :</th>
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>
+                                            <th></th>
+
                                         </tr>
 
                                     </tfoot>
