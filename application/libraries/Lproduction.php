@@ -319,17 +319,14 @@ class Lproduction
                 $rcv_qty=$CI->db->select('SUM(rcv_qty) as rc_qty')->from('production_goods')->where('product_id',$product_id)->get()->row();
 
                 if (!empty($rqsn_quantity)){
-                    $product_list[$k]['quantity']=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
-                    $product_list[$k]['rc_qty']=$rcv_qty->rc_qty;
-                    $product_list[$k]['row_total']=$rcv_qty->rc_qty*$product_list[$k]['production_cost'];
-
-//                    if ($product_list[$k]['rc_qty'] > 0){
-//                        $product =array_slice($product_list,2);
-//                    }
+                    $product_list[$k]['rc_qty']=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
+                    //$product_list[$k]['rc_qty']=$rcv_qty->rc_qty;
+                    $product_list[$k]['row_total']=$product_list[$k]['rc_qty']*$product_list[$k]['production_cost'];
 
                 }
 
             }
+
         }
 
 
@@ -341,9 +338,10 @@ class Lproduction
             'base_no'       => $base_no,
             'bank_list'     => $bank_list,
             'product_list'     => $product_list,
+            'grand_total'     => number_format(array_sum(array_column($product_list,'row_total')),2),
         );
 
-       // echo '<pre>'; print_r($product_list);exit();
+       //echo '<pre>'; print_r($product_list);exit();
         //    die();
         $invoiceForm = $CI->parser->parse('production/rcv_production_form', $data, true);
         return $invoiceForm;

@@ -347,45 +347,28 @@ function quantity_calculate(item) {
 
 function quantity_calculate_p(item) {
     var gr_tot = 0;
-    //var additional_charge = 0;
-    //var labour_charge = 0;
-
     var quantity = $("#total_qntt_" + item).val();
-    var available_quantity = $(".available_quantity_" + item).val();
-    var multiplier = $(".multiplier_" + item).val();
+    var qty = $("#quantity_" + item).val();
+    //alert(quantity)
+   // var available_quantity = $(".available_quantity_" + item).val();
+
+    if (quantity > qty){
+        toastr.error("You can't receive more than "+qty+" quantity !")
+        $("#total_qntt_" + item).val(qty);
+        return
+    }
 
     var price =  $("#rate_" + item).val();
 
-
-    var total_rate = price / multiplier;
-    $("#total_rate_"+item).val(total_rate.toFixed(2));
     var qty_price = price * quantity;
+
     $("#qty_price_"+item).val(qty_price.toFixed(2));
-
-    var per_item_cost = $("#per_item_extra_cost").val();
-
 
     $(".qty_price").each(function() {
         isNaN(this.value) || 0 == this.value.length || (gr_tot += parseFloat(this.value) )
     });
-   // console.log(gr_tot)
 
-    $("#Total").val(gr_tot.toFixed(2,2));
-
-   var additional_charge= parseFloat($("#ad_charge").val());
-   var labour_charge= parseFloat($("#labour_charge").val());
-
-
-
-    var grandtotal = gr_tot+additional_charge+labour_charge;
-    $("#grandTotal").val(grandtotal.toFixed(2,2));
-    //console.log(gr_tot)
-    //console.log(additional_charge)
-    //console.log(labour_charge)
-    //
-    //console.log(grandtotal)
- //   console.log(grandtotal)
-
+    $("#grandTotal").val(gr_tot.toFixed(2,2));
 
   //  calculateSum();
    // invoice_paidamount();
@@ -558,6 +541,7 @@ function deleteRow(t) {
     else {
         var e = t.parentNode.parentNode;
         e.parentNode.removeChild(e),
+            quantity_calculate_p(1)
             calculateSum();
         invoice_paidamount();
         var current = 1;
@@ -593,7 +577,7 @@ function deleteRow(t) {
         });
 
 
-
+        quantity_calculate_p(1)
 
     }
 }

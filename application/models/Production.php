@@ -923,7 +923,7 @@ class Production extends CI_Model
             $price  = $price_rate[$i];
             $product_id   = $p_id[$i];
             $r_q   = $rcv_qty[$i];
-            $transfer_price =  $this->input->post('transfer_price', true);
+
 
 
             $goods_details = array(
@@ -931,14 +931,12 @@ class Production extends CI_Model
                 'production_goods_id'     => mt_rand(),
                 'product_id'         => $product_id,
                 'price'         => $price,
-                'per_unit_cost'     => $this->input->post('per_item_extra_cost', true),
-                'transfer_cost'     => $transfer_price,
                 'quantity'                => $qty,
                 'rcv_qty'                => $r_q,
                 'status'                => 1,
 
             );
-            // echo '<pre>';print_r($mix_details);exit();
+           // echo '<pre>';print_r($goods_details);exit();
             if (!empty($quantity)) {
                 $this->db->insert('production_goods', $goods_details);
 
@@ -950,192 +948,33 @@ class Production extends CI_Model
             $this->db->set('isrcv', 1);
             $this->db->where('product_id', $product_id);
             $this->db->update('pr_rqsn_details');
-//
-//            $this->db->where('product_id', $product_id);
-//            $this->db->set('price', $transfer_price);
-//            $this->db->update('product_information');
+
         }
-//
-//        $items = $this->db->select('*')
-//            ->from('production_mix a')
-//            ->join('production_mix_details b', 'a.production_id=b.production_id')
-//            ->where('a.product_id', $product_id)
-//            ->get()->result();
-//
-//        foreach ($items as $i) {
-//
-//            $usage_qty = ($i->quantity) * $qty;
-//
-//            $data_items = array(
-//                'production_id' => $pro_id,
-//                'item_usage_id' => mt_rand(),
-//                'item_id' => $i->item_id,
-//                'usage_qty' => $usage_qty,
-//
-//            );
-//            $this->db->insert('item_usage', $data_items);
-//        }
+
 
         $createdate = date('Y-m-d H:i:s');
         $createby = $this->session->userdata('user_id');
 
+            $total= $this->input->post('total', true);
 
-
-        for ($i = 0; $i < count($exp_pay); $i++) {
-            if ($exp_pay[$i] == 1) {
-
-                $cc = array(
-                    'VNo'            =>  $base_no,
+            if ($total > 0){
+                //Expense Debit
+                $exDr = array(
+                    'VNo'            =>  $pro_id,
                     'Vtype'          =>  'Production',
                     'VDate'          =>  $createdate,
-                    'COAID'          =>  1020101,
-                    'Narration'      =>  'Cash out for Production - ' . $pro_id,
-                    'Debit'          =>  0,
-                    'Credit'         =>  $exp_amount[$i],
+                    'COAID'          =>  409,
+                    'Narration'      =>  'Expense Debit For Production ID -  ' . $pro_id,
+                    'Credit'          => 0,
+                    'Debit'         =>  (!empty($total) ? $total: 0),
                     'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1
                 );
-
-                $expdr = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $exp_head[$i],
-                    'Narration'      =>  'Expense debit for Production - ' . $pro_id,
-                    'Debit'          =>  $exp_amount[$i],
-                    'Credit'         =>  0,
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-                );
-
-                $this->db->insert('acc_transaction', $cc);
-                $this->db->insert('acc_transaction', $expdr);
+                $this->db->insert('acc_transaction', $exDr);
             }
 
-            if ($exp_pay[$i] == 2) {
-                if (!empty($bank_id)) {
-                    $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id[$i])->get()->row()->bank_name;
-
-                    $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-                } else {
-                    $bankcoaid = '';
-                }
-
-                $bankc = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $bankcoaid,
-                    'Narration'      =>  'Bank cash out for Production - ' . $pro_id,
-                    'Debit'          =>  0,
-                    'Credit'         =>  $exp_amount[$i],
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-                );
-
-                $expdr = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $exp_head[$i],
-                    'Narration'      =>  'Expense debit for Production - ' . $pro_id,
-                    'Debit'          =>  $exp_amount[$i],
-                    'Credit'         =>  0,
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-                );
-
-                $this->db->insert('acc_transaction', $bankc);
-                $this->db->insert('acc_transaction', $expdr);
-            }
-
-            if ($exp_pay[$i] == 3) {
-
-                $cc = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  1020101,
-                    'Narration'      =>  'Cash out (TT) for Production - ' . $pro_id,
-                    'Debit'          =>  0,
-                    'Credit'         =>  $exp_amount[$i],
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-
-                );
-
-                $expdr = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $exp_head[$i],
-                    'Narration'      =>  'Expense debit for Production - ' . $pro_id,
-                    'Debit'          =>  $exp_amount[$i],
-                    'Credit'         =>  0,
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-                );
-
-                $this->db->insert('acc_transaction', $cc);
-                $this->db->insert('acc_transaction', $expdr);
-            }
-
-            if ($exp_pay[$i] == 4) {
-                if (!empty($bank_id)) {
-                    $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id[$i])->get()->row()->bank_name;
-
-                    $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
-                } else {
-                    $bankcoaid = '';
-                }
-
-                $bankc = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $bankcoaid,
-                    'Narration'      =>  'Bank cash out (TT) for Production - ' . $pro_id,
-                    'Debit'          =>  0,
-                    'Credit'         =>  $exp_amount[$i],
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-                );
-
-                $expdr = array(
-                    'VNo'            =>  $base_no,
-                    'Vtype'          =>  'Production',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $exp_head[$i],
-                    'Narration'      =>  'Expense debit for Production - ' . $pro_id,
-                    'Debit'          =>  $exp_amount[$i],
-                    'Credit'         =>  0,
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
-                );
-
-                $this->db->insert('acc_transaction', $bankc);
-                $this->db->insert('acc_transaction', $expdr);
-            }
-        }
-
-        //  echo '<pre>';print_r($data_items);exit();
 
         return $pro_id;
     }

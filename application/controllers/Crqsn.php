@@ -573,7 +573,7 @@ class Crqsn extends CI_Controller
             'VNo'            =>  $id,
             'Vtype'          =>  'RQSN',
             'VDate'          =>  $Vdate,
-            'COAID'          =>  407,
+            'COAID'          =>  408,
             'Narration'      =>  'Expense For ID -  ' . $id,
             'Credit'          => 0,
             'Debit'         =>  (!empty($item_total) ? $item_total: 0),
