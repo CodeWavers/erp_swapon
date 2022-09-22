@@ -111,6 +111,9 @@
 
 
                                     ?>
+
+
+                                        <?php if ($row['quantity'] !=  $row['finished_qty']) { ?>
                                     <tr class="text-center">
                                         <td><?php echo $row['sl']?> </td>
                                         <td class="text-center"><img src="<?php echo $row['image']?>" class="img-zoom" alt="Product Photo"></td>
@@ -200,7 +203,7 @@
                                         </td>
                                     </tr>
                                     <input type ="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash();?>">
-                                <?php } ?>
+                                <?php } }?>
                                 </tbody>
                             </table>
 

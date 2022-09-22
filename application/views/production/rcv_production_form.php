@@ -138,7 +138,7 @@
                                     <td>
                                         <input type="text" name="rcv_qty[]" required="" onkeyup="quantity_calculate_p(<?=$sl?>);" onchange="quantity_calculate_p(<?=$sl?>);" class="total_qntt form-control text-right" id="total_qntt_<?= $sl?>" placeholder="0.00" value="<?= $pro['rc_qty']?>" tabindex="8" /></td>
                                     <input type="hidden" name="product_quantity[]" required="" onkeyup="quantity_calculate_p(<?=$sl?>);" onchange="quantity_calculate_p(<?=$sl?>);" class="quantity form-control text-right" id="quantity_<?= $sl?>" placeholder="0.00" value="<?= $pro['rc_qty']?>" tabindex="8" /></td>
-                                    <input type="hidden" name="product_id[]" required="" onkeyup="quantity_calculate_p(<?=$sl?>);" onchange="quantity_calculate_p(<?=$sl?>);" class="product_id form-control text-right" id="quantity_<?= $sl?>" placeholder="0.00" value="<?= $pro['product_id']?>" tabindex="8" /></td>
+                                    <input type="hidden" name="product_id[]" required="" onkeyup="quantity_calculate_p(<?=$sl?>);" onchange="quantity_calculate_p(<?=$sl?>);" class="product_id form-control text-right" id="product_id_<?= $sl?>" placeholder="0.00" value="<?= $pro['product_id']?>" tabindex="8" /></td>
 
                                     <td>
                                         <input type="text" name="production_cost[]" required="" onkeyup="quantity_calculate_p(<?=$sl?>);" onchange="quantity_calculate_p(<?=$sl?>);" class="rate form-control text-right" id="rate_<?= $sl?>" placeholder="0.00" value="<?= $pro['production_cost']?>" tabindex="8" /></td>

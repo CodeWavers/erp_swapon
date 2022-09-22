@@ -347,8 +347,9 @@ function quantity_calculate(item) {
 
 function quantity_calculate_p(item) {
     var gr_tot = 0;
-    var quantity = $("#total_qntt_" + item).val();
-    var qty = $("#quantity_" + item).val();
+    var quantity = parseFloat($("#total_qntt_" + item).val());
+    var qty = parseFloat($("#quantity_" + item).val());
+  //  debugger
     //alert(quantity)
    // var available_quantity = $(".available_quantity_" + item).val();
 
@@ -357,6 +358,7 @@ function quantity_calculate_p(item) {
         $("#total_qntt_" + item).val(qty);
         return
     }
+
 
     var price =  $("#rate_" + item).val();
 

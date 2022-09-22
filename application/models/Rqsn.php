@@ -1944,6 +1944,7 @@ class Rqsn extends CI_Model
         $this->db->group_by('b.product_id');
         $this->db->where('a.status', 1);
         $this->db->where('b.isaprv', 1);
+       // $this->db->where('b.isRcv', 0);
 
         // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');
 

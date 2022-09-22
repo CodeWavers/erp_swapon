@@ -761,7 +761,7 @@ class Crqsn extends CI_Controller
         $product_id=$_POST["product_id"];
         $rq_d_id=$_POST["rq_d_id"];
 
-        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row()->finished_qty;
+        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row();
 
 
         $data = array(
