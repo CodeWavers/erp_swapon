@@ -438,6 +438,9 @@ class reports extends CI_Model
         // exit();
 
         $sl = 1;
+        $stock=0;
+        $closing_stock=0;
+        $opening_stock=0;
 
 
 
@@ -460,7 +463,7 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('product_purchase.purchase_date <=', $to_date);
             }
-            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->from('product_purchase_details')->where('status', 2)->where('product_id', $record->product_id)->get()->row();
+            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')->from('product_purchase_details')->where('product_id', $record->product_id)->get()->row();
             if ($from_date) {
                 $this->db->where('rqsn.date >=', $from_date);
             }
@@ -514,8 +517,9 @@ class reports extends CI_Model
             }
             $production_qty = $this->db->select('SUM(quantity) as pro_qty')
                 ->from('production_goods')
-                ->where('product_id', $record->product_id)
-                ->group_by('product_id')
+                ->join('production','production_goods.pro_id=production.pro_id','left')
+                ->where('production_goods.product_id', $record->product_id)
+                ->group_by('production_goods.product_id')
                 ->get()
                 ->row();
 
@@ -527,8 +531,9 @@ class reports extends CI_Model
             }
             $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
                 ->from('item_usage')
-                ->where('item_id', $record->product_id)
-                ->group_by('item_id')
+                ->join('production','item_usage.production_id=production.pro_id','left')
+                ->where('item_usage.item_id', $record->product_id)
+                ->group_by('item_usage.item_id')
                 ->get()
                 ->row();
 
@@ -546,17 +551,28 @@ class reports extends CI_Model
 
             }
             else{
-
+                if ($from_date) {
+                    $this->db->where('transfer_items.date >=', $from_date);
+                }
+                if ($to_date) {
+                    $this->db->where('transfer_items.date <=', $to_date);
+                }
                 $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
                     ->from('transfer_item_details')
-                    ->where('product_id', $record->product_id)
-                    ->group_by('product_id')
+                    ->join('transfer_items','transfer_items.transfer_item_details=transfer_items.pro_id','left')
+                    ->where('transfer_item_details.product_id', $record->product_id)
+                    ->group_by('transfer_item_details.product_id')
                     ->get()
                     ->row();
                 $total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
 
             }
-
+            if ($from_date) {
+                $this->db->where('a.create_date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('a.create_date <=', $to_date);
+            }
             $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                 ->from('stock_taking_details a')
                 ->join('stock_taking b', 'b.stid = a.stid')
@@ -574,6 +590,9 @@ class reports extends CI_Model
 
 
 
+            $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
+            $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+            $stock = (($total_in - $total_out)-$newStock)+$diff;
 
             /************************
              *  Opening Stock Start *
@@ -585,12 +604,13 @@ class reports extends CI_Model
                 $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
                 //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
 
-                $this->db->where('product_purchase.purchase_date <=', $from_date);
+               $this->db->where('product_purchase.purchase_date <=', $from_date);
 
                 $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
                     ->from('product_purchase_details')
                     ->where('product_id', $record->product_id)
+                  //  ->where('product_purchase.purchase_date <=', $from_date)
                     ->get()
                     ->row();
 
@@ -645,14 +665,60 @@ class reports extends CI_Model
                     ->row();
 
 
+
+
+
                 $sprice = (!empty($record->price) ? $record->price : 0);
                 $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet
-                        ->totaloutletQnty) ? $stockin_outlet
-                        ->totaloutletQnty : 0);
-                $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+//                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
+//                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet
+//                        ->totaloutletQnty) ? $stockin_outlet
+//                        ->totaloutletQnty : 0);
+                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
 
-                $opening_stock = $opening_total_in - $opening_total_out;
+                $opening_total_out='';
+
+                if ($record->finished_raw == 1){
+                    $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+
+                }
+                else{
+
+
+                    $this->db->where('transfer_items.date <=', $from_date);
+                    $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
+                        ->from('transfer_item_details')
+                        ->join('transfer_items','transfer_items.transfer_item_details=transfer_items.pro_id','left')
+                        ->where('transfer_item_details.product_id', $record->product_id)
+                        ->group_by('transfer_item_details.product_id')
+                        ->get()
+                        ->row();
+                    $opening_total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
+
+                }
+              //  $this->db->where('b.date <=', $from_date);
+                $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                    ->from('stock_taking_details a')
+                    ->join('stock_taking b', 'b.stid = a.stid')
+                    ->where(array(
+                        'b.outlet_id' =>'HK7TGDT69VFMXB7',
+                        'a.product_id' => $record->product_id,
+                   'create_date >=' => $from_date,
+                        'a.status' => 1,
+
+                    ))
+                    ->group_by('a.product_id')
+                    ->order_by('a.id','desc')
+                    ->get()
+                    ->row();
+                $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
+                $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+                $opening_stock = (($opening_total_in - $opening_total_out)-$newStock)+$diff;
+
+
+//                $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+
+              //  $opening_stock = $opening_total_in - $opening_total_out;
             } else {
                 $opening_stock = $stock;
             }
@@ -726,13 +792,47 @@ class reports extends CI_Model
                     ->get()
                     ->row();
 
+                if ($record->finished_raw == 1){
+                    $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
 
+                }
+                else{
+
+                    $this->db->where('transfer_items.date <=', $to_date);
+                    $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
+                        ->from('transfer_item_details')
+                        ->join('transfer_items','transfer_items.transfer_item_details=transfer_items.pro_id','left')
+                        ->where('transfer_item_details.product_id', $record->product_id)
+                        ->group_by('transfer_item_details.product_id')
+                        ->get()
+                        ->row();
+                    $closing_total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
+
+                }
+                $this->db->where('a.create_date <=', $to_date);
+                $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                    ->from('stock_taking_details a')
+                    ->join('stock_taking b', 'b.stid = a.stid')
+                    ->where(array(
+                        'b.outlet_id' =>'HK7TGDT69VFMXB7',
+                        'a.product_id' => $record->product_id,
+//                    'create_date >=' => $date,
+                        'a.status' => 1,
+
+                    ))
+                    ->group_by('a.product_id')
+                    ->order_by('a.id','desc')
+                    ->get()
+                    ->row();
 
                 $sprice = (!empty($record->price) ? $record->price : 0);
                 $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
                 $closing_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet->totaloutletQnty) ? $stockin_outlet->totaloutletQnty : 0);
-                $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
-                $closing_stock = $closing_total_in - $closing_total_out;
+             //   $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+               // $closing_stock = $closing_total_in - $closing_total_out;
+                $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+                $closing_stock = (($closing_total_in - $closing_total_out)-$newStock)+$diff;
+
             } else {
                 $closing_stock = $stock;
             }
@@ -740,9 +840,6 @@ class reports extends CI_Model
 
 
 
-            $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
-            $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-            $stock = (($total_in - $total_out)-$newStock)+$diff;
 
             $data[] = array(
                 'sl'            =>   $sl,
@@ -757,13 +854,13 @@ class reports extends CI_Model
                 'totalSalesQnty' =>  $total_out,
                 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                'stok_quantity' => sprintf('%0.2f',$stock),
+                'stok_quantity' => sprintf('%0.2f',$closing_stock),
                 'opening_stock'     => $opening_stock,
-                'total_sale_price' => $stock * $sprice,
-                'purchase_total' => (($stock * $pprice) != 0)
-                    ? ($stock * $pprice)
+                'total_sale_price' => $closing_stock * $sprice,
+                'purchase_total' => (($closing_stock * $pprice) != 0)
+                    ? ($closing_stock * $pprice)
                     : ($product_supplier_price
-                        ? $product_supplier_price[0]->supplier_price * $stock
+                        ? $product_supplier_price[0]->supplier_price * $closing_stock
                         : 0),
 
 

@@ -1269,8 +1269,8 @@ $(document).ready(function () {
   var pr_status = $("#pr_status").val();
 
   $("#product_status,#from_date, #to_date").on("change", function (e) {
-    var valueSelected = this.value;
-    product_status = valueSelected;
+    //var valueSelected = this.value;
+    product_status = product_status;
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
     table.ajax.reload();
