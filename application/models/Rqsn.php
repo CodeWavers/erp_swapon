@@ -1519,6 +1519,8 @@ class Rqsn extends CI_Model
         $product_sku = $this->input->post('product_sku', TRUE);
 
         $cat_id = $this->input->post('cat_id', TRUE);
+        $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
 
         ## Read value
         if (!$post_product_id) {
@@ -1668,6 +1670,10 @@ class Rqsn extends CI_Model
                 ->get()
                 ->row();
 
+            if ($from_date)
+                $this->db->where('c.date >=', $from_date);
+            if ($to_date)
+                $this->db->where('c.date <=', $to_date);
             $this->db->select('a.*,c.*,,SUM(a.a_qty) as total_purchase');
             $this->db->from('rqsn_details a');
             $this->db->join('rqsn c', 'a.rqsn_id=c.rqsn_id');
@@ -1678,6 +1684,12 @@ class Rqsn extends CI_Model
             $this->db->where('a.isrcv', 1);
             $total_purchase = $this->db->get()->row();
 
+
+
+            if ($from_date)
+                $this->db->where('d.date >=', $from_date);
+            if ($to_date)
+                $this->db->where('d.date <=', $to_date);
             $this->db->select('SUM(b.quantity) as total_sale');
             $this->db->from('invoice_details b');
             $this->db->join('invoice d', 'd.invoice_id=b.invoice_id');
@@ -1689,13 +1701,17 @@ class Rqsn extends CI_Model
             $out_qty = (!empty($total_sale->total_sale) ? $total_sale->total_sale : 0);
 
 
+
+            if ($from_date)
+                $this->db->where('a.create_date >=', $from_date);
+            if ($to_date)
+                $this->db->where('a.create_date <=', $to_date);
             $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                 ->from('stock_taking_details a')
                 ->join('stock_taking b', 'b.stid = a.stid')
                 ->where(array(
                     'b.outlet_id' =>$outlet_id,
                     'a.product_id' => $record->product_id,
-//                    'create_date >=' => $date,
                     'a.status' => 1,
 
                 ))
@@ -1704,8 +1720,175 @@ class Rqsn extends CI_Model
                 ->get()
                 ->row();
             $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-//            $stock = (($total_in - $total_out)-$newStock)+$diff;
             $stock =  ((!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty)+$diff;
+
+
+
+            /************************
+             *  Opening Stock Start *
+             * **********************/
+            if ($from_date) {
+                $this->db->where('d.date <=', $from_date);
+                $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')
+                    ->from('invoice_details a')
+                    ->join('invoice d', 'd.invoice_id=a.invoice_id')
+                    ->where('a.product_id', $record->product_id)
+                    ->where('d.outlet_id', $outlet_id)
+                    ->get()
+                    ->row();
+
+                $this->db->where('product_purchase.purchase_date <=', $from_date);
+                $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,Avg(rate) as purchaseprice')
+                    ->from('product_purchase_details')
+                    ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+                $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
+
+
+                $sprice = (!empty($record->price) ? $record->price : 0);
+                $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
+                $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
+
+
+
+                $return_given = $this->db->select('sum(a.ret_qty) as totalReturnQnty')
+                    ->from('rqsn_return a')
+                    ->where('a.product_id', $record->product_id)
+                    ->where('a.from_id', $outlet_id)
+                    ->get()
+                    ->row();
+
+                $this->db->where('c.date <=', $from_date);
+                $this->db->select('a.*,c.*,,SUM(a.a_qty) as total_purchase');
+                $this->db->from('rqsn_details a');
+                $this->db->join('rqsn c', 'a.rqsn_id=c.rqsn_id');
+                // $this->db->join('outlet_warehouse d', 'c.from_id=d.outlet_id');
+                $this->db->where('a.product_id', $record->product_id);
+                $this->db->where('c.from_id', $outlet_id);
+                $this->db->where('a.isaprv', 1);
+                $this->db->where('a.isrcv', 1);
+                $opening_total_purchase = $this->db->get()->row();
+
+                $this->db->where('d.date <=', $from_date);
+                $this->db->select('SUM(b.quantity) as total_sale');
+                $this->db->from('invoice_details b');
+                $this->db->join('invoice d', 'd.invoice_id=b.invoice_id');
+                $this->db->where('b.product_id', $record->product_id);
+                $this->db->where('d.outlet_id', $outlet_id);
+                $opening_total_sale = $this->db->get()->row();
+
+                $opening_out_qty = (!empty($opening_total_sale->total_sale) ? $opening_total_sale->total_sale : 0);
+
+                $this->db->where('a.create_date <=', $from_date);
+                $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                    ->from('stock_taking_details a')
+                    ->join('stock_taking b', 'b.stid = a.stid')
+                    ->where(array(
+                        'b.outlet_id' =>$outlet_id,
+                        'a.product_id' => $record->product_id,
+                        'a.status' => 1,
+
+                    ))
+                    ->group_by('a.product_id')
+                    ->order_by('a.id','desc')
+                    ->get()
+                    ->row();
+                $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+                $opening_stock =  ((!empty($opening_total_purchase->total_purchase) ? $opening_total_purchase->total_purchase : 0) - $opening_out_qty)+$diff;
+
+
+            } else {
+                $opening_stock = $stock;
+            }
+
+            // Opening stock end
+
+
+
+            /************************
+             *  Closing Stock Start *
+             * **********************/
+
+            if ($to_date) {
+                $this->db->where('d.date <=', $to_date);
+                $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')
+                    ->from('invoice_details a')
+                    ->join('invoice d', 'd.invoice_id=a.invoice_id')
+                    ->where('a.product_id', $record->product_id)
+                    ->where('d.outlet_id', $outlet_id)
+                    ->get()
+                    ->row();
+
+                $this->db->where('product_purchase.purchase_date <=', $to_date);
+                $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,Avg(rate) as purchaseprice')
+                    ->from('product_purchase_details')
+                    ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                    ->where('product_id', $record->product_id)
+                    ->get()
+                    ->row();
+
+                $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
+
+
+                $sprice = (!empty($record->price) ? $record->price : 0);
+                $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
+                $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
+
+
+
+                $return_given = $this->db->select('sum(a.ret_qty) as totalReturnQnty')
+                    ->from('rqsn_return a')
+                    ->where('a.product_id', $record->product_id)
+                    ->where('a.from_id', $outlet_id)
+                    ->get()
+                    ->row();
+
+                $this->db->where('c.date <=', $to_date);
+                $this->db->select('a.*,c.*,,SUM(a.a_qty) as total_purchase');
+                $this->db->from('rqsn_details a');
+                $this->db->join('rqsn c', 'a.rqsn_id=c.rqsn_id');
+                // $this->db->join('outlet_warehouse d', 'c.from_id=d.outlet_id');
+                $this->db->where('a.product_id', $record->product_id);
+                $this->db->where('c.from_id', $outlet_id);
+                $this->db->where('a.isaprv', 1);
+                $this->db->where('a.isrcv', 1);
+                $closing_total_purchase = $this->db->get()->row();
+
+                $this->db->where('d.date <=', $to_date);
+                $this->db->select('SUM(b.quantity) as total_sale');
+                $this->db->from('invoice_details b');
+                $this->db->join('invoice d', 'd.invoice_id=b.invoice_id');
+                $this->db->where('b.product_id', $record->product_id);
+                $this->db->where('d.outlet_id', $outlet_id);
+                $closing_total_sale = $this->db->get()->row();
+
+                $this->db->where('a.create_date <=', $to_date);
+                $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                    ->from('stock_taking_details a')
+                    ->join('stock_taking b', 'b.stid = a.stid')
+                    ->where(array(
+                        'b.outlet_id' =>$outlet_id,
+                        'a.product_id' => $record->product_id,
+                        'a.status' => 1,
+
+                    ))
+                    ->group_by('a.product_id')
+                    ->order_by('a.id','desc')
+                    ->get()
+                    ->row();
+                $closing_out_qty = (!empty($closing_total_sale->total_sale) ? $closing_total_sale->total_sale : 0);
+                $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+                $closing_stock =  ((!empty($closing_total_purchase->total_purchase) ? $closing_total_purchase->total_purchase : 0) - $closing_out_qty)+$diff;
+
+
+            } else {
+                $closing_stock = $stock;
+            }
+
+            // Closing stock end
 
             $data[] = array(
                 'sl'            =>   $sl,
@@ -1719,8 +1902,10 @@ class Rqsn extends CI_Model
                 'totalSalesQnty' => sprintf('%0.2f', $out_qty),
                 'dispatch' => $total_sale->total_sale,
                 'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
-                'stok_quantity' => sprintf('%0.2f', $stock),
-                'total_sale_price' => ($stock) * $sprice,
+                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                'opening_stock' => $opening_stock,
+                'closing_stock' => $closing_stock,
+                'total_sale_price' => ($closing_stock) * $sprice,
                 'purchase_total' => (($stock * $pprice) != 0)
                     ? ($stock * $pprice)
                     : ($product_supplier_price

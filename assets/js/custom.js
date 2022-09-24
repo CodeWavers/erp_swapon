@@ -920,7 +920,7 @@ $(document).ready(function () {
 
   $("#cat_list,#from_date,#to_date").on("change", function (e) {
     var valueSelected = this.value;
-    cat_id = valueSelected;
+    cat_id =  $("#cat_list").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
     table.ajax.reload();
@@ -986,6 +986,8 @@ $(document).ready(function () {
         d.cat_id = cat_id;
         d.product_sku = $('.product_sku').val();
         d.outlet_id = outlet_id;
+        d.from_date = from_date;
+        d.to_date = to_date;
       },
     },
     columns: [
@@ -1009,7 +1011,7 @@ $(document).ready(function () {
       { data: "totalSalesQnty", class: "text-right" },
       { data: "return_given", class: " stock text-right" },
       //   { data: 'warrenty_stock' ,class:"stock text-right" },
-      { data: "stok_quantity", class: "stock text-right" },
+      { data: "opening_stock", class: "stock text-right" },
       { data: "stok_quantity", class: "stock text-right" },
 
       {
