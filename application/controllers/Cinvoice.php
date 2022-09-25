@@ -625,6 +625,34 @@ class Cinvoice extends CI_Controller
     }
 
 
+    public function order() {
+        $CI = & get_instance();
+        $CI->load->model('Rqsn');
+
+
+        $data = array(
+            'title'         => "Order",
+        );
+
+
+        $view  = $this->parser->parse('invoice/order', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+
+    public function customer_order() {
+
+        $CI = & get_instance();
+        $data = array(
+            'title'         => "Customer's Order",
+        );
+
+
+        $view  = $this->parser->parse('invoice/customer_order', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+
     public function invoicdetails_download($invoice_id = null)
     {
 
