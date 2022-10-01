@@ -134,7 +134,7 @@ function quantity_calculate_re(item) {
   //}
 
   var just_tot = quantity * price_item;
-  var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
+  var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
   $("#re_total_price_wd_" + item).val(just_tot);
   $("#re_total_discount_" + item).val((just_tot) * (discount / 100));
@@ -245,6 +245,8 @@ function quantity_calculate(item) {
       y = 0,
       z = 0,
       r = 0,
+      cm = 0,
+      acm = 0,
       g = 0,
       p = 0;
   var pa_total_price = $("#pa_total_price_" + item).val();
@@ -253,7 +255,11 @@ function quantity_calculate(item) {
   var price_item = $("#price_item_" + item).val();
   var discount = $("#discount_" + item).val();
   var disc = $("#dis_" + item).val();
+
   var add_cost = $("#total_tax_ammount").val() ? $("#total_tax_ammount").val() : 0;
+
+  var comm = $("#comm_" + item).val()?  $("#comm_" + item).val(): 0;
+
   if (parseInt(sold_qty) < parseInt(quantity)) {
     alert("Sold quantity less than quantity!");
     $("#total_qntt_" + item).val("");
@@ -261,13 +267,20 @@ function quantity_calculate(item) {
   var price = quantity * price_item;
   var dis = price * (discount / 100);
   var diss = price * (disc / 100);
+  var cmss = price * (comm / 100);
   $("#all_discount_" + item).val(diss);
+  $("#all_cm_" + item).val(cmss);
   $("#return_val_" + item).val(price);
+  $("#cm_return_val_" + item).val(price);
   var ttldis = $("#all_discount_" + item).val();
   var total_d = $("#total_discount_ammount").val();
 
   $(".return_val").each(function () {
     isNaN(this.value) || r == this.value.length || (r += parseFloat(this.value));
+  });
+
+  $(".cm_return_val").each(function () {
+    isNaN(this.value) || cm == this.value.length || (cm += parseFloat(this.value));
   });
 
   $(".total_p").each(function () {
@@ -287,6 +300,10 @@ function quantity_calculate(item) {
   $(".total_discount").each(function () {
     isNaN(this.value) || d == this.value.length || (d += parseFloat(this.value));
   })
+  $(".total_cm").each(function () {
+    isNaN(this.value) || acm == this.value.length || (acm += parseFloat(this.value));
+  })
+
 //per sku discount calculation
   var invoice_discount = parseFloat($("#invoice_discount").val());
   var perc_dis = parseFloat($("#perc_discount").val());
@@ -300,22 +317,38 @@ function quantity_calculate(item) {
   })
   var total=parseFloat($('#total_amount').val());
   var total_discount=parseFloat($('#total_discount_ammount').val());
-  var invoice_value=total+total_discount;
+  var shipping_cost = parseFloat($('#shipping_cost').val()) ? parseFloat($('#shipping_cost').val()) : 0;
+  var commission = parseFloat($('#commission').val()) ? parseFloat($('#commission').val()) : 0;
+  var total_commission = parseFloat($('#total_commission').val()) ? parseFloat($('#total_commission').val()) : 0;
+  var dc = parseFloat($('#dc').val()) ? parseFloat($('#dc').val()) : 0;
 
 
+  var invoice_value=(total-shipping_cost)+total_discount+commission+total_commission;
+ // var c_invoice_value=total+commission+total_commission;
+
+
+
+
+  var sale_cm=commission/invoice_value*r;
+  var sku_wise_t_cm=sale_cm+acm;
 
 
   var sale_discount=invoice_discount/invoice_value*r;
   var sale_discount_perc=pds/g*a;
   var sku_wise_t_dis=sale_discount+sale_discount_perc+d;
+
+
+
   $('#total_return').val(r);
   $('#sub_total').val(a.toFixed(2,2));
  // $('#sale_discount_perc').val(sale_discount_perc  .toFixed(2,2));
   $('#sku_discount').val(sku_wise_t_dis.toFixed(2,2));
+  $('#sku_cm').val(sku_wise_t_cm.toFixed(2,2));
+
 
 
   //Total price calculate per product
-  var temp = price - diss;
+  var temp = price - (diss +cmss);
   var paya = pa_total_price-temp;
   $("#total_price_" + item).val(temp); //
   $("#payable_" + item).val(paya.toFixed(2,2)); //
@@ -324,27 +357,33 @@ function quantity_calculate(item) {
 
 
 
-  var sales_return=r-sku_wise_t_dis;
+  var sales_return=r-(sku_wise_t_dis+sku_wise_t_cm);
   $("#sale_discount").val(sale_discount.toFixed(2,2));
   $("#sales_return").val(sales_return.toFixed(2,2));
 
 
-  var net_pay=sku_wise_t_dis-r;
+  var net_pay=(sku_wise_t_dis+sku_wise_t_cm)-r;
   $("#net_pay").val(net_pay.toFixed(2,2));
   var paid_amount=parseFloat($("#paid_amount").val());
 
   var total_refund=total-sales_return-paid_amount;
   $("#customer_ac").val(total_refund.toFixed(2,2));
-  // console.log(paid_amount)
-  // console.log(total_refund)
 
-  var rounding=Math.round(total_refund)-total_refund;
+  if ($("#pay_person").is(":checked")) {
+    var n_total_refund = total_refund-dc;
+    $('#adc').addClass('d-none');
+  }else{
+    var n_total_refund = total_refund;
+    $('#adc').removeClass('d-none');
+  }
+
+  var rounding=Math.round(n_total_refund)-n_total_refund;
   $("#rounding").val(rounding.toFixed(2,2));
-  $("#total_refund").val(Math.round(total_refund).toFixed(2,2));
-  $("#dueAmmount").val(Math.round(total_refund).toFixed(2,2));
-  $("#refunded_amt").val(Math.round(total_refund).toFixed(2,2));
-  $("#re_dueAmmount").val(Math.round(total_refund).toFixed(2,2));
-  if (total_refund < 0){
+  $("#total_refund").val(Math.round(n_total_refund).toFixed(2,2));
+  $("#dueAmmount").val(Math.round(n_total_refund).toFixed(2,2));
+  $("#refunded_amt").val(Math.round(n_total_refund).toFixed(2,2));
+  $("#re_dueAmmount").val(Math.round(n_total_refund).toFixed(2,2));
+  if (n_total_refund < 0){
     $('.hide_tr').removeClass('d-none')
     $('.due_tr').addClass('d-none')
   }else{

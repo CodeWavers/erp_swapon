@@ -194,7 +194,7 @@ function quantity_calculate(item) {
     //}
 
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
     $("#total_price_wd_" + item).val(just_tot);
     $("#total_discount_" + item).val((just_tot) * (discount / 100));
@@ -228,7 +228,7 @@ function quantity_calculate_pre(item) {
     //}
 
     var just_tot = quantity * price_item;
-    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))+((just_tot) * (comm_item / 100)));
+    var row_tot = ((just_tot) - ((just_tot) * (discount / 100))-((just_tot) * (comm_item / 100)));
 
 
     $("#total_price_wd_" + item).val(just_tot);
@@ -311,7 +311,7 @@ function calculateSum() {
 
     //console.log(discount_perc);
 
-    var test = +tx + +s_cost + +x + -ttl_discount  + + ad  - commission;
+    var test = +tx + +s_cost + +x + -ttl_discount  + + ad  - commission - cc;
     var test2 = +tx + +s_cost + +x + -ttl_discount + + ad ;
 
     if(c_cost == undefined || commission ==undefined){

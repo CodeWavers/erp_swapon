@@ -650,6 +650,8 @@ class Invoices extends CI_Model
         $p_amount = $this->input->post('p_amount', TRUE);
         // echo '<pre>'; print_r(count($pay_type)); exit();
         $cus_card = $this->input->post('cus_card', TRUE);
+        $commission = $this->input->post('commission', TRUE);
+        $total_commission = $this->input->post('total_commission', TRUE);
 
 
         $changeamount = $this->input->post('change', TRUE);
@@ -942,7 +944,7 @@ class Invoices extends CI_Model
             $grand_total=$this->input->post('grand_total_price', TRUE);
             $total_discount=$this->input->post('total_discount', TRUE);
 
-            $grand_total_wtd=$grand_total+$total_discount;
+            $grand_total_wtd=$grand_total+$total_discount+$commission+$total_commission;
 
             $shipping_cost=$this->input->post('shipping_cost', TRUE);
             $condition_cost=$this->input->post('condition_cost', TRUE);
@@ -972,7 +974,7 @@ class Invoices extends CI_Model
                    'Vtype'          =>  'INV-CC',
                    'VDate'          =>  $Vdate,
                    'COAID'          =>  40105,
-                   'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                   'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Customer  ' . $cs_name,
                    'Credit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): 0),
                    'Debit'         =>  0,
                    'IsPosted'       =>  1,
@@ -1021,10 +1023,47 @@ class Invoices extends CI_Model
 
         }
 
+        if ($commission > 0) {
+            $com_transaction = array(
 
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $Vdate,
+                'COAID' => 410,
+                'Narration' => 'Sales Commission for Invoice ID - ' . $invoice_id,
+                'Credit' => 0,
+                'Debit' => $commission,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+
+            $this->db->insert('acc_transaction', $com_transaction);
+
+        }
+        if ($total_commission > 0) {
+            $com_transaction = array(
+
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $Vdate,
+                'COAID' => 410,
+                'Narration' => 'Sales Commission for Invoice ID - ' . $invoice_id,
+                'Credit' => 0,
+                'Debit' => $total_commission,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+
+            $this->db->insert('acc_transaction', $com_transaction);
+
+        }
         ///Customer credit for Paid Amount
-
-
         $paid = $this->input->post('p_amount', TRUE);
 
         if (count($paid) > 0 ) {

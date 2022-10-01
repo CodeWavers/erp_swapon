@@ -360,7 +360,7 @@
                                                  <td>
                                                      <input type="text" readonly style="width: 120px; display:inline-block" onkeyup="quantity_calculate({sl});" onchange="quantity_calculate({sl});" id="dis_{sl}" class="form-control text-right" placeholder="0.00" name="discount_per" value="{discount_per}" min="0" tabindex="6" />
                                                      <?php  if ($sel_type == 1 && $comm_type==1){?>
-                                                     <input class="comm_th form-control text-right  p-5" readonly style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="{commission_per}" onkeyup="quantity_calculate(1);" placeholder="0.00" onchange="quantity_calculate(1);"  />
+                                                     <input class="comm_th form-control text-right  p-5" readonly style="width: 120px ;" type="text" name="comm[]" id="comm_{sl}" value="{commission_per}" />
                                                         <?php } ?>
                                                  </td>
 
@@ -378,6 +378,7 @@
 
                                                      <input type="hidden" name="invoice_details_id[]" id="invoice_details_id" value="{invoice_details_id}" />
                                                      <input class=" form-control text-right return_val" type="hidden" id="return_val_{sl}" value="0" placeholder="0.00" readonly="readonly" />
+                                                     <input class=" form-control text-right cm_return_val" type="hidden" id="cm_return_val_{sl}" value="0" placeholder="0.00" readonly="readonly" />
 
                                                  </td>
 
@@ -398,6 +399,7 @@
                                                      <input type="hidden" id="total_discount_{sl}" class="" value="0" />
 
                                                      <input type="hidden" id="all_discount_{sl}" class="total_discount" value="" />
+                                                     <input type="hidden" id="all_cm_{sl}" class="total_cm" value="" />
                                                      <!-- Discount calculate end -->
 
 
@@ -415,7 +417,7 @@
                                          <tfoot>
 
                                              <tr>
-                                                 <td colspan="5" rowspan="13">
+                                                 <td colspan="5" rowspan="15">
                                                      <center><label for="details" class="  col-form-label text-center"><?php echo display('reason') ?></label></center>
                                                      <textarea class="form-control" name="details" id="details" placeholder="<?php echo display('reason') ?>"></textarea> <br>
                                                      <!-- <span class="usablity"><?php echo display('usablilties') ?> </span><br> -->
@@ -489,23 +491,30 @@
                                              </tr>
 
                                              <?php if ($sel_type == 1 && $comm_type == 2) {?>
-                                                 <tr id="commission_tr" class="">
+                                                 <tr id="commission_tr" class="" >
                                                      <td class="text-right" colspan="1"><b>Commission:</b></td>
                                                      <td class="text-right">
                                                          <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="{commission}"  readonly/>
+
                                                      </td>
                                                  </tr>
                                              <?php } ?>
                                              <?php  if ($sel_type == 1 && $comm_type==1){?>
-                                                 <tr id="t_comm_tr" >
+                                                 <tr id="t_comm_tr" hidden>
                                                      <td class="text-right" colspan="1"><b>Total Commission:</b></td>
                                                      <td class="text-right">
                                                          <input type="text" id="total_commission" class="form-control text-right" name="total_commission" value="{total_commission}"  readonly="readonly" />
                                                      </td>
                                                  </tr>
                                              <?php } ?>
-
-
+                                             <?php  if ($sel_type == 1 ){?>
+                                                 <tr id="t_comm_tr" >
+                                                     <td class="text-right" colspan="1"><b>Total Commission:</b></td>
+                                                     <td class="text-right">
+                                                         <input type="text" id="sku_cm" class="form-control text-right" name="sku_cm" value="" placeholder="0.00" readonly="readonly" />
+                                                     </td>
+                                                 </tr>
+                                             <?php } ?>
                                              <tr id="" >
                                                  <td class="text-right font-bold" colspan="1"><b>Total Sales Return:</b></td>
                                                  <td class="text-right">
@@ -515,7 +524,7 @@
                                              <tr class="hidden_tr">
                                                  <td class="text-right" colspan="1"><b>Delivery Charge:</b></td>
                                                  <td class="text-right">
-                                                     <input id="total_tax_ammount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" aria-invalid="false" type="text">
+                                                     <input id="dc" tabindex="-1" class="form-control text-right valid" name="dc" value="{shipping_cost}" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" aria-invalid="false" type="text">
                                                      <input id="shipping_cost" tabindex="-1" class="form-control text-right valid" name="shipping_cost" value="{shipping_cost}" aria-invalid="false" type="hidden">
                                                      <input id="condition_cost" tabindex="-1" class="form-control text-right valid" name="condition_cost" value="{condition_cost}" aria-invalid="false" type="hidden">
 
@@ -529,14 +538,14 @@
                                                  </td>
                                              </tr>
 
-
-                                             <tr class="hidden_tr ">
+                                             <?php  if ($sel_type == 1 ){?>
+                                             <tr class="hidden_tr " id="adc">
                                                  <td class="text-right" colspan="1"><b>ADC:</b></td>
                                                  <td class="text-right">
                                                      <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="{delivery_ac}" tabindex="14"  />
                                                  </td>
                                              </tr>
-
+                                             <?php } ?>
                                              <tr hidden>
                                                  <td colspan="1" class="text-right"><b>Net Payable:</b></td>
                                                  <td class="text-right">

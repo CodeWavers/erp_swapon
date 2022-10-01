@@ -430,7 +430,7 @@ class Returnse extends CI_Model
         $invoice_no_generated =$this->number_generator();
 
         $invoice_id =$this->input->post('invoice_id', TRUE);
-        $delivery_type =$this->input->post('delivery_type', TRUE);
+        $delivery_type =$this->input->post('deliver_type', TRUE);
         $total =$this->input->post('grand_total_price', TRUE);
         $add_cost =( !empty($this->input->post('total_tax', TRUE))) ? $this->input->post('total_tax', TRUE): 0;
         $customer_id =$this->input->post('customer_id', TRUE);
@@ -463,8 +463,10 @@ class Returnse extends CI_Model
         $tax_amount =$this->input->post('tax', TRUE);
         $soldqty =$this->input->post('sold_qty', TRUE);
         $courier_condtion =$this->input->post('courier_condtion', TRUE);
+        $commission =$this->input->post('sku_cm', TRUE);
 
         $is_cash_return =$this->input->post('cash_return', TRUE);
+        $is_customer_dc =$this->input->post('pay_person', TRUE);
         $pay_person =$this->input->post('pay_person', TRUE);
         $is_replace =$this->input->post('is_replace', TRUE);
 
@@ -518,6 +520,44 @@ class Returnse extends CI_Model
     $this->db->insert('acc_transaction', $sales_discount);
 
     }
+
+        if ($is_customer_dc ==1) {
+            $dc = array(
+                'VNo' => $invoice_id,
+                'Vtype' => 'INV-CC',
+                'VDate' => $date,
+                'COAID' => 4040104,
+                'Narration' => 'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Courier  ' . $courier_name,
+                'Debit' => (!empty($this->input->post('dc', TRUE)) ? $this->input->post('dc', TRUE) : 0),
+                'Credit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1
+            );
+            $this->db->insert('acc_transaction', $dc);
+        }
+
+        if ($commission > 0) {
+            $com_transaction = array(
+
+                'VNo' => $invoice_id,
+                'Vtype' => 'Return',
+                'VDate' => $date,
+                'COAID' => 410,
+                'Narration'=> 'Sales Commission For  Invoice NO - ' . $invoice_no_generated . ' Customer- ' . $cusifo->customer_name,
+                'Credit' => $commission,
+                'Debit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+
+            $this->db->insert('acc_transaction', $com_transaction);
+
+        }
 
         if ($is_cash_return ==1) {
 
@@ -806,7 +846,12 @@ class Returnse extends CI_Model
                 'total_discount'=> $this->input->post('sku_discount', TRUE),
                 'cash_refund'=> $this->input->post('cash_refund', TRUE),
                 'customer_ac'=> $this->input->post('customer_ac', TRUE),
+                'shipping_cost'=> $this->input->post('shipping_cost', TRUE),
+                'delivery_ac'=> $this->input->post('delivery_ac', TRUE),
+                'delivery_type'=> $delivery_type,
+                'courier_status'=> 5,
                 'previous_paid'=> $this->input->post('paid_amount', TRUE),
+
                 'sales_by'=> $createby,
                 'status'=> 2,
                 'payment_type'=> 1,
@@ -915,6 +960,7 @@ class Returnse extends CI_Model
                 'shipping_cost'=> ( !empty($add_cost) ? $add_cost : null),
                  'condition_cost'   => $this->input->post('re_condition_cost', TRUE),
                 'courier_condtion'=> $this->input->post('re_courier_condtion', TRUE),
+                'delivery_ac'=> $this->input->post('re_delivery_ac', TRUE),
                 'sales_by'=> $createby,
                 'status'=> 2,
                 'payment_type'=> 1,
