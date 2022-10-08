@@ -440,7 +440,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 </td>
                                             </tr>
                                         <?php } ?>
-                                        <?php if ($paid_amount > 0) { ?>
+                                        <?php if ($courier_status != 5) { ?>
                                             <tr>
                                                 <td align="left">
                                                     <nobr></nobr>

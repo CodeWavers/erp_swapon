@@ -970,7 +970,7 @@ class Returnse extends CI_Model
                 'outlet_id'=> $this->input->post('outlet_id', TRUE),
                 'reciever_id'=> $this->input->post('reciever_id', TRUE),
                 'receiver_number'=> $this->input->post('receiver_number', TRUE),
-                'courier_status'=> $this->input->post('courier_status', TRUE),
+                'courier_status'=> 6,
                 'previous_paid'=> $this->input->post('paid_amount', TRUE),
 
 

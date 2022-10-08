@@ -941,6 +941,7 @@ class Linvoice
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'customer_email'    => $invoice_detail[0]['customer_email'],
+            'courier_status'    => $invoice_detail[0]['courier_status'],
             'final_date'        => $invoice_detail[0]['final_date'],
             'inv_date'        => $invoice_detail[0]['date'],
             'invoice_details'   => $invoice_detail[0]['invoice_details'],
@@ -985,7 +986,7 @@ class Linvoice
         );
 
 //         echo '<pre>';
-//         print_r($data);
+//         print_r($invoice_detail);
 //         exit();
         $pay_type=$invoice_detail[0]['sale_type'];
 

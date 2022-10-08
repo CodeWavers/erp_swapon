@@ -325,11 +325,11 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <div>{product_name} - ({product_model})</div>
                                             </td>
 
-                                            <td align="right">{sum_quantity}</td>
+                                            <td align="right">{quantity}</td>
 
                                             <td align="right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?><nobr>  <s>Tk {price}</s></nobr>
                                             </td>
-                                            <td align="right"><?php echo (($position == 0) ? "$currency {sum_amount}" : "{sum_amount} $currency") ?></td>
+                                            <td align="right"><?php echo (($position == 0) ? "$currency {total_price_wd}" : "{total_price_wd} $currency") ?></td>
                                         </tr>
                                         {/invoice_all_data}
 
@@ -338,7 +338,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <td></td>
                                             <td  class="text-right" colspan="3"><b>Sub-Total:</b></td>
 
-                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {subTotal_ammount}" : "{subTotal_ammount} $currency") ?></b></td>
+                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency") ?></b></td>
                                         </tr>
                                         <tr>
                                             <td colspan="3" rowspan="2" >
