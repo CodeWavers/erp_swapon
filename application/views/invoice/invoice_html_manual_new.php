@@ -317,63 +317,506 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {invoice_all_data}
-                                        <tr>
-                                            <td class="text-center">{sl}</td>
-                                            <td class="text-center"><img src="{image}" class="img img-responsive" height="50" width="50"></td>
-                                            <td class="text-center">
-                                                <div>{product_name} - ({product_model})</div>
+
+                                        <?php
+                                        $sl = 1;
+                                        $s_total = 0;
+                                        foreach ($invoice_all_data as $invoice_data) { ?>
+                                            <tr>
+                                                <td align="center">
+                                                <nobr><?php echo $sl; ?></nobr>
                                             </td>
+                                                <td class="text-center"><img src="  <?php echo html_escape($invoice_data['image']); ?>" class="img img-responsive" height="50" width="50"></td>
 
-                                            <td align="right">{quantity}</td>
 
-                                            <td align="right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?><nobr>  <s>Tk {price}</s></nobr>
+                                                <td align="center" >
+                                                    <?php if ($invoice_data['is_return'] == 0) { ?>
+                                                        <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')'; ?>
+
+                                                    <?php }else{ ?>
+                                                        <?php echo html_escape($invoice_data['product_name']) . '(' . html_escape($invoice_data['sku']) . ')(RET)'; ?>
+
+                                                    <?php } ?>
+
+                                                </td>
+
+
+
+
+                                                <td align="center" class="td-style" width="10%" >
+                                                    <?php echo html_escape(abs($invoice_data['quantity'])); ?>
+                                                </td>
+
+                                                <!-- <td align="right" class="td-style">
+                                                <nobr>
+                                                    <?php
+                                                if (!empty($invoice_data['discount_per'])) {
+                                                    $curicon = $currency;
+                                                } else {
+                                                    $curicon = '';
+                                                }
+                                                if ($position == 0) {
+                                                    echo  $curicon . ' ' . html_escape($invoice_data['discount_per']);
+                                                } else {
+                                                    echo html_escape($invoice_data['discount_per']) . ' ' . $curicon;
+                                                }
+                                                ?>
+                                                </nobr>
+                                            </td> -->
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php
+                                                        if ($position == 0) {
+                                                            echo  $currency . ' ' . html_escape($invoice_data['rate']);
+                                                        } else {
+                                                            echo html_escape($invoice_data['rate']) . ' ' . $currency;
+                                                        }
+                                                        ?>
+                                                    </nobr>
+                                                    <nobr>  <s>Tk <?php echo html_escape($invoice_data['price']); ?></s></nobr>
+                                                </td>
+                                                <td align="right" class="td-style" style="width: 15mm !important;">
+
+                                                    <?php
+                                                    if ($position == 0) {
+                                                        echo  $currency . ' ' . html_escape(abs($invoice_data['total_price_wd']));
+                                                    } else {
+                                                        echo html_escape($invoice_data['total_price_wd']) . ' ' . $currency;
+                                                    }
+                                                    //                                                $s_total += $invoice_data['total_price_wd'];
+                                                    ?>
+
+                                                </td>
+                                            </tr>
+                                            <?php $sl++;
+                                        } ?>
+
+
+                                        <tr>
+                                            <td align="left">
+                                                <nobr></nobr>
                                             </td>
-                                            <td align="right"><?php echo (($position == 0) ? "$currency {total_price_wd}" : "{total_price_wd} $currency") ?></td>
-                                        </tr>
-                                        {/invoice_all_data}
-
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td  class="text-right" colspan="3"><b>Sub-Total:</b></td>
-
-                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency") ?></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="3" rowspan="2" >
-<!--                                                <strong>Notes:</strong>-->
+                                            <td align="right" colspan="4">
+                                                <nobr>Sales Total</nobr>
                                             </td>
-                                            <td colspan="2" class="text-right"><b>Discount:</b></td>
-
-                                            <td align="right"><b><?php echo (($position == 0) ? "$currency {total_discount}" : "{total_discount} $currency") ?></b></td>
+                                            <td align="right" class="td-style">
+                                                <?php if ($sub_total < 0) { ?>
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency 0.00" : "0.00 $currency")) ?>
+                                                    </nobr>
+                                                <?php }else{ ?>
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency")) ?>
+                                                    </nobr>
+                                                <?php }?>
+                                            </td>
                                         </tr>
 
-<!--                                        --><?php //if ($total_commission > 0) {?>
-
+                                        <?php if ($invoice_discount > 0) { ?>
+                                            <tr hidden>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr><?php echo display('invoice_discount'); ?></nobr>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {invoice_discount}" : "{invoice_discount} $currency")) ?>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                        <!--                                    --><?php //if ($total_discount > 0) { ?>
                                         <tr>
-
-                                            <td colspan="2" class="text-right"><b>Total Commission:</b></td>
-
-                                            <td align="right"><b><?php echo (($position == 0) ? "$currency {total_commission}" : "{total_commission} $currency") ?></b></td>
+                                            <td align="left">
+                                                <nobr></nobr>
+                                            </td>
+                                            <td align="right" colspan="4">
+                                                <nobr><?php echo display('total_discount') ?></nobr>
+                                            </td>
+                                            <td align="right" class="td-style">
+                                                <nobr>
+                                                    <?php echo html_escape((($position == 0) ? "$currency {total_discount}" : "{total_discount} $currency")) ?>
+                                                </nobr>
+                                            </td>
                                         </tr>
+                                        <!--                                    --><?php //} ?>
+                                        <?php if ($sales_return > 0) { ?>
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr>Sales Return</nobr>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {sales_return}" : "{sales_return} $currency")) ?>
 
-<!--                                        --><?php //} ?>
-                                        <tr>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
 
-                                            <td  colspan="5" class="text-right"><b><?php echo display('grand_total') ?>:</b></td>
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr>Rounding</nobr>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {rounding}" : "{rounding} $currency")) ?>
 
-                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency") ?></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td  colspan="5" class="text-right"><b>Paid Amount:</b></td>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" colspan="4">
+                                                    <nobr>  <strong>Payable</strong></nobr>
+                                                </td>
+                                                <td align="right" >
 
-                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {paid_amount}" : "{paid_amount} $currency") ?></b></td>
-                                        </tr>
-                                        <tr>
-                                            <td  colspan="5" class="text-right"><b>Due Amount:</b></td>
 
-                                            <td  align="right"><b><?php echo (($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency") ?></b></td>
+                                                    <nobr><strong>(Including Vat)</strong></nobr>
+
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <strong>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency"))
+                                                            ?>
+                                                        </strong>
+                                                    </nobr>
+                                                </td>
+                                                </td>
+                                            </tr>
+                                            <?php if ($previous_paid > 0) { ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <strong> <nobr>
+                                                                Previous Paid
+                                                            </nobr>
+                                                        </strong>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <strong> <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {previous_paid}" : "{previous_paid} $currency")) ?>
+                                                            </nobr>   </strong>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                            <?php if ($courier_status != 5) { ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <strong> <nobr>
+                                                                Total Paid
+                                                            </nobr>
+                                                        </strong>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <strong> <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {paid_amount}" : "{paid_amount} $currency")) ?>
+                                                            </nobr>   </strong>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr>
+                                                        <?=  ($due_amount < 0) ? 'Refund'  : 'Due';?>
+                                                    </nobr>
+
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency")) ?>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                            <?php if ($cash_refund > 0) { ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <nobr>Cash Refund</nobr>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <nobr>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {cash_refund}" : "{cash_refund} $currency")) ?>
+
+                                                        </nobr>
+                                                    </td>
+                                                </tr>
+
+                                                <?php if ($customer_ac > 0) { ?>
+                                                    <tr>
+                                                        <td align="left">
+                                                            <nobr></nobr>
+                                                        </td>
+                                                        <td align="right" colspan="4">
+                                                            <nobr>Customer Receivable</nobr>
+                                                        </td>
+                                                        <td align="right" class="td-style">
+                                                            <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {customer_ac}" : "{customer_ac} $currency")) ?>
+
+                                                            </nobr>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>
+                                            <?php } ?>
+
+                                            <?php foreach ($payment_info as $pay){?>
+
+                                                <?php
+
+                                                if ($pay->pay_type == 1){
+                                                    $pay_type='In Cash';
+                                                }
+                                                if ($pay->pay_type == 3){
+                                                    $pay_type='In Bkash';
+                                                }
+
+                                                if ($pay->pay_type == 4){
+                                                    $pay_type='In Bank';
+                                                }
+
+                                                if ($pay->pay_type == 5){
+                                                    $pay_type='In Nagad';
+                                                }
+
+                                                if ($pay->pay_type == 6){
+                                                    $pay_type='In Card';
+                                                }
+
+
+                                                ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <nobr><?= $pay_type?></nobr>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <nobr>
+                                                            <?php echo html_escape((($position == 0) ? $currency ." ". number_format($pay->amount) :number_format($pay->amount)." ".$currency)) ?>
+                                                        </nobr>
+                                                    </td>
+                                                </tr>
+
+                                            <?php } ?>
+
+                                        <?php }?>
+
+
+                                        <?php if ($shipping_cost > 0) { ?>
+                                            <tr hidden>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr><?php echo display('shipping_cost') ?></nobr>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+
+                                                        <?php echo html_escape((($position == 0) ? "$currency {shipping_cost}" : "{shipping_cost} $currency")) ?>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+
+                                        <?php if ($sales_return == 0) { ?>
+
+                                            <?php if ($previous > 0) { ?>
+                                                <tr hidden>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <nobr><?php echo display('previous') ?></nobr>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <nobr>
+
+                                                            <?php echo html_escape((($position == 0) ? "$currency {previous}" : "{prevous_due} $currency")) ?>
+                                                        </nobr>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr>Rounding</nobr>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {rounding}" : "{rounding} $currency")) ?>
+
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" colspan="4">
+                                                    <nobr>  <strong>Net Payable</strong></nobr>
+                                                </td>
+                                                <td align="right" >
+                                                    <nobr><strong>(Including Vat)</strong></nobr>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <strong>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {total_amount}" : "{total_amount} $currency"))
+                                                            ?>
+                                                        </strong>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                            <?php if ($previous_paid > 0) { ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <strong> <nobr>
+                                                                Previous Paid
+                                                            </nobr>
+                                                        </strong>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <strong> <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {previous_paid}" : "{previous_paid} $currency")) ?>
+                                                            </nobr>   </strong>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+
+                                            <?php foreach ($payment_info as $pay){?>
+
+                                                <?php
+
+                                                if ($pay->pay_type == 1){
+                                                    $pay_type='In Cash';
+                                                }
+                                                if ($pay->pay_type == 3){
+                                                    $pay_type='In Bkash';
+                                                }
+
+                                                if ($pay->pay_type == 4){
+                                                    $pay_type='In Bank';
+                                                }
+
+                                                if ($pay->pay_type == 5){
+                                                    $pay_type='In Nagad';
+                                                }
+
+                                                if ($pay->pay_type == 6){
+                                                    $pay_type='In Card';
+                                                }
+
+
+                                                ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <nobr><?= $pay_type?></nobr>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <nobr>
+                                                            <?php echo html_escape((($position == 0) ? $currency ." ". number_format($pay->amount) :number_format($pay->amount)." ".$currency)) ?>
+                                                        </nobr>
+                                                    </td>
+                                                </tr>
+
+                                            <?php } ?>
+
+
+                                            <?php if ($paid_amount > 0) { ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <strong> <nobr>
+                                                                Total Paid
+                                                            </nobr>
+                                                        </strong>
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <strong> <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {paid_amount}" : "{paid_amount} $currency")) ?>
+                                                            </nobr>   </strong>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+
+
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="4">
+                                                    <nobr>
+                                                        Due
+                                                    </nobr>
+
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <nobr>
+                                                        <?php echo html_escape((($position == 0) ? "$currency {due_amount}" : "{due_amount} $currency")) ?>
+                                                    </nobr>
+                                                </td>
+                                            </tr>
+                                            <?php if ($changeamount > 0) { ?>
+                                                <tr>
+                                                    <td align="left">
+                                                        <nobr></nobr>
+                                                    </td>
+                                                    <td align="right" colspan="4">
+                                                        <nobr>
+                                                            Change
+                                                        </nobr>
+
+                                                    </td>
+                                                    <td align="right" class="td-style">
+                                                        <nobr>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {changeamount}" : "{changeamount} $currency")) ?>
+                                                        </nobr>
+                                                    </td>
+                                                </tr>
+
+                                            <?php } ?>
+                                        <?php } ?>
+                                        <?php if (!empty($invoice_details)) { ?>
+                                            <tr>
+
+                                                <td align="left" colspan="4" >
+                                                    <strong>Notes:</strong> {invoice_details}
+                                                </td>
+
+                                            </tr>
+
+                                        <?php } ?>
+
+                                        </td>
                                         </tr>
                                     </tbody>
 

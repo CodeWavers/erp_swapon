@@ -985,11 +985,11 @@ class Linvoice
 
         );
 
-//         echo '<pre>';
-//         print_r($invoice_detail);
-//         exit();
+//
         $pay_type=$invoice_detail[0]['sale_type'];
-
+//         echo '<pre>';
+//         print_r($pay_type);
+//         exit();
         if ($pay_type == 2 ){
             $chapterList = $CI->parser->parse('invoice/pos_dell_arte_invoice_html_manual', $data, true);
 

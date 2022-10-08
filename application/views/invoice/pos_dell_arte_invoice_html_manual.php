@@ -618,6 +618,24 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 </nobr>
                                             </td>
                                         </tr>
+                                        <?php if ($previous_paid > 0) { ?>
+                                            <tr>
+                                                <td align="left">
+                                                    <nobr></nobr>
+                                                </td>
+                                                <td align="right" colspan="2">
+                                                    <strong> <nobr>
+                                                            Previous Paid
+                                                        </nobr>
+                                                    </strong>
+                                                </td>
+                                                <td align="right" class="td-style">
+                                                    <strong> <nobr>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {previous_paid}" : "{previous_paid} $currency")) ?>
+                                                        </nobr>   </strong>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
 
                                         <?php foreach ($payment_info as $pay){?>
 
