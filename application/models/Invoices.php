@@ -531,9 +531,9 @@ class Invoices extends CI_Model
         $product_information = $this->Products->get_single_pr_details($product_id, true);
 
         $p_id=$this->db->select('product_id')->from('product_information')->where('product_id',$product_id)->or_where('sku',$product_id)->get()->row()->product_id;
-        // echo '<pre>';
-        // print_r($product_information);
-        // exit();
+//         echo '<pre>';
+//         print_r($product_information);
+//         exit();
         //8901058841091
         if ($product_information != null) {
             $product_information = $product_information[0];
@@ -558,7 +558,7 @@ class Invoices extends CI_Model
 
             $data2 = (object) array(
                 'total_product'  => $available_quantity,
-                'supplier_price' => $product_information->supplier_price,
+//                'supplier_price' => $product_information->supplier_price,
                 'price'          => $product_information->price,
                 'purchase_price'          => $product_information->purchase_price,
                 'supplier_id'    => $product_information->supplier_id,
@@ -1328,8 +1328,11 @@ class Invoices extends CI_Model
                 'total_price_wd'        => $total_price_wd,
                 'status'             => 2
             );
+
+          //  echo '<pre>';print_r($data1);exit();
             if (!empty($quantity)) {
                 $this->db->insert('invoice_details', $data1);
+               // echo '<pre>';print_r($ab);exit();
             }
         }
 

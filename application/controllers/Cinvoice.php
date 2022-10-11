@@ -919,11 +919,12 @@ class Cinvoice extends CI_Controller
 
         $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
 
-        // echo '<pre>';
-        // print_r($outlet_id);
-        // exit();
+
 
         $product_details  = $CI->Invoices->pos_invoice_setup($product_id, $outlet_id);
+//         echo '<pre>';
+//         print_r($product_details);
+//         exit();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $taxfield = $CI->db->select('tax_name,default_value')
             ->from('tax_settings')
