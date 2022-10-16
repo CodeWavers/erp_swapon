@@ -139,20 +139,19 @@ class Corder extends CI_Controller
         $check_order = $this->db->select('*')->from('invoice')->where(array('invoice_id'=> $invoice_id))->get()->num_rows();
 
 
-
-
             $datainv = array(
                 'invoice_id' => $invoice_id,
-
                 'date' => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
                 'total_amount' => $this->input->post('grand_total', TRUE),
+                'customer_id' => $this->input->post('customer_id', TRUE),
                 'invoice' => $invoice_no_generated,
                 'total_discount' => $this->input->post('discount', TRUE),
                 'paid_amount' => $this->input->post('paid_amount', TRUE),
                 'due_amount' => $this->input->post('due_amount', TRUE),
                 'shipping_cost' => $this->input->post('shipping_cost', TRUE),
                 'outlet_id' => 'OpSoxJvBbbS8Rws',
-                'sale_type' => 2,
+                'sale_type' => 4,
+                'delivery_type' => 2,
                 'payment_type' => $pay_type,
                 'sales_by' => $createby,
                 'status' => 2,

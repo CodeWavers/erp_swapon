@@ -124,6 +124,7 @@
                             <div class="invoice-bill row">
                                 <div class="col-sm-6 text-xs-center">
                                     <address>
+                                        <input type="hidden" name="customer_id" value="<?php echo $order[0]->user_id?>"    id="product_id<?php echo $od->id?>">
 
                                         <strong class="text-main"><?php echo $customer_name?></strong><br>
                                         <?php echo $email?><br>
@@ -236,7 +237,7 @@
                                                 <a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><img height="50" src="<?php echo ecom_url() ?>public/<?php echo $od->thumbnail_img?>"></a>
                                             </td>
                                             <td>
-                                                <input type="hidden" name="product_id[]" value="<?php echo $od->id?>"    id="product_id<?php echo $od->id?>">
+                                                <input type="hidden" name="product_id[]" value="<?php echo $od->sku?>"    id="product_id<?php echo $od->id?>">
                                                 <input type="hidden" name="variation[]" value="<?php echo $od->variation?>"    id="variation<?php echo $od->id?>">
 
                                                 <strong><a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><?php echo $od->name?></a></strong>

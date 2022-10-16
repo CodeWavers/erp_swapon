@@ -1964,225 +1964,7 @@ $birthday = $CI->Reports->birthday_noti();
                                                   ); ?>">Transfer Report</a></li>
             <?php } ?>
 
-            <?php if ($this->permission1->method('ac_report', 'create')->access()) { ?>
-              <li class="treeview <?php if (
-                                    $this->uri->segment('2') == "voucher_report" ||
-                                    $this->uri->segment('2') == "cash_book" ||
-                                    $this->uri->segment('2') == "bank_book" ||
-                                    $this->uri->segment('2') == "general_ledger" ||
-                                    $this->uri->segment('2') == "trial_balance" ||
-                                    $this->uri->segment('2') == "profit_loss_report" ||
-                                    $this->uri->segment('2') == "cash_flow_report" ||
-                                    $this->uri->segment('2') == "inventory_ledger" ||
-                                    $this->uri->segment('2') == "coa_print"
-                                  ) {
-                                    echo "active";
-                                  } else {
-                                    echo " ";
-                                  } ?>"><a href=""><?php echo "Account Reports"; ?>
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-                <ul class="treeview-menu">
-                  <?php if ($this->permission1->method('aprove_v', 'read')->access()) { ?>
-                    <li class="treeview <?php if ($this->uri->segment('2') == "approved_voucher") {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/approved_voucher'
-                                                        ); ?>"><?php echo "Approved Vouchers" ?></a></li>
-                  <?php } ?>
-                  <?php if (
-                    $this->permission1->method('cash_book', 'read')->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "cash_book"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/cash_book'
-                                                        ); ?>"><?php echo display('cash_book'); ?></a></li>
-                  <?php } ?>
-                  <?php if (
-                    $this->permission1
-                    ->method('inventory_ledger', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "inventory_ledger"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/inventory_ledger'
-                                                        ); ?>"><?php echo display('Inventory_ledger'); ?></a></li>
-                  <?php } ?>
-                  <?php if (
-                    $this->permission1->method('bank_book', 'read')->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "bank_book"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/bank_book'
-                                                        ); ?>"><?php echo display('bank_book'); ?></a></li>
-                  <?php } ?>
 
-                  <?php if (
-                    $this->permission1->method('general_ledger', 'read')->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "general_ledger"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/general_ledger'
-                                                        ); ?>"><?php echo display('general_ledger'); ?></a></li>
-                  <?php } ?>
-
-                  <?php if (
-                    $this->permission1
-                    ->method('supplier_payment_report', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "general_ledger"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'admin_dashboard/supplier_payment_report'
-                                                        ); ?>">Supplier Payment Report</a></li>
-                  <?php } ?>
-
-                  <?php if (
-                    $this->permission1
-                    ->method('customer_recieve_report', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "general_ledger"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'admin_dashboard/customer_recieve_report'
-                                                        ); ?>">Customer Recieve Report</a></li>
-                  <?php } ?>
-                  <?php if (
-                    $this->permission1->method('trial_balance', 'read')->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "trial_balance"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/trial_balance_new'
-                                                        ); ?>"><?php echo display('trial_balance'); ?></a></li>
-                  <?php } ?>
-                  <li class="treeview <?php if (
-                                        $this->uri->segment('2') == "profit_loss_report"
-                                      ) {
-                                        echo "active";
-                                      } else {
-                                        echo " ";
-                                      } ?>"><a href="<?php echo base_url(
-                                                        'accounts/profit_loss_report_search'
-                                                      ); ?>"><?php echo display('profit_loss'); ?></a></li>
-                  <?php if (
-                    $this->permission1
-                    ->method('cash_flow_report', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "cash_flow_report"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/cash_flow_report'
-                                                        ); ?>"><?php echo display('cash_flow'); ?></a></li>
-                  <?php } ?>
-
-                  <?php if (
-                    $this->permission1
-                    ->method('cash_flow_report', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "cost_sheet"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/cost_sheet'
-                                                        ); ?>"><?php echo "Cost Sheet"; ?></a></li>
-                  <?php } ?>
-
-                  <?php if (
-                    $this->permission1
-                    ->method('cash_flow_report', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "profit_and_loss"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/profit_and_loss'
-                                                        ); ?>"><?php echo "Profit And Loss Account"; ?></a></li>
-                  <?php } ?>
-
-                  <?php if (
-                    $this->permission1
-                    ->method('balance_sheet_report', 'read')
-                    ->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "balance_sheet_report"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/balance_sheet_report_search_new'
-                                                        ); ?>">Balance Sheet</a></li>
-                  <?php } ?>
-                  <?php if (
-                    $this->permission1->method('coa_print', 'read')->access()
-                  ) { ?>
-                    <li class="treeview <?php if (
-                                          $this->uri->segment('2') == "coa_print"
-                                        ) {
-                                          echo "active";
-                                        } else {
-                                          echo " ";
-                                        } ?>"><a href="<?php echo base_url(
-                                                          'accounts/coa_print'
-                                                        ); ?>"><?php echo display('coa_print'); ?></a></li>
-                  <?php } ?>
-                </ul>
-
-              </li>
-            <?php } ?>
 
             <!-- <?php if (
                     $this->permission1->method('money_receipt', 'read')->access()
@@ -2376,6 +2158,225 @@ $birthday = $CI->Reports->birthday_noti();
                                                     'accounts/aprove_v'
                                                   ); ?>"><?php echo display('voucher_approval'); ?></a></li>
             <?php } ?>
+              <?php if ($this->permission1->method('ac_report', 'create')->access()) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('2') == "voucher_report" ||
+                      $this->uri->segment('2') == "cash_book" ||
+                      $this->uri->segment('2') == "bank_book" ||
+                      $this->uri->segment('2') == "general_ledger" ||
+                      $this->uri->segment('2') == "trial_balance" ||
+                      $this->uri->segment('2') == "profit_loss_report" ||
+                      $this->uri->segment('2') == "cash_flow_report" ||
+                      $this->uri->segment('2') == "inventory_ledger" ||
+                      $this->uri->segment('2') == "coa_print"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href=""><?php echo "Account Reports"; ?>
+                          <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                      </a>
+                      <ul class="treeview-menu">
+                          <?php if ($this->permission1->method('aprove_v', 'read')->access()) { ?>
+                              <li class="treeview <?php if ($this->uri->segment('2') == "approved_voucher") {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/approved_voucher'
+                                  ); ?>"><?php echo "Approved Vouchers" ?></a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1->method('cash_book', 'read')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "cash_book"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/cash_book'
+                                  ); ?>"><?php echo display('cash_book'); ?></a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1
+                              ->method('inventory_ledger', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "inventory_ledger"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/inventory_ledger'
+                                  ); ?>"><?php echo display('Inventory_ledger'); ?></a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1->method('bank_book', 'read')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "bank_book"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/bank_book'
+                                  ); ?>"><?php echo display('bank_book'); ?></a></li>
+                          <?php } ?>
+
+                          <?php if (
+                          $this->permission1->method('general_ledger', 'read')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "general_ledger"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/general_ledger'
+                                  ); ?>"><?php echo display('general_ledger'); ?></a></li>
+                          <?php } ?>
+
+                          <?php if (
+                          $this->permission1
+                              ->method('supplier_payment_report', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "general_ledger"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'admin_dashboard/supplier_payment_report'
+                                  ); ?>">Supplier Payment Report</a></li>
+                          <?php } ?>
+
+                          <?php if (
+                          $this->permission1
+                              ->method('customer_recieve_report', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "general_ledger"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'admin_dashboard/customer_recieve_report'
+                                  ); ?>">Customer Recieve Report</a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1->method('trial_balance', 'read')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "trial_balance"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/trial_balance_new'
+                                  ); ?>"><?php echo display('trial_balance'); ?></a></li>
+                          <?php } ?>
+                          <li class="treeview <?php if (
+                              $this->uri->segment('2') == "profit_loss_report"
+                          ) {
+                              echo "active";
+                          } else {
+                              echo " ";
+                          } ?>"><a href="<?php echo base_url(
+                                  'accounts/profit_loss_report_search'
+                              ); ?>"><?php echo display('profit_loss'); ?></a></li>
+                          <?php if (
+                          $this->permission1
+                              ->method('cash_flow_report', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "cash_flow_report"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/cash_flow_report'
+                                  ); ?>"><?php echo display('cash_flow'); ?></a></li>
+                          <?php } ?>
+
+                          <?php if (
+                          $this->permission1
+                              ->method('cash_flow_report', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "cost_sheet"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/cost_sheet'
+                                  ); ?>"><?php echo "Cost Sheet"; ?></a></li>
+                          <?php } ?>
+
+                          <?php if (
+                          $this->permission1
+                              ->method('cash_flow_report', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "profit_and_loss"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/profit_and_loss'
+                                  ); ?>"><?php echo "Profit And Loss Account"; ?></a></li>
+                          <?php } ?>
+
+                          <?php if (
+                          $this->permission1
+                              ->method('balance_sheet_report', 'read')
+                              ->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "balance_sheet_report"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/balance_sheet_report_search_new'
+                                  ); ?>">Balance Sheet</a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1->method('coa_print', 'read')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "coa_print"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'accounts/coa_print'
+                                  ); ?>"><?php echo display('coa_print'); ?></a></li>
+                          <?php } ?>
+                      </ul>
+
+                  </li>
+              <?php } ?>
           </ul>
         </li>
       <?php } ?>

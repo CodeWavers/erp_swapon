@@ -33,14 +33,36 @@ class Invoices extends CI_Model
         return $data;
     }
 
+    public function get_user_role($user_id){
+
+        return $this->db->select('b.type')
+            ->from('sec_userrole a')
+            ->join('sec_role b','a.roleid=b.id')
+            ->where('a.user_id',$user_id)
+            ->get()->row()->type;
+    }
+
 
 
     public function getInvoiceList($postData = null)
     {
+
+
+
         $this->load->library('occational');
         $this->load->model('Warehouse');
         $response = array();
         $usertype = $this->session->userdata('user_type');
+
+        $userRole=$this->get_user_role($this->session->userdata('user_id'));
+
+//        echo strstr($userRole,"warehouse");
+//        exit();
+//        if (str_contains($userRole, 'Warehouse')) {
+//            echo 'true';
+//        }
+
+//        echo '<pre>';print_r($userRole);exit();
         $fromdate = $this->input->post('fromdate', TRUE);
         $todate   = $this->input->post('todate', TRUE);
         if (!empty($fromdate)) {
@@ -115,8 +137,15 @@ class Invoices extends CI_Model
         $this->db->join('users u', 'u.user_id = a.sales_by', 'left');
         $this->db->join('outlet_warehouse x', 'x.outlet_id = a.outlet_id', 'left');
         $this->db->order_by('a.invoice', 'desc');
-        if ($usertype == 2) {
-            $this->db->where('a.sales_by', $this->session->userdata('user_id'));
+        if ($usertype == 2 ) {
+            if ($userRole == 'Warehouse Admin'){
+                $this->db->where('a.sale_type', 1);
+                $this->db->or_where('a.sale_type', 4);
+                $this->db->or_where('a.sale_type', 3);
+            }else{
+                $this->db->where('a.sales_by', $this->session->userdata('user_id'));
+            }
+
         }
         if (!empty($fromdate) && !empty($todate)) {
             $this->db->where($datbetween);
@@ -138,14 +167,6 @@ class Invoices extends CI_Model
 
             $button .= '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
 
-            //    $button .='  <a href="'.$base_url.'Cinvoice/min_invoice_inserted_data/'.$record->invoice_id.'" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="'.display('mini_invoice').'"><i class="fa fa-fax" aria-hidden="true"></i></a>';
-
-            //$button .='  <a href="'.$base_url.'Cinvoice/pos_invoice_inserted_data/'.$record->invoice_id.'" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="left" title="'.display('pos_invoice').'"><i class="fa fa-fax" aria-hidden="true"></i></a>';
-
-//            $button .= '  <a href="' . $base_url . 'Cinvoice/chalan_invoice_inserted_data/' . $record->invoice_id . '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="left" title="Chalan"><i class="fa fa-fax" aria-hidden="true"></i></a>';
-
-//            $button .= '  <a href="' . $base_url . 'Cinvoice/invoicdetails_download/' . $record->invoice_id . '" class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('download') . '"><i class="fa fa-download"></i></a>';
-
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $button .= ' <a href="' . $base_url . 'Cinvoice/invoice_update_form/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
             }
@@ -157,7 +178,18 @@ class Invoices extends CI_Model
             $details = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
             $details_i = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
 
-            $out = (($record->outlt == 'HK7TGDT69VFMXB7') ? $cw_name : $record->outlet_name);
+            if ($record->outlt == 'HK7TGDT69VFMXB7'){
+                $out=$cw_name;
+            }else{
+                if ($record->sale_type == 4){
+                    $out='Online Order' ;
+                }else{
+                    $out=   $record->outlet_name;
+
+                }
+            }
+
+//            $out = (($record->outlt == 'HK7TGDT69VFMXB7') ? $cw_name : $record->outlet_name);
 
 
             $agg_id = $record->agg_id;
@@ -188,6 +220,9 @@ class Invoices extends CI_Model
             }
             if ($record->sale_type == 3){
                 $st='Aggregators Sale';
+            }
+          if ($record->sale_type == 4){
+                $st='Online Retail';
             }
 
             if ($record->sale_type  == null){
