@@ -441,7 +441,9 @@ class Creport extends CI_Controller
         $postData = $this->input->post();
 
         $pr_status = $this->input->post('pr_status');
-        $data = $this->Reports->getCheckList($postData, null, $pr_status);
+        $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
+        $data = $this->Reports->getCheckList($postData, null, $pr_status,$from_date,$to_date);
         echo json_encode($data);
     }
 

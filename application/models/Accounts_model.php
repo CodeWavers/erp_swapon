@@ -2623,13 +2623,13 @@ class Accounts_model extends CI_Model
         if ($outlet_id != 1) {
             if ($outlet_id == 'HK7TGDT69VFMXB7') {
                 $sql = "SELECT SUM(acc_transaction.Credit) as total_credit , SUM(acc_transaction.Debit) as total_debit FROM acc_transaction LEFT JOIN outlet_warehouse ON acc_transaction.CreateBy = outlet_warehouse.user_id
-                INNER JOIN acc_coa ON acc_transaction.COAID = acc_coa.HeadCode WHERE acc_transaction.IsAppove = 1 AND outlet_warehouse.id IS NULL AND acc_coa.IsActive = 1 AND  COAID LIKE '$COAID%'";
+                INNER JOIN acc_coa ON acc_transaction.COAID = acc_coa.HeadCode WHERE acc_transaction.IsAppove = 1 AND outlet_warehouse.id IS NULL AND acc_coa.IsActive = 1 AND acc_transaction.VDate BETWEEN '" . $dtpFromDate . "' AND '" . $dtpToDate . "' AND COAID LIKE '$COAID%'";
             } else {
                 $sql = "SELECT SUM(acc_transaction.Credit) as total_credit , SUM(acc_transaction.Debit) as total_debit FROM acc_transaction LEFT JOIN outlet_warehouse ON acc_transaction.CreateBy = outlet_warehouse.user_id
-            INNER JOIN acc_coa ON acc_transaction.COAID = acc_coa.HeadCode WHERE acc_transaction.IsAppove = 1 AND outlet_warehouse.outlet_id = '$outlet_id' AND acc_coa.IsActive = 1 AND  COAID LIKE '$COAID%'";
+            INNER JOIN acc_coa ON acc_transaction.COAID = acc_coa.HeadCode WHERE acc_transaction.IsAppove = 1 AND outlet_warehouse.outlet_id = '$outlet_id' AND acc_coa.IsActive = 1 AND acc_transaction.VDate BETWEEN '" . $dtpFromDate . "' AND '" . $dtpToDate . "' AND COAID LIKE '$COAID%'";
             }
         } else {
-            $sql = "SELECT SUM(acc_transaction.Credit) as total_credit , SUM(acc_transaction.Debit) as total_debit FROM acc_transaction INNER JOIN acc_coa ON acc_transaction.COAID = acc_coa.HeadCode WHERE acc_transaction.IsAppove = 1 AND acc_coa.IsActive = 1 AND  COAID LIKE '$COAID%'";
+            $sql = "SELECT SUM(acc_transaction.Credit) as total_credit , SUM(acc_transaction.Debit) as total_debit FROM acc_transaction INNER JOIN acc_coa ON acc_transaction.COAID = acc_coa.HeadCode WHERE acc_transaction.IsAppove = 1 AND acc_coa.IsActive = 1 AND acc_transaction.VDate BETWEEN '" . $dtpFromDate . "' AND '" . $dtpToDate . "' AND  COAID LIKE '$COAID%'";
         }
 
         return $sql;

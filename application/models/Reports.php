@@ -303,7 +303,7 @@ class reports extends CI_Model
         return false;
     }
 
-    public function getCheckList($postData = null, $post_product_id = null, $pr_status = null)
+    public function getCheckList($postData = null, $post_product_id = null, $pr_status = null,$from_date=null,$to_date=null)
     {
         $this->load->model('Warehouse');
         $this->load->model('suppliers');
@@ -313,8 +313,7 @@ class reports extends CI_Model
         $product_sku = $this->input->post('product_sku', TRUE);
         $date = date('Y-m-d');
 
-        $from_date = $this->input->post('from_date');
-        $to_date = $this->input->post('to_date');
+       $op_date = date( 'Y-m-d', strtotime( $fdate . ' -1 day' ) );
 
         ## Read value
         if (!$post_product_id) {
@@ -557,9 +556,9 @@ class reports extends CI_Model
                 if ($to_date) {
                     $this->db->where('transfer_items.date <=', $to_date);
                 }
-                $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
+                $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                     ->from('transfer_item_details')
-                    ->join('transfer_items','transfer_items.transfer_item_details=transfer_items.pro_id','left')
+                  ->join('transfer_items','transfer_item_details.pro_id=transfer_items.pro_id','left')
                     ->where('transfer_item_details.product_id', $record->product_id)
                     ->group_by('transfer_item_details.product_id')
                     ->get()
@@ -598,19 +597,19 @@ class reports extends CI_Model
              *  Opening Stock Start *
              * **********************/
 
-            if ($from_date) {
-                $this->db->where('b.date <=', $from_date);
+            if ($op_date) {
+                $this->db->where('b.date <=', $op_date);
                 $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
                 $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
                 //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
 
-               $this->db->where('product_purchase.purchase_date <=', $from_date);
+               $this->db->where('product_purchase.purchase_date <=', $op_date);
 
                 $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
                     ->from('product_purchase_details')
                     ->where('product_id', $record->product_id)
-                  //  ->where('product_purchase.purchase_date <=', $from_date)
+                  //  ->where('product_purchase.purchase_date <=', $op_date)
                     ->get()
                     ->row();
 
@@ -626,7 +625,7 @@ class reports extends CI_Model
                     ->get()
                     ->row();
 
-                $this->db->where('rqsn.date <=', $from_date);
+                $this->db->where('rqsn.date <=', $op_date);
                 $stockin_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
                     ->from('rqsn_details')
                     ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
@@ -645,7 +644,7 @@ class reports extends CI_Model
 
                 $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
 
-                $this->db->where('production.date <=', $from_date);
+                $this->db->where('production.date <=', $op_date);
                 $production_qty = $this->db->select('SUM(quantity) as pro_qty')
                     ->from('production_goods')
                     ->join('production', 'production.pro_id = production_goods.pro_id', 'left')
@@ -655,7 +654,7 @@ class reports extends CI_Model
                     ->row();
 
 
-                $this->db->where('production.date <=', $from_date);
+                $this->db->where('production.date <=', $op_date);
                 $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
                     ->from('item_usage')
                     ->join('production', 'production.pro_id = item_usage.production_id', 'left')
@@ -685,10 +684,10 @@ class reports extends CI_Model
                 else{
 
 
-                    $this->db->where('transfer_items.date <=', $from_date);
-                    $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
+                  $this->db->where('transfer_items.date <=', $op_date);
+                    $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                         ->from('transfer_item_details')
-                        ->join('transfer_items','transfer_items.transfer_item_details=transfer_items.pro_id','left')
+                        ->join('transfer_items','transfer_item_details.pro_id=transfer_items.pro_id','left')
                         ->where('transfer_item_details.product_id', $record->product_id)
                         ->group_by('transfer_item_details.product_id')
                         ->get()
@@ -696,14 +695,14 @@ class reports extends CI_Model
                     $opening_total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
 
                 }
-              //  $this->db->where('b.date <=', $from_date);
+              //  $this->db->where('b.date <=', $op_date);
                 $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                     ->from('stock_taking_details a')
                     ->join('stock_taking b', 'b.stid = a.stid')
                     ->where(array(
                         'b.outlet_id' =>'HK7TGDT69VFMXB7',
                         'a.product_id' => $record->product_id,
-                   'create_date >=' => $from_date,
+                   'create_date >=' => $op_date,
                         'a.status' => 1,
 
                     ))
@@ -799,9 +798,9 @@ class reports extends CI_Model
                 else{
 
                     $this->db->where('transfer_items.date <=', $to_date);
-                    $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
+                    $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                         ->from('transfer_item_details')
-                        ->join('transfer_items','transfer_items.transfer_item_details=transfer_items.pro_id','left')
+                        ->join('transfer_items','transfer_items.pro_id=transfer_items.pro_id','left')
                         ->where('transfer_item_details.product_id', $record->product_id)
                         ->group_by('transfer_item_details.product_id')
                         ->get()
@@ -844,6 +843,7 @@ class reports extends CI_Model
             $data[] = array(
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
+                'product_type'  =>  $record->finished_raw,
                 'product_model' => ($record->product_model ? $record->product_model : ''),
                 'category' => ($record->name ? $record->name : ''),
                 'sku' => ($record->sku ? $record->sku : ''),
@@ -863,6 +863,12 @@ class reports extends CI_Model
                         ? $product_supplier_price[0]->supplier_price * $closing_stock
                         : 0),
 
+                'opening_inventory' => (($opening_stock * $pprice) != 0)
+                    ? ($opening_stock * $pprice)
+                    : ($product_supplier_price
+                        ? $product_supplier_price[0]->supplier_price * $opening_stock
+                        : 0),
+
 
             );
             $sl++;
@@ -870,11 +876,30 @@ class reports extends CI_Model
 
 
 
+            $opening_finished= 0;
+            $opening_raw= 0;
+            $opening_tools= 0;
+
+
+
+
             $closing_inventory = array_sum(array_column($data, 'purchase_total'));
+
         }
 
 
+        foreach($data as $key => $value){
 
+            if($value['product_type'] == 1) {
+                $opening_finished+= $value['opening_inventory'];
+            }
+            if($value['product_type'] == 2) {
+                $opening_raw+= $value['opening_inventory'];
+            }
+            if($value['product_type'] == 3) {
+                $opening_tools+= $value['opening_inventory'];
+            }
+        }
         ## Response
         if (!$post_product_id) {
             $response = array(
@@ -883,6 +908,9 @@ class reports extends CI_Model
                 "iTotalDisplayRecords" => $totalRecords,
                 "aaData" =>  $data,
                 "closing_inventory" => $closing_inventory,
+                "opening_finished" => $opening_finished,
+                "opening_raw" => $opening_raw,
+                "opening_tools" => $opening_tools,
 
             );
         } else {

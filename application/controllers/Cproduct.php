@@ -201,7 +201,7 @@ class Cproduct extends CI_Controller
 //
 //        }
 
-        $data2['product_id']   = $this->input->post('sku', TRUE);
+        $data2['product_id']   =(!empty( $this->input->post('sku', TRUE)) ?  $this->input->post('sku', TRUE) : date('Ymdhs'));
         $data2['category_id']  = $catsdata;
         $data2['brand_id']  = $this->input->post('brand_id', TRUE);
         $data2['product_name'] = $this->input->post('product_name', TRUE);

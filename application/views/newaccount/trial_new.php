@@ -1,3 +1,8 @@
+<script src="<?php echo base_url() ?>assets/js/daterangepicker.js"></script>
+<script src="<?php echo base_url('assets/plugins/moment/moment.js') ?>" type="text/javascript"></script>
+
+
+
 <?php
 $GLOBALS['TotalIncome'] = 0;
 $GLOBALS['TotalAssertF']   = 0;
@@ -11,12 +16,12 @@ $GLOBALS['TotalExpence'] = 0;
 
 function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $dtpFromDate, $dtpToDate, $check)
 {
-
+     // echo '<pre>';print_r($value);exit();
     $CI = &get_instance();
-    //echo '<pre>';print_r($HeadName);exit();
+
 
     if ($value == 1) {
-?>
+        ?>
         <tr>
             <td colspan="3" class="profilossphead"><?php echo $HeadName; ?></td>
         </tr>
@@ -35,6 +40,8 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
         // }
         $q1 = $CI->db->query($sqlF);
         $oResultAmountPreF = $q1->row();
+
+
 
         $class = "";
 
@@ -57,7 +64,7 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                 $TotalDebit = 0;
 
 
-        ?>
+                ?>
                 <tr>
 
 
@@ -71,19 +78,19 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                     </td>
 
                     <td align="right" class="profitlossbrancheadamount <?php echo ($value <= 3 ? " font-bold " : " "); ?>"><?php
-                                                                                                                            $TotalDebit += $oResultAmountPreF->total_debit - $oResultAmountPreF->total_credit;
-                                                                                                                            ($value == 2) ? ($GLOBALS['Ultimate_debit'] += $TotalDebit) : ($GLOBALS['Ultimate_debit'] += 0);
-                                                                                                                            echo number_format($oResultAmountPreF->total_debit - $oResultAmountPreF->total_credit, 2);
-                                                                                                                            ?>
+                        $TotalDebit += $oResultAmountPreF->total_debit - $oResultAmountPreF->total_credit;
+                        ($value == 2) ? ($GLOBALS['Ultimate_debit'] += $TotalDebit) : ($GLOBALS['Ultimate_debit'] += 0);
+                        echo number_format($oResultAmountPreF->total_debit - $oResultAmountPreF->total_credit, 2);
+                        ?>
                     </td>
 
                     <td align="right" class="profitlossbrancheadamount <?php echo ($value <= 3 ? " font-bold " : " "); ?>"><?php
-                                                                                                                            echo number_format('0.00', 2); ?></td>
+                        echo number_format('0.00', 2); ?></td>
 
                 </tr>
-            <?php
+                <?php
             } else {
-            ?>
+                ?>
 
                 <tr>
                     <td align="left" class="profitlossbranchead <?php echo ($value <= 3 ? " font-bold " : " "); ?>" font-size="<?php echo (int)(20 - $value * 1.5) . 'px'; ?>">
@@ -92,23 +99,25 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                         </a>
                     </td>
                     <td align="right" class="profitlossbrancheadamount <?php echo ($value <= 3 ? " font-bold " : " "); ?>"><?php
-                                                                                                                            echo number_format('0.00', 2); ?></td>
+                        echo number_format('0.00', 2); ?></td>
                     <td align="right" class="profitlossbrancheadamount <?php echo ($value <= 3 ? " font-bold " : " "); ?>"><?php
-                                                                                                                            $TotalCredit += $oResultAmountPreF->total_credit - $oResultAmountPreF->total_debit;
-                                                                                                                            ($value == 2) ? ($GLOBALS['Ultimate_credit'] += $TotalCredit) : ($GLOBALS['Ultimate_debit'] += 0);
-                                                                                                                            echo number_format(($oResultAmountPreF->total_credit - $oResultAmountPreF->total_debit), 2);
-                                                                                                                            ?>
+                        $TotalCredit += $oResultAmountPreF->total_credit - $oResultAmountPreF->total_debit;
+                        ($value == 2) ? ($GLOBALS['Ultimate_credit'] += $TotalCredit) : ($GLOBALS['Ultimate_debit'] += 0);
+                        echo number_format(($oResultAmountPreF->total_credit - $oResultAmountPreF->total_debit), 2);
+                        ?>
                     </td>
 
                 </tr>
 
 
-<?php
+                <?php
 
 
             }
         }
     }
+
+
     for ($i = 0; $i < count($oResultAsset); $i++) {
         if (!$Visited[$i] && $GL == 1) {
             if ($HeadName == $oResultAsset[$i]->PHeadName) {
@@ -157,11 +166,11 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                         <div class="panel-body">
                             <?php if (!$first_outlet) { ?>
                                 <?php echo form_open_multipart('accounts/trial_balance_new', array('id' => 'trial_balance_new_form', 'name' => 'trial_balance_new_form')) ?>
-                                <div class="col-sm-8">
+                                <div class="col-sm-12">
 
                                     <div class="form-group row">
-                                        <label for="outlet" class="col-form-label col-sm-4">Outlet</label>
-                                        <div class="col-sm-6">
+                                        <label for="outlet" class="col-form-label col-sm-1">Outlet</label>
+                                        <div class="col-sm-2">
                                             <select id="outlet" class="form-control" name="outlet">
                                                 <option value="">Select One</option>
                                                 <?php if ($id_out == 1) { ?>
@@ -175,7 +184,7 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                                                         <option value="<?= $c['warehouse_id'] ?>" selected><?= $c['central_warehouse'] ?></option>
                                                     <?php } else { ?>
                                                         <option value="<?= $c['warehouse_id'] ?>"><?= $c['central_warehouse'] ?></option>
-                                                <?php }
+                                                    <?php }
                                                 } ?>
 
                                                 <?php foreach ($outlet_list as $outlet) {
@@ -183,14 +192,26 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                                                         <option value="<?= $outlet['outlet_id'] ?>" selected><?= $outlet['outlet_name'] ?></option>
                                                     <?php } else { ?>
                                                         <option value="<?= $outlet['outlet_id'] ?>"><?= $outlet['outlet_name'] ?></option>
-                                                <?php }
+                                                    <?php }
                                                 } ?>
                                             </select>
                                         </div>
+
+                                        <label for="outlet" class="col-form-label col-sm-1">Start Date</label>
                                         <div class="col-sm-2">
+                                            <input type="text" name="dtpFromDate" value="<?php echo (!empty($dtpFromDate) ? html_escape($dtpFromDate) : '') ?>" placeholder="<?php echo display('from_date') ?>" class="datepicker form-control" autocomplete="off">
+
+                                        </div>
+                                        <label for="outlet" class="col-form-label col-sm-1">End Date</label>
+                                        <div class="col-sm-2">
+                                            <input type="text" name="dtpToDate" value="<?php echo (!empty($dtpToDate) ? html_escape($dtpToDate) : '') ?>" placeholder="<?php echo display('to_date') ?>" class="datepicker form-control" autocomplete="off">
+
+                                        </div>
+                                        <div class="col-sm-1">
                                             <button type="submit" name="btnSave" class="btn btn-success"><?php echo display('find') ?></button>
                                         </div>
                                     </div>
+
 
 
                                 </div>
@@ -200,7 +221,7 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                             <table class="table" width="100%" class="table_boxnew" cellpadding="5" cellspacing="0">
                                 <tr>
                                     <td colspan="4" align="center">
-                                        <h3><b>Trial Balance of Till<br /> <?php echo $today ?> </b></h3>
+                                        <h3><b>Trial Balance of <br /><?php echo $dtpFromDate ?> <?php echo display('to')?> <?php echo $dtpToDate;?> </b></h3>
                                     </td>
                                 </tr>
                                 <tr>
@@ -285,17 +306,65 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                                     <td colspan="3" align="right"></td>
                                 </tr>
 
+                                <tr>
+                                    <td colspan="3" class="profilossphead">Opening Inventory</td>
+                                </tr>
+
+<!--                                <tr>-->
+<!--                                    <td align="left" class="profitlossbranchead  font-bold " font-size="13px">-->
+<!--                                        <a href=#">-->
+<!--                                            <font size="+1">-->
+<!--                                             Finished Goods                           </font>-->
+<!--                                        </a>-->
+<!--                                    </td>-->
+<!--                                            <td>0.00</td>-->
+<!--                                            <td>0.00</td>-->
+<!--                                </tr>-->
+
+                                <tr>
+                                    <td align="left" class="profitlossbranchead  font-bold " font-size="17px">
+                                        <a href="#">
+                                            <font size="+1">Finished Goods</font>
+                                        </a>
+                                    </td>
+                                    <td align="right" class="profitlossbrancheadamount  font-bold "><?php echo number_format($opening_finished, 2); ?></td>
+                                    <td align="right" class="profitlossbrancheadamount  font-bold ">0.00  </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td align="left" class="profitlossbranchead  font-bold " font-size="17px">
+                                        <a href="#">
+                                            <font size="+1">Raw Materials</font>
+                                        </a>
+                                    </td>
+                                    <td align="right" class="profitlossbrancheadamount  font-bold "><?php echo number_format($opening_raw, 2); ?></td>
+
+                                    <td align="right" class="profitlossbrancheadamount  font-bold ">0.00  </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="left" class="profitlossbranchead  font-bold " font-size="17px">
+                                        <a href="#">
+                                            <font size="+1">Tools</font>
+                                        </a>
+                                    </td>
+                                    <td align="right" class="profitlossbrancheadamount  font-bold "><?php echo number_format($opening_tools, 2); ?></td>
+
+                                    <td align="right" class="profitlossbrancheadamount  font-bold ">0.00  </td>
+
+                                </tr>
 
                                 <tr bgcolor="#FFFFFF">
                                     <td align="right"><strong>Total</strong></td>
-                                    <td align="right" class="totalliability"><strong><?php echo number_format($GLOBALS['Ultimate_debit'], 2); ?></strong></td>
+                                    <td align="right" class="totalliability"><strong><?php echo number_format($GLOBALS['Ultimate_debit']+$opening_finished+$opening_raw+$opening_tools, 2); ?></strong></td>
                                     <td align="right" class="totalliability"><strong><?php echo number_format($GLOBALS['Ultimate_credit'], 2); ?></strong></td>
 
                                     <!--                                    <td align="right" class="totalliability"><strong >--><?php //echo number_format($TotalDebit,2);
-                                                                                                                                    ?>
+                                    ?>
                                     <!--</strong></td>-->
                                     <!--                                    <td align="right" class="totalliability"><strong >--><?php //echo number_format($TotalCredit,2);
-                                                                                                                                    ?>
+                                    ?>
                                     <!--</strong></td>-->
                                 </tr>
                                 <tr>
@@ -324,3 +393,57 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
         </div>
     </section>
 </div>
+
+<script>
+
+
+        var start = moment().subtract(29, 'days');
+        var end = moment();
+
+// var start = moment($start);
+// var end = moment($end);
+        var quarter = moment().quarter();
+
+        function cb(start, end) {
+
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            // console.log(start)
+            // console.log(end)
+            $('#dtpFromDate').val(start.format('YYYY-MM-DD'));
+            $('#dtpToDate').val(end.format('YYYY-MM-DD'));
+        }
+
+        $('#reportrange').daterangepicker({
+            // singleDatePicker: true,
+            single: true,
+            standalone: true,
+            // singleDatePicker: true,
+            showDropdowns: true,
+            startDate: start,
+            endDate: end,
+            minYear: 1901,
+            maxYear: parseInt(moment().format('YYYY'),10),
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'This Year': [moment().startOf('year'), moment().endOf('year')],
+                'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+                'Current Quarter': [moment().quarter(quarter).startOf('quarter'), moment().quarter(quarter).endOf('quarter')],
+                'Last Quarter': [moment().subtract(1, 'quarter').startOf('quarter'), moment().subtract(1, 'quarter').endOf('quarter')],
+            }
+        }, cb);
+// console.log(start)
+// console.log(end)
+
+
+        cb(start, end);
+
+        $('#dtpFromDate').val(start.format('YYYY-MM-DD'));
+        $('#dtpToDate').val(end.format('YYYY-MM-DD'));
+
+
+</script>
