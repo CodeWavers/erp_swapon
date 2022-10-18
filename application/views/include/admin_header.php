@@ -2297,37 +2297,38 @@ $birthday = $CI->Reports->birthday_noti();
                           } ?>"><a href="<?php echo base_url(
                                   'accounts/profit_loss_report_search'
                               ); ?>"><?php echo display('profit_loss'); ?></a></li>
-                          <?php if (
-                          $this->permission1
-                              ->method('cash_flow_report', 'read')
-                              ->access()
-                          ) { ?>
-                              <li class="treeview <?php if (
-                                  $this->uri->segment('2') == "cash_flow_report"
-                              ) {
-                                  echo "active";
-                              } else {
-                                  echo " ";
-                              } ?>"><a href="<?php echo base_url(
-                                      'accounts/cash_flow_report'
-                                  ); ?>"><?php echo display('cash_flow'); ?></a></li>
-                          <?php } ?>
 
-                          <?php if (
-                          $this->permission1
-                              ->method('cash_flow_report', 'read')
-                              ->access()
-                          ) { ?>
-                              <li class="treeview <?php if (
-                                  $this->uri->segment('2') == "cost_sheet"
-                              ) {
-                                  echo "active";
-                              } else {
-                                  echo " ";
-                              } ?>"><a href="<?php echo base_url(
-                                      'accounts/cost_sheet'
-                                  ); ?>"><?php echo "Cost Sheet"; ?></a></li>
-                          <?php } ?>
+<!--                          --><?php //if (
+//                          $this->permission1
+//                              ->method('cash_flow_report', 'read')
+//                              ->access()
+//                          ) { ?>
+<!--                              <li class="treeview --><?php //if (
+//                                  $this->uri->segment('2') == "cash_flow_report"
+//                              ) {
+//                                  echo "active";
+//                              } else {
+//                                  echo " ";
+//                              } ?><!--"><a href="--><?php //echo base_url(
+//                                      'accounts/cash_flow_report'
+//                                  ); ?><!--">--><?php //echo display('cash_flow'); ?><!--</a></li>-->
+<!--                          --><?php //} ?>
+
+<!--                          --><?php //if (
+//                          $this->permission1
+//                              ->method('cash_flow_report', 'read')
+//                              ->access()
+//                          ) { ?>
+<!--                              <li class="treeview --><?php //if (
+//                                  $this->uri->segment('2') == "cost_sheet"
+//                              ) {
+//                                  echo "active";
+//                              } else {
+//                                  echo " ";
+//                              } ?><!--"><a href="--><?php //echo base_url(
+//                                      'accounts/cost_sheet'
+//                                  ); ?><!--">--><?php //echo "Cost Sheet"; ?><!--</a></li>-->
+<!--                          --><?php //} ?>
 
                           <?php if (
                           $this->permission1

@@ -1506,7 +1506,7 @@ class Rqsn extends CI_Model
         return false;
     }
 
-    public function outlet_stock($postData = null, $post_product_id = null)
+    public function outlet_stock($postData = null, $post_product_id = null,$from_date=null,$to_date=null)
     {
         $this->load->model('suppliers');
         $this->load->model('warehouse');
@@ -1515,12 +1515,11 @@ class Rqsn extends CI_Model
 
         $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
 
-
+        $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
         $product_sku = $this->input->post('product_sku', TRUE);
 
         $cat_id = $this->input->post('cat_id', TRUE);
-        $from_date = $this->input->post('from_date');
-        $to_date = $this->input->post('to_date');
+
 
         ## Read value
         if (!$post_product_id) {
@@ -1727,8 +1726,8 @@ class Rqsn extends CI_Model
             /************************
              *  Opening Stock Start *
              * **********************/
-            if ($from_date) {
-                $this->db->where('d.date <=', $from_date);
+            if ($op_date) {
+                $this->db->where('d.date <=', $op_date);
                 $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')
                     ->from('invoice_details a')
                     ->join('invoice d', 'd.invoice_id=a.invoice_id')
@@ -1737,7 +1736,7 @@ class Rqsn extends CI_Model
                     ->get()
                     ->row();
 
-                $this->db->where('product_purchase.purchase_date <=', $from_date);
+                $this->db->where('product_purchase.purchase_date <=', $op_date);
                 $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,Avg(rate) as purchaseprice')
                     ->from('product_purchase_details')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
@@ -1761,7 +1760,7 @@ class Rqsn extends CI_Model
                     ->get()
                     ->row();
 
-                $this->db->where('c.date <=', $from_date);
+                $this->db->where('c.date <=', $op_date);
                 $this->db->select('a.*,c.*,,SUM(a.a_qty) as total_purchase');
                 $this->db->from('rqsn_details a');
                 $this->db->join('rqsn c', 'a.rqsn_id=c.rqsn_id');
@@ -1772,7 +1771,7 @@ class Rqsn extends CI_Model
                 $this->db->where('a.isrcv', 1);
                 $opening_total_purchase = $this->db->get()->row();
 
-                $this->db->where('d.date <=', $from_date);
+                $this->db->where('d.date <=', $op_date);
                 $this->db->select('SUM(b.quantity) as total_sale');
                 $this->db->from('invoice_details b');
                 $this->db->join('invoice d', 'd.invoice_id=b.invoice_id');
@@ -1782,7 +1781,7 @@ class Rqsn extends CI_Model
 
                 $opening_out_qty = (!empty($opening_total_sale->total_sale) ? $opening_total_sale->total_sale : 0);
 
-                $this->db->where('a.create_date <=', $from_date);
+                $this->db->where('a.create_date <=', $op_date);
                 $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                     ->from('stock_taking_details a')
                     ->join('stock_taking b', 'b.stid = a.stid')
@@ -1894,6 +1893,7 @@ class Rqsn extends CI_Model
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
                 'product_model' =>  $record->product_model,
+                'product_type'  =>  $record->finished_raw,
                 'sales_price'   =>  sprintf('%0.2f', $sprice),
                 'purchase_p'    =>  $pprice,
                 'sku'          => $record->sku,
@@ -1911,11 +1911,40 @@ class Rqsn extends CI_Model
                     : ($product_supplier_price
                         ? $product_supplier_price[0]->supplier_price * $stock
                         : 0),
+                'opening_inventory' => (($opening_stock * $pprice) != 0)
+                    ? ($opening_stock * $pprice)
+                    : ($product_supplier_price
+                        ? $product_supplier_price[0]->supplier_price * $opening_stock
+                        : 0),
 
             );
             $sl++;
 
-            $closing_inventory = array_sum(array_column($data, 'purchase_total'));
+            //$closing_inventory = array_sum(array_column($data, 'purchase_total'));
+        }
+        $opening_finished= 0;
+        $opening_raw= 0;
+        $opening_tools= 0;
+
+        $closing_finished= 0;
+        $closing_raw= 0;
+        $closing_tools= 0;
+
+
+        foreach($data as $key => $value){
+
+            if($value['product_type'] == 1) {
+                $opening_finished+= $value['opening_inventory'];
+                $closing_finished+= $value['purchase_total'];
+            }
+            if($value['product_type'] == 2) {
+                $opening_raw+= $value['opening_inventory'];
+                $closing_raw+= $value['purchase_total'];
+            }
+            if($value['product_type'] == 3) {
+                $opening_tools+= $value['opening_inventory'];
+                $closing_tools+= $value['purchase_total'];
+            }
         }
 
         // print_r($data);
@@ -1928,7 +1957,14 @@ class Rqsn extends CI_Model
                 "iTotalRecords" => $totalRecordwithFilter,
                 "iTotalDisplayRecords" => $totalRecords,
                 "aaData" => $data,
-                "closing_inventory"     => $closing_inventory
+                "closing_inventory"     => $closing_inventory,
+                "opening_finished" => $opening_finished,
+                "opening_raw" => $opening_raw,
+                "opening_tools" => $opening_tools,
+
+                "closing_finished" => $closing_finished,
+                "closing_raw" => $closing_raw,
+                "closing_tools" => $closing_tools,
             );
         } else {
             $response = array(

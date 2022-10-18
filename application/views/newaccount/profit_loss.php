@@ -35,11 +35,11 @@
                         <?php if (!$first_outlet) { ?>
                             <?php echo form_open_multipart('accounts/profit_loss_report_search', array('id' => 'profit_loss_filter', 'name' => 'profit_loss_filter')) ?>
                             <div class="row">
-                                <div class="col-sm-8">
+                                <div class="col-sm-12">
 
                                     <div class="form-group row">
-                                        <label for="outlet" class="col-form-label col-sm-4">Outlet</label>
-                                        <div class="col-sm-6">
+                                        <label for="outlet" class="col-form-label col-sm-1">Outlet</label>
+                                        <div class="col-sm-2">
                                             <select id="outlet" class="form-control" name="outlet">
                                                 <option value="">Select One</option>
                                                 <option value="1">Consolidated</option>
@@ -50,6 +50,16 @@
                                                 <option value={outlet_id}>{outlet_name}</option>
                                                 {/outlet_list}
                                             </select>
+                                        </div>
+                                        <label for="outlet" class="col-form-label col-sm-1">Start Date</label>
+                                        <div class="col-sm-2">
+                                            <input type="text" name="dtpFromDate" value="<?php echo (!empty($dtpFromDate) ? html_escape($dtpFromDate) : '') ?>" placeholder="<?php echo display('from_date') ?>" class="datepicker form-control" autocomplete="off">
+
+                                        </div>
+                                        <label for="outlet" class="col-form-label col-sm-1">End Date</label>
+                                        <div class="col-sm-2">
+                                            <input type="text" name="dtpToDate" value="<?php echo (!empty($dtpToDate) ? html_escape($dtpToDate) : '') ?>" placeholder="<?php echo display('to_date') ?>" class="datepicker form-control" autocomplete="off">
+
                                         </div>
                                         <div class="col-sm-2">
                                             <button type="submit" name="btnSave" class="btn btn-success"><?php echo display('find') ?></button>
@@ -64,7 +74,9 @@
                         <?php } ?>
 
                         <div id="purchase_div" class="table-responsive">
-                            <h3 align="center">Profit Loss Report</h3>
+
+                            <h3  align="center"><b>Profit Loss Report of <br /><?php echo $dtpFromDate ?> <?php echo display('to')?> <?php echo $dtpToDate;?> </b></h3>
+
                             <table class="print-table" width="100%">
 
                                 <tr>
@@ -101,79 +113,96 @@
 
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><b>Opening Inventory</b></td>
+                                        <tr>
+                                            <td><b>Production Expense</b></td>
+                                            <td></td>
+                                            <td></td>
+
+                                            <?php if ($production_expense) : ?>
+                                                <td align="right"><b><?php echo  number_format($production_expense, 2) ?></b></td>
+                                            <?php else : ?>
+                                                <td  align="right"><b><?php echo number_format('0', 2) ?></b></td>
+                                            <?php endif; ?>
+                                        </tr>
+
+                                        <tr>
+                                                <td><b>Opening Inventory(Finished Goods)</b></td>
                                                 <td></td>
                                                 <td></td>
 
                                                 <?php if ($opening_inventory) : ?>
-                                                    <td><b><?php echo  number_format($opening_inventory, 2) ?></b></td>
+                                                    <td align="right"><b><?php echo  number_format($opening_inventory, 2) ?></b></td>
                                                 <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
                                                 <?php endif; ?>
                                             </tr>
 
                                             <tr>
-                                                <td><b>Product Purchase</b></td>
+                                                <td><b>(+)Purchase Finished Goods</b></td>
 
                                                 <td></td>
                                                 <td></td>
                                                 <?php if ($product_purchase) : ?>
-                                                    <td><b><?php echo  number_format($product_purchase, 2) ?></b></td>
+                                                    <td align="right"><b><?php echo  number_format($product_purchase, 2) ?></b></td>
                                                 <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
                                                 <?php endif; ?>
                                             </tr>
-                                            <tr>
-                                                <td><b>Direct Expense</b></td>
 
-                                                <td></td>
-                                                <td></td>
-                                                <?php if ($direct_expense) : ?>
-                                                    <td><b><?php echo  number_format($direct_expense, 2) ?></b></td>
-                                                <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
-                                                <?php endif; ?>
-                                            </tr>
-                                            <?php foreach ($expense as $direct_expense) { ?>
-                                                <?php if ($i['amount'] > 0) { ?>
+                                        <tr class="text-right">
+                                            <td colspan="4"> <b><?= number_format($opp,2) ?></b></td>
+                                        </tr>
 
-                                                    <tr>
-                                                        <td></td>
-                                                        <td><?php echo $direct_expense['HeadName'] ?></td>
-                                                        <td><?php echo $direct_expense['amount'] ?></td>
-                                                        <td></td>
-                                                    </tr>
-                                                <?php } ?>
-                                            <?php } ?>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td><b><?php echo number_format($abc, 2) ?></b></td>
-                                            </tr>
-                                            <tr>
-                                                <td><b>(-)Closing Inventory</b></td>
+                                        <tr>
+                                            <td><b>(-)Purchase Return</b></td>
 
-                                                <td></td>
-                                                <td></td>
-                                                <?php if ($closing_inventory) : ?>
-                                                    <td><b><?php echo  number_format($closing_inventory, 2) ?></b></td>
-                                                <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
-                                                <?php endif; ?>
-                                            </tr>
-                                            <tr>
-                                                <td><b>Costs of Goods Sold</b></td>
+                                            <td></td>
+                                            <td></td>
+                                            <?php if ($purchase_return) : ?>
+                                                <td align="right"><b><?php echo  number_format($purchase_return, 2) ?></b></td>
+                                            <?php else : ?>
+                                                <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
+                                            <?php endif; ?>
+                                        </tr>
+                                        <tr class="text-right">
+                                            <td colspan="4"> <b><?= number_format($pmo,2) ?></b></td>
+                                        </tr>
 
-                                                <td></td>
-                                                <td></td>
-                                                <?php if ($total_i) : ?>
-                                                    <td><b><?php echo  number_format($total_i, 2) ?></b></td>
-                                                <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
-                                                <?php endif; ?>
-                                            </tr>
+
+                                        <tr>
+                                            <td><b>(-)Purchase Discount</b></td>
+
+                                            <td></td>
+                                            <td></td>
+                                            <?php if ($purchase_discount) : ?>
+                                                <td align="right"><b><?php echo  number_format($purchase_discount, 2) ?></b></td>
+                                            <?php else : ?>
+                                                <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
+                                            <?php endif; ?>
+                                        </tr>
+                                        <tr class="text-right">
+                                            <td colspan="4"> <b><?= number_format($dmo,2) ?></b></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><b>(-)Closing Inventory (Finished Goods)</b></td>
+
+                                            <td></td>
+                                            <td></td>
+                                            <?php if ($closing_inventory) : ?>
+                                                <td align="right"><b><?php echo  number_format($closing_inventory, 2) ?></b></td>
+                                            <?php else : ?>
+                                                <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
+                                            <?php endif; ?>
+                                        </tr>
+
+                                        <tr>
+                                            <td><b>Costs of Goods Sold</b></td>
+                                            <td></td>
+                                            <td></td>
+
+                                            <td align="right"><b><?php echo  number_format($cogs, 2) ?></b></td>
+                                        </tr>
 
                                             <tr>
                                                 <td><b>Gross Profit/Loss (c/o)</b></td>
@@ -181,7 +210,7 @@
                                                 <td></td>
                                                 <td></td>
 
-                                                <td><b><?php echo  number_format($gross_profit, 2) ?></b></td>
+                                                <td align="right"><b><?php echo  number_format($gross_profit, 2) ?></b></td>
 
 
                                             </tr>
@@ -199,54 +228,80 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><b>Sales Account</b></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td colspan="4"><b>Sales Account</b></td>
 
-                                                <?php if ($total_sale) : ?>
-                                                    <td><b><?php echo  number_format($total_sale, 2) ?></b></td>
-                                                <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
-                                                <?php endif; ?>
+
+<!--                                                --><?php //if ($total_sale) : ?>
+<!--                                                    <td><b>--><?php //echo  number_format($total_sale, 2) ?><!--</b></td>-->
+<!--                                                --><?php //else : ?>
+<!--                                                    <td><b>--><?php //echo number_format('0', 2) ?><!--</b></td>-->
+<!--                                                --><?php //endif; ?>
                                             </tr>
 
                                             <tr>
 
                                                 <td></td>
                                                 <td>Sales</td>
-
-                                                <?php if ($product_sale) : ?>
-                                                    <td><?php echo  number_format($product_sale, 2) ?></td>
-                                                <?php else : ?>
-                                                    <td><?php echo number_format('0', 2) ?></td>
-                                                <?php endif; ?>
                                                 <td></td>
+                                                <?php if ($product_sale) : ?>
+                                                    <td  align="right"><?php echo  number_format($product_sale, 2) ?></td>
+                                                <?php else : ?>
+                                                    <td  align="right"><?php echo number_format('0', 2) ?></td>
+                                                <?php endif; ?>
+
                                             </tr>
 
                                             <tr>
                                                 <td></td>
 
                                                 <td align="left">(-)Sales Return</td>
-
-                                                <?php if ($sale_return) : ?>
-                                                    <td><?php echo  number_format($sale_return, 2) ?></td>
-                                                <?php else : ?>
-                                                    <td><?php echo number_format('0', 2) ?></td>
-                                                <?php endif; ?>
                                                 <td></td>
+                                                <?php if ($sale_return) : ?>
+                                                    <td align="right"><?php echo  number_format($sale_return, 2) ?></td>
+                                                <?php else : ?>
+                                                    <td align="right"><?php echo number_format('0', 2) ?></td>
+                                                <?php endif; ?>
+
+                                            </tr>
+
+                                            <tr class="text-right">
+                                                <td colspan="4"> <b><?= number_format($sme,2) ?></b></td>
                                             </tr>
                                             <tr>
                                                 <td></td>
 
-                                                <td align="left">Service Income</td>
-
-                                                <?php if ($service_income) : ?>
-                                                    <td><?php echo  number_format($service_income, 2) ?></td>
-                                                <?php else : ?>
-                                                    <td><?php echo number_format('0', 2) ?></td>
-                                                <?php endif; ?>
+                                                <td align="left">(-)Sales Discount</td>
                                                 <td></td>
+                                                <?php if ($sales_discount) : ?>
+                                                    <td align="right"><?php echo  number_format($sales_discount, 2) ?></td>
+                                                <?php else : ?>
+                                                    <td align="right"><?php echo number_format('0', 2) ?></td>
+                                                <?php endif; ?>
+
                                             </tr>
+                                            <tr>
+                                                <td colspan="3"><b>Net Sales</b></td>
+                                                <?php if ($net_sales) : ?>
+                                                    <td align="right"><b><?php echo  number_format($net_sales, 2) ?></b></td>
+                                                <?php else : ?>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
+                                                <?php endif; ?>
+                                            </tr>
+
+                                            <tr>
+                                                <td></td>
+
+                                                <td align="left">Service Income</td>
+                                                <td></td>
+                                                <?php if ($service_income) : ?>
+                                                    <td align="right"><?php echo  number_format($service_income, 2) ?></td>
+                                                <?php else : ?>
+                                                    <td align="right"><?php echo number_format('0', 2) ?></td>
+                                                <?php endif; ?>
+
+                                            </tr>
+
+
 
 
 
@@ -282,9 +337,9 @@
 
 
                                                 <?php if ($total_i) : ?>
-                                                    <td><span style="border-bottom-style:double; border-bottom-width: 5px;"><b><?php echo  number_format($total_i + $gross_profit, 2) ?></b></span></td>
+                                                    <td align="right"><span style="border-bottom-style:double; border-bottom-width: 5px;"><b><?php echo  number_format($total_i, 2) ?></b></span></td>
                                                 <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
                                                 <?php endif; ?>
                                             </tr>
                                         </tbody>
@@ -320,9 +375,9 @@
 
 
                                                 <?php if ($total_sale) : ?>
-                                                    <td><b><span style="border-bottom-style:double; border-bottom-width: 5px;"><?php echo  number_format($total_sale, 2) ?></span></b></td>
+                                                    <td align="right"><b><span style="border-bottom-style:double; border-bottom-width: 5px;"><?php echo  number_format($total_sale, 2) ?></span></b></td>
                                                 <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
                                                 <?php endif; ?>
                                             </tr>
 
@@ -340,37 +395,39 @@
 
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><b>Indirect Expense</b></td>
 
-                                                <td></td>
-                                                <td></td>
-                                                <?php if ($indirect_expense) : ?>
-                                                    <td><b><?php echo  number_format($indirect_expense, 2) ?></b></td>
-                                                <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
-                                                <?php endif; ?>
-                                            </tr>
-
-                                            <?php foreach ($indirect_expense_c as $i) { ?>
+                                        <tr>
+                                            <td colspan="4"><b>Operating Expenses</b></td>
+                                        </tr>
+                                            <?php foreach ($expense as $i) { ?>
                                                 <?php if ($i['amount'] > 0) { ?>
 
                                                     <tr>
                                                         <td></td>
                                                         <td><?php echo $i['HeadName'] ?></td>
-                                                        <td><?php echo $i['amount'] ?></td>
+                                                        <td align="right"><?php echo $i['amount'] ?></td>
                                                         <td></td>
                                                     </tr>
                                                 <?php } ?>
                                             <?php } ?>
+                                            <tr>
+                                                <td><b>Total Operating Expense</b></td>
 
+                                                <td></td>
+                                                <td></td>
+                                                <?php if ($direct_expense) : ?>
+                                                    <td align="right"><b><?php echo  number_format($direct_expense, 2) ?></b></td>
+                                                <?php else : ?>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
+                                                <?php endif; ?>
+                                            </tr>
                                             <tr>
                                                 <td><b>Net Profit/Loss</b></td>
 
                                                 <td></td>
                                                 <td></td>
 
-                                                <td><b><?php echo  number_format($net_profit, 2) ?></b></td>
+                                                <td align="right"><b><?php echo  number_format($net_profit, 2) ?></b></td>
                                             </tr>
 
 
@@ -392,33 +449,33 @@
                                                 <td></td>
                                                 <td></td>
 
-                                                <td><b><?php echo  number_format($gross_profit, 2) ?></b></td>
+                                                <td align="right"><b><?php echo  number_format($gross_profit, 2) ?></b></td>
 
 
                                             </tr>
-                                            <tr>
-                                                <td><b>Indirect Income</b></td>
-
-                                                <td></td>
-                                                <td></td>
-                                                <?php if ($indirect_income > 0) : ?>
-                                                    <td><b><?php echo  number_format($indirect_income, 2) ?></b></td>
-                                                <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
-                                                <?php endif; ?>
-                                            </tr>
-
-                                            <?php foreach ($indirect_income_c as $i) { ?>
-                                                <?php if ($i['amount'] > 0) { ?>
-
-                                                    <tr>
-                                                        <td></td>
-                                                        <td><?php echo $i['HeadName'] ?></td>
-                                                        <td><?php echo $i['amount'] ?></td>
-                                                        <td></td>
-                                                    </tr>
-                                                <?php } ?>
-                                            <?php } ?>
+<!--                                            <tr>-->
+<!--                                                <td><b>Indirect Income</b></td>-->
+<!---->
+<!--                                                <td></td>-->
+<!--                                                <td></td>-->
+<!--                                                --><?php //if ($indirect_income > 0) : ?>
+<!--                                                    <td><b>--><?php //echo  number_format($indirect_income, 2) ?><!--</b></td>-->
+<!--                                                --><?php //else : ?>
+<!--                                                    <td><b>--><?php //echo number_format('0', 2) ?><!--</b></td>-->
+<!--                                                --><?php //endif; ?>
+<!--                                            </tr>-->
+<!---->
+<!--                                            --><?php //foreach ($indirect_income_c as $i) { ?>
+<!--                                                --><?php //if ($i['amount'] > 0) { ?>
+<!---->
+<!--                                                    <tr>-->
+<!--                                                        <td></td>-->
+<!--                                                        <td>--><?php //echo $i['HeadName'] ?><!--</td>-->
+<!--                                                        <td>--><?php //echo $i['amount'] ?><!--</td>-->
+<!--                                                        <td></td>-->
+<!--                                                    </tr>-->
+<!--                                                --><?php //} ?>
+<!--                                            --><?php //} ?>
 
 
 
@@ -453,9 +510,9 @@
 
 
                                                 <?php if ($left_total) : ?>
-                                                    <td><b><?php echo  number_format($left_total, 2) ?></b></td>
+                                                    <td align="right"><b><?php echo  number_format($left_total, 2) ?></b></td>
                                                 <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
                                                 <?php endif; ?>
                                             </tr>
                                         </tbody>
@@ -486,14 +543,13 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
+
 
 
                                                 <?php if ($right_total) : ?>
-                                                    <td><b><?php echo  number_format($right_total, 2) ?></b></td>
+                                                    <td align="right"><b><?php echo  number_format($right_total, 2) ?></b></td>
                                                 <?php else : ?>
-                                                    <td><b><?php echo number_format('0', 2) ?></b></td>
+                                                    <td align="right"><b><?php echo number_format('0', 2) ?></b></td>
                                                 <?php endif; ?>
                                             </tr>
 

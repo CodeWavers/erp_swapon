@@ -313,7 +313,7 @@ class reports extends CI_Model
         $product_sku = $this->input->post('product_sku', TRUE);
         $date = date('Y-m-d');
 
-       $op_date = date( 'Y-m-d', strtotime( $fdate . ' -1 day' ) );
+       $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
 
         ## Read value
         if (!$post_product_id) {
@@ -876,28 +876,36 @@ class reports extends CI_Model
 
 
 
-            $opening_finished= 0;
-            $opening_raw= 0;
-            $opening_tools= 0;
 
 
 
 
-            $closing_inventory = array_sum(array_column($data, 'purchase_total'));
+           // $closing_inventory = array_sum(array_column($data, 'purchase_total'));
 
         }
+        $opening_finished= 0;
+        $opening_raw= 0;
+        $opening_tools= 0;
+
+        $closing_finished= 0;
+        $closing_raw= 0;
+        $closing_tools= 0;
+
 
 
         foreach($data as $key => $value){
 
             if($value['product_type'] == 1) {
                 $opening_finished+= $value['opening_inventory'];
+                $closing_finished+= $value['purchase_total'];
             }
             if($value['product_type'] == 2) {
                 $opening_raw+= $value['opening_inventory'];
+                $closing_raw+= $value['purchase_total'];
             }
             if($value['product_type'] == 3) {
                 $opening_tools+= $value['opening_inventory'];
+                $closing_tools+= $value['purchase_total'];
             }
         }
         ## Response
@@ -907,10 +915,14 @@ class reports extends CI_Model
                 "iTotalRecords" => $totalRecordwithFilter,
                 "iTotalDisplayRecords" => $totalRecords,
                 "aaData" =>  $data,
-                "closing_inventory" => $closing_inventory,
+
                 "opening_finished" => $opening_finished,
                 "opening_raw" => $opening_raw,
                 "opening_tools" => $opening_tools,
+
+                "closing_finished" => $closing_finished,
+                "closing_raw" => $closing_raw,
+                "closing_tools" => $closing_tools,
 
             );
         } else {
