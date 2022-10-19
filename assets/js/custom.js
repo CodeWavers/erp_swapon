@@ -2032,3 +2032,9 @@ function popOverInit(button, tooltip) {
     button.addEventListener(event, hide);
   });
 }
+
+function get_text(){
+
+  var text=$( "#outlet option:selected" ).text();
+  $('#outlet_text').val(text);
+}

@@ -39,8 +39,9 @@
 
                                     <div class="form-group row">
                                         <label for="outlet" class="col-form-label col-sm-1">Outlet</label>
+                                        <input type="hidden" name="outlet_text" id="outlet_text">
                                         <div class="col-sm-2">
-                                            <select id="outlet" class="form-control" name="outlet">
+                                            <select id="outlet" class="form-control" name="outlet" onchange="get_text()>
                                                 <option value="">Select One</option>
                                                 <option value="1">Consolidated</option>
                                                 {cw}
@@ -75,7 +76,7 @@
 
                         <div id="purchase_div" class="table-responsive">
 
-                            <h3  align="center"><b>Profit Loss Report of <br /><?php echo $dtpFromDate ?> <?php echo display('to')?> <?php echo $dtpToDate;?> </b></h3>
+                            <h3  align="center"><b>Profit Loss Report of <br /><?php echo $dtpFromDate ?> <?php echo display('to')?> <?php echo $dtpToDate;?>   (<?php echo $outlet_text ?> ) </b></h3>
 
                             <table class="print-table" width="100%">
 

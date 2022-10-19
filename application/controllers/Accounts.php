@@ -1067,10 +1067,15 @@ class Accounts extends CI_Controller
 
     public function balance_sheet_report_search_new()
     {
+//        echo '<pre>';print_r($_POST);
+//        echo '<pre>';print_r($_GET);
+//        exit();
+
         $CI = &get_instance();
         $CI->load->model('Reports');
         $CI->load->model('Warehouse');
         $CI->load->model('Rqsn');
+        $outlet_text =(!empty($this->input->post('outlet_text', TRUE)) ?$this->input->post('outlet_text', TRUE) : 'Consolidated');
         $dtpFromDate =(!empty($this->input->post('dtpFromDate', TRUE)) ?$this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
 
         $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ?$this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
@@ -1185,6 +1190,7 @@ class Accounts extends CI_Controller
 
         $data['dtpFromDate']  = $dtpFromDate;
         $data['dtpToDate']    = $dtpToDate;
+        $data['outlet_text']    = $outlet_text;
         $data['today']    = $today;
         $data['pdf']    = 'assets/data/pdf/Statement of Comprehensive Income Till ' . $today . '.pdf';
         $data['title']  = 'Balance Sheet Report';
@@ -1203,7 +1209,7 @@ class Accounts extends CI_Controller
         $CI->load->model('Reports');
         $CI->load->model('Rqsn');
         $CI->load->model('Warehouse');
-
+        $outlet_text =(!empty($this->input->post('outlet_text', TRUE)) ?$this->input->post('outlet_text', TRUE) : 'Consolidated');
         $outlet_id = $this->input->post('outlet');
         $dtpFromDate =(!empty($this->input->post('dtpFromDate', TRUE)) ?$this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
         $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ?$this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
@@ -1281,6 +1287,7 @@ class Accounts extends CI_Controller
         $data['right_total']  =    $data['net_profit'] +  $data['total_i'];
         $data['dtpFromDate']  = $dtpFromDate;
         $data['dtpToDate']    =$dtpToDate;
+        $data['outlet_text']    = $outlet_text;
         $data['today']    = $today;
         $data['pdf']    = 'assets/data/pdf/Statement of Comprehensive Income Till ' . $today . '.pdf';
         $data['title']  = display('profit_loss_report');
@@ -1292,6 +1299,7 @@ class Accounts extends CI_Controller
     }
     public function balance_sheet_report_search()
     {
+
 
 
         $dtpFromDate =(!empty($this->input->post('dtpFromDate', TRUE)) ?$this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
@@ -1329,6 +1337,7 @@ class Accounts extends CI_Controller
                 $outlet_id = 1;
             }
         }
+        $outlet_text =(!empty($this->input->post('outlet_text', TRUE)) ?$this->input->post('outlet_text', TRUE) : 'Consolidated');
         $dtpFromDate =(!empty($this->input->post('dtpFromDate', TRUE)) ?$this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
         $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ?$this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
         $today   = date('Y-m-d');
@@ -1363,6 +1372,7 @@ class Accounts extends CI_Controller
         $data['oResultExpence']  = $get_profit['oResultExpence'];
         $data['dtpFromDate']  = $dtpFromDate;
         $data['dtpToDate']    =$dtpToDate;
+        $data['outlet_text']    =$outlet_text;
         $data['total']    = $get_profit['total'];
         $data['today']    = $today;
         $data['pdf']    = 'assets/data/pdf/Statement of Comprehensive Income till ' . $today . 'pdf';

@@ -162,7 +162,7 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
                             <h4></h4>
                         </div>
                     </div>
-                    <div id="printArea">
+
                         <div class="panel-body">
                             <?php if (!$first_outlet) { ?>
                                 <?php echo form_open_multipart('accounts/trial_balance_new', array('id' => 'trial_balance_new_form', 'name' => 'trial_balance_new_form')) ?>
@@ -170,8 +170,9 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
 
                                     <div class="form-group row">
                                         <label for="outlet" class="col-form-label col-sm-1">Outlet</label>
+                                        <input type="hidden" name="outlet_text" id="outlet_text">
                                         <div class="col-sm-2">
-                                            <select id="outlet" class="form-control" name="outlet">
+                                            <select id="outlet" class="form-control" name="outlet" onchange="get_text()">
                                                 <option value="">Select One</option>
                                                 <?php if ($id_out == 1) { ?>
                                                     <option value="1" selected>Consolidated</option>
@@ -218,10 +219,11 @@ function AssertCoa($HeadName, $HeadCode, $GL, $oResultAsset, $Visited, $value, $
 
                                 <?php echo form_close() ?>
                             <?php } ?>
+                            <div id="printArea">
                             <table class="table" width="100%" class="table_boxnew" cellpadding="5" cellspacing="0">
                                 <tr>
                                     <td colspan="4" align="center">
-                                        <h3><b>Trial Balance of <br /><?php echo $dtpFromDate ?> <?php echo display('to')?> <?php echo $dtpToDate;?> </b></h3>
+                                        <h3><b>Trial Balance of <br /><?php echo $dtpFromDate ?> <?php echo display('to')?> <?php echo $dtpToDate;?>  (<?php echo $outlet_text ?> ) </b></h3>
                                     </td>
                                 </tr>
                                 <tr>
