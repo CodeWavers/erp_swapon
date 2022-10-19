@@ -1435,7 +1435,6 @@ class Accounts_model extends CI_Model
     //        return $data;
     //    }
 
-
     public function profit_loss_serach($outlet_id = null,$from_date,$to_date)
     {
 
@@ -1588,7 +1587,7 @@ class Accounts_model extends CI_Model
         return $data;
     }
 
-    public function balance_sheet($outlet_id = null)
+    public function balance_sheet($outlet_id = null,$from_date,$to_date)
     {
 
         $CI = &get_instance();
@@ -1600,106 +1599,182 @@ class Accounts_model extends CI_Model
             $outlet_id = $outlet[0]['outlet_id'];
         }
 
-        if ($outlet_id) {
-            $capital = $this->db->select('(sum(credit)-sum(debit)) as capital')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 2)->get()->result_array();
-            $current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as current_liabilities')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '5020')->get()->result_array();
-            $non_current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as non_current_liabilities')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '5010')->get()->result_array();
-            $acc_pay = $this->db->select('(sum(credit)-sum(debit)) as acc_pay')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '502020')->get()->result_array();
-            $emp_led = $this->db->select('(sum(credit)-sum(debit)) as emp_led')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '502040')->get()->result_array();
-            $acc_pay_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'L')->like('COAID', '502020')->group_by('a.HeadCode')->get()->result();
-            $emp_led_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'L')->like('COAID', '502040')->group_by('a.HeadCode')->get()->result();
-            $non_current_liabilities_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'L')->like('COAID', '5010')->group_by('a.HeadCode')->get()->result();
+        if ($outlet_id != 1) {
 
-            $fixed_assets = $this->db->select('(sum(debit)-sum(credit)) as fixed_assets')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '1030')->get()->result_array();
-
-            $current_assets = $this->db->select('(sum(debit)-sum(credit)) as current_assets')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '1020')->get()->result_array();
-            $current_assets_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '1020')->get()->result();
-            $acc_rcv = $this->db->select('(sum(debit)-sum(credit)) as acc_rcv')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '102030')->get()->result_array();
-
-            $acc_rcv_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '102030')->group_by('a.HeadCode')->get()->result();
-            $cash_bank_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '10201020')->group_by('a.HeadCode')->get()->result();
-            $cash_bkash_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '10201030')->group_by('a.HeadCode')->get()->result();
-
-            $cash_nagad_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '10201040')->group_by('a.HeadCode')->get()->result();
-
-            $fixed_assets_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '1030')->group_by('a.HeadCode')->get()->result();
-
-            $cash_eq = $this->db->select('(sum(debit)-sum(credit)) as cash_eq')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '102010')->get()->result_array();
-            $cash_hand = $this->db->select('(sum(debit)-sum(credit)) as cash_hand')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '1020101')->get()->result_array();
-            $cash_bank = $this->db->select('(sum(debit)-sum(credit)) as cash_bank')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '1020102')->get()->result_array();
-            $cash_bkash = $this->db->select('(sum(debit)-sum(credit)) as cash_bkash')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '1020103')->get()->result_array();
-
-            $cash_nagad = $this->db->select('(sum(debit)-sum(credit)) as cash_nagad')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '1020103')->get()->result_array();
+            if ($outlet_id == 'HK7TGDT69VFMXB7') {
 
 
-            $cash_eq_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '102010')->get()->result();
-            $cash_hand_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->like('COAID', '10201010')->get()->result();
+                $capital = $this->db->select('(sum(credit)-sum(debit)) as capital')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 2)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as current_liabilities')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->like('COAID', '5020')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $non_current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as non_current_liabilities')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '5010')->get()->result_array();
+                $acc_pay = $this->db->select('(sum(credit)-sum(debit)) as acc_pay')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->like('COAID', '502020')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $emp_led = $this->db->select('(sum(credit)-sum(debit)) as emp_led')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->like('COAID', '502040')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $acc_pay_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'L')->like('COAID', '502020')->group_by('a.HeadCode')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $emp_led_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'L')->like('COAID', '502040')->group_by('a.HeadCode')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $non_current_liabilities_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'L')->like('COAID', '5010')->group_by('a.HeadCode')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+
+                $fixed_assets = $this->db->select('(sum(debit)-sum(credit)) as fixed_assets')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1030')->get()->result_array();
+
+                $current_assets = $this->db->select('(sum(debit)-sum(credit)) as current_assets')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020')->get()->result_array();
+                $current_assets_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '1020')->get()->result();
+                $acc_rcv = $this->db->select('(sum(debit)-sum(credit)) as acc_rcv')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '102030')->get()->result_array();
+
+                $acc_rcv_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '102030')->group_by('a.HeadCode')->get()->result();
+                $cash_bank_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201020')->group_by('a.HeadCode')->get()->result();
+                $cash_bkash_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201030')->group_by('a.HeadCode')->get()->result();
+
+                $cash_nagad_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201040')->group_by('a.HeadCode')->get()->result();
+
+                $fixed_assets_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '1030')->group_by('a.HeadCode')->get()->result();
+
+                $cash_eq = $this->db->select('(sum(debit)-sum(credit)) as cash_eq')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '102010')->get()->result_array();
+                $cash_hand = $this->db->select('(sum(debit)-sum(credit)) as cash_hand')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020101')->get()->result_array();
+                $cash_bank = $this->db->select('(sum(debit)-sum(credit)) as cash_bank')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020102')->get()->result_array();
+                $cash_bkash = $this->db->select('(sum(debit)-sum(credit)) as cash_bkash')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020103')->get()->result_array();
+
+                $cash_nagad = $this->db->select('(sum(debit)-sum(credit)) as cash_nagad')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020103')->get()->result_array();
 
 
-            $product_sale = $this->db->select('sum(credit) as product_sale')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 303)->get()->result_array();
-            $product_purchase = $this->db->select('sum(debit) as product_purchase')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 402)->get()->result_array();
-            $opening_inventory = $this->db->select('sum(debit) as opening_inventory')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 10205)->get()->result_array();
-            $direct_expense = $this->db->select('sum(Debit) as direct_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '4010')->get()->result_array();
+                $cash_eq_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '102010')->get()->result();
+                $cash_hand_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201010')->get()->result();
 
-            $indirect_expense = $this->db->select('sum(Debit) as indirect_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '4040')->get()->result_array();
-            $indirect_income = $this->db->select('sum(Credit) as indirect_income')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '3040')->get()->result_array();
+                $production_expense = $this->db->select('(sum(debit)-sum(credit)) as production_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 409)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $purchase_return = $this->db->select('(sum(debit)-sum(credit)) as purchase_return')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 307)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $purchase_discount = $this->db->select('(sum(credit)-sum(debit)) as purchase_discount')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 301)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $sales_discount = $this->db->select('(sum(debit)-sum(credit)) as sales_discount')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 406)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+                $product_sale = $this->db->select('sum(credit) as product_sale')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 303)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $product_purchase = $this->db->select('sum(debit) as product_purchase')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 402)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $opening_inventory = $this->db->select('sum(debit) as opening_inventory')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 10205)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $direct_expense = $this->db->select('sum(Debit) as direct_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->like('COAID', '4010')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+
+
+                $indirect_expense = $this->db->select('sum(Debit) as indirect_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->like('COAID', '4040')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $indirect_income = $this->db->select('sum(Credit) as indirect_income')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->like('COAID', '3040')->get()->result_array();
+                //  $closing_inventory=$this->db->select('sum(grand_total_amount) as closing_inventory')->from('product_purchase')->get()->result_array();
+                $service_income = $this->db->select('sum(credit) as service_income')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 304)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $sale_return = $this->db->select('sum(credit) as sale_return')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 301)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+
+                $expense = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'E')->like('COAID', '4010')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $indirect_expense_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'E')->like('COAID', '4040')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $indirect_income_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.id IS NULL')->where('HeadType', 'I')->like('COAID', '3040')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+
+
+            }else{
+
+
+                $capital = $this->db->select('(sum(credit)-sum(debit)) as capital')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 2)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as current_liabilities')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '5020')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $non_current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as non_current_liabilities')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '5010')->get()->result_array();
+                $acc_pay = $this->db->select('(sum(credit)-sum(debit)) as acc_pay')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '502020')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $emp_led = $this->db->select('(sum(credit)-sum(debit)) as emp_led')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '502040')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $acc_pay_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'L')->like('COAID', '502020')->group_by('a.HeadCode')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $emp_led_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'L')->like('COAID', '502040')->group_by('a.HeadCode')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $non_current_liabilities_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'L')->like('COAID', '5010')->group_by('a.HeadCode')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+
+                $fixed_assets = $this->db->select('(sum(debit)-sum(credit)) as fixed_assets')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1030')->get()->result_array();
+
+                $current_assets = $this->db->select('(sum(debit)-sum(credit)) as current_assets')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020')->get()->result_array();
+                $current_assets_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '1020')->get()->result();
+                $acc_rcv = $this->db->select('(sum(debit)-sum(credit)) as acc_rcv')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '102030')->get()->result_array();
+
+                $acc_rcv_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '102030')->group_by('a.HeadCode')->get()->result();
+                $cash_bank_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201020')->group_by('a.HeadCode')->get()->result();
+                $cash_bkash_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201030')->group_by('a.HeadCode')->get()->result();
+
+                $cash_nagad_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201040')->group_by('a.HeadCode')->get()->result();
+
+                $fixed_assets_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '1030')->group_by('a.HeadCode')->get()->result();
+
+                $cash_eq = $this->db->select('(sum(debit)-sum(credit)) as cash_eq')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '102010')->get()->result_array();
+                $cash_hand = $this->db->select('(sum(debit)-sum(credit)) as cash_hand')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020101')->get()->result_array();
+                $cash_bank = $this->db->select('(sum(debit)-sum(credit)) as cash_bank')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020102')->get()->result_array();
+                $cash_bkash = $this->db->select('(sum(debit)-sum(credit)) as cash_bkash')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020103')->get()->result_array();
+
+                $cash_nagad = $this->db->select('(sum(debit)-sum(credit)) as cash_nagad')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->like('COAID', '1020103')->get()->result_array();
+
+
+                $cash_eq_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '102010')->get()->result();
+                $cash_hand_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'A')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->like('COAID', '10201010')->get()->result();
+
+                $production_expense = $this->db->select('(sum(debit)-sum(credit)) as production_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 409)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $purchase_return = $this->db->select('(sum(debit)-sum(credit)) as purchase_return')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 307)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $purchase_discount = $this->db->select('(sum(credit)-sum(debit)) as purchase_discount')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.id IS NULL')->where('COAID', 301)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $sales_discount = $this->db->select('(sum(debit)-sum(credit)) as sales_discount')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->where('COAID', 406)->get()->result_array();
+
+                $product_sale = $this->db->select('sum(credit) as product_sale')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 303)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $product_purchase = $this->db->select('sum(debit) as product_purchase')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 402)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $opening_inventory = $this->db->select('sum(debit) as opening_inventory')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 10205)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $direct_expense = $this->db->select('sum(Debit) as direct_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '4010')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+
+                $indirect_expense = $this->db->select('sum(Debit) as indirect_expense')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '4040')->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $indirect_income = $this->db->select('sum(Credit) as indirect_income')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->like('COAID', '3040')->get()->result_array();
+                //  $closing_inventory=$this->db->select('sum(grand_total_amount) as closing_inventory')->from('product_purchase')->get()->result_array();
+                $service_income = $this->db->select('sum(credit) as service_income')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 304)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+                $sale_return = $this->db->select('sum(credit) as sale_return')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 301)->where('acc_transaction.VDate >=', $from_date)->where('acc_transaction.VDate <=', $to_date)->get()->result_array();
+
+                $expense = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'E')->like('COAID', '4010')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $indirect_expense_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'E')->like('COAID', '4040')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+                $indirect_income_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'I')->like('COAID', '3040')->where('b.VDate >=', $from_date)->where('b.VDate <=', $to_date)->get()->result();
+
+            }
+
+
+        }else {
+            $capital = $this->db->select('(sum(credit)-sum(debit)) as capital')->from('acc_transaction')->where('COAID', 2)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as current_liabilities')->from('acc_transaction')->like('COAID', '5020')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $non_current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as non_current_liabilities')->from('acc_transaction')->like('COAID', '5010')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $acc_pay = $this->db->select('(sum(credit)-sum(debit)) as acc_pay')->from('acc_transaction')->like('COAID', '502020')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $emp_led = $this->db->select('(sum(credit)-sum(debit)) as emp_led')->from('acc_transaction')->like('COAID', '502040')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $acc_pay_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'L')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '502020')->group_by('a.HeadCode')->get()->result();
+            $emp_led_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'L')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '502040')->group_by('a.HeadCode')->get()->result();
+            $non_current_liabilities_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'L')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '5010')->group_by('a.HeadCode')->get()->result();
+
+            $fixed_assets = $this->db->select('(sum(debit)-sum(credit)) as fixed_assets')->from('acc_transaction')->like('COAID', '1030')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+            $current_assets = $this->db->select('(sum(debit)-sum(credit)) as current_assets')->from('acc_transaction')->like('COAID', '1020')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $current_assets_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '1020')->get()->result();
+            $acc_rcv = $this->db->select('(sum(debit)-sum(credit)) as acc_rcv')->from('acc_transaction')->like('COAID', '102030')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+            $acc_rcv_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '102030')->group_by('a.HeadCode')->get()->result();
+            $cash_bank_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '10201020')->group_by('a.HeadCode')->get()->result();
+            $cash_bkash_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '10201030')->group_by('a.HeadCode')->get()->result();
+
+            $cash_nagad_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '10201040')->group_by('a.HeadCode')->get()->result();
+
+            $fixed_assets_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '1030')->group_by('a.HeadCode')->get()->result();
+
+            $cash_eq = $this->db->select('(sum(debit)-sum(credit)) as cash_eq')->from('acc_transaction')->like('COAID', '102010')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $cash_hand = $this->db->select('(sum(debit)-sum(credit)) as cash_hand')->from('acc_transaction')->like('COAID', '1020101')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $cash_bank = $this->db->select('(sum(debit)-sum(credit)) as cash_bank')->from('acc_transaction')->like('COAID', '1020102')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $cash_bkash = $this->db->select('(sum(debit)-sum(credit)) as cash_bkash')->from('acc_transaction')->like('COAID', '1020103')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+            $cash_nagad = $this->db->select('(sum(debit)-sum(credit)) as cash_nagad')->from('acc_transaction')->like('COAID', '1020103')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+
+            $cash_eq_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '102010')->get()->result();
+            $cash_hand_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '10201010')->get()->result();
+
+            $purchase_discount = $this->db->select('(sum(credit)-sum(debit)) as purchase_discount')->from('acc_transaction')->where('COAID', 301)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $sales_discount = $this->db->select('(sum(debit)-sum(credit)) as sales_discount')->from('acc_transaction')->where('COAID', 406)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+            $production_expense = $this->db->select('(sum(debit)-sum(credit)) as production_expense')->from('acc_transaction')->where('COAID', 409)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+            $product_sale = $this->db->select('sum(credit) as product_sale')->from('acc_transaction')->where('COAID', 303)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $product_purchase = $this->db->select('sum(debit) as product_purchase')->from('acc_transaction')->where('COAID', 402)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $opening_inventory = $this->db->select('sum(debit) as opening_inventory')->from('acc_transaction')->where('COAID', 10205)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $direct_expense = $this->db->select('sum(Debit) as direct_expense')->from('acc_transaction')->like('COAID', '4010')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+
+            $indirect_expense = $this->db->select('sum(Debit) as indirect_expense')->from('acc_transaction')->like('COAID', '4040')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $indirect_income = $this->db->select('sum(Credit) as indirect_income')->from('acc_transaction')->like('COAID', '3040')->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
             //  $closing_inventory=$this->db->select('sum(grand_total_amount) as closing_inventory')->from('product_purchase')->get()->result_array();
-            $service_income = $this->db->select('sum(credit) as service_income')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('COAID', 304)->get()->result_array();
-            $sale_return = $this->db->select('sum(credit) as sale_return')->from('acc_transaction')->join('outlet_warehouse', 'acc_transaction.CreateBy = outlet_warehouse.user_id', 'left')->where('outlet_warehouse.outlet_id', $outlet_id)->where('Vtype', 'Return')->get()->result_array();
+            $service_income = $this->db->select('sum(credit) as service_income')->from('acc_transaction')->where('COAID', 304)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $sale_return = $this->db->select('sum(credit) as sale_return')->from('acc_transaction')->where('COAID', 301)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
+            $purchase_return = $this->db->select('(sum(debit)-sum(credit)) as purchase_return')->from('acc_transaction')->where('COAID', 307)->where('acc_transaction.VDate >=',$from_date)->where('acc_transaction.VDate <=',$to_date)->get()->result_array();
 
-            $expense = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'E')->like('COAID', '4010')->get()->result();
-            $indirect_expense_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'E')->like('COAID', '4040')->get()->result();
-            $indirect_income_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->join('outlet_warehouse x', 'b.CreateBy = x.user_id', 'left')->where('x.outlet_id', $outlet_id)->where('HeadType', 'I')->like('COAID', '3040')->get()->result();
-        } else {
-            $capital = $this->db->select('(sum(credit)-sum(debit)) as capital')->from('acc_transaction')->where('COAID', 2)->get()->result_array();
-            $current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as current_liabilities')->from('acc_transaction')->like('COAID', '5020')->get()->result_array();
-            $non_current_liabilities = $this->db->select('(sum(credit)-sum(debit)) as non_current_liabilities')->from('acc_transaction')->like('COAID', '5010')->get()->result_array();
-            $acc_pay = $this->db->select('(sum(credit)-sum(debit)) as acc_pay')->from('acc_transaction')->like('COAID', '502020')->get()->result_array();
-            $emp_led = $this->db->select('(sum(credit)-sum(debit)) as emp_led')->from('acc_transaction')->like('COAID', '502040')->get()->result_array();
-            $acc_pay_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'L')->like('COAID', '502020')->group_by('a.HeadCode')->get()->result();
-            $emp_led_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'L')->like('COAID', '502040')->group_by('a.HeadCode')->get()->result();
-            $non_current_liabilities_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'L')->like('COAID', '5010')->group_by('a.HeadCode')->get()->result();
-
-            $fixed_assets = $this->db->select('(sum(debit)-sum(credit)) as fixed_assets')->from('acc_transaction')->like('COAID', '1030')->get()->result_array();
-
-            $current_assets = $this->db->select('(sum(debit)-sum(credit)) as current_assets')->from('acc_transaction')->like('COAID', '1020')->get()->result_array();
-            $current_assets_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '1020')->get()->result();
-            $acc_rcv = $this->db->select('(sum(debit)-sum(credit)) as acc_rcv')->from('acc_transaction')->like('COAID', '102030')->get()->result_array();
-
-            $acc_rcv_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '102030')->group_by('a.HeadCode')->get()->result();
-            $cash_bank_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '10201020')->group_by('a.HeadCode')->get()->result();
-            $cash_bkash_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '10201030')->group_by('a.HeadCode')->get()->result();
-
-            $cash_nagad_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '10201040')->group_by('a.HeadCode')->get()->result();
-
-            $fixed_assets_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '1030')->group_by('a.HeadCode')->get()->result();
-
-            $cash_eq = $this->db->select('(sum(debit)-sum(credit)) as cash_eq')->from('acc_transaction')->like('COAID', '102010')->get()->result_array();
-            $cash_hand = $this->db->select('(sum(debit)-sum(credit)) as cash_hand')->from('acc_transaction')->like('COAID', '1020101')->get()->result_array();
-            $cash_bank = $this->db->select('(sum(debit)-sum(credit)) as cash_bank')->from('acc_transaction')->like('COAID', '1020102')->get()->result_array();
-            $cash_bkash = $this->db->select('(sum(debit)-sum(credit)) as cash_bkash')->from('acc_transaction')->like('COAID', '1020103')->get()->result_array();
-
-            $cash_nagad = $this->db->select('(sum(debit)-sum(credit)) as cash_nagad')->from('acc_transaction')->like('COAID', '1020103')->get()->result_array();
-
-
-            $cash_eq_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '102010')->get()->result();
-            $cash_hand_c = $this->db->select('*,(sum(b.debit)-sum(b.credit)) as total_debit')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'A')->like('COAID', '10201010')->get()->result();
-
-
-            $product_sale = $this->db->select('sum(credit) as product_sale')->from('acc_transaction')->where('COAID', 303)->get()->result_array();
-            $product_purchase = $this->db->select('sum(debit) as product_purchase')->from('acc_transaction')->where('COAID', 402)->get()->result_array();
-            $opening_inventory = $this->db->select('sum(debit) as opening_inventory')->from('acc_transaction')->where('COAID', 10205)->get()->result_array();
-            $direct_expense = $this->db->select('sum(Debit) as direct_expense')->from('acc_transaction')->like('COAID', '4010')->get()->result_array();
-
-            $indirect_expense = $this->db->select('sum(Debit) as indirect_expense')->from('acc_transaction')->like('COAID', '4040')->get()->result_array();
-            $indirect_income = $this->db->select('sum(Credit) as indirect_income')->from('acc_transaction')->like('COAID', '3040')->get()->result_array();
-            //  $closing_inventory=$this->db->select('sum(grand_total_amount) as closing_inventory')->from('product_purchase')->get()->result_array();
-            $service_income = $this->db->select('sum(credit) as service_income')->from('acc_transaction')->where('COAID', 304)->get()->result_array();
-            $sale_return = $this->db->select('sum(credit) as sale_return')->from('acc_transaction')->where('Vtype', 'Return')->get()->result_array();
-
-            $expense = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'E')->like('COAID', '4010')->get()->result();
-            $indirect_expense_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'E')->like('COAID', '4040')->get()->result();
-            $indirect_income_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'I')->like('COAID', '3040')->get()->result();
+            $expense = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'E')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '4010')->get()->result();
+            $indirect_expense_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'E')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '4040')->get()->result();
+            $indirect_income_c = $this->db->select('*')->from('acc_coa a')->join('acc_transaction b', 'a.HeadCode=b.COAID')->where('HeadType', 'I')->where('b.VDate >=',$from_date)->where('b.VDate <=',$to_date)->like('COAID', '3040')->get()->result();
         }
 
         $data = array();
@@ -1810,6 +1885,10 @@ class Accounts_model extends CI_Model
             'product_sale' => $product_sale[0]['product_sale'],
             'opening_inventory' => $opening_inventory[0]['opening_inventory'],
             'product_purchase' => $product_purchase[0]['product_purchase'],
+            'production_expense' => $production_expense[0]['production_expense'],
+            'purchase_return' => $purchase_return[0]['purchase_return'],
+            'sales_discount' => $sales_discount[0]['sales_discount'],
+            'purchase_discount' => $purchase_discount[0]['purchase_discount'],
             // 'closing_inventory' =>$closing_inventory[0]['closing_inventory'],
             'service_income' => $service_income[0]['service_income'],
             'direct_expense' => $direct_expense[0]['direct_expense'],

@@ -2330,21 +2330,21 @@ $birthday = $CI->Reports->birthday_noti();
 //                                  ); ?><!--">--><?php //echo "Cost Sheet"; ?><!--</a></li>-->
 <!--                          --><?php //} ?>
 
-                          <?php if (
-                          $this->permission1
-                              ->method('cash_flow_report', 'read')
-                              ->access()
-                          ) { ?>
-                              <li class="treeview <?php if (
-                                  $this->uri->segment('2') == "profit_and_loss"
-                              ) {
-                                  echo "active";
-                              } else {
-                                  echo " ";
-                              } ?>"><a href="<?php echo base_url(
-                                      'accounts/profit_and_loss'
-                                  ); ?>"><?php echo "Profit And Loss Account"; ?></a></li>
-                          <?php } ?>
+<!--                          --><?php //if (
+//                          $this->permission1
+//                              ->method('cash_flow_report', 'read')
+//                              ->access()
+//                          ) { ?>
+<!--                              <li class="treeview --><?php //if (
+//                                  $this->uri->segment('2') == "profit_and_loss"
+//                              ) {
+//                                  echo "active";
+//                              } else {
+//                                  echo " ";
+//                              } ?><!--"><a href="--><?php //echo base_url(
+//                                      'accounts/profit_and_loss'
+//                                  ); ?><!--">--><?php //echo "Profit And Loss Account"; ?><!--</a></li>-->
+<!--                          --><?php //} ?>
 
                           <?php if (
                           $this->permission1
