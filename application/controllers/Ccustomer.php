@@ -311,6 +311,7 @@ class Ccustomer extends CI_Controller
 
             $data=array(
 
+                'customer_id'   => $r->user_id,
                 'customer_name'   => $r->name,
                 'customer_mobile'   => $r->phone,
                 'zip'   => $r->postal_code,

@@ -252,19 +252,7 @@ $birthday = $CI->Reports->birthday_noti();
 
 
 
-              <?php if (
-              $this->permission1->method('manage_invoice', 'read')->access()
-              ) { ?>
-                  <li class="treeview <?php if (
-                      $this->uri->segment('2') == "manage_invoice"
-                  ) {
-                      echo "active";
-                  } else {
-                      echo " ";
-                  } ?>"><a href="<?php echo base_url(
-                          'Cinvoice/order'
-                      ); ?>">Order</a></li>
-              <?php } ?>
+  
               <?php if (
               $this->permission1->method('manage_invoice', 'read')->access()
               ) { ?>

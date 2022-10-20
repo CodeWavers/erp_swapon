@@ -124,7 +124,7 @@
                             <div class="invoice-bill row">
                                 <div class="col-sm-6 text-xs-center">
                                     <address>
-                                        <input type="hidden" name="customer_id" value="<?php echo $order[0]->user_id?>"    id="product_id<?php echo $od->id?>">
+                                        <input type="hidden" name="customer_id" value="<?php echo $order[0]->customer_id?>"    id="product_id<?php echo $od->id?>">
 
                                         <strong class="text-main"><?php echo $customer_name?></strong><br>
                                         <?php echo $email?><br>
