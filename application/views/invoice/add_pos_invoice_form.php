@@ -594,10 +594,10 @@ $_SESSION['redirect_uri'] = $currentURL;
                                     </div>
 
                                     <div class="panel-body">
-                                        <div id="pay_div" class="text-right" style="margin: 10px 3px; padding:10px 0;">
+                                        <div id="pay_div" class="" style="margin: 10px 3px; padding:10px 0;">
                                             <div class="row margin-top10">
                                                 <div class="col-sm-4">
-                                                    <label for="payment_type" class="col-sm-5 col-form-label"><?php
+                                                    <label for="payment_type" class="col-sm-5 col-form-label text-left"><?php
                                                                                                                 echo display('payment_type');
                                                                                                                 ?> <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
@@ -704,11 +704,11 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-4" style="display: none" id="card_div_1">
+                                                <div class="col-sm-4" style="display: none;text-align: left" id="card_div_1">
                                                     <div class="form-group row">
                                                         <label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
-                                                            <select name="card_id[]" class="form-control bankpayment" id="card_id_1" onchange="card_charge()">
+                                                            <select name="card_id[]" class="form-control bankpayment" id="card_id_1" >
                                                                 <option value="">Select One</option>
                                                                 <?php foreach ($card_list as $card) { ?>
                                                                     <option value="<?php echo html_escape($card['card_no_id']) ?>"><?php echo html_escape($card['card_no'] . ' (' . $card['card_name'] . ')'); ?></option>

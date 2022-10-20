@@ -324,6 +324,7 @@ class Cinvoice extends CI_Controller
     public function due_payment()
     {
         $invoice_id = $this->input->post('invoice_id');
+        $notes = $this->input->post('notes');
 
         $inv_details=$this->db->from('invoice')->where('invoice_id',$invoice_id)->get()->row();
 
@@ -425,6 +426,7 @@ class Cinvoice extends CI_Controller
                 'pay_date'      =>  date('Y-m-d'),
                 'status'        =>  1,
                 'account'       => '',
+                'notes'       => $notes,
                 'COAID'         => 1020101
             );
 
@@ -456,6 +458,7 @@ class Cinvoice extends CI_Controller
                 'pay_date'      =>  date('Y-m-d'),
                 'status'        =>  1,
                 'account'       => '',
+                'notes'       => $notes,
                 'COAID'         => $bankcoaid
             );
 
@@ -487,6 +490,7 @@ class Cinvoice extends CI_Controller
                 'pay_date'      =>  date('Y-m-d'),
                 'status'        =>  1,
                 'account'       => '',
+                'notes'       => $notes,
                 'COAID'         => $bkashcoaid
             );
 
@@ -519,6 +523,7 @@ class Cinvoice extends CI_Controller
                 'pay_date'      =>  date('Y-m-d'),
                 'status'        =>  1,
                 'account'       => '',
+                'notes'       => $notes,
                 'COAID'         => $nagadcoaid
             );
 

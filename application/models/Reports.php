@@ -3494,10 +3494,13 @@ class reports extends CI_Model
 
     public function update_data()
     {
-        $this->load->model('invoices');
+       // exit();
+        $this->load->model('Invoices');
 
 
         $invoice_id = $this->input->post('invoice_id');
+
+
         $cheque_id = $this->input->post('cheque_id');
         $invoice_no = $this->input->post('invoice');
         $cheque_date = $this->input->post('cheque_date');
@@ -3518,11 +3521,9 @@ class reports extends CI_Model
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
 
-        $inv_details = $this->invoices->get_invoice_details($invoice_id)[0];
+        $inv_details = $this->Invoices->get_invoice_details($invoice_id)[0];
 
-        // echo '<pre>';
-        // print_r($inv_details);
-        // exit();
+
 
         $new_due = $inv_details->due_amount - $credit;
         $new_paid = $inv_details->paid_amount + $credit;
@@ -3564,18 +3565,18 @@ class reports extends CI_Model
         if ($status == 1) {
             if ($paytype == 1) {
                 $data3 = array(
-                    'VNo'            =>  $invoice_id,
+                    'VNo' => $invoice_id,
                     //'cheque_id' => $cheque_id,
-                    'Vtype'          =>  'INV',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  1020101,
-                    'Narration'      =>  'Customer Debit for Installment Amount For Customer Invoice NO- ' . $invoice_no . ' and Cheque No-' . $cheque_number . ' Customer- ' . $cusifo->customer_name,
-                    'Debit'          =>  $credit,
-                    'Credit'         =>  0,
-                    'IsPosted'       => 1,
-                    'CreateBy'       => $createby,
-                    'CreateDate'     => $createdate,
-                    'IsAppove'       => 1,
+                    'Vtype' => 'INV',
+                    'VDate' => $createdate,
+                    'COAID' => 1020101,
+                    'Narration' => 'Customer Debit for Installment Amount For Customer Invoice NO- ' . $invoice_no . ' and Cheque No-' . $cheque_number . ' Customer- ' . $cusifo->customer_name,
+                    'Debit' => $credit,
+                    'Credit' => 0,
+                    'IsPosted' => 1,
+                    'CreateBy' => $createby,
+                    'CreateDate' => $createdate,
+                    'IsAppove' => 1,
                     //'paytype'=>$paytype
 
                 );
@@ -3619,40 +3620,23 @@ class reports extends CI_Model
             }
             if ($paytype == 4) {
                 $nagadc = array(
-                    'VNo'            =>  $invoice_id,
-                    'Vtype'          =>  'INVOICE',
-                    'VDate'          =>  $createdate,
-                    'COAID'          =>  $nagadcoaid,
-                    'Narration'      =>  'Installment amount for customer  Invoice No - ' . $invoice_no . ' and Nagad No-' . $nagadcoaid . ' customer -' . $cusifo->customer_name,
-                    'Debit'          =>  $credit,
-                    'Credit'         =>  0,
-                    'IsPosted'       =>  1,
-                    'CreateBy'       =>  $createby,
-                    'CreateDate'     =>  $createdate,
-                    'IsAppove'       =>  1,
+                    'VNo' => $invoice_id,
+                    'Vtype' => 'INVOICE',
+                    'VDate' => $createdate,
+                    'COAID' => $nagadcoaid,
+                    'Narration' => 'Installment amount for customer  Invoice No - ' . $invoice_no . ' and Nagad No-' . $nagadcoaid . ' customer -' . $cusifo->customer_name,
+                    'Debit' => $credit,
+                    'Credit' => 0,
+                    'IsPosted' => 1,
+                    'CreateBy' => $createby,
+                    'CreateDate' => $createdate,
+                    'IsAppove' => 1,
 
                 );
 
                 $this->db->insert('acc_transaction', $nagadc);
             }
 
-            //            if (isset($_POST['with_cash'])){
-            //                $cc = array(
-            //                    'VNo'            =>  $invoice_id,
-            //                    'cheque_id' => $cheque_id,
-            //                    'Vtype'          =>  'INV',
-            //                    'VDate'          =>  $createdate,
-            //                    'COAID'          =>  $customer_headcode,
-            //                    'Narration'      =>  'Cash in Hand insist of cheque no '.$cheque_number.' in Sale for Invoice No - '.$invoice_no.' customer- '.$cusifo->customer_name,
-            //                    'Debit'          =>  $credit,
-            //                    'Credit'         =>  0,
-            //                    'IsPosted'       => 1,
-            //                    'CreateBy'       => $createby,
-            //                    'CreateDate'     => $createdate ,
-            //                    'IsAppove'       => 1
-            //                );
-            //                $ddd=$this->db->insert('acc_transaction', $cc);
-            //  }else {
 
             $data = array(
                 'VNo' => $invoice_id,
@@ -3677,15 +3661,18 @@ class reports extends CI_Model
             $this->db->where('invoice_id', $invoice_id);
             $this->db->set(array(
                 'paid_amount' => $new_paid,
-                'due_amount'    => $new_due
+                'due_amount' => $new_due
             ));
             $this->db->update('invoice');
 
             $paid_data = array(
-                'invoice_id'    => $invoice_id,
-                'pay_type'      => 2,
-                'amount'        => $credit
+                'invoice_id' => $invoice_id,
+                'pay_type' => 2,
+                'amount' => $credit
             );
+//            echo '<pre>';
+//            print_r($paid_data);
+//            exit();
 
             $this->db->insert('paid_amount', $paid_data);
             $this->db->set('payment_date', $payment_date);
@@ -3704,19 +3691,6 @@ class reports extends CI_Model
                 'ddd' => $ddd,
             );
         }
-        //exit();
-
-
-
-
-
-
-        //$this->db->set('cheque_date', $cheque_date);
-        // $this->db->set('cheque_no', $cheque_number);
-        //$this->db->set('status', $status);
-        // $this->db->set(array('paid_amount' => $new_paid, 'due_amount' => $new_due)); // need to be fixed later
-        // $this->db->where('invoice_id', $invoice_id);
-        // $result = $this->db->update('invoice');
 
     }
 

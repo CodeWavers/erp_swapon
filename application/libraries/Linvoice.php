@@ -323,6 +323,8 @@ class Linvoice
             'aggre_list'    => $aggre_list,
             'cw'            => $cw
         );
+
+     //   echo '<pre>';print_r($card_list);exit();
         $invoiceForm = $CI->parser->parse('invoice/add_pos_invoice_form', $data, true);
         return $invoiceForm;
     }
@@ -988,7 +990,7 @@ class Linvoice
 //
         $pay_type=$invoice_detail[0]['sale_type'];
 //         echo '<pre>';
-//         print_r($pay_type);
+//         print_r($payment_info);
 //         exit();
         if ($pay_type == 2 ){
             $chapterList = $CI->parser->parse('invoice/pos_dell_arte_invoice_html_manual', $data, true);

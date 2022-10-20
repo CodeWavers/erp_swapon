@@ -208,6 +208,17 @@
                             <div class="col-sm-6" id="payment_from_1">
                                 <div class="form-group row">
                                     <label for="payment_type" class="col-sm-4 col-form-label">
+                                       Any Notes</label>
+                                    <div class="col-sm-6">
+                                        <textarea name="notes" class="form-control" placeholder="..."></textarea>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6" id="payment_from_1">
+                                <div class="form-group row">
+                                    <label for="payment_type" class="col-sm-4 col-form-label">
                                         Receive By <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
                                         <select name="paytype" id="paytype" class="form-control" required="" onchange="bank_paymet(this.value)">

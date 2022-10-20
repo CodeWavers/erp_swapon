@@ -579,14 +579,19 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 <?php } ?>
                                             <?php } ?>
 
+
+
                                             <?php foreach ($payment_info as $pay){?>
 
                                                 <?php
+                                                if ($pay->pay_type == 2){
+                                                    $pay_type='In Cheque';
+                                                }
 
                                                 if ($pay->pay_type == 1){
                                                     $pay_type='In Cash';
                                                 }
-                                                if ($pay->pay_type == 3){
+                                                if ($pay->pay_type === 3){
                                                     $pay_type='In Bkash';
                                                 }
 
