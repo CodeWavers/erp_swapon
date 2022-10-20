@@ -110,7 +110,7 @@ class Corder extends CI_Controller
 
     public function order_invoice(){
 
-        //echo '<pre>';print_r($_POST);exit();
+      //  echo '<pre>';print_r($_POST);exit();
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->library('lproduct');
@@ -124,6 +124,8 @@ class Corder extends CI_Controller
 //        echo '<pre>';print_r($role_list[0]['id']);exit();
         $tablecolumn = $this->db->list_fields('tax_collection');
         $invoice_id = $this->input->post('order_id', TRUE);
+        $customer_id = $this->input->post('customer_id', TRUE);
+        $quantity = $this->input->post('quantity', TRUE);
 
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
@@ -160,7 +162,149 @@ class Corder extends CI_Controller
 
             );
 
+        $prinfo  = $this->db->select('product_id,Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id', $product_id)->group_by('product_id')->get()->result();
 
+        $pr_open_price = $this->db->select('supplier_price')
+            ->from('supplier_product')
+            ->where_in('product_id', $product_id)
+            ->group_by('product_id')
+            ->get()
+            ->result();
+
+        $purchase_ave = [];
+        $i = 0;
+        if ($prinfo) {
+            foreach ($prinfo as $avg) {
+                $purchase_ave[] =  $avg->product_rate * $quantity[$i];
+                $i++;
+            }
+        } else {
+            foreach ($pr_open_price as $avg) {
+                $purchase_ave[] =  $avg->supplier_price * $quantity[$i];
+                $i++;
+            }
+        }
+
+
+            $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $customer_id)->get()->row();
+            $headn = $customer_id . '-' . $cusifo->customer_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->customer_name;
+
+        $grand_total=$this->input->post('grand_total', TRUE);
+        $total_discount=$this->input->post('discount', TRUE);
+
+        $grand_total_wtd=$grand_total+$total_discount;
+
+        $shipping_cost=$this->input->post('shipping_cost', TRUE);
+
+        $due_amount= $this->input->post('due_amount', TRUE);
+        $paid_amount= $this->input->post('paid_amount', TRUE);
+
+        if ($due_amount > 0) {
+            $cosdr = array(
+                'VNo' => $invoice_id,
+                'Vtype' => 'INV-CC',
+                'VDate' => $Vdate,
+                'COAID' => $customer_headcode,
+                'Narration' => 'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                'Debit' => $due_amount,
+                'Credit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1
+            );
+            $this->db->insert('acc_transaction', $cosdr);
+        }
+
+
+        if ($shipping_cost > 0){
+            $dc_income = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV-CC',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  40105,
+                'Narration'      =>  'Delivery Charge For Invoice No -  ' . $invoice_no_generated . ' Customer  ' . $cs_name,
+                'Credit'          =>   (!empty($this->input->post('shipping_cost', TRUE)) ? $this->input->post('shipping_cost', TRUE): 0),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $dc_income);
+        }
+
+
+        $pro_sale_income = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INVOICE',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  303,
+            'Narration'      =>  'Sale Income For Invoice ID - ' . $invoice_id . ' Customer ' .$cs_name,
+            'Debit'          =>  0,
+            'Credit'         => $grand_total_wtd-$this->input->post('shipping_cost', TRUE),
+            'IsPosted'       => 1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $pro_sale_income);
+
+
+        if ($total_discount > 0) {
+            $dis_transaction = array(
+
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $Vdate,
+                'COAID' => 406,
+                'Narration' => 'Sales Discount for Invoice ID - ' . $invoice_id,
+                'Credit' => 0,
+                'Debit' => $total_discount,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+
+            $this->db->insert('acc_transaction', $dis_transaction);
+
+        }
+
+
+        ///Customer credit for Paid Amount
+        $cc = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  1020101,
+            'Narration'      =>  'Cash in Hand in Sale for Invoice ID - ' . $invoice_id . ' customer- ' . $cs_name,
+            'Debit'          =>  $paid_amount,
+            'Credit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       =>  $createby,
+            'CreateDate'     =>  $createdate,
+            'IsAppove'       =>  1,
+
+        );
+
+
+        $data = array(
+            'invoice_id'    => $invoice_id,
+            'pay_type'      =>1,
+            'amount'        => $paid_amount,
+            'pay_date'      =>  $Vdate,
+            'status'        =>  1,
+            'account'       => '',
+            'COAID'         => 1020101
+        );
+        $this->db->insert('acc_transaction', $cc);
+
+        $this->db->insert('paid_amount', $data);
             // echo '<pre>'; print_r($datainv); exit();
 
         if ($check_order <= 0) {
@@ -173,7 +317,7 @@ class Corder extends CI_Controller
             $this->db->delete('invoice_details');
         }
 
-            $quantity = $this->input->post('quantity', TRUE);
+
             $current_stock = $this->input->post('stock', TRUE);
             $rate = $this->input->post('price', TRUE);
             $p_id = $this->input->post('product_id', TRUE);
