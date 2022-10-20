@@ -752,9 +752,9 @@ function customer_due(id){
         data: {customer_id:id,csrf_test_name:csrf_test_name},
         success: function (msg){
 
-            //$("#previous").val(msg);
+            $("#previous").val(msg);
 
-            console.log(msg);
+
         },
         error: function (xhr, desc, err){
             alert('failed');

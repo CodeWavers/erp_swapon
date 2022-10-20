@@ -225,7 +225,7 @@ function invoice_paidamount() {
     var t = $("#grandTotal").val(),
             a = $("#paidAmount").val(),
             e = t - a,
-            f = e + pr,
+            f = e + pr ,
             nt = parseFloat(t, 10) + pr,
         re_r =Math.round(nt)-nt,
             d = a - nt;
@@ -532,6 +532,7 @@ function bank_paymet(val, sl){
 function full_paid() {
     var grandTotal = $("#n_total").val();
     $("#paidAmount").val(grandTotal);
+    $("#cash_field").val(grandTotal);
     invoice_paidamount();
     calculateSum();
 }
@@ -655,8 +656,8 @@ var count = 2,
             data: {customer_id:id,csrf_test_name:csrf_test_name},
             success: function (msg){
 
-                //$("#previous").val(msg);
-                $("#previous").val(0);
+                $("#previous").val(msg);
+               // $("#previous").val(0);
             },
             error: function (xhr, desc, err){
                  alert('failed');

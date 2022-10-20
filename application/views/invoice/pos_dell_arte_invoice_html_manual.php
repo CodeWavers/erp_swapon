@@ -573,12 +573,12 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <?php if ($sales_return == 0) { ?>
 
                                         <?php if ($previous > 0) { ?>
-                                            <tr hidden>
+                                            <tr >
                                                 <td align="left">
                                                     <nobr></nobr>
                                                 </td>
                                                 <td align="right" colspan="2">
-                                                    <nobr><?php echo display('previous') ?></nobr>
+                                                    <nobr>Previous Due</nobr>
                                                 </td>
                                                 <td align="right" class="td-style">
                                                     <nobr>

@@ -205,9 +205,9 @@
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-3 col-form-label">Customer Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <input autocomplete="off"  type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="" />
+                                        <input autocomplete="off"  type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="Walking Customer" />
 
-                                        <input autocomplete="off" id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="">
+                                        <input autocomplete="off" id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="1">
                                     </div>
                                     <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
                                         <div class=" col-sm-3">

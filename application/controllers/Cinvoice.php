@@ -1225,6 +1225,7 @@ class Cinvoice extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Customers');
         $customer_id = $this->input->post('customer_id', TRUE);
+
         $this->db->select("a.*,b.HeadCode,((select ifnull(sum(Debit),0) from acc_transaction where COAID= `b`.`HeadCode` AND IsAppove = 1)-(select ifnull(sum(Credit),0) from acc_transaction where COAID= `b`.`HeadCode` AND IsAppove = 1)) as balance");
         $this->db->from('customer_information a');
         $this->db->join('acc_coa b', 'a.customer_id = b.customer_id', 'left');

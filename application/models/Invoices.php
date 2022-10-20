@@ -583,10 +583,10 @@ class Invoices extends CI_Model
             $total_sale = $this->db->get()->row();
 
             if ($outlet_id == 'HK7TGDT69VFMXB7') {
-                $available_quantity = $this->Reports->getCheckList(null, $p_id)['central_stock'];
+                $available_quantity = $this->Reports->getCheckList(null, $p_id,'','')['central_stock'];
              //   $available_quantity = $this->Reports->current_stock($product_id,1);
             } else {
-                $available_quantity = $this->Rqsn->outlet_stock(null, $p_id)['outlet_stock'];
+                $available_quantity = $this->Rqsn->outlet_stock(null, $p_id,'','')['outlet_stock'];
 
                // echo '<pre>';print_r($available_quantity);exit();
             }
@@ -3286,7 +3286,7 @@ class Invoices extends CI_Model
 
         $product_information = $this->db->get()->row();
 
-        $stock = $CI->Reports->getCheckList(null, $product_id)['central_stock'];
+        $stock = $CI->Reports->getCheckList(null, $product_id,'','')['central_stock'];
 
        // $available_quantity=$CI->Reports->current_stock($product_id,$product_status=null);
 
@@ -3340,10 +3340,10 @@ class Invoices extends CI_Model
 
 
         if ($outlet_id == 'HK7TGDT69VFMXB7') {
-            $available_quantity = $this->Reports->getCheckList(null, $product_id)['central_stock'];
+            $available_quantity = $this->Reports->getCheckList(null, $product_id,'','')['central_stock'];
             //   $available_quantity = $this->Reports->current_stock($product_id,1);
         } else {
-            $available_quantity = $this->Rqsn->outlet_stock(null, $product_id)['outlet_stock'];
+            $available_quantity = $this->Rqsn->outlet_stock(null, $product_id,'','')['outlet_stock'];
 
             // echo '<pre>';print_r($available_quantity);exit();
         }
