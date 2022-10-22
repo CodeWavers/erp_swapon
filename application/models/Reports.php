@@ -311,9 +311,16 @@ class reports extends CI_Model
 
         $p_s = $this->input->post('product_status', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
-        $date = date('Y-m-d');
+        if ($from_date == null){
+            $date = date('Y-m-d');
+            $op_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );
 
-       $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
+        }else{
+            $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
+
+        }
+
+
 
         ## Read value
         if (!$post_product_id) {
@@ -446,12 +453,18 @@ class reports extends CI_Model
 
 
         foreach ($records as $record) {
+            $production_cost = $this->db->select('avg(production_cost) as cost')->from('production_cost a')->where('a.product_id', $record->product_id)->get()->row();
+
+            $production_price = (!empty($production_cost->cost) ? sprintf('%0.2f', $production_cost->cost) : 0);
+
             if ($from_date) {
                 $this->db->where('b.date >=', $from_date);
             }
             if ($to_date) {
                 $this->db->where('b.date <=', $to_date);
             }
+
+
             $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('a.pre_order', 1)->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
             $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
             //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
@@ -614,7 +627,7 @@ class reports extends CI_Model
                     ->row();
 
 
-                $this->db->where('rqsn.date <=', $from_date);
+                $this->db->where('rqsn.date <=', $op_date);
                 $this->db->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id');
                 $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
                     ->from('rqsn_details')
@@ -840,10 +853,12 @@ class reports extends CI_Model
 
 
 
+
             $data[] = array(
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
                 'product_type'  =>  $record->finished_raw,
+                'production_cost'  => $production_price,
                 'product_model' => ($record->product_model ? $record->product_model : ''),
                 'category' => ($record->name ? $record->name : ''),
                 'sku' => ($record->sku ? $record->sku : ''),
@@ -859,14 +874,14 @@ class reports extends CI_Model
                 'total_sale_price' => $closing_stock * $sprice,
                 'purchase_total' => (($closing_stock * $pprice) != 0)
                     ? ($closing_stock * $pprice)
-                    : ($product_supplier_price
-                        ? $product_supplier_price[0]->supplier_price * $closing_stock
+                    : ($production_price
+                        ? $production_price * $closing_stock
                         : 0),
 
                 'opening_inventory' => (($opening_stock * $pprice) != 0)
                     ? ($opening_stock * $pprice)
                     : ($product_supplier_price
-                        ? $product_supplier_price[0]->supplier_price * $opening_stock
+                        ? $production_price * $opening_stock
                         : 0),
 
 

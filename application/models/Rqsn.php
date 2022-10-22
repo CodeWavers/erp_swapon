@@ -1515,7 +1515,15 @@ class Rqsn extends CI_Model
 
         $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
 
-        $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
+        if ($from_date == null){
+            $date = date('Y-m-d');
+            $op_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );
+
+        }else{
+            $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
+
+        }
+
         $product_sku = $this->input->post('product_sku', TRUE);
 
         $cat_id = $this->input->post('cat_id', TRUE);
@@ -1642,6 +1650,9 @@ class Rqsn extends CI_Model
 
 
         foreach ($records as $record) {
+
+            $production_cost = $this->db->select('avg(production_cost) as cost')->from('production_cost a')->where('a.product_id', $record->product_id)->get()->row();
+            $production_price = (!empty($production_cost->cost) ? sprintf('%0.2f', $production_cost->cost) : 0);
 
             $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')
                 ->from('invoice_details a')
@@ -1906,15 +1917,16 @@ class Rqsn extends CI_Model
                 'opening_stock' => $opening_stock,
                 'closing_stock' => $closing_stock,
                 'total_sale_price' => ($closing_stock) * $sprice,
-                'purchase_total' => (($stock * $pprice) != 0)
-                    ? ($stock * $pprice)
-                    : ($product_supplier_price
-                        ? $product_supplier_price[0]->supplier_price * $stock
+                'purchase_total' => (($closing_stock * $pprice) != 0)
+                    ? ($closing_stock * $pprice)
+                    : ($production_price
+                        ? $production_price * $closing_stock
                         : 0),
+
                 'opening_inventory' => (($opening_stock * $pprice) != 0)
                     ? ($opening_stock * $pprice)
                     : ($product_supplier_price
-                        ? $product_supplier_price[0]->supplier_price * $opening_stock
+                        ? $production_price * $opening_stock
                         : 0),
 
             );

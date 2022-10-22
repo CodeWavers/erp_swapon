@@ -3572,7 +3572,7 @@ class Invoices extends CI_Model
     }
     public function payment_details_total($invoice_id)
     {
-        $this->db->select('sum(amount) as amount,pay_type')
+        $this->db->select('sum(amount) as amount,pay_type,pay_date,notes')
             ->from('paid_amount')
             ->where('invoice_id', $invoice_id)
             ->group_by('pay_type');

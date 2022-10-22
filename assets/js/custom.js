@@ -1272,7 +1272,7 @@ $(document).ready(function () {
 
   $("#product_status,#from_date, #to_date").on("change", function (e) {
     //var valueSelected = this.value;
-    product_status = product_status;
+    product_status = $("#product_status").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
     table.ajax.reload();
@@ -1379,6 +1379,11 @@ $(document).ready(function () {
       },
       {
         data: "purchase_p",
+        class: "text-right",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+      {
+        data: "production_cost",
         class: "text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },

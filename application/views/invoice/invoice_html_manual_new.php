@@ -581,17 +581,20 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
 
-                                            <?php foreach ($payment_info as $pay){?>
+                                            <?php if ($due_amount == 0){
+                                                ?>
+                                            <?php
+                                            foreach ($payment_info as $pay){?>
 
                                                 <?php
-                                                if ($pay->pay_type == 2){
-                                                    $pay_type='In Cheque';
-                                                }
 
                                                 if ($pay->pay_type == 1){
                                                     $pay_type='In Cash';
                                                 }
-                                                if ($pay->pay_type === 3){
+                                                if ($pay->pay_type == 2){
+                                                    $pay_type='In Cheque';
+                                                }
+                                                if ($pay->pay_type == 3){
                                                     $pay_type='In Bkash';
                                                 }
 
@@ -625,7 +628,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             <?php } ?>
 
-                                        <?php }?>
+                                        <?php } ?>
+                                        <?php } ?>
 
 
                                         <?php if ($shipping_cost > 0) { ?>
@@ -712,12 +716,19 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 </tr>
                                             <?php } ?>
 
+
+                                            <?php if ($due_amount == 0 ){
+                                            ?>
+
                                             <?php foreach ($payment_info as $pay){?>
 
                                                 <?php
 
                                                 if ($pay->pay_type == 1){
                                                     $pay_type='In Cash';
+                                                }
+                                                if ($pay->pay_type == 2){
+                                                    $pay_type='In Cheque';
                                                 }
                                                 if ($pay->pay_type == 3){
                                                     $pay_type='In Bkash';
@@ -751,6 +762,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     </td>
                                                 </tr>
 
+                                            <?php } ?>
                                             <?php } ?>
 
 
@@ -859,6 +871,77 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 <!--                                </div>-->
 <!--                                --><?php //} ?>
                             </div>
+
+                            <?php  if ($due_amount > 0 && !empty($payment_info)){?>
+
+                            <table class="table" style="width: 100%;">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: right">#</th>
+                                    <th style="text-align: right">Payment Date</th>
+                                    <th style="text-align: right">Payment Type</th>
+                                    <th style="text-align: right">Notes</th>
+                                    <th style="text-align: right">Amount</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $slp = 1;
+                                foreach ($payment_info as $pay){?>
+
+                                    <?php
+
+                                    if ($pay->pay_type == 1){
+                                        $pay_type='In Cash';
+                                    }
+                                    if ($pay->pay_type == 2){
+                                        $pay_type='In Cheque';
+                                    }
+                                    if ($pay->pay_type == 3){
+                                        $pay_type='In Bkash';
+                                    }
+
+                                    if ($pay->pay_type == 4){
+                                        $pay_type='In Bank';
+                                    }
+
+                                    if ($pay->pay_type == 5){
+                                        $pay_type='In Nagad';
+                                    }
+
+                                    if ($pay->pay_type == 6){
+                                        $pay_type='In Card';
+                                    }
+
+
+                                    ?>
+                                    <tr>
+                                        <td align="right"><?=$slp++ ?></td>
+                                        <td align="right">
+                                            <nobr> <?= $pay->pay_date?></nobr>
+                                        </td>
+                                        <td align="right" >
+                                            <nobr><?= $pay_type?></nobr>
+                                        </td>
+
+                                        <td align="right" >
+                                            <nobr><?= $pay->notes?></nobr>
+                                        </td>
+                                        <td align="right" class="">
+                                            <nobr>
+                                                <?php echo html_escape((($position == 0) ? $currency ." ". number_format($pay->amount) :number_format($pay->amount)." ".$currency)) ?>
+                                            </nobr>
+                                        </td>
+                                    </tr>
+
+                                <?php } ?>
+
+                                </tbody>
+
+                            </table>
+
+                            <?php } ?>
 
 
 <!--                            <div class="footer" style="padding: 0.5in;">-->

@@ -136,7 +136,7 @@ class Creport extends CI_Controller
             $res[$k]['sl']  = $sl;
 
             if ($outlet_id == 'HK7TGDT69VFMXB7') {
-                $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'],'','')['central_stock'];
+                $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'],'','','')['central_stock'];
                 //   $available_quantity = $this->Reports->current_stock($product_id,1);
             } else {
                 $stock = $CI->Rqsn->outlet_stock(null,$res[$k]['product_id'],'','')['outlet_stock'];

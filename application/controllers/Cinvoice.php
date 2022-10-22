@@ -541,14 +541,20 @@ class Cinvoice extends CI_Controller
 
 
         $this->db->where('invoice_id',$invoice_id);
-        $this->db->update('invoice',$data);
+       $result= $this->db->update('invoice',$data);
 
 
 //
 
+        if ($result == true){
 
-        $this->session->set_userdata(array('message' => 'Payment Success'));
-        redirect(base_url('Cinvoice/manage_invoice'));
+            redirect(base_url('Cinvoice/invoice_inserted_data/'.$invoice_id));
+        }else{
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Cinvoice/manage_invoice'));
+        }
+
+
 
 
 
