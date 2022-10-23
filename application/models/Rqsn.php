@@ -1515,6 +1515,9 @@ class Rqsn extends CI_Model
 
         $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
 
+//        echo $outlet_id;
+//        exit();
+
         if ($from_date == null){
             $date = date('Y-m-d');
             $op_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );
@@ -1716,9 +1719,10 @@ class Rqsn extends CI_Model
                 $this->db->where('a.create_date >=', $from_date);
             if ($to_date)
                 $this->db->where('a.create_date <=', $to_date);
+
             $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                 ->from('stock_taking_details a')
-                ->join('stock_taking b', 'b.stid = a.stid')
+                ->join('stock_taking b', 'b.stid = a.stid','left')
                 ->where(array(
                     'b.outlet_id' =>$outlet_id,
                     'a.product_id' => $record->product_id,
@@ -1729,15 +1733,19 @@ class Rqsn extends CI_Model
                 ->order_by('a.id','desc')
                 ->get()
                 ->row();
+
+//            echo '<pre>';print_r($outlet_id);
+//            echo '<pre>';print_r($phy_count);
             $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+
             $stock =  ((!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty)+$diff;
 
 
-
+            //echo '<pre>';print_r($diff);
             /************************
              *  Opening Stock Start *
              * **********************/
-            if ($op_date) {
+            if ($from_date) {
                 $this->db->where('d.date <=', $op_date);
                 $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')
                     ->from('invoice_details a')
@@ -1904,6 +1912,7 @@ class Rqsn extends CI_Model
                 'sl'            =>   $sl,
                 'product_name'  =>  $record->product_name,
                 'product_model' =>  $record->product_model,
+                'production_cost'  => $production_price,
                 'product_type'  =>  $record->finished_raw,
                 'sales_price'   =>  sprintf('%0.2f', $sprice),
                 'purchase_p'    =>  $pprice,

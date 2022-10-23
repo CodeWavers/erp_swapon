@@ -122,6 +122,8 @@
 
                                             <th class="text-center"><?php echo display('sell_price') ?></th>
                                             <th class="text-center"><?php echo display('purchase_price') ?></th>
+                                            <th class="text-center">Production Cost</th>
+
                                             <th class="text-center"><?php echo display('in_qnty') ?></th>
                                             <th class="text-center"><?php echo display('out_qnty') ?></th>
                                             <th class="text-center">Return Given</th>
@@ -135,12 +137,13 @@
                                     <tfoot>
                                         <tr>
 
-                                            <th colspan="9" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th colspan="10" class="text-right"><?php echo display('total') ?> :</th>
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
+
                                         </tr>
 
                                     </tfoot>

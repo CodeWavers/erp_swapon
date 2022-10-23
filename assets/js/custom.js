@@ -1007,6 +1007,11 @@ $(document).ready(function () {
         class: "text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },
+      {
+        data: "production_cost",
+        class: "text-right",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
       { data: "totalPurchaseQnty", class: "text-right" },
       { data: "totalSalesQnty", class: "text-right" },
       { data: "return_given", class: " stock text-right" },
