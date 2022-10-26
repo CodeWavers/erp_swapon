@@ -1064,8 +1064,8 @@ class Settings extends CI_Model
   public function read_all_card()
   {
     $this->db->select('*');
-    $this->db->from('card_list a');
-    $this->db->join('card b','a.card_id=b.card_id');
+    $this->db->from('card a');
+    $this->db->join('card_list b','a.card_id=b.card_id','left');
     $query = $this->db->get();
     if ($query->num_rows() > 0) {
       return $query->result_array();

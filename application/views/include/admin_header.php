@@ -2336,7 +2336,7 @@ $birthday = $CI->Reports->birthday_noti();
 
                           <?php if (
                           $this->permission1
-                              ->method('balance_sheet_report', 'read')
+                              ->method('coa_print', 'read')
                               ->access()
                           ) { ?>
                               <li class="treeview <?php if (

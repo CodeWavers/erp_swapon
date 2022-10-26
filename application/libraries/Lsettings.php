@@ -785,6 +785,8 @@ class Lsettings
 
     $card_list = $CI->Settings->read_all_card();
 
+   // echo '<pre>';print_r($card_list);exit();
+
     $i = 0;
     foreach ($card_list as $k => $v) {
       $i++;
