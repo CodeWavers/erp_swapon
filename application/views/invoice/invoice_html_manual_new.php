@@ -681,6 +681,43 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     </nobr>
                                                 </td>
                                             </tr>
+                                            <?php if ($sale_type == 1) { ?>
+
+                                                <?php if ($shipping_cost > 0 ){ ?>
+                                                    <tr>
+                                                        <td align="left">
+                                                            <nobr></nobr>
+                                                        </td>
+                                                        <td align="right" colspan="4">
+                                                            <nobr>Delivery Charge</nobr>
+                                                        </td>
+                                                        <td align="right" class="td-style">
+                                                            <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {shipping_cost}" : "{shipping_cost} $currency")) ?>
+
+                                                            </nobr>
+                                                        </td>
+                                                    </tr>
+                                                <?php  }?>
+
+                                                <?php if ($shipping_cost > 0 ){ ?>
+                                                    <tr>
+                                                        <td align="left">
+                                                            <nobr></nobr>
+                                                        </td>
+                                                        <td align="right" colspan="4">
+                                                            <nobr>Total Commission</nobr>
+                                                        </td>
+                                                        <td align="right" class="td-style">
+                                                            <nobr>
+                                                                <?php echo html_escape((($position == 0) ? "$currency {total_commission}" : "{total_commission} $currency")) ?>
+
+                                                            </nobr>
+                                                        </td>
+                                                    </tr>
+                                                <?php  }?>
+
+                                            <?php  }?>
                                             <tr>
                                                 <td align="right" colspan="4">
                                                     <nobr>  <strong>Net Payable</strong></nobr>
