@@ -1063,7 +1063,7 @@ class Settings extends CI_Model
 
   public function read_all_card()
   {
-    $this->db->select('*');
+    $this->db->select('a.card_id,a.card_name,b.card_no_id,b.card_no_id,b.card_no_id');
     $this->db->from('card a');
     $this->db->join('card_list b','a.card_id=b.card_id','left');
     $query = $this->db->get();

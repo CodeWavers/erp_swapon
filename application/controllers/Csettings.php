@@ -1170,6 +1170,8 @@ class Csettings extends CI_Controller
     $card_type = $CI->Settings->read_all_card();
     $bank_list = $CI->Settings->get_bank_list();
 
+  //  echo '<pre>';print_r($card_type);exit();
+
     $data = array(
       'title'   => 'Add Card',
       'card_type'   => $card_type,
