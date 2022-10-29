@@ -756,12 +756,12 @@
 
                                                     </div>
 
-                                                    <div class="form-group row">
-                                                        <label for="cus_card" class="col-sm-5 col-form-label">Customer Card No.</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" id="cus_card" name="cus_card">
-                                                        </div>
-                                                    </div>
+<!--                                                    <div class="form-group row">-->
+<!--                                                        <label for="cus_card" class="col-sm-5 col-form-label">Customer Card No.</label>-->
+<!--                                                        <div class="col-sm-7">-->
+<!--                                                            <input type="text" class="form-control" id="cus_card" name="cus_card">-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
                                                 </div>
 
                                                 <div class="col-sm-3" id="ammnt_1">

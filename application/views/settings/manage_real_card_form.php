@@ -75,7 +75,7 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl'); ?></th>
-                                        <th>Card No</th>
+                                        <th>Card No/Name</th>
                                         <th>Card Type</th>
                                         <th>Bank</th>
 

@@ -80,9 +80,9 @@
 
 
                         <div class="form-group row">
-                            <label for="bank_name" class="col-sm-3 col-form-label">Account Name <i class="text-danger">*</i></label>
+                            <label for="bank_name" class="col-sm-3 col-form-label">Account No/Name <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" name="ac_name" id="ac_name" required="" placeholder="Account Name" tabindex="1" required />
+                                <input type="text" class="form-control" name="ac_name" id="ac_name" required="" placeholder="Account No/Name" tabindex="1" required />
                             </div>
 
                         </div>

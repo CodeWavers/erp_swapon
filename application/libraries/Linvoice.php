@@ -282,7 +282,7 @@ class Linvoice
         $CI->load->model('Aggre');
         $customer_details = $CI->Invoices->pos_customer_setup();
         $employee_list    = $CI->Service->employee_list();
-        $card_list = $CI->Settings->read_all_card();
+        $card_list = $CI->Settings->get_real_card_data();
 
         $bank_list          = $CI->Web_settings->bank_list();
         $bkash_list        = $CI->Web_settings->bkash_list();

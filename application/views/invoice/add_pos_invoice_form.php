@@ -574,36 +574,27 @@ $_SESSION['redirect_uri'] = $currentURL;
                             </table>
                         </div>
 
-                        <div class="row">
+                        <div class="row " >
                             <div class="col-sm-12" id="payment_div">
-                                <div class="panel panel-bd lobidrag text-center">
+                                <div class="panel panel-bd lobidrag">
                                     <div class="panel-heading">
-                                        <div class="panel-title row">
-                                            <div class="col-md-11">
-                                                <h3>Payment</h3>
-                                                <input type="hidden" id="count" value="2">
-
-                                            </div>
-                                            <div class="col-md-1 text-left">
-
-                                                <input type="button" id="full_paid_tab" class="btn btn-warning" value="<?php echo display('full_paid') ?>" tabindex="14" onClick="full_paid()" />
-
-                                            </div>
+                                        <div class="panel-title">
+                                            <h3>Payment</h3>
+                                            <input type="hidden" id="count" value="2">
                                         </div>
-
                                     </div>
 
                                     <div class="panel-body">
-                                        <div id="pay_div" class="" style="margin: 10px 3px; padding:10px 0;">
+                                        <div id="pay_div" style="margin: 10px 3px; padding:10px 0">
                                             <div class="row margin-top10">
                                                 <div class="col-sm-4">
-                                                    <label for="payment_type" class="col-sm-5 col-form-label text-left"><?php
-                                                                                                                echo display('payment_type');
-                                                                                                                ?> <i class="text-danger">*</i></label>
+                                                    <label for="payment_type" class="col-sm-5 col-form-label"><?php
+                                                        echo display('payment_type');
+                                                        ?> <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
-                                                        <select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
+                                                        <select name="paytype[]" class="form-control pay_type" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
                                                             <option value="1"><?php echo display('cash_payment') ?></option>
-                                                            <option value="2">Cheque Payment</option>
+                                                            <option value="2"><span class="">Cheque Payment</span></option>
                                                             <option value="4"><?php echo display('bank_payment') ?></option>
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
@@ -618,8 +609,8 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                 <div class="col-sm-4" id="bank_div_1" style="display:none;">
                                                     <div class="form-group row">
                                                         <label for="bank" class="col-sm-3 col-form-label"><?php
-                                                                                                            echo display('bank');
-                                                                                                            ?> <i class="text-danger">*</i></label>
+                                                            echo display('bank');
+                                                            ?> <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
 
                                                             <input type="text" name="bank_id" class="form-control" id="bank_id_1" placeholder="Bank">
@@ -638,8 +629,8 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                 <div class="col-sm-4" id="bank_div_m_1" style="display:none;">
                                                     <div class="form-group row">
                                                         <label for="bank" class="col-sm-5 col-form-label"><?php
-                                                                                                            echo display('bank');
-                                                                                                            ?> <i class="text-danger">*</i></label>
+                                                            echo display('bank');
+                                                            ?> <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
                                                             <select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_1">
                                                                 <option value="">Select One</option>
@@ -704,11 +695,11 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                     </div>
                                                 </div>
 
-                                                <div class="col-sm-4" style="display: none;text-align: left" id="card_div_1">
+                                                <div class="col-sm-4" style="display: none" id="card_div_1">
                                                     <div class="form-group row">
                                                         <label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
-                                                            <select name="card_id[]" class="form-control bankpayment" id="card_id_1" >
+                                                            <select name="card_id[]" class="form-control bankpayment" id="card_id_1" onchange="">
                                                                 <option value="">Select One</option>
                                                                 <?php foreach ($card_list as $card) { ?>
                                                                     <option value="<?php echo html_escape($card['card_no_id']) ?>"><?php echo html_escape($card['card_no'] . ' (' . $card['card_name'] . ')'); ?></option>
@@ -724,12 +715,19 @@ $_SESSION['redirect_uri'] = $currentURL;
 
 
                                                     </div>
+
+<!--                                                    <div class="form-group row">-->
+<!--                                                        <label for="cus_card" class="col-sm-5 col-form-label">Customer Card No.</label>-->
+<!--                                                        <div class="col-sm-7">-->
+<!--                                                            <input type="text" class="form-control" id="cus_card" name="cus_card">-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
                                                 </div>
 
                                                 <div class="col-sm-3" id="ammnt_1">
                                                     <label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
-                                                        <input class="form-control p_amount" type="text" name="p_amount[]" id="cash_field" onchange="calc_paid()" onkeyup="calc_paid()">
+                                                        <input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">
                                                     </div>
 
 
@@ -744,8 +742,8 @@ $_SESSION['redirect_uri'] = $currentURL;
                                 </div>
                             </div>
 
-                            <div class="form-group row " >
-                                <div class="col-sm-12 text-right " style="margin: inherit">
+                            <div class="form-group row">
+                                <div class="col-sm-6">
                                     <input type="submit" id="add_invoice" class="btn btn-success" name="add-invoice" value="<?php echo display('submit') ?>" tabindex="17" />
                                     <!-- <input type="submit" value="<?php echo display('submit_and_add_another') ?>" name="add-purchase-another" class="btn btn-large btn-success" id="add_purchase_another" > -->
                                 </div>
@@ -773,7 +771,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                         <div class="col-sm-6">
                                                             <input type="text" name="cheque_type[]" class=" form-control" placeholder="" autocomplete="off" />
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                                                                                                                                                                            ?>
+                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -782,7 +780,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                         <div class="col-sm-6">
                                                             <input type="number" name="cheque_no[]" class=" form-control" placeholder="" autocomplete="off" />
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                                                                                                                                                                            ?>
+                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -790,7 +788,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                         <label for="date" class="col-sm-4 col-form-label">Due Date <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
 
-                                                            <input class="form-control" type="date" size="50" name="cheque_date[]" id="" value="" tabindex="4" autocomplete="off" placeholder="y-m-d"/>
+                                                            <input class="form-control" type="date" size="50" name="cheque_date[]" id="" value="" tabindex="4" autocomplete="off" placeholder="mm/dd/yyyy" />
                                                         </div>
 
                                                         <label for="bank" class="col-sm-4 col-form-label">Amount:
@@ -799,7 +797,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                         <div class="col-sm-6">
                                                             <input type="number" name="amount[]" class=" form-control" placeholder="" autocomplete="off" />
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                                                                                                                                                                            ?>
+                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -809,7 +807,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                         <div class="col-sm-6" style="padding-bottom:10px ">
                                                             <input type="file" name="image[]" class="form-control" id="image" tabindex="4">
                                                             <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
-                                                                                                                                                                                                            ?>
+                                                            ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
 
@@ -843,6 +841,7 @@ $_SESSION['redirect_uri'] = $currentURL;
 
 
                         </div>
+
 
                     </div>
 
