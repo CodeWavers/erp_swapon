@@ -204,6 +204,7 @@ $(function ($) {
       { data: "sl" },
       // { data: "customer_id_two" },
       { data: "customer_name" },
+      { data: "shop_name"},
       { data: "address" },
       { data: "address2" },
       { data: "mobile" },

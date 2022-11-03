@@ -284,6 +284,7 @@ class Lcustomer
             'customer_id'     => $customer_detail[0]['customer_id'],
             'customer_id_two'     => $customer_detail[0]['customer_id_two'],
             'customer_name'   => $customer_detail[0]['customer_name'],
+            'shop_name'   => $customer_detail[0]['shop_name'],
             'customer_address' => $customer_detail[0]['customer_address'],
             'address2'        => $customer_detail[0]['address2'],
             'customer_mobile' => $customer_detail[0]['customer_mobile'],

@@ -219,6 +219,7 @@ class Ccustomer extends CI_Controller
         $data = array(
             'customer_id_two'   => $this->input->post('customer_id_two', TRUE),
             'customer_name'   => $this->input->post('customer_name', TRUE),
+            'shop_name'   => $this->input->post('shop_name', TRUE),
             'customer_address' => $this->input->post('address', TRUE),
             'address2'        => $this->input->post('address2', TRUE),
             'customer_mobile' => $this->input->post('mobile', TRUE),
@@ -553,6 +554,7 @@ class Ccustomer extends CI_Controller
         $data = array(
             'customer_id_two' => $this->input->post('customer_id_two', TRUE),
             'customer_name'   => $this->input->post('customer_name', TRUE),
+            'shop_name'   => $this->input->post('shop_name', TRUE),
             'customer_address' => $this->input->post('address', TRUE),
             'address2'        => $this->input->post('address2', TRUE),
             'customer_mobile' => $this->input->post('mobile', TRUE),

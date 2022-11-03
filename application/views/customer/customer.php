@@ -81,6 +81,7 @@
                                         <th><?php echo display('sl') ?></th>
 <!--                                        <th>Customer ID</th>-->
                                         <th><?php echo display('customer_name') ?></th>
+                                        <th>Shop Name</th>
                                         <th>Address</th>
                                         <th>District</th>
                                         <th><?php echo display('mobile') ?></th>
@@ -98,7 +99,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="6" class="text-right"><?php echo display('total') ?>:</th>
+                                        <th colspan="7" class="text-right"><?php echo display('total') ?>:</th>
                                         <th id="stockqty"></th>
                                         <th></th>
                                     </tr>

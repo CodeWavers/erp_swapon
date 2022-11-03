@@ -403,7 +403,7 @@ function add_pay_row(sl) {
         +    ' </div>'
         +   '</div>'
 
-            + '<div class="col-sm-3"id="ammnt_'+sl+'" >'
+            + '<div class="col-sm-3" id="ammnt_'+sl+'" >'
             + '<label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>'
             + '<div class="col-sm-7">'
             + '<input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">'

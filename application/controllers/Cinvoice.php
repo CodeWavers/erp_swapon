@@ -1463,6 +1463,7 @@ class Cinvoice extends CI_Controller
         $data = array(
             'customer_id_two'    => $this->input->post('customer_id_two', TRUE),
             'contact_person'    => $this->input->post('contact_person', TRUE),
+            'shop_name'    => $this->input->post('shop_name', TRUE),
             'contact'    => $this->input->post('contact', TRUE),
             'customer_name'    => $this->input->post('customer_name', TRUE),
             'customer_address' => $this->input->post('address', TRUE),

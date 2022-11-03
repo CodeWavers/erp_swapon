@@ -652,7 +652,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <?php if ($sales_return == 0) { ?>
 
                                             <?php if ($previous > 0) { ?>
-                                                <tr hidden>
+                                                <tr >
                                                     <td align="left">
                                                         <nobr></nobr>
                                                     </td>
@@ -662,7 +662,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     <td align="right" class="td-style">
                                                         <nobr>
 
-                                                            <?php echo html_escape((($position == 0) ? "$currency {previous}" : "{prevous_due} $currency")) ?>
+                                                            <?php echo html_escape((($position == 0) ? "$currency {previous}" : "{previous} $currency")) ?>
                                                         </nobr>
                                                     </td>
                                                 </tr>
@@ -700,7 +700,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     </tr>
                                                 <?php  }?>
 
-                                                <?php if ($shipping_cost > 0 ){ ?>
+                                                <?php if ($total_commission > 0 ){ ?>
                                                     <tr>
                                                         <td align="left">
                                                             <nobr></nobr>
@@ -754,7 +754,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                             <?php } ?>
 
 
-                                            <?php if ($due_amount == 0 ){
+                                            <?php if ($due_amount == 0 && empty($payment_info)){
                                             ?>
 
                                             <?php foreach ($payment_info as $pay){?>
@@ -909,7 +909,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 <!--                                --><?php //} ?>
                             </div>
 
-                            <?php  if ($due_amount > 0 && !empty($payment_info)){?>
+                            <?php  if (!empty($payment_info)){?>
 
                             <table class="table" style="width: 100%;">
                                 <thead>

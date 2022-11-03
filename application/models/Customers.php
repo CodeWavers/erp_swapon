@@ -119,6 +119,7 @@ class Customers extends CI_Model
                 'sl'               => $sl,
                 'customer_id_two'    => html_escape($record->customer_id_two),
                 'customer_name'    => html_escape($record->customer_name),
+                'shop_name'    => html_escape($record->shop_name),
                 'address'          => html_escape($record->customer_address),
                 'address2'         => html_escape($record->address2),
                 'mobile'           => html_escape($record->customer_mobile),

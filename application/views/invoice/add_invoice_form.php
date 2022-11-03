@@ -339,9 +339,9 @@
                                     <label for="date" class="col-sm-3 col-form-label">Commission<i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
                                         <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
-                                            <option value="">Select Commission</option>
+                                            <option value="2" selected>Overall</option>
                                             <option value="1">Product Wise</option>
-                                            <option value="2">Overall</option>
+
                                         </select>
 
                                     </div>
@@ -944,6 +944,14 @@
                                             <input class="form-control" name="customer_name" id="m_customer_name" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label for="customer_name" class="col-sm-3 col-form-label">Shop Name </label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control" name="shop_name" id="shop_name" type="text" placeholder="Shop Name" required="" tabindex="1">
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group row">
                                         <label for="email" class="col-sm-3 col-form-label"><?php echo display('customer_email') ?></label>
