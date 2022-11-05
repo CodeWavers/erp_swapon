@@ -204,6 +204,8 @@ class Accounts extends CI_Controller
         $data['acc'] = $this->accounts_model->Transacc();
         $data['voucher_no'] = $this->accounts_model->voNO();
         $data['crcc'] = $this->accounts_model->Cracc();
+
+       // echo '<pre>';print_r($data['acc']);exit();
         $content = $this->parser->parse('newaccount/debit_voucher', $data, true);
         $this->template->full_admin_html_view($content);
     }
