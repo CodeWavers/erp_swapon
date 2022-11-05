@@ -46,11 +46,15 @@
                 "<td><input type='text'  class='form-control text-right  available_quantity_" + count + "' value='' readonly></td>"+
                 " <td><input type='hidden' name='available_quantity[]' id='' class='form-control text-right common_avail_qnt available_quantity_" + count + "' value='0' readonly='readonly' /><input class='form-control text-right common_name unit_" + count + " valid' value='None' readonly='' aria-invalid='false' type='text'></td>" +
                 "<td> <input type='text' name='product_quantity[]' value='1' required='required' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "' class='common_qnt total_qntt_" + count + " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab3 + "'/>" +
-                "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
+                // "</td><td> <?php $date = date('Y-m-d') ?><input type='date' id='' style='width: 110px' class='form-control  warrenty_date_" + count + "' name='warrenty_date[]' value=''/></td>" +
                 "<td  class='text-center'><input type='text' style='width:120px;display:inline-block' name='product_rate[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + " form-control text-right' required placeholder='0.00' min='0'  tabindex='" + tab4 + "'/>     <s id='purchase_price_" + count + "' class=' purchase_price" + count + "text-right' style='width:120px;display:inline-block'>৳0.00</s></td>" +
+                "<td class='text-right'><input class='total_price_wd  form-control text-right' type='text' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
+
                 "<td class='text-center'><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "'style='width:120px;display:inline-block' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='text' style='width:120px;' name='comm[]' onkeyup='quantity_calculate(" + count + ");' onchange='quantity_calculate(" + count + ");' id='comm_" + count + "' class='form-control text-right comm_th d-none  p-5' placeholder='0.00' min='0' tabindex='" + tab5 + "' /><input type='hidden' value='' name='discount_type' id='discount_type_" + count + "'></td>" +
-                "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/><input class=' total_price_wd form-control text-right' type='hidden' name='total_price_wd[]' id='total_price_wd_" + count + "' value='0.00' readonly='readonly'/></td>" +
+
                 "<td class='text-right' hidden><input class=' total_discount form-control text-right' type='text' name='total_discount[]' id='total_discount_" + count + "' name='discount_amt[]' value='0.00' readonly='readonly'/></td>" +
+                "<td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + "' value='0.00' readonly='readonly'/></td>" +
+
                 "<td class='text-right' hidden><input class=' total_comm form-control text-right' type='text' name='total_comm[]' id='total_comm_" + count + "' name='total_comm[]' value='0.00' readonly='readonly'/></td>" +
 
                 "<td>" + tbfild + "<input type='hidden' id='all_discount_" + count + "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>",
@@ -63,18 +67,7 @@
             document.getElementById("paidAmount").setAttribute("tabindex", tab10);
             // document.getElementById("full_paid_tab").setAttribute("tabindex", tab11);
             document.getElementById("add_invoice").setAttribute("tabindex", tab12);
-            var commision_type=$('#commission_type').val()
 
-            if (commision_type==1 ) {
-                $('.comm_th').removeClass('d-none')
-                $('.comm_th').addClass('d-inline')
-
-            }
-
-            if (commision_type==2 ) {
-                $('.comm_th').removeClass('d-inline')
-                $('.comm_th').addClass('d-none')
-            }
 
             count++
         }
@@ -1093,28 +1086,21 @@ $(document).ready(function() {
 function cancelprint(){
    location.reload();
 }
+
+
     "use strict";
     function invoice_productList(sl) {
-
-        var outlet_id = $("#outlet_name").val();
-
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+        var base_url = $("#base_url").val();
         var priceClass = 'price_item'+sl;
-        var purchase_price = 'purchase_price_'+sl;
-
         var available_quantity = 'available_quantity_'+sl;
         var unit = 'unit_'+sl;
         var tax = 'total_tax_'+sl;
         var serial_no = 'serial_no_'+sl;
-        var warehouse = 'warehouse_'+sl;
-        var warrenty_date='warrenty_date_'+sl;
-        var expiry_date='expiry_date_'+sl;
+        var total_price = 'total_price_'+sl;
         var discount_type = 'discount_type_'+sl;
-        var discount = 'discount_'+sl;
-        var csrf_test_name = $('[name="csrf_test_name"]').val();
-        var base_url = $("#base_url").val();
-
-
-
+        var total_price_wd = 'total_price_wd_'+sl;
+        var purchase_price = 'purchase_price_'+sl;
         // Auto complete
         var options = {
             minLength: 0,
@@ -1143,16 +1129,21 @@ function cancelprint(){
             select: function( event, ui ) {
                 $(this).parent().parent().find(".autocomplete_hidden_value").val(ui.item.value);
                 $(this).val(ui.item.label);
+                var sl = $(this).parent().parent().find(".sl").val();
                 var id=ui.item.value;
                 var dataString = 'product_id='+ id;
                 var base_url = $('.baseUrl').val();
-                var  customer_id=$('#autocomplete_customer_id').val();
-                console.log(id);
+                var outlet_id = $("#outlet_name").val();
+
                 $.ajax
                 ({
                     type: "POST",
                     url: base_url+"Cinvoice/retrieve_product_data_inv",
-                    data: {product_id:id,customer_id:customer_id,outlet_id: outlet_id,csrf_test_name:csrf_test_name},
+                    data: {
+                        product_id: id,
+                        outlet_id : outlet_id,
+                        csrf_test_name: csrf_test_name
+                    },
                     cache: false,
                     success: function(data)
                     {
@@ -1162,21 +1153,19 @@ function cancelprint(){
                             var txclass = 'total_tax'+i+'_'+sl;
                             $('.'+txclass).val(obj.taxdta[i]);
                         }
-
-                        //   console.log(obj)
-                        $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
+                        $('.'+priceClass).val(obj.purchase_price);
                         $('#'+purchase_price).html('৳'+obj.price);
-                        $('.'+available_quantity).val(obj.stock);
+
+                        $('#'+total_price).val(obj.purchase_price);
+                        $('#'+total_price_wd).val(obj.purchase_price);
+                        $('.'+available_quantity).val(obj.total_product.toFixed(2,2));
                         $('.'+unit).val(obj.unit);
-                        $('.'+warrenty_date).val(obj.warrenty_date);
-                        $('.'+expiry_date).val(obj.expired_date);
-                        $('#'+warehouse).html(obj.warehouse);
                         $('.'+tax).val(obj.tax);
                         $('#txfieldnum').val(obj.txnmber);
-                        // $('#'+serial_no).html(obj.serial);
-                        // $('#'+discount_type).val(obj.discount_type);
-                        $('#' + discount).val(obj.discount);
-                        $("#stock_"+sl).val(obj.stock);
+                        $('#'+serial_no).html(obj.serial);
+                        $('#'+discount_type).val(obj.discount_type);
+
+                        //This Function Stay on others.js page
                         quantity_calculate(sl);
 
                     }
@@ -1192,93 +1181,8 @@ function cancelprint(){
         });
 
     }
-       "use strict";
-//     function invoice_productList(sl) {
-//      //   alert(sl)
-//    var csrf_test_name = $('[name="csrf_test_name"]').val();
-//         var base_url = $("#base_url").val();
-// var priceClass = 'price_item'+sl;
-// var total_price = 'total_price_'+sl;
-//         var purchase_price = 'purchase_price_'+sl;
-//        var available_quantity = 'available_quantity_'+sl;
-//        var unit = 'unit_'+sl;
-//        var tax = 'total_tax_'+sl;
-//        var serial_no = 'serial_no_'+sl;
-//        var discount_type = 'discount_type_'+sl;
-//
-//    // Auto complete
-//    var options = {
-//        minLength: 0,
-//        source: function( request, response ) {
-//            var product_name = $('#product_name_'+sl).val();
-//        $.ajax( {
-//          url: base_url + "Cinvoice/autocompleteproductsearch",
-//          method: 'post',
-//          dataType: "json",
-//          data: {
-//            term: request.term,
-//            product_name:product_name,
-//            csrf_test_name:csrf_test_name,
-//          },
-//          success: function( data ) {
-//            response( data );
-//
-//          }
-//        });
-//      },
-//       focus: function( event, ui ) {
-//           $(this).val(ui.item.label);
-//           return false;
-//       },
-//       select: function( event, ui ) {
-//            $(this).parent().parent().find(".autocomplete_hidden_value").val(ui.item.value);
-//                $(this).val(ui.item.label);
-//            var sl = $(this).parent().parent().find(".sl").val();
-//                var id=ui.item.value;
-//                var dataString = 'product_id='+ id;
-//                var base_url = $('.baseUrl').val();
-//           var outlet_id = $("#outlet_name").val();
-//
-//                $.ajax
-//                   ({
-//                        type: "POST",
-//                        url: base_url+"Cinvoice/retrieve_product_data_inv",
-//                       data: {
-//                           product_id: id,
-//                           outlet_id : outlet_id,
-//                           csrf_test_name: csrf_test_name
-//                       },
-//                        cache: false,
-//                        success: function(data)
-//                        {
-//                            var obj = jQuery.parseJSON(data);
-//
-//                            $('.'+priceClass).val(obj.purchase_price ? obj.purchase_price : 0.00);
-//                            $('#'+total_price).val(obj.purchase_price ? obj.purchase_price : 0.00);
-//                            $('#'+purchase_price).html('৳'+obj.price);
-//                            $('.'+available_quantity).val(obj.total_product);
-//                            $('.'+unit).val(obj.unit);
-//                            $('.'+tax).val(obj.tax);
-//                            $('#txfieldnum').val(obj.txnmber);
-//                            $('#'+serial_no).html(obj.serial);
-//                            $('#'+discount_type).val(obj.discount_type);
-//
-//                            //This Function Stay on others.js page
-//                            quantity_calculate(sl);
-//
-//                        }
-//                    });
-//
-//            $(this).unbind("change");
-//            return false;
-//       }
-//   }
-//
-//   $('body').on('keypress.autocomplete', '.productSelection', function() {
-//       $(this).autocomplete(options);
-//   });
-//
-//}
+
+
 
         window.onload = function () {
         $('body').addClass("sidebar-mini sidebar-collapse");

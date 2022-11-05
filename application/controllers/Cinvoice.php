@@ -988,11 +988,7 @@ class Cinvoice extends CI_Controller
                             <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
                         </td>
 
-                        <td>
-
-                              <input id=\'warrenty_date\' type=\"date\" name=\"warrenty_date[]\" class=\"form-control datepicker \" value=\" $product_details->warrenty_date\"  />
-                        </td>
-
+                  
 
 
 
@@ -1032,7 +1028,7 @@ class Cinvoice extends CI_Controller
             $tr .= "<input type=\"hidden\"  class=\"total_discount\"  name=\"total_discount[]\" id=\"total_discount_" . $product_details->product_id . "\" />
             
 							<input type=\"hidden\" id=\"all_discount_" . $product_details->product_id . "\" class=\" dppr\"/>
-							<button  class=\"btn btn-danger btn-xs text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+							<button  class=\"btn btn-danger  text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
 						</td>
 					</tr>";
             echo $tr;
