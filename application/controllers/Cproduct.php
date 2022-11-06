@@ -48,18 +48,25 @@ class Cproduct extends CI_Controller
 
         $records=json_decode($resp);
 
-        //  echo '<pre>';print_r($records->data);exit();
-
+         //echo '<pre>';print_r($records);exit();
+//
         $data2=array();
-        foreach ($records->data as $r){
-            $image_url = ecom_url() . 'public/'.$r->thumbnail_image;
-            $data2['product_id']   = $r->sku;
+        foreach ($records as $r){
+
+            if ($r->discount_type == 'percent'){
+                $discount_price=$r->unit_price-($r->unit_price*($r->discount/100));
+            }else{
+                $discount_price=$r->unit_price- $r->discount;
+
+            }
+            $image_url = ecom_url() . 'public/'.$r->thumbnail_img;
+            $data2['product_id']   = $r->product_id;
             $data2['category_id']  = $r->cats;
             $data2['brand_id']  = '';
             $data2['product_name'] = $r->name;
             $data2['finished_raw']  = 1;
             $data2['price']        = $r->unit_price;
-            $data2['purchase_price']        = $r->purchase_price;
+            $data2['purchase_price']        = $discount_price;
             $data2['unit']         = $r->unit;
             $data2['sku']  = $r->sku;
             $data2['tax']          = 0;
