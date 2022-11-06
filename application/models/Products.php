@@ -573,7 +573,7 @@ class Products extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('product_information');
-        $this->db->where('product_id', $product_id);
+        $this->db->where('sku', $product_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
