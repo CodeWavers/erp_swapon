@@ -331,7 +331,6 @@ class Cinvoice extends CI_Controller
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
 
-        //echo '<pre>';print_r($coainfo_cor);exit();
         $bank_id = $this->input->post('bank_id');
         $bkash_id = $this->input->post('bkash_id');
         $nagad_id = $this->input->post('nagad_id');
@@ -342,7 +341,7 @@ class Cinvoice extends CI_Controller
         $paid_amount = $this->input->post('paid_amount');
         $pay_amount = $this->input->post('pay_amount');
 
-        if ($inv_details->sel_type == 1 || 2) {
+        if ($inv_details->sale_type == 1 || 2) {
 
 
             $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $inv_details->customer_id)->get()->row();
@@ -351,7 +350,9 @@ class Cinvoice extends CI_Controller
             $customer_headcode = $coainfo->HeadCode;
             $cs_name= $cusifo->customer_name;
 
-        } else if ($inv_details->sel_type == 3){
+        }
+
+        if ($inv_details->sale_type == 3){
 
             $cusifo = $this->db->select('*')->from('aggre_list')->where('id', $inv_details->agg_id)->get()->row();
             $headn =  $inv_details->agg_id . '-' . $cusifo->aggre_name;
@@ -360,6 +361,7 @@ class Cinvoice extends CI_Controller
             $cs_name= $cusifo->aggre_name;
         }
 
+      //  echo '<pre>';print_r($cs_name);exit();
 
         if (!empty($bank_id)) {
             $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
