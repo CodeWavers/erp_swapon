@@ -807,6 +807,6 @@ class Products extends CI_Model
 
     public function sku_list(){
 
-        return $this->db->select('sku')->from('product_information')->get()->result();
+        return $this->db->select('sku')->from('product_information')->limit(100)->get()->result();
     }
 }
