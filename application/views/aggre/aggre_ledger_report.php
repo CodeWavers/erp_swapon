@@ -66,7 +66,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-body"> 
-                        <?php echo form_open('Ccustomer/customer_ledgerData', array('class' => '', 'id' => 'validate')) ?>
+                        <?php echo form_open('Caggre/aggre_ledgerData', array('class' => '', 'id' => 'validate')) ?>
                         <?php $today = date('Y-m-d'); ?>
                        <div class="col-sm-4">
                         <div class="form-group row">
@@ -75,7 +75,7 @@
                                 <select name="customer_id"  class="form-control" required="">
                                     <option value=""></option>
                                    <?php foreach($customer as $customers){?>
-                                    <option value="<?php echo html_escape($customers['aggre_id'])?>"  <?php if($customers['aggre_name'] == $customer_id){echo 'selected';}?>><?php echo html_escape($customers['aggre_name'])?></option>
+                                    <option value="<?php echo html_escape($customers['id'])?>"  <?php if($customers['aggre_name'] == $customer_name){echo 'selected';}?>><?php echo html_escape($customers['aggre_name'])?></option>
                                    <?php }?>
                                 </select>
                             </div>
@@ -127,7 +127,7 @@
                             <?php if ($customer_name) { ?>
                                 <div class="text-center">
                                     <h3> {customer_name} </h3>
-                                    <h4><?php echo display('address') ?> : {address} </h4>
+<!--                                    <h4>--><?php //echo display('address') ?><!-- : {address} </h4>-->
                                     <h4> <?php echo display('print_date') ?>: <?php echo date("d/m/Y h:i:s"); ?> </h4>
                                 </div>
                             <?php } ?>

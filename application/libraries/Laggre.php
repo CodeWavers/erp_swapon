@@ -93,6 +93,39 @@ class Laggre {
         return $singlecustomerdetails;
     }
 
+    public function aggre_ledger($customer_id, $start, $end)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Customers');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+
+        $aggre = $CI->Aggre->aggre_list_ledger();
+        $aggre_detail = $CI->Aggre->aggre_personal_data($customer_id);
+        $ledger   = $CI->Aggre->aggre_buy_by_date($customer_id, $start, $end);
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        $data = array(
+
+            'title'          => 'Aggregators Ledger',
+            'ledgers'        => $ledger,
+            'customer_name'  => $aggre_detail[0]['aggre_name'],
+            'address'        => '',
+            'customer'       => $aggre,
+            'customer_id'    => $customer_id,
+            'start'          => $start,
+            'end'            => $end,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'links'          => '',
+        );
+
+        //echo '<pre>';print_r($data);exit();
+
+        $singlecustomerdetails = $CI->parser->parse('aggre/aggre_ledger_report', $data, true);
+        return $singlecustomerdetails;
+    }
+
 }
 
 ?>

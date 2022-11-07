@@ -97,7 +97,7 @@ class Caggre extends CI_Controller {
             'HeadType'         => 'A',
             'IsBudget'         => '0',
             'IsDepreciation'   => '0',
-            'customer_id'      => $agg_id,
+            'aggre_id'      => $agg_id,
             'DepreciationRate' => '0',
             'CreateBy'         => $createby,
             'CreateDate'       => $createdate,
@@ -114,6 +114,14 @@ class Caggre extends CI_Controller {
             $this->session->set_userdata(array('error_message' => display('already_inserted')));
             redirect(base_url('Caggre'));
         }
+    }
+    public function aggre_ledgerData()
+    {
+        $start       = $this->input->post('from_date');
+        $end         = $this->input->post('to_date');
+        $customer_id = $this->input->post('customer_id');
+        $content     = $this->laggre->aggre_ledger($customer_id, $start, $end);
+        $this->template->full_admin_html_view($content);
     }
 
     //aggre Update Form

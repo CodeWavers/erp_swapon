@@ -245,7 +245,7 @@ class Suppliers extends CI_Model
             $this->db->group_end();
             $this->db->group_by('a.product_id');
             $this->db->order_by('a.product_name', 'asc');
-            // ->limit(15)
+            $this->db->limit(15);
         $query =$this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();

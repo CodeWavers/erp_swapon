@@ -598,6 +598,7 @@ class Invoices extends CI_Model
                 'purchase_price'          => $product_information->purchase_price,
                 'supplier_id'    => $product_information->supplier_id,
                 'product_id'     => $product_information->product_id,
+//                'product_id'     => $product_information->product_id,
                 'product_name'   => $product_information->product_name,
                 'product_model'  => $product_information->product_model,
                 'sku'  => $product_information->sku,
@@ -967,7 +968,8 @@ class Invoices extends CI_Model
             $customer_headcode = $coainfo->HeadCode;
             $cs_name= $cusifo->customer_name;
 
-        } else if ($sel_type == 3){
+        }
+        if ($sel_type == 3){
 
             $cusifo = $this->db->select('*')->from('aggre_list')->where('id', $agg_id)->get()->row();
             $headn = $agg_id . '-' . $cusifo->aggre_name;
