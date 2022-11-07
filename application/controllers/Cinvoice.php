@@ -972,6 +972,7 @@ class Cinvoice extends CI_Controller
 							<input type=\"text\"  size='100' name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . html_escape($product_details->sku)."-" . html_escape($product_details->product_name) . "' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
 
 							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+							<input type=\"hidden\" class=\"form-control  product_id_" . $product_details->sku . "\" name=\"skuu[]\" id=\"SchoolHiddenSku_" . $product_details->sku . "\" value = \"$product_details->sku\"/>
 
 						</td>
 
@@ -985,7 +986,7 @@ class Cinvoice extends CI_Controller
                         </td>
 
                         <td>
-                            <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                            <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->sku . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
                         </td>
 
                   

@@ -992,9 +992,13 @@ $_SESSION['redirect_uri'] = $currentURL;
         $('#add_item_m_p').keydown(function(e) {
             if (e.keyCode == 13) {
                 // e.preventDefault()
-                var product_id = $(this).val();
-                var product_id = $(this).val();
-                var exist = $("#SchoolHiddenId_" + product_id).val();
+                // var product_id = $(this).val();
+                 var product_id = $(this).val();
+               // var product_id = $("#SchoolHiddenId_" + product_id).val();
+                var exist = $("#SchoolHiddenSku_"+product_id).val();
+
+              //
+                // return
                 var qty = $("#total_qntt_" + product_id).val();
                 var add_qty = parseInt(qty) + 1;
                 var csrf_test_name = $('[name="csrf_test_name"]').val();
