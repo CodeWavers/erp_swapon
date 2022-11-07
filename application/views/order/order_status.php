@@ -86,16 +86,16 @@
                         <div class="panel-body">
 
                             <div class="row">
-                                <div class="col-lg-offset-3 col-lg-3">
-                                    <label for="update_payment_status&quot;&quot;">Payment Status</label>
-                                    <select name="payment_status" class="form-control demo-select2 select2-hidden-accessible" data-minimum-results-for-search="Infinity" id="update_payment_status" tabindex="-1" aria-hidden="true">
-                                        <option value="<?php echo $order[0]->payment_status?>" selected ><?php echo $order[0]->payment_status?></option>
-                                        <option value="paid" >Paid</option>
-                                        <option value="partial">Partial</option>
-                                        <option value="unpaid">Unpaid</option>
-                                    </select>
-<!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_payment_status-container"><span class="select2-selection__rendered" id="select2-update_payment_status-container" title="Paid">Paid</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
-                                </div>
+<!--                                <div class="col-lg-offset-3 col-lg-3">-->
+<!--                                    <label for="update_payment_status&quot;&quot;">Payment Status</label>-->
+<!--                                    <select name="payment_status" class="form-control demo-select2 select2-hidden-accessible" data-minimum-results-for-search="Infinity" id="update_payment_status" tabindex="-1" aria-hidden="true">-->
+<!--                                        <option value="--><?php //echo $order[0]->payment_status?><!--" selected >--><?php //echo $order[0]->payment_status?><!--</option>-->
+<!--                                        <option value="paid" >Paid</option>-->
+<!--                                        <option value="partial">Partial</option>-->
+<!--                                        <option value="unpaid">Unpaid</option>-->
+<!--                                    </select>-->
+<!---->
+<!--                                </div>-->
                                 <div class="col-lg-3">
                                     <label for="update_delivery_status">Delivery Status</label>
 
@@ -116,15 +116,15 @@
                                     </select>
 <!--                                    <span class="select2 select2-container select2-container--default" dir="ltr" style="width: 370.75px;"><span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-labelledby="select2-update_delivery_status-container"><span class="select2-selection__rendered" id="select2-update_delivery_status-container" title="Delivered">Delivered</span><span class="select2-selection__arrow" role="presentation"><b role="presentation"></b></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>-->
                                 </div>
-                                <div class="col-lg-3 pt-3">
-                                    <a class="btn btn-primary" data-toggle="modal" data-target="#paymentForm">Make Payment</a>
-                                </div>
+<!--                                <div class="col-lg-3 pt-3">-->
+<!--                                    <a class="btn btn-primary" data-toggle="modal" data-target="#paymentForm">Make Payment</a>-->
+<!--                                </div>-->
                             </div>
                             <hr>
                             <div class="invoice-bill row">
                                 <div class="col-sm-6 text-xs-center">
                                     <address>
-                                        <input type="text" name="customer_id" value="<?php echo $order[0]->customer_id?>"    id="product_id<?php echo $od->id?>">
+                                        <input type="hidden" name="customer_id" value="<?php echo $order[0]->customer_id?>"    id="customer_id<?php echo $od->id?>">
 
                                         <strong class="text-main"><?php echo $customer_name?></strong><br>
                                         <?php echo $email?><br>
@@ -237,7 +237,7 @@
                                                 <a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><img height="50" src="<?php echo ecom_url() ?>public/<?php echo $od->thumbnail_img?>"></a>
                                             </td>
                                             <td>
-                                                <input type="hidden" name="product_id[]" value="<?php echo $od->sku?>"    id="product_id<?php echo $od->id?>">
+                                                <input type="hidden" name="product_id[]" value="<?php echo $od->variationId?>"    id="product_id<?php echo $od->id?>">
                                                 <input type="hidden" name="variation[]" value="<?php echo $od->variation?>"    id="variation<?php echo $od->id?>">
 
                                                 <strong><a href="<?php echo ecom_url() ?>product/<?php echo $od->slug?>" target="_blank"><?php echo $od->name?></a></strong>
