@@ -151,6 +151,7 @@ class Corder extends CI_Controller
                 'paid_amount' => $this->input->post('paid_amount', TRUE),
                 'due_amount' => $this->input->post('due_amount', TRUE),
                 'shipping_cost' => $this->input->post('shipping_cost', TRUE),
+                'courier_status' => 1,
                 'outlet_id' => 'OpSoxJvBbbS8Rws',
                 'sale_type' => 4,
                 'delivery_type' => 2,
