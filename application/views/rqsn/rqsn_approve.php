@@ -76,7 +76,7 @@
                                             <td><?php echo $sl++; ?></td>
                                             <td><?php echo $approve['outlet_name'] ?> </td>
                                             <td><?php echo $approve['date'] ?> </td>
-                                            <td><?php echo $approve['product_name'] . ' (' . $approve['model'] . ')' . ' (' . $approve['color_name'] . ')' . ' (' . $approve['size_name'] . ')' ?> </td>
+                                            <td><?php echo $approve['product_name'] . ' (' . $approve['sku'] . ')' ?> </td>
                                             <td class="s_qty"><?php echo $approve['stok_quantity'] ?> </td>
                                             <td class="r_qty"><?php echo $approve['quantity'] ?> </td>
 

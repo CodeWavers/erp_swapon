@@ -1008,8 +1008,6 @@ class Rqsn extends CI_Model
             ->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id')
             ->join('outlet_warehouse c', 'c.outlet_id=a.from_id')
             ->join('product_information d', 'd.product_id=b.product_id')
-            ->join('size_list sz', 'd.size=sz.size_id', 'left')
-            ->join('color_list cl', 'd.color=cl.color_id', 'left')
             ->where('b.status', 1)
             ->where('a.to_id', 'HK7TGDT69VFMXB7')
             ->get()
@@ -1061,9 +1059,8 @@ class Rqsn extends CI_Model
                 'outlet_name' => $record->outlet_name,
                 'date' => $record->date,
                 'product_name' => $record->product_name,
+                'sku' => $record->sku,
                 'model'        => $record->product_model,
-                'color_name'        => $record->color_name,
-                'size_name'        => $record->size_name,
                 'quantity' => $record->quantity,
                 'unit' => $record->unit,
                 'details' => $record->details,
