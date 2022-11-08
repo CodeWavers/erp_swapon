@@ -277,6 +277,9 @@ class Purchases extends CI_Model
             $data = array(
                 'purchase_id'        => $purchase_id,
                 'supplier_id'        => $this->input->post('supplier_id', TRUE),
+                'invoice_no'        => $this->input->post('invoice_no', TRUE),
+                'labour_wages'     => $this->input->post('labour_wages', TRUE),
+                'transport_cost'     => $this->input->post('transport_cost', TRUE),
                 'grand_total_amount' => $this->input->post('grand_total_price', TRUE),
                 'total_discount'     => $this->input->post('discount', TRUE),
                 'purchase_date'      => $this->input->post('purchase_date', TRUE),
@@ -287,18 +290,21 @@ class Purchases extends CI_Model
                 'outlet_id'       =>  $this->input->post('outlet_name', TRUE),
                 'isFinal'          => 2
             );
-
-            // echo '<pre>';
-            // print_r($data);
-            // exit;
+//
+//             echo '<pre>';
+//             print_r($data);
+//             exit;
 
             $this->db->insert('product_purchase', $data);
         } else {
             $data = array(
                 'purchase_id'        => $purchase_id,
                 'supplier_id'        => $this->input->post('supplier_id', TRUE),
+                'invoice_no'        => $this->input->post('invoice_no', TRUE),
                 'grand_total_amount' => $this->input->post('grand_total_price', TRUE),
                 'total_discount'     => $this->input->post('discount', TRUE),
+                'labour_wages'     => $this->input->post('labour_wages', TRUE),
+                'transport_cost'     => $this->input->post('transport_cost', TRUE),
                 'purchase_date'      => $this->input->post('purchase_date', TRUE),
                 'purchase_details'   => $this->input->post('purchase_details', TRUE),
                 'paid_amount'        => $paid_amount,
@@ -1003,6 +1009,9 @@ class Purchases extends CI_Model
             'purchase_id'        => $purchase_id,
             // 'chalan_no'          => $this->input->post('chalan_no', TRUE),
             'supplier_id'        => $this->input->post('supplier_id', TRUE),
+            'invoice_no'        => $this->input->post('invoice_no', TRUE),
+            'labour_wages'     => $this->input->post('labour_wages', TRUE),
+            'transport_cost'     => $this->input->post('transport_cost', TRUE),
             'grand_total_amount' => $this->input->post('grand_total_price', TRUE),
             'total_discount'     => $this->input->post('discount', TRUE),
             'purchase_date'      => $this->input->post('purchase_date', TRUE),

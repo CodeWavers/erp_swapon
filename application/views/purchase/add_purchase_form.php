@@ -130,16 +130,29 @@
 
 
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <div class="form-group row">
-                                    <label for="product_status" class="col-sm-2 col-form-label"> Product Type <i class="text-danger">*</i></label>
-                                    <div class="col-sm-3">
+                                    <label for="product_status" class="col-sm-4 col-form-label"> Product Type <i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
                                         <select name="product_status" id="product_status" class="form-control" required">
 
                                             <option value="1" selected>Finished Goods</option>
                                             <option value="2">Raw Materials</option>
                                             <option value="3">Tools</option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-4 col-form-label">Invoice No:
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+
+                                        <input type="text" required tabindex="2" class="form-control " name="invoice_no" placeholder="Invoice No" value="" id="date" />
                                     </div>
                                 </div>
                             </div>
@@ -345,6 +358,27 @@
 
                                         </td>
                                     </tr>
+                                    <tr>
+
+                                        <td class="text-right" colspan="8"><b>Labour Wages</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="labour_wages" class="text-right form-control labour_wages" onkeyup="calculate_store(1)" name="labour_wages" placeholder="0.00" value="" />
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                        <td class="text-right" colspan="8"><b>Transportation</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="transport_cost " class="text-right form-control transport_cost" onkeyup="calculate_store(1)" name="transport_cost" placeholder="0.00" value="" />
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+
 
                                     <tr>
 

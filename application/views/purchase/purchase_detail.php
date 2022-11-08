@@ -101,7 +101,7 @@
 
 							<div class="col-sm-4 text-left invoice-details-billing">
 								<h2 class="m-t-0"><?php echo display('purchase') ?></h2>
-								<div><?php echo display('invoice_no') ?>: {chalan_no}</div>
+								<div><?php echo display('invoice_no') ?>: {invoice_no}</div>
 								<div class="m-b-15"><?php echo display('billing_date') ?>: {final_date}</div>
 
 								<span class="label label-success-outline m-r-15"><?php echo display('billing_to') ?></span>
@@ -159,6 +159,18 @@
 											<td class="text-right"><b><?php echo (($position == 0) ? "$currency {discount}" : "{discount} $currency") ?></b></td>
 										</tr>
 									<?php } ?>
+                                    <?php if ($labour_wages > 0) { ?>
+                                        <tr>
+                                            <td class="text-right" colspan="4"><b>Labour Wages:</b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency {labour_wages}" : "{labour_wages} $currency") ?></b></td>
+                                        </tr>
+                                    <?php } ?>
+                                    <?php if ($transport_cost > 0) { ?>
+                                        <tr>
+                                            <td class="text-right" colspan="4"><b>Transportation:</b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency {transport_cost}" : "{transport_cost} $currency") ?></b></td>
+                                        </tr>
+                                    <?php } ?>
 									<tr>
 										<td class="text-right" colspan="4"><b><?php echo display('grand_total') ?>:</b></td>
 										<td class="text-right"><b><?php echo (($position == 0) ? "$currency {sub_total_amount}" : "{sub_total_amount} $currency") ?></b></td>

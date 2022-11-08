@@ -52,6 +52,7 @@ function calculate_store(sl) {
 
     var gr_tot = 0;
     var dis = 0;
+
     var item_ctn_qty    = $("#cartoon_"+sl).val();
     var vendor_rate = $("#product_rate_"+sl).val();
 
@@ -68,8 +69,12 @@ function calculate_store(sl) {
     });
 
     $("#Total").val(gr_tot.toFixed(2,2));
-    var grandtotal = gr_tot - dis;
+    var  labour_wages =  (parseInt($('#labour_wages').val())? parseInt($('#labour_wages').val()) : 0);
+    var  transport_cost =  (parseInt($('.transport_cost').val())? parseInt($('.transport_cost').val()) : 0);
+
+    var grandtotal = (gr_tot - dis)+labour_wages+transport_cost;
     $("#grandTotal").val(grandtotal.toFixed(2,2));
+
     invoice_paidamount();
 }
 
