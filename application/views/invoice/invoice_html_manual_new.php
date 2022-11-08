@@ -265,6 +265,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                     <address style=" text-align: justify;">
                                                     <u><h4><b>Shipped To:</b></h4></u>
                                                     <abbr><nobr>Name: {customer_name} </nobr></abbr><br>
+                                                    <abbr><nobr>Shop Name: {shop_name} </nobr></abbr><br>
                                                     <abbr><nobr>Mobile: {customer_mobile}</nobr></abbr><br>
                                                     <abbr><nobr>Address: {customer_address}</nobr></abbr><br>
                                                 </address>

@@ -64,7 +64,7 @@
                        	<div class="form-group row">
                             <label for="email" class="col-sm-4 col-form-label">Shop Name</label>
                             <div class="col-sm-8">
-                                <input class="form-control" name ="shop_name" value="{shop_name}" id="shop_name" type="shop_name" placeholder="<?php echo display('customer_email') ?>" tabindex="2">
+                                <input class="form-control" name ="shop_name" value="{shop_name}" id="shop_name" type="shop_name" placeholder="Shop Name" tabindex="2">
                             </div>
                         </div>
                           <div class="form-group row">

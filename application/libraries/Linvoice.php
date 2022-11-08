@@ -940,6 +940,7 @@ class Linvoice
             'time'     => $invoice_detail[0]['time'],
             'date'     => $invoice_detail[0]['date'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
+            'shop_name'  => $invoice_detail[0]['shop_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'customer_email'    => $invoice_detail[0]['customer_email'],
@@ -990,7 +991,7 @@ class Linvoice
 //
         $pay_type=$invoice_detail[0]['sale_type'];
 //         echo '<pre>';
-//         print_r($payment_info);
+//         print_r($data);
 //         exit();
         if ($pay_type == 2 ){
             $chapterList = $CI->parser->parse('invoice/pos_dell_arte_invoice_html_manual', $data, true);
