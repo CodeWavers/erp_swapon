@@ -21,13 +21,13 @@
 			<div class="col-sm-12">
 
 				<?php if ($this->permission1->method('add_bank', 'create')->access()) { ?>
-					<a href="<?php echo base_url('Csettings/rocket') ?>" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i> Add rocket Number </a>
+					<a href="<?php echo base_url('Csettings/rocket') ?>" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i> Add Rocket Number </a>
 				<?php } ?>
 				<?php if ($this->permission1->method('bank_transaction', 'create')->access()) { ?>
-					<a href="<?php echo base_url('Csettings/rocket_transaction') ?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-align-justify"> </i> rocket Transaction </a>
+					<a href="<?php echo base_url('Csettings/rocket_transaction') ?>" class="btn btn-primary m-b-5 m-r-2"><i class="ti-align-justify"> </i> Rocket Transaction </a>
 				<?php } ?>
 				<?php if ($this->permission1->method('bank_list', 'read')->access()) { ?>
-					<a href="<?php echo base_url('Csettings/rocket_list') ?>" class="btn btn-success m-b-5 m-r-2"><i class="ti-align-justify"> </i> Manage rocket </a>
+					<a href="<?php echo base_url('Csettings/rocket_list') ?>" class="btn btn-success m-b-5 m-r-2"><i class="ti-align-justify"> </i> Manage Rocket </a>
 				<?php } ?>
 
 
@@ -41,7 +41,7 @@
 						<?php $today = date('Y-m-d'); ?>
 						<label class="select">Rocket: </label>
 						<select name="rocket_id" class="form-control">
-							<option value="">Select Bank</option>
+							<option value="">Select Rocket</option>
 							<?php foreach ($rocket_list as $rocket) { ?>
 								<option value="<?php echo $rocket['rocket_id'] ?>"><?php echo $rocket['rocket_no'] ?>(<?php echo $rocket['ac_name'] ?>)</option>
 							<?php } ?>
@@ -82,7 +82,7 @@
 				<div class="panel panel-bd lobidrag">
 					<div class="panel-heading">
 						<div class="panel-title">
-							<h4>rocket Ledger</h4>
+							<h4>Rocket Ledger</h4>
 						</div>
 					</div>
 					<div class="panel-body">
