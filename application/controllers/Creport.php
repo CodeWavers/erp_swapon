@@ -42,22 +42,8 @@ class Creport extends CI_Controller
         $CI->load->model('Purchases');
 
 
-        $query = $this->db->select('*')
-            ->from('product_information a')
-            ->where('a.finished_raw',1)
-            ->get();
-
-        $res = $query->result_array();
-
-        $sl = 1;
-        foreach ($res as $k => $v) {
-            $res[$k]['sl']  = $sl;
-            $sl++;
-        }
-
         $data = array(
             'title'     => 'Stock Taking',
-            'product_list'  => $res,
             'outlet_list'     =>  $CI->Warehouse->get_outlet_user(),
             'cw'            => $CI->Warehouse->central_warehouse(),
             'access'  => '',
@@ -281,6 +267,7 @@ class Creport extends CI_Controller
                             $product_details->product_name
 
 							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+                            <input type=\"hidden\" name=\"purchase_price[]\" class=\"purchase_price_" . $product_details->product_id . " form-control text-right\" id=\"purchase_price_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $product_details->purchase_price_ecom . "'/>
 
 						</td>
 
@@ -332,7 +319,10 @@ class Creport extends CI_Controller
         $date = date('Y-m-d');
         $outlet_id = $this->input->post('outlet_name', TRUE);
         $product_id = $this->input->post('product_id', TRUE);
+        $purchase_price = $this->input->post('purchase_price', TRUE);
         $quantity = array_filter($this->input->post('p_qty', TRUE));
+
+       // echo '<pre>';print_r($purchase_price);exit();
 
      if (empty($quantity)){
          $this->session->set_userdata(array('error_message' => 'Physical count is empty!!'));
@@ -363,6 +353,9 @@ class Creport extends CI_Controller
             $this->db->where('stid',$stid);
             $this->db->update('stock_taking', $data1);
 
+            $this->db->where('VNo',$stid);
+            $this->db->delete('acc_transaction');
+
         }
         elseif ($access =='view'){
             $this->db->where('stid',$stid);
@@ -370,10 +363,6 @@ class Creport extends CI_Controller
             $this->db->set('approve',1);
             $this->db->where('stid',$stid);
             $this->db->update('stock_taking');
-
-
-
-
 
 
         }  else{
@@ -384,6 +373,26 @@ class Creport extends CI_Controller
         for ($i = 0; $i < count($product_id); $i++) {
             $pr_id = $product_id[$i];
             $qty = $quantity[$i];
+            $purchase_ecom =$purchase_price[$i];
+
+
+            $prinfo  = $this->db->select('Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id', $pr_id)->get()->row()->product_rate;
+            $production_cost = $this->db->select('avg(production_cost) as cost')->from('production_cost a')->where('a.product_id',$pr_id)->get()->row()->cost;
+
+            if (!empty($purchase_ecom)){
+                $total_amount[] = $quantity[$i] * $purchase_ecom;
+            }
+            else if (!empty($prinfo)){
+                $total_amount[] = $quantity[$i] * $prinfo;
+
+            }
+            else if (!empty($production_cost)){
+                $total_amount[] = $quantity[$i] * $production_cost;
+
+            }else{
+                $total_amount[] =0;
+
+            }
 
             $data2 = array(
                 'st_details_id'    => mt_rand(),
@@ -399,13 +408,32 @@ class Creport extends CI_Controller
 
 
            // echo '<pre>';print_r($data1);
-           // echo '<pre>';print_r($data2);exit();
             if (!empty($qty)) {
                 $this->db->insert('stock_taking_details', $data2);
             }
 
 
         }
+
+        if (!empty($total_amount)){
+            $stcr = array(
+                'VNo'            =>  $stid,
+                'Vtype'          =>  'Stock Taking',
+                'VDate'          =>  $date,
+                'COAID'          =>  201,
+                'Narration'      =>  'Stock Taking For STID -  ' . $stid . '',
+                'Credit'          => array_sum($total_amount),
+                'Debit'         =>   0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $this->session->userdata('user_id'),
+                'CreateDate'     => $date,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $stcr);
+        }
+
+     //   echo '<pre>';print_r(array_sum($total_amount));exit();
+
 
         redirect(base_url('Creport/manage_stock_taking'));
     }

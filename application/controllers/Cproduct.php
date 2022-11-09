@@ -66,6 +66,7 @@ class Cproduct extends CI_Controller
             $data2['product_name'] = $r->name;
             $data2['finished_raw']  = 1;
             $data2['price']        = $r->unit_price;
+            $data2['purchase_price_ecom']        = $r->purchase_price;
             $data2['purchase_price']        = $discount_price;
             $data2['unit']         = $r->unit;
             $data2['sku']  = $r->sku;
