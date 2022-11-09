@@ -5,12 +5,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1>Bkash Edit</h1>
-            <small>Bkash Edit</small>
+            <h1>Rocket Edit</h1>
+            <small>Rocket Edit</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
-                <li><a href="#">BKash</a></li>
-                <li class="active">Bkash Edit></li>
+                <li><a href="#">Rocket</a></li>
+                <li class="active">Rocket Edit></li>
             </ol>
         </div>
     </section>
@@ -48,35 +48,35 @@
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h4>Bkash Edit</h4>
+                            <h4>Rocket Edit</h4>
                         </div>
                     </div>
-                    <?php echo form_open_multipart('Csettings/update_bkash/' . $bkash_list[0]['bkash_id'], array('class' => 'form-vertical', 'id' => 'validate')) ?>
+                    <?php echo form_open_multipart('Csettings/update_rocket/' . $rocket_list[0]['rocket_id'], array('class' => 'form-vertical', 'id' => 'validate')) ?>
                     <div class="panel-body">
 
                         <div class="form-group row">
                             <label for="bank_name" class="col-sm-3 col-form-label">Account Name <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" name="ac_name" id="ac_name" required="" placeholder="Account Name" value="<?php echo $bkash_list[0]['ac_name'] ?>" tabindex="1" />
-                                <input type="hidden" name="oldname" value="<?php echo $bkash_list[0]['bkash_no'] ?>">
+                                <input type="text" class="form-control" name="ac_name" id="ac_name" required="" placeholder="Account Name" value="<?php echo $rocket_list[0]['ac_name'] ?>" tabindex="1" />
+                                <input type="hidden" name="oldname" value="<?php echo $rocket_list[0]['rocket_no'] ?>">
                             </div>
                         </div>
 
 
                         <div class="form-group row">
-                            <label for="ac_no" class="col-sm-3 col-form-label">Bkash Number <i class="text-danger">*</i></label>
+                            <label for="ac_no" class="col-sm-3 col-form-label">Rocket Number <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control" name="bkash_no" id="bkash_no" required="" placeholder="Bkash Number" value="<?php echo $bkash_list[0]['bkash_no'] ?>" tabindex="3" />
+                                <input type="text" class="form-control" name="rocket_no" id="rocket_no" required="" placeholder="Rocket Number" value="<?php echo $rocket_list[0]['rocket_no'] ?>" tabindex="3" />
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label for="bank" class="col-sm-3 col-form-label">Account Type <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <select name="bkash_type" class="form-control bankpayment" id="bank_id">
+                                <select name="rocket_type" class="form-control bankpayment" id="bank_id">
                                     <option value=""></option>
 
-                                    <option value="<?php echo $bkash_list[0]['bkash_type'] ?>" selected><?php echo $bkash_list[0]['bkash_type'] ?></option>
+                                    <option value="<?php echo $rocket_list[0]['rocket_type'] ?>" selected><?php echo $rocket_list[0]['rocket_type'] ?></option>
                                     <option value="Merchant">Merchant</option>
                                     <option value="Agent">Agent</option>
                                     <option value="Personal">Personal</option>
@@ -93,7 +93,7 @@
                                 <div class="col-sm-6">
                                     <select name="outlet" class="form-control" id="outlet">
                                         <?php foreach ($outlet_list as $outlet) {
-                                            if ($outlet['outlet_id'] == $bkash_list[0]['outlet_id']) { ?>
+                                            if ($outlet['outlet_id'] == $rocket_list[0]['outlet_id']) { ?>
                                                 <option value="<?= $outlet['outlet_id'] ?>" selected>
                                                     <?= $outlet['outlet_name'] ?>
                                                 </option>

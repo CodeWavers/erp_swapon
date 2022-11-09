@@ -40,6 +40,34 @@ class Csettings extends CI_Controller
     $this->template->full_admin_html_view($content);
   }
 
+  public function rocket()
+  {
+    $CI = &get_instance();
+    $CI->load->model('Warehouse');
+    $outlet_list = $CI->Warehouse->cw_and_outlet_merged();
+    $signed_outlet = $CI->Warehouse->get_outlet_user();
+
+    $signed_outlet_id = '';
+
+    if ($signed_outlet) {
+      $signed_outlet_id = $signed_outlet[0]['outlet_id'];
+    }
+
+    // echo '<pre>';
+    // print_r($outlet_list);
+    // exit();
+    $data = [
+      'title' => 'Add Rocket',
+      'outlet_list' => $outlet_list,
+      'signed_outlet_id'  => $signed_outlet_id
+    ];
+    // echo '<pre>';
+    // print_r($data);
+    // exit();
+
+    $content = $this->parser->parse('settings/new_rocket', $data, true);
+    $this->template->full_admin_html_view($content);
+  }
   public function bkash()
   {
     $CI = &get_instance();
@@ -198,7 +226,7 @@ class Csettings extends CI_Controller
     ];
     $bank_coa = [
       'HeadCode' => $headcode,
-      'HeadName' => 'BK - ' . $this->input->post('bkash_no', true),
+      'HeadName' => 'BK-' . $this->input->post('bkash_no', true),
       'PHeadName' => 'Cash At Bkash',
       'HeadLevel' => '4',
       'IsActive' => '1',
@@ -216,6 +244,47 @@ class Csettings extends CI_Controller
     $this->db->insert('acc_coa', $bank_coa);
     $this->session->set_userdata(['message' => display('successfully_added')]);
     redirect(base_url('Csettings/bkash_list'));
+    // exit();
+  }
+  public function add_new_rocket()
+  {
+    $coa = $this->Settings->headcode_rocket();
+    if ($coa->HeadCode != null) {
+      $headcode = $coa->HeadCode + 1;
+    } else {
+      $headcode = "102010501";
+    }
+
+    $createby = $this->session->userdata('user_id');
+    $createdate = date('Y-m-d H:i:s');
+    $data = [
+      'rocket_id' => $this->auth->generator(10),
+      'ac_name' => $this->input->post('ac_name', true),
+      'rocket_no' => $this->input->post('rocket_no', true),
+      'rocket_type' => $this->input->post('rocket_type', true),
+      'status' => 1,
+      // 'outlet_id' => $this->input->post('outlet', true),
+    ];
+    $bank_coa = [
+      'HeadCode' => $headcode,
+      'HeadName' => 'RK-' . $this->input->post('rocket_no', true),
+      'PHeadName' => 'Cash At Rocket',
+      'HeadLevel' => '4',
+      'IsActive' => '1',
+      'IsTransaction' => '1',
+      'IsGL' => '1',
+      'HeadType' => 'A',
+      'IsBudget' => '0',
+      'IsDepreciation' => '0',
+      'DepreciationRate' => '0',
+      'CreateBy' => $createby,
+      'CreateDate' => $createdate,
+    ];
+     $this->Settings->rocket_entry($data);
+
+    $this->db->insert('acc_coa', $bank_coa);
+    $this->session->set_userdata(['message' => display('successfully_added')]);
+    redirect(base_url('Csettings/rocket_list'));
     // exit();
   }
   public function add_new_nagad()
@@ -239,7 +308,7 @@ class Csettings extends CI_Controller
     ];
     $bank_coa = [
       'HeadCode' => $headcode,
-      'HeadName' => 'NG - ' . $this->input->post('nagad_no', true),
+      'HeadName' => 'NG-' . $this->input->post('nagad_no', true),
       'PHeadName' => 'Cash At Nagad',
       'HeadLevel' => '4',
       'IsActive' => '1',
@@ -278,6 +347,17 @@ class Csettings extends CI_Controller
       'bkash_list' => $bkash_list,
     ];
     $content = $this->parser->parse('settings/bkash_debit_credit_manage', $data, true);
+    $this->template->full_admin_html_view($content);
+  }
+
+  public function rocket_transaction()
+  {
+    $rocket_list = $this->Settings->get_rocket_list();
+    $data = [
+      'title' => 'Rocket Transaction',
+      'rocket_list' => $rocket_list,
+    ];
+    $content = $this->parser->parse('settings/rocket_debit_credit_manage', $data, true);
     $this->template->full_admin_html_view($content);
   }
   public function nagad_transaction()
@@ -360,10 +440,12 @@ class Csettings extends CI_Controller
       ->where('bkash_id', $this->input->post('bkash_id'))
       ->get()
       ->row()->bkash_no;
-    $coaid = $this->db
+      $coa_name='BK-'. $bkashname;
+
+      $coaid = $this->db
       ->select('HeadCode')
       ->from('acc_coa')
-      ->where('HeadName', $bkashname)
+      ->where('HeadName', $coa_name)
       ->get()
       ->row()->HeadCode;
     //echo '<pre>';print_r($bkashname);exit();
@@ -387,6 +469,50 @@ class Csettings extends CI_Controller
     redirect(base_url('Csettings/bkash_list'));
     exit();
   }
+  public function rocket_debit_credit_manage_add()
+  {
+    if ($this->input->post('account_type', true) == "Debit(+)") {
+      $dr = $this->input->post('ammount', true);
+    } else {
+      $cr = $this->input->post('ammount', true);
+    }
+    $receive_by = $this->session->userdata('user_id');
+    $receive_date = date('Y-m-d');
+    $bkashname = $this->db
+      ->select('rocket_no')
+      ->from('rocket_add')
+      ->where('rocket_id', $this->input->post('rocket_id'))
+      ->get()
+      ->row()->rocket_no;
+
+    $coa_name='RK-'. $bkashname;
+      $coaid = $this->db
+      ->select('HeadCode')
+      ->from('acc_coa')
+      ->where('HeadName', $coa_name)
+      ->get()
+      ->row()->HeadCode;
+   // echo '<pre>';print_r($coa_name);exit();
+    $coabanktransaction = [
+      'VNo' => $this->input->post('withdraw_deposite_id', true),
+      'Vtype' => 'Rocket Transaction',
+      'VDate' => $this->input->post('date', true),
+      'COAID' => $coaid,
+      'Narration' => $this->input->post('description', true),
+      'Debit' => !empty($dr) ? $dr : 0,
+      'Credit' => !empty($cr) ? $cr : 0,
+      'IsPosted' => 1,
+      'CreateBy' => $receive_by,
+      'CreateDate' => date('Y-m-d H:i:s'),
+      'IsAppove' => 1,
+    ];
+
+     //echo '<pre>';print_r($coabanktransaction);exit();
+    $this->db->insert('acc_transaction', $coabanktransaction);
+    $this->session->set_userdata(['message' => display('successfully_added')]);
+    redirect(base_url('Csettings/rocket_list'));
+    exit();
+  }
   public function nagad_debit_credit_manage_add()
   {
     if ($this->input->post('account_type', true) == "Debit(+)") {
@@ -402,10 +528,12 @@ class Csettings extends CI_Controller
       ->where('nagad_id', $this->input->post('nagad_id'))
       ->get()
       ->row()->nagad_no;
-    $coaid = $this->db
+      $coa_name='NG-'. $nagadname;
+
+      $coaid = $this->db
       ->select('HeadCode')
       ->from('acc_coa')
-      ->where('HeadName', $nagadname)
+      ->where('HeadName', $coa_name)
       ->get()
       ->row()->HeadCode;
     //echo '<pre>';print_r($bkashname);exit();
@@ -445,6 +573,14 @@ class Csettings extends CI_Controller
     $from = $this->input->post('from_date', true);
     $to = $this->input->post('to_date', true);
     $content = $this->lsettings->bkash_ledger($bkash_id, $from, $to);
+    $this->template->full_admin_html_view($content);
+  }
+  public function rocket_ledger()
+  {
+    $rocket_id = $this->input->post('rocket_id', true);
+    $from = $this->input->post('from_date', true);
+    $to = $this->input->post('to_date', true);
+    $content = $this->lsettings->rocket_ledger($rocket_id, $from, $to);
     $this->template->full_admin_html_view($content);
   }
   public function nagad_ledger()
@@ -814,6 +950,12 @@ class Csettings extends CI_Controller
     $this->template->full_admin_html_view($content);
   }
 
+  public function rocket_list()
+  {
+    $content = $this->lsettings->rocket_list();
+    $this->template->full_admin_html_view($content);
+  }
+
   public function nagad_list()
   {
     $content = $this->lsettings->nagad_list();
@@ -831,6 +973,12 @@ class Csettings extends CI_Controller
   public function edit_bkash($bkash_id)
   {
     $content = $this->lsettings->bkash_show_by_id($bkash_id);
+    $this->template->full_admin_html_view($content);
+  }
+
+  public function edit_rocket($rocket_id)
+  {
+    $content = $this->lsettings->rocket_show_by_id($rocket_id);
     $this->template->full_admin_html_view($content);
   }
 
@@ -853,6 +1001,13 @@ class Csettings extends CI_Controller
     $content = $this->lsettings->bkash_update_by_id($bkash_id);
     $this->session->set_userdata(['message' => display('successfully_updated')]);
     redirect('Csettings/bkash_list');
+  }
+
+  public function update_rocket($rocket_id)
+  {
+    $content = $this->lsettings->rocket_update_by_id($rocket_id);
+    $this->session->set_userdata(['message' => display('successfully_updated')]);
+    redirect('Csettings/rocket_list');
   }
   public function update_nagad($nagad_id)
   {

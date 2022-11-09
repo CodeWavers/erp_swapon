@@ -2540,6 +2540,84 @@ $birthday = $CI->Reports->birthday_noti();
                 </ul>
               </li>
             <?php } ?>
+
+
+              <?php if (
+              $this->permission1->method('add_bank', 'create')->access()
+              ) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('2') == "index" ||
+                      $this->uri->segment('2') == "rocket_list" ||
+                      $this->uri->segment('2') == "rocket_ledger" ||
+                      $this->uri->segment('2') == "rocket_transaction"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>">
+                      <a href="#">
+                          </i><span>Rocket</span>
+                          <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                      </a>
+                      <ul class="treeview-menu">
+                          <?php if (
+                          $this->permission1->method('add_bank', 'create')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('1') == "Csettings" &&
+                                  $this->uri->segment('2') == "index"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'Csettings/rocket'
+                                  ); ?>">Add Rocket Number</a></li>
+                          <?php } ?>
+
+                          <?php if ($this->permission1->method('add_bank', 'create')->access()) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "rocket_list"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'Csettings/rocket_list'
+                                  ); ?>">Manage Rocket</a></li>
+                          <?php } ?>
+                          <?php if (
+                          $this->permission1->method('add_bank', 'create')->access()
+                          ) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "rocket_transaction"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'Csettings/rocket_transaction'
+                                  ); ?>">Rocket Transaction</a></li>
+                          <?php } ?>
+
+                          <?php if ($this->permission1->method('add_bank', 'create')->access()) { ?>
+                              <li class="treeview <?php if (
+                                  $this->uri->segment('2') == "rocket_ledger"
+                              ) {
+                                  echo "active";
+                              } else {
+                                  echo " ";
+                              } ?>"><a href="<?php echo base_url(
+                                      'Csettings/rocket_ledger'
+                                  ); ?>">Rocket Ledger</a></li>
+                          <?php } ?>
+                      </ul>
+                  </li>
+              <?php } ?>
+
+
             <?php if (
               $this->permission1->method('add_bank', 'create')->access()
             ) { ?>
