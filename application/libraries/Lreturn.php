@@ -106,6 +106,7 @@ class Lreturn
             'bank_list'     => $CI->Web_settings->bank_list(),
             'bkash_list'     => $CI->Web_settings->bkash_list(),
             'nagad_list'     => $CI->Web_settings->nagad_list(),
+            'rocket_list'     => $CI->Web_settings->rocket_list(),
         );
 
 //        echo '<pre>';print_r($invoice_detail[0]['receiver_name']);exit();
