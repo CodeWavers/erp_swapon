@@ -693,7 +693,7 @@ class Returnse extends CI_Model
                                 if (!empty($bkash_id)) {
                                     $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id[$i])->get()->row()->bkash_no;
 
-                                    $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+                                    $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK-' . $bkashname)->get()->row()->HeadCode;
                                 } else {
                                     $bkashcoaid = '';
                                 }
@@ -731,7 +731,7 @@ class Returnse extends CI_Model
                                 if (!empty($nagad_id)) {
                                     $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id[$i])->get()->row()->nagad_no;
 
-                                    $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+                                    $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG-' . $nagadname)->get()->row()->HeadCode;
                                 } else {
                                     $nagadcoaid = '';
                                 }
