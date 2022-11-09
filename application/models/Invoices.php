@@ -703,6 +703,7 @@ class Invoices extends CI_Model
         $bkashname = '';
         $card_id = $this->input->post('card_id', TRUE);
         $nagad_id = $this->input->post('nagad_id', TRUE);
+        $rocket_id = $this->input->post('rocket_id', TRUE);
         $available_quantity = $this->input->post('available_quantity', TRUE);
         $currency_details = $this->Web_settings->retrieve_setting_editdata();
 
@@ -1195,7 +1196,7 @@ class Invoices extends CI_Model
                         if (!empty($bkash_id)) {
                             $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id[$i])->get()->row()->bkash_no;
 
-                            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+                            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK-' . $bkashname)->get()->row()->HeadCode;
                         } else {
                             $bkashcoaid = '';
                         }
@@ -1232,7 +1233,7 @@ class Invoices extends CI_Model
                         if (!empty($nagad_id)) {
                             $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id[$i])->get()->row()->nagad_no;
 
-                            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+                            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG-' . $nagadname)->get()->row()->HeadCode;
                         } else {
                             $nagadcoaid = '';
                         }
@@ -1265,6 +1266,45 @@ class Invoices extends CI_Model
                         $this->db->insert('paid_amount', $data);
 
                         $this->db->insert('acc_transaction', $nagadc);
+                    }
+                    if ($pay_type[$i] == 7) {
+
+                        if (!empty($rocket_id)) {
+                            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id[$i])->get()->row()->rocket_no;
+
+                            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'RK-' . $rocketname)->get()->row()->HeadCode;
+                        } else {
+                            $rocketcoaid = '';
+                        }
+
+                        $rocketc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INVOICE',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $rocketcoaid,
+                            'Narration'      =>  'Cash in Rocket  paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                            'Debit'          =>  $paid[$i],
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
+
+                        );
+
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'pay_date'       =>  $Vdate,
+                            'account'       => $rocketname,
+                            'COAID'         => $rocketcoaid,
+                            'status'        =>  1,
+                        );
+
+                        $this->db->insert('paid_amount', $data);
+
+                        $this->db->insert('acc_transaction', $rocketc);
                     }
                     if ($pay_type[$i] == 6) {
 
@@ -2570,6 +2610,7 @@ class Invoices extends CI_Model
         $p_amount = $this->input->post('p_amount', TRUE);
         $bank_id = $this->input->post('bank_id_m', TRUE);
         $bkash_id = $this->input->post('bkash_id', TRUE);
+        $rocket_id = $this->input->post('rocket_id', TRUE);
         $bkashname = '';
         $card_id = $this->input->post('card_id', TRUE);
         $nagad_id = $this->input->post('nagad_id', TRUE);
@@ -2948,7 +2989,7 @@ class Invoices extends CI_Model
                     if (!empty($bkash_id)) {
                         $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id[$i])->get()->row()->bkash_no;
 
-                        $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+                        $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK-' . $bkashname)->get()->row()->HeadCode;
                     } else {
                         $bkashcoaid = '';
                     }
@@ -2999,7 +3040,7 @@ class Invoices extends CI_Model
                     if (!empty($nagad_id)) {
                         $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id[$i])->get()->row()->nagad_no;
 
-                        $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+                        $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG-' . $nagadname)->get()->row()->HeadCode;
                     } else {
                         $nagadcoaid = '';
                     }
@@ -3045,6 +3086,45 @@ class Invoices extends CI_Model
                     $this->db->insert('acc_transaction', $cuscredit);
 
                     $this->db->insert('acc_transaction', $nagadc);
+                }
+                if ($pay_type[$i] == 7) {
+
+                    if (!empty($rocket_id)) {
+                        $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id[$i])->get()->row()->rocket_no;
+
+                        $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG-' . $rocketname)->get()->row()->HeadCode;
+                    } else {
+                        $rocketcoaid = '';
+                    }
+
+                    $rocketc = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INVOICE',
+                        'VDate'          =>  $Vdate,
+                        'COAID'          =>  $nagadcoaid,
+                        'Narration'      =>  'Cash in Nagad paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                        'Debit'          =>  $paid[$i],
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       =>  $createby,
+                        'CreateDate'     =>  $createdate,
+                        'IsAppove'       =>  1,
+
+                    );
+
+                    $data = array(
+                        'invoice_id'    => $invoice_id,
+                        'pay_type'      => $pay_type[$i],
+                        'amount'        => $paid[$i],
+                        'pay_date'       =>  $Vdate,
+                        'account'       => $rocketname,
+                        'COAID'         => $rocketcoaid,
+                        'status'        =>  1,
+                    );
+
+                    $this->db->insert('paid_amount', $data);
+
+                    $this->db->insert('acc_transaction', $rocketc);
                 }
                 if ($pay_type[$i] == 6) {
 

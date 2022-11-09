@@ -536,6 +536,10 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                                 $pay_type='In Card';
                                             }
 
+                                                if ($pay->pay_type == 7){
+                                                    $pay_type='In Rocket';
+                                                }
+
 
                                             ?>
                                             <tr>
@@ -667,6 +671,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                         if ($pay->pay_type == 6){
                                             $pay_type='In Card';
+                                        }
+                                        if ($pay->pay_type == 7){
+                                            $pay_type='In Rocket';
                                         }
 
 
@@ -802,6 +809,9 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                             if ($pay->pay_type == 6){
                                                 $pay_type='In Card';
+                                            }
+                                              if ($pay->pay_type == 7){
+                                                $pay_type='In Rocket';
                                             }
 
 

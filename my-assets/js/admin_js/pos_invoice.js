@@ -380,6 +380,23 @@ function add_pay_row(sl) {
 
             + '</div>'
             + ' </div>'
+
+        + '</div>'
+        + ' </div>'
+
+        + '<div class="col-sm-4" style="display: none" id="rocket_div_'+sl+'">'
+        + '<div class="form-group row">'
+        + '<label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>'
+        + '<div class="col-sm-7">'
+        + '<select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_'+sl+'">'
+        + rocket_list
+        + ' </select>'
+
+        + '</div>'
+
+
+        + '</div>'
+        + ' </div>'
             +'<div class="col-sm-4" style="display: none" id="card_div_'+sl+'">'
         +     '<div class="form-group row">'
         +        '<label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>'
@@ -444,66 +461,83 @@ function delete_row(e) {
     }
 
 "use strict";
-function bank_paymet(val, sl){
+    function bank_paymet(val, sl){
 
-    if (val==2 || 3 || 4 || 5 || 6){
+        if (val==2 || 3 || 4 || 5 || 6 || 7){
 
-        if(val==2){
-            var style = 'block';
-            document.getElementById('bank_id_'+sl).setAttribute("required", true);
-        }else{
-            var style ='none';
-            document.getElementById('bank_id_'+sl).removeAttribute("required");
+            if(val==2){
+                var style = 'block';
+                document.getElementById('bank_id_'+sl).setAttribute("required", true);
+                document.getElementById('ammnt_' + sl).style.display = 'none';
+            }else{
+                var style ='none';
+                document.getElementById('bank_id_' + sl).removeAttribute("required");
+                document.getElementById('ammnt_' + sl).style.display = 'block';
+            }
+
+            document.getElementById('bank_div_' + sl).style.display = style;
+
+            if(val==3){
+                var style = 'block';
+                document.getElementById('bkash_id_' + sl).setAttribute("required", true);
+
+            }else{
+                var style ='none';
+                document.getElementById('bkash_id_'+sl).removeAttribute("required");
+
+            }
+
+            document.getElementById('bkash_div_'+sl).style.display = style;
+
+
+            if(val==4){
+                var style = 'block';
+                document.getElementById('bank_id_m_'+sl).setAttribute("required", true);
+            }else{
+                var style ='none';
+                document.getElementById('bank_id_m_'+sl).removeAttribute("required");
+            }
+
+            document.getElementById('bank_div_m_'+sl).style.display = style;
+
+            if(val==5){
+                var style = 'block';
+                document.getElementById('nagad_id_'+sl).setAttribute("required", true);
+            }else{
+                var style ='none';
+                document.getElementById('nagad_id_'+sl).removeAttribute("required");
+            }
+
+            document.getElementById('nagad_div_'+sl).style.display = style;
+
+            if(val==7){
+                var style = 'block';
+                document.getElementById('rocket_id_'+sl).setAttribute("required", true);
+            }else{
+                var style ='none';
+                document.getElementById('rocket_id_'+sl).removeAttribute("required");
+            }
+
+            document.getElementById('rocket_div_'+sl).style.display = style;
+
+            if(val==6){
+                var style = 'block';
+                document.getElementById('card_id_'+sl).setAttribute("required", true);
+            }else{
+                var style ='none';
+                document.getElementById('card_id_'+sl).removeAttribute("required");
+            }
+
+            document.getElementById('card_div_'+sl).style.display = style;
+
+
+
+
         }
 
-        document.getElementById('bank_div_' + sl).style.display = style;
-
-        if(val==3){
-            var style = 'block';
-            document.getElementById('bkash_id_'+sl).setAttribute("required", true);
-        }else{
-            var style ='none';
-            document.getElementById('bkash_id_'+sl).removeAttribute("required");
-        }
-
-        document.getElementById('bkash_div_'+sl).style.display = style;
-
-        if(val==4){
-            var style = 'block';
-            document.getElementById('bank_id_m_'+sl).setAttribute("required", true);
-        }else{
-            var style ='none';
-            document.getElementById('bank_id_m_'+sl).removeAttribute("required");
-        }
-
-        document.getElementById('bank_div_m_'+sl).style.display = style;
-
-        if(val==5){
-            var style = 'block';
-            document.getElementById('nagad_id_'+sl).setAttribute("required", true);
-        }else{
-            var style ='none';
-            document.getElementById('nagad_id_'+sl).removeAttribute("required");
-        }
-
-        document.getElementById('nagad_div_'+sl).style.display = style;
-
-        if(val==6){
-            var style = 'block';
-            document.getElementById('card_id_'+sl).setAttribute("required", true);
-        }else{
-            var style ='none';
-            document.getElementById('card_id_'+sl).removeAttribute("required");
-        }
-
-        document.getElementById('card_div_'+sl).style.display = style;
 
 
     }
-
-
-
-}
 
     "use strict"
     function calc_paid(){

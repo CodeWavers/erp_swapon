@@ -157,6 +157,23 @@ class Web_settings extends CI_Model
         return false;
     }
 
+    public function rocket_list()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+
+        $this->db->select('*');
+        $this->db->from('rocket_add');
+        // $this->db->where('outlet_id', $outlet_id);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
     public function outletwise_nagad_list($outlet_id)
     {
         $CI = &get_instance();

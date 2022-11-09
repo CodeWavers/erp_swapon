@@ -24,6 +24,7 @@ class Linvoice
             'bank_list'        => $CI->Web_settings->bank_list(),
             'bkash_list'        =>$CI->Web_settings->bkash_list(),
             'nagad_list'        =>  $CI->Web_settings->nagad_list(),
+            'rocket_list'        =>  $CI->Web_settings->rocket_list(),
         );
         // echo "<pre>";
         // print_r($company_info);
@@ -259,6 +260,7 @@ class Linvoice
             'bank_list'     => $CI->Web_settings->bank_list(),
             'bkash_list'     => $CI->Web_settings->bkash_list(),
             'nagad_list'     => $CI->Web_settings->nagad_list(),
+            'rocket_list'     => $CI->Web_settings->rocket_list(),
             'courier_list'     => $courier_list,
             'branch_list'     => $branch_list,
             'outlet_list'     => $outlet_user,
@@ -266,6 +268,8 @@ class Linvoice
             'aggre_list'    => $aggre_list,
             'cw'            => $cw
         );
+
+      //  echo '<pre>';print_r($data['rocket_list']);
         $invoiceForm = $CI->parser->parse('invoice/add_invoice_form', $data, true);
         return $invoiceForm;
     }
@@ -391,6 +395,7 @@ class Linvoice
         $courier_list        = $CI->Courier->get_courier_list();
         $bank_list      = $CI->Web_settings->bank_list();
         $bkash_list     = $CI->Web_settings->bkash_list();
+        $rocket_list     = $CI->Web_settings->rocket_list();
         $branch_list    = $CI->Courier->get_branch_list();
         $taxinfo        = $CI->Invoices->service_invoice_taxinfo($invoice_id);
         $taxfield       = $CI->db->select('tax_name,default_value')
@@ -485,6 +490,7 @@ class Linvoice
             'discount_type'   => $currency_details[0]['discount_type'],
             'bank_list'       => $bank_list,
             'bkash_list'      => $bkash_list,
+            'rocket_list'      => $rocket_list,
             'employee_list' => $employee_list,
             'rid'         => $invoice_detail[0]['rid'],
             'receiver_name'         => $invoice_detail[0]['receiver_name'],

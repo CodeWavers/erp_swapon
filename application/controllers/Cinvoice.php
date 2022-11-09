@@ -334,6 +334,7 @@ class Cinvoice extends CI_Controller
         $bank_id = $this->input->post('bank_id');
         $bkash_id = $this->input->post('bkash_id');
         $nagad_id = $this->input->post('nagad_id');
+        $rocket_id = $this->input->post('rocket_id');
         $paytype = $this->input->post('paytype');
 
         $total_amount = $this->input->post('total_amount');
@@ -373,16 +374,24 @@ class Cinvoice extends CI_Controller
         if (!empty($bkash_id)) {
             $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id)->get()->row()->bkash_no;
 
-            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK-' . $bkashname)->get()->row()->HeadCode;
         } else {
             $bkashcoaid = '';
         }
         if (!empty($nagad_id)) {
             $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id)->get()->row()->nagad_no;
 
-            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG-' . $nagadname)->get()->row()->HeadCode;
         } else {
             $nagadcoaid = '';
+        }
+
+        if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'RK-' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
         }
 
         $cosdr= array(
@@ -988,7 +997,7 @@ class Cinvoice extends CI_Controller
                         </td>
 
                         <td>
-                            <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->sku . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                            <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->sku . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
                         </td>
 
                   

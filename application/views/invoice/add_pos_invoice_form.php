@@ -598,6 +598,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                                             <option value="4"><?php echo display('bank_payment') ?></option>
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
+                                                            <option value="7">Rocket Payment</option>
                                                             <option value="6">Card Payment</option>
 
                                                         </select>
@@ -694,6 +695,29 @@ $_SESSION['redirect_uri'] = $currentURL;
 
                                                     </div>
                                                 </div>
+
+                                                <div class="col-sm-4" style="display: none" id="rocket_div_1">
+                                                    <div class="form-group row">
+                                                        <label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>
+                                                        <div class="col-sm-7">
+                                                            <select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_1">
+                                                                <option value="">Select One</option>
+                                                                <?php foreach ($rocket_list as $rocket) { ?>
+                                                                    <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                                                <?php } ?>
+                                                            </select>
+
+                                                            <input type="hidden" id="rocket_list" value='<option value="">Select One</option>
+                                            <?php foreach ($rocket_list as $rocket) { ?>
+                                                <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                            <?php } ?>'>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
 
                                                 <div class="col-sm-4" style="display: none" id="card_div_1">
                                                     <div class="form-group row">
@@ -1062,12 +1086,12 @@ $_SESSION['redirect_uri'] = $currentURL;
             if (barcodeStringPos != '') {
                 var product_id = barcodeStringPos;
                 var exist = $("#SchoolHiddenId_" + product_id).val();
-                var qty = $("#total_qntt_" + product_id).val();
+                var qty = $(".total_qntt_" + product_id).val();
                 var add_qty = parseInt(qty) + 1;
                 var csrf_test_name = $('[name="csrf_test_name"]').val();
                 var base_url = $("#base_url").val();
                 if (product_id == exist) {
-                    $("#total_qntt_" + product_id).val(add_qty);
+                    $(".total_qntt_" + product_id).val(add_qty);
                     quantity_calculate(product_id);
                     calculateSum();
                     invoice_paidamount();

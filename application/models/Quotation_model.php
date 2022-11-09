@@ -82,6 +82,7 @@ class Quotation_model extends CI_Model
         $bank_id = $this->input->post('bank_id_m', TRUE);
 
         $bkash_id = $this->input->post('bkash_id', TRUE);
+        $rocket_id = $this->input->post('rocket_id', TRUE);
         $bkashname = '';
         $card_id = $this->input->post('card_id', TRUE);
 
@@ -827,6 +828,45 @@ class Quotation_model extends CI_Model
                         $this->db->insert('acc_transaction', $cuscredit);
 
                         $this->db->insert('acc_transaction', $nagadc);
+                    }
+                    if ($pay_type[$i] == 7) {
+
+                        if (!empty($rocket_id)) {
+                            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id[$i])->get()->row()->rocket_no;
+
+                            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $rocketname)->get()->row()->HeadCode;
+                        } else {
+                            $rocketcoaid = '';
+                        }
+
+                        $rocketc = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INVOICE',
+                            'VDate'          =>  $Vdate,
+                            'COAID'          =>  $nagadcoaid,
+                            'Narration'      =>  'Cash in Nagad paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                            'Debit'          =>  $paid[$i],
+                            'Credit'         =>  0,
+                            'IsPosted'       =>  1,
+                            'CreateBy'       =>  $createby,
+                            'CreateDate'     =>  $createdate,
+                            'IsAppove'       =>  1,
+
+                        );
+
+                        $data = array(
+                            'invoice_id'    => $invoice_id,
+                            'pay_type'      => $pay_type[$i],
+                            'amount'        => $paid[$i],
+                            'pay_date'       =>  $Vdate,
+                            'account'       => $rocketname,
+                            'COAID'         => $rocketcoaid,
+                            'status'        =>  1,
+                        );
+
+                        $this->db->insert('paid_amount', $data);
+
+                        $this->db->insert('acc_transaction', $rocketc);
                     }
                     if ($pay_type[$i] == 6) {
 

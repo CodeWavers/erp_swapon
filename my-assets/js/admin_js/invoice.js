@@ -527,7 +527,7 @@ window.onload = function () {
 "use strict";
 function bank_paymet(val, sl){
 
-    if (val==2 || 3 || 4 || 5 || 6){
+    if (val==2 || 3 || 4 || 5 || 6 || 7){
 
         if(val==2){
             var style = 'block';
@@ -574,6 +574,16 @@ function bank_paymet(val, sl){
 
         document.getElementById('nagad_div_'+sl).style.display = style;
 
+        if(val==7){
+            var style = 'block';
+            document.getElementById('rocket_id_'+sl).setAttribute("required", true);
+        }else{
+            var style ='none';
+            document.getElementById('rocket_id_'+sl).removeAttribute("required");
+        }
+
+        document.getElementById('rocket_div_'+sl).style.display = style;
+
         if(val==6){
             var style = 'block';
             document.getElementById('card_id_'+sl).setAttribute("required", true);
@@ -583,6 +593,8 @@ function bank_paymet(val, sl){
         }
 
         document.getElementById('card_div_'+sl).style.display = style;
+
+
 
 
     }
@@ -1125,6 +1137,7 @@ function add_pay_row(sl) {
     sl += 1;
     var bkash_list = $("#bkash_list").val();
     var nagad_list = $("#nagad_list").val();
+    var rocket_list = $("#rocket_list").val();
     var bank_list = $("#bank_list").val();
     var card_list = $("#card_list").val();
     var pay_div = $("#pay_div");
@@ -1139,6 +1152,7 @@ function add_pay_row(sl) {
         + '<option value="4">Bank Payment</option>'
         + ' <option value="3">Bkash Payment</option>'
         + ' <option value="5">Nagad Payment</option>'
+        + ' <option value="7">Rocket Payment</option>'
         + ' <option value="6">Card Payment</option>'
 
         + '</select>'
@@ -1202,6 +1216,20 @@ function add_pay_row(sl) {
         + '<div class="col-sm-7">'
         + '<select name="nagad_id[]" class="form-control bankpayment" id="nagad_id_'+sl+'">'
         + nagad_list
+        + ' </select>'
+
+        + '</div>'
+
+
+        + '</div>'
+        + ' </div>'
+
+        + '<div class="col-sm-4" style="display: none" id="rocket_div_'+sl+'">'
+        + '<div class="form-group row">'
+        + '<label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>'
+        + '<div class="col-sm-7">'
+        + '<select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_'+sl+'">'
+        + rocket_list
         + ' </select>'
 
         + '</div>'

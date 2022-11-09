@@ -226,6 +226,7 @@
                                             <option value="2">Bank</option>
                                             <option value="3">Bkash</option>
                                             <option value="4">Nagad</option>
+                                            <option value="7">Rocket</option>
 
                                         </select>
 
@@ -281,6 +282,24 @@
                                             <option value="">Select Location</option>
                                             <?php foreach ($nagad_list as $nagad) { ?>
                                                 <option value="<?php echo $nagad['nagad_id'] ?>"><?php echo $nagad['nagad_no']; ?> (<?php echo $nagad['ac_name']; ?>)</option>
+                                            <?php } ?>
+                                        </select>
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6" id="rocket_div">
+                                <div class="form-group row">
+                                    <label for="bank" class="col-sm-3 col-form-label">Rocket</label>
+                                    <div class="col-sm-8">
+                                        <select name="rocket_id" class="form-control bankpayment" id="rocket_id">
+                                            <option value="">Select Location</option>
+                                            <?php foreach ($rocket_list as $rocket) { ?>
+                                                <option value="<?php echo $rocket['rocket_id'] ?>"><?php echo $rocket['rocket_no']; ?> (<?php echo $rocket['ac_name']; ?>)</option>
                                             <?php } ?>
                                         </select>
 
@@ -396,6 +415,16 @@
         }
 
         document.getElementById('nagad_div').style.display = style;
+
+        if (val == 7) {
+            var style = 'block';
+            document.getElementById('rocket_id').setAttribute("required", true);
+        } else {
+            var style = 'none';
+            document.getElementById('rocket_id').removeAttribute("required");
+        }
+
+        document.getElementById('rocket_div').style.display = style;
     }
 
 
@@ -417,6 +446,12 @@
             $("#nagad_div").css("display", "block");
         } else {
             $("#nagad_div").css("display", "none");
+        }
+
+       if (paytype == 7) {
+            $("#rocket_div").css("display", "block");
+        } else {
+            $("#rocket_div").css("display", "none");
         }
 
         $(".bankpayment").css("width", "100%");
