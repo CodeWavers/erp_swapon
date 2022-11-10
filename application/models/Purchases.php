@@ -405,7 +405,7 @@ class Purchases extends CI_Model
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
         $bkash_id = $this->input->post('bkash_id', TRUE);
-        $nagad_id = $this->input->post('nagad_id', TRUE);
+        $rocket_id = $this->input->post('rocket_id', TRUE);
         $nagad_id = $this->input->post('nagad_id', TRUE);
         $tt_id = $this->input->post('tt_id', TRUE);
         $tt_bank_id = $this->input->post('tt_bank', TRUE);
@@ -633,6 +633,45 @@ class Purchases extends CI_Model
                         $this->db->insert('purchase_payment', $data);
                     }
                     $nagad_count++;
+                }
+                if ($pay_type[$i] == 7) {
+
+                    if (!empty($rocket_id)) {
+                        $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id[$i])->get()->row()->rocket_no;
+
+                        $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'RK-' . $rocketname)->get()->row()->HeadCode;
+                    } else {
+                        $rocketcoaid = '';
+                    }
+
+                    $rocketc = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INVOICE',
+                        'VDate'          =>  $Vdate,
+                        'COAID'          =>  $rocketcoaid,
+                        'Narration'      =>  'Cash in Rocket  paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                        'Debit'          =>  $paid[$i],
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       =>  $createby,
+                        'CreateDate'     =>  $createdate,
+                        'IsAppove'       =>  1,
+
+                    );
+
+                    $data = array(
+                        'invoice_id'    => $invoice_id,
+                        'pay_type'      => $pay_type[$i],
+                        'amount'        => $paid[$i],
+                        'pay_date'       =>  $Vdate,
+                        'account'       => $rocketname,
+                        'COAID'         => $rocketcoaid,
+                        'status'        =>  1,
+                    );
+
+                    $this->db->insert('paid_amount', $data);
+
+                    $this->db->insert('acc_transaction', $rocketc);
                 }
 
 //                if ($pay_type[$i] == 6) {
@@ -1162,7 +1201,7 @@ class Purchases extends CI_Model
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
         $bkash_id = $this->input->post('bkash_id', TRUE);
-        $nagad_id = $this->input->post('nagad_id', TRUE);
+        $rocket_id = $this->input->post('rocket_id', TRUE);
         $nagad_id = $this->input->post('nagad_id', TRUE);
         $tt_id = $this->input->post('tt_id', TRUE);
         $tt_bank_id = $this->input->post('tt_bank', TRUE);
@@ -1495,32 +1534,42 @@ class Purchases extends CI_Model
 
                 if ($pay_type[$i] == 7) {
 
-                    $lc_liablities = array(
-                        'VNo'            =>  $purchase_id,
-                        'Vtype'          =>  'Purchase',
-                        'VDate'          =>  $this->input->post('purchase_date', TRUE),
-                        'COAID'          =>  503,
-                        'Narration'      =>  'LC Liabilities Credit for purchase no. ' . $purchase_id . ', LC No. ' . $lc_no[$i],
-                        'Debit'          =>  0,
-                        'Credit'         =>  $paid[$i],
-                        'IsPosted'       =>  1,
-                        'CreateBy'       =>  $receive_by,
-                        'CreateDate'     =>  $receive_date,
-                        'IsAppove'       =>  1
-                    );
-                    $this->db->insert('acc_transaction', $lc_liablities);
+                    if (!empty($rocket_id)) {
+                        $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id[$i])->get()->row()->rocket_no;
 
+                        $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'RK-' . $rocketname)->get()->row()->HeadCode;
+                    } else {
+                        $rocketcoaid = '';
+                    }
+
+                    $rocketc = array(
+                        'VNo'            =>  $invoice_id,
+                        'Vtype'          =>  'INVOICE',
+                        'VDate'          =>  $Vdate,
+                        'COAID'          =>  $rocketcoaid,
+                        'Narration'      =>  'Cash in Rocket  paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
+                        'Debit'          =>  $paid[$i],
+                        'Credit'         =>  0,
+                        'IsPosted'       =>  1,
+                        'CreateBy'       =>  $createby,
+                        'CreateDate'     =>  $createdate,
+                        'IsAppove'       =>  1,
+
+                    );
 
                     $data = array(
-                        'lc_no'   => $lc_no[$i],
-                        'purchase_id'   => $purchase_id,
+                        'invoice_id'    => $invoice_id,
+                        'pay_type'      => $pay_type[$i],
                         'amount'        => $paid[$i],
-                        'status'        => 1,
+                        'pay_date'       =>  $Vdate,
+                        'account'       => $rocketname,
+                        'COAID'         => $rocketcoaid,
+                        'status'        =>  1,
                     );
 
-                    $this->db->insert('lc_list', $data);
+                    $this->db->insert('paid_amount', $data);
 
-                    /** Accounts (later) */
+                    $this->db->insert('acc_transaction', $rocketc);
                 }
             }
         }

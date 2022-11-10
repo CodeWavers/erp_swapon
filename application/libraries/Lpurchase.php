@@ -19,6 +19,7 @@ class Lpurchase
         $bank_list        = $CI->Web_settings->bank_list();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $outlet_list = $CI->Warehouse->branch_list_product();
         $outlet_user        = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->central_warehouse();
@@ -34,6 +35,7 @@ class Lpurchase
             'bank_list'     => $bank_list,
             'bkash_list'    => $bkash_list,
             'nagad_list'    => $nagad_list,
+            'rocket_list'    => $rocket_list,
             'outlet_list'   => $outlet_user,
             'cw'            => $cw,
             'cates'            => $cates,
@@ -206,6 +208,7 @@ class Lpurchase
         $bank_list        = $CI->Web_settings->bank_list();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $purchase_detail = $CI->Purchases->retrieve_purchase_editdata($purchase_id);
         $supplier_id = $purchase_detail[0]['supplier_id'];
         $supplier_list = $CI->Suppliers->supplier_list("110", "0");
@@ -255,6 +258,7 @@ class Lpurchase
             'due_amount'    => $purchase_detail[0]['due_amount'],
             'bank_list'     => $bank_list,
             'bkash_list'    => $bkash_list,
+            'rocket_list'    => $rocket_list,
             'nagad_list'    => $nagad_list,
             'supplier_selected' => $supplier_selected,
             'discount_type' => $currency_details[0]['discount_type'],
