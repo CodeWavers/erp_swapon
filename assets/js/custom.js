@@ -942,7 +942,9 @@ $(document).ready(function () {
     responsive: true,
 
     aaSorting: [[1, "asc"]],
-    columnDefs: [{ bSortable: false, aTargets: [1] }],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 2,4,5,6,7,8,9,10,11,12,13,14] },
+    ],
     processing: true,
     serverSide: true,
 
