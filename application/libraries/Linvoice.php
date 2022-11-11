@@ -291,6 +291,7 @@ class Linvoice
         $bank_list          = $CI->Web_settings->bank_list();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $courier_list        = $CI->Courier->get_courier_list();
         $branch_list        = $CI->Courier->get_branch_list();
         $outlet_user        = $CI->Warehouse->get_outlet_user();
@@ -320,6 +321,7 @@ class Linvoice
             'bank_list'     => $bank_list,
             'bkash_list'     => $bkash_list,
             'nagad_list'     => $nagad_list,
+            'rocket_list'     => $rocket_list,
             'courier_list'     => $courier_list,
             'branch_list'     => $branch_list,
             'outlet_list'     => $outlet_user,

@@ -290,58 +290,60 @@ function stockLimitAjax(t) {
 }
 
 'use strict';
-function add_pay_row(sl) {
-    var count = $("#count");
-    sl = count.val();
-    sl += 1;
-    var bkash_list = $("#bkash_list").val();
-    var nagad_list = $("#nagad_list").val();
-    var bank_list = $("#bank_list").val();
-    var card_list = $("#card_list").val();
-    var pay_div = $("#pay_div");
-    pay_div.append(
-        '<div class="row margin-top10"  >'
-        + '<div class="col-sm-4">'
-        + '<label for="payment_type" class="col-sm-5 col-form-label">Payment Type <i class="text-danger">*</i></label>'
-        + '<div class="col-sm-7">'
-        + '<select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, '+sl+')" tabindex="3">'
-        + '<option value="1">Cash Payment</option>'
-        + '<option value="2">Cheque Payment</option>'
-        + '<option value="4">Bank Payment</option>'
-        + ' <option value="3">Bkash Payment</option>'
-        + ' <option value="5">Nagad Payment</option>'
-        + ' <option value="6">Card Payment</option>'
+    function add_pay_row(sl) {
+        var count = $("#count");
+        sl = count.val();
+        sl += 1;
+        var bkash_list = $("#bkash_list").val();
+        var nagad_list = $("#nagad_list").val();
+        var rocket_list = $("#rocket_list").val();
+        var bank_list = $("#bank_list").val();
+        var card_list = $("#card_list").val();
+        var pay_div = $("#pay_div");
+        pay_div.append(
+            '<div class="row margin-top10"  >'
+            + '<div class="col-sm-4">'
+            + '<label for="payment_type" class="col-sm-5 col-form-label">Payment Type <i class="text-danger">*</i></label>'
+            + '<div class="col-sm-7">'
+            + '<select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, '+sl+')" tabindex="3">'
+            + '<option value="1">Cash Payment</option>'
+            + '<option value="2">Cheque Payment</option>'
+            + '<option value="4">Bank Payment</option>'
+            + ' <option value="3">Bkash Payment</option>'
+            + ' <option value="5">Nagad Payment</option>'
+            + ' <option value="7">Rocket Payment</option>'
+            + ' <option value="6">Card Payment</option>'
 
-        + '</select>'
+            + '</select>'
 
-        + '</div>'
+            + '</div>'
 
-        + '</div>'
+            + '</div>'
 
-        + '<div class="col-sm-4" id="bank_div_'+sl+'"  style="display:none;">'
-        + ' <div class="form-group row">'
-        + '<label for="bank" class="col-sm-3 col-form-label">Bank<i class="text-danger">*</i></label>'
-        + ' <div class="col-sm-7">'
+            + '<div class="col-sm-4" id="bank_div_'+sl+'"  style="display:none;">'
+            + ' <div class="form-group row">'
+            + '<label for="bank" class="col-sm-3 col-form-label">Bank<i class="text-danger">*</i></label>'
+            + ' <div class="col-sm-7">'
 
-        + ' <input type="text" name="bank_id" class="form-control" id="bank_id_'+sl+'" placeholder="Bank">'
+            + ' <input type="text" name="bank_id" class="form-control" id="bank_id_'+sl+'" placeholder="Bank">'
 
-        + ' </div>'
+            + ' </div>'
 
-        + '<div class="col-sm-1">'
-        + ' <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cheque_info"><i class="ti-plus m-r-2"></i></a>'
-        + '</div>'
-        + ' </div>'
+            + '<div class="col-sm-1">'
+            + ' <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cheque_info"><i class="ti-plus m-r-2"></i></a>'
+            + '</div>'
+            + ' </div>'
 
-        + '</div>'
+            + '</div>'
 
 
 
-        + '<div class="col-sm-4" id="bank_div_m_'+sl+'" style="display:none;">'
-        + ' <div class="form-group row">'
-        + '<label for="bank" class="col-sm-5 col-form-label"> Bank <i class="text-danger">*</i></label>'
-        + '<div class="col-sm-7">'
-        + '<select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_'+sl+'">'
-        + bank_list
+            + '<div class="col-sm-4" id="bank_div_m_'+sl+'" style="display:none;">'
+            + ' <div class="form-group row">'
+            + '<label for="bank" class="col-sm-5 col-form-label"> Bank <i class="text-danger">*</i></label>'
+            + '<div class="col-sm-7">'
+            + '<select name="bank_id_m[]" class="form-control bankpayment" id="bank_id_m_'+sl+'">'
+            + bank_list
 
             + '</select>'
 
@@ -381,39 +383,36 @@ function add_pay_row(sl) {
             + '</div>'
             + ' </div>'
 
-        + '</div>'
-        + ' </div>'
+            + '<div class="col-sm-4" style="display: none" id="rocket_div_'+sl+'">'
+            + '<div class="form-group row">'
+            + '<label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>'
+            + '<div class="col-sm-7">'
+            + '<select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_'+sl+'">'
+            + rocket_list
+            + ' </select>'
 
-        + '<div class="col-sm-4" style="display: none" id="rocket_div_'+sl+'">'
-        + '<div class="form-group row">'
-        + '<label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>'
-        + '<div class="col-sm-7">'
-        + '<select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_'+sl+'">'
-        + rocket_list
-        + ' </select>'
-
-        + '</div>'
+            + '</div>'
 
 
-        + '</div>'
-        + ' </div>'
+            + '</div>'
+            + ' </div>'
             +'<div class="col-sm-4" style="display: none" id="card_div_'+sl+'">'
-        +     '<div class="form-group row">'
-        +        '<label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>'
-        +        '<div class="col-sm-7">'
-        +            '<select name="card_id" class="form-control bankpayment" id="card_id_'+sl+'">'
-        +                '<option value="">Select One</option>'
-        +   card_list
-        +           '</select>'
+            +     '<div class="form-group row">'
+            +        '<label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>'
+            +        '<div class="col-sm-7">'
+            +            '<select name="card_id" class="form-control bankpayment" id="card_id_'+sl+'">'
+            +                '<option value="">Select One</option>'
+            +   card_list
+            +           '</select>'
 
 
-        +       ' </div>'
+            +       ' </div>'
 
 
-        +    ' </div>'
-        +   '</div>'
+            +    ' </div>'
+            +   '</div>'
 
-            + '<div class="col-sm-3" id="ammnt_'+sl+'" >'
+            + '<div class="col-sm-3"id="ammnt_'+sl+'" >'
             + '<label for="p_amount" class="col-sm-5 col-form-label"> Amount <i class="text-danger">*</i></label>'
             + '<div class="col-sm-7">'
             + '<input class="form-control p_amount" type="text" name="p_amount[]" onchange="calc_paid()" onkeyup="calc_paid()">'
@@ -421,13 +420,14 @@ function add_pay_row(sl) {
             + '</div>'
             +'<div class="col-sm-1">'
             + '<a id="delete_btn" onclick="delete_row(this)" class="btn btn-danger"><i class="fa fa-trash"></i></a>'
-        + '</div>'
+            + '</div>'
 
 
             +'</div > '
-    );
-    count.val(sl + 1);
-}
+        );
+        count.val(sl + 1);
+    }
+
 
 'use strict';
 function delete_row(e) {
@@ -538,6 +538,7 @@ function delete_row(e) {
 
 
     }
+
 
     "use strict"
     function calc_paid(){
