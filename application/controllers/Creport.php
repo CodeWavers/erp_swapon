@@ -429,7 +429,7 @@ class Creport extends CI_Controller
                 'CreateDate'     => $date,
                 'IsAppove'       => 1
             );
-            $this->db->insert('acc_transaction', $stcr);
+            //$this->db->insert('acc_transaction', $stcr);
         }
 
      //   echo '<pre>';print_r(array_sum($total_amount));exit();
