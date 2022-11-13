@@ -388,7 +388,7 @@
     "use strict";
 
     function bank_paymet(val) {
-        if (val == 2) {
+        if (val == 4) {
             var style = 'block';
             document.getElementById('bank_id').setAttribute("required", true);
         } else {
@@ -406,7 +406,7 @@
         }
 
         document.getElementById('bkash_div').style.display = style;
-        if (val == 4) {
+        if (val == 5) {
             var style = 'block';
             document.getElementById('nagad_id').setAttribute("required", true);
         } else {

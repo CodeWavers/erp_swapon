@@ -681,20 +681,6 @@ class Ccourier extends CI_Controller {
 
             $this->db->insert('acc_transaction', $rocketc);
 
-            $payment_data=array(
-
-                'invoice_id'    => $invoice_id,
-                'pay_type'      => $paytype,
-                'amount'        => 5,
-                'pay_date'      =>  date('Y-m-d'),
-                'status'        =>  1,
-                'account'       => '',
-                'notes'       => $notes,
-                'COAID'         => $rocketcoaid
-            );
-
-            $this->db->insert('paid_amount', $payment_data);
-
 
         }
 

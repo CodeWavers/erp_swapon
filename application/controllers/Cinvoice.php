@@ -530,7 +530,7 @@ class Cinvoice extends CI_Controller
 
                 'invoice_id'    => $invoice_id,
                 'pay_type'      => $paytype,
-                'amount'        => 5,
+                'amount'        => $pay_amount,
                 'pay_date'      =>  date('Y-m-d'),
                 'status'        =>  1,
                 'account'       => '',
@@ -564,7 +564,7 @@ class Cinvoice extends CI_Controller
 
                 'invoice_id'    => $invoice_id,
                 'pay_type'      => $paytype,
-                'amount'        => 5,
+                'amount'        => $pay_amount,
                 'pay_date'      =>  date('Y-m-d'),
                 'status'        =>  1,
                 'account'       => '',
