@@ -542,6 +542,40 @@ class Cinvoice extends CI_Controller
 
 
         }
+        if ($paytype == 7) {
+            $rocketc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $rocketcoaid,
+                'Narration'      =>  'Customer Rocket Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$nagadname,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $this->db->insert('acc_transaction', $rocketc);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => 5,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'notes'       => $notes,
+                'COAID'         => $rocketcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+
+
+        }
 
         $data=array(
 

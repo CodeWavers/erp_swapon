@@ -128,7 +128,7 @@
                                     </label>
                                     <div class="col-sm-8">
 
-                                        <input type="text" required tabindex="2" class="form-control " name="invoice_no" placeholder="Invoice No" value="{invoice_no}" id="date" />
+                                        <input type="text"  tabindex="2" class="form-control " name="invoice_no" placeholder="Invoice No" value="{invoice_no}" id="date" />
                                     </div>
                                 </div>
                             </div>
