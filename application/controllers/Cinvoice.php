@@ -443,7 +443,7 @@ class Cinvoice extends CI_Controller
 
             $this->db->insert('paid_amount', $payment_data);
         }
-        if ($paytype == 2) {
+        if ($paytype == 4) {
 
             $bankc = array(
                 'VNo' => $invoice_id,
@@ -508,7 +508,7 @@ class Cinvoice extends CI_Controller
             $this->db->insert('paid_amount', $payment_data);
 
         }
-        if ($paytype == 4) {
+        if ($paytype == 5) {
             $nagadc = array(
                 'VNo'            =>  $invoice_id,
                 'Vtype'          =>  'INVOICE',

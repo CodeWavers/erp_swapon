@@ -935,7 +935,7 @@ $_SESSION['redirect_uri'] = $currentURL;
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-3 col-form-label">Shop Name </label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" name="shop_name" id="shop_name" type="text" placeholder="Shop Name" required="" tabindex="1">
+                                        <input class="form-control" name="shop_name" id="shop_name" type="text" placeholder="Shop Name" tabindex="1">
                                     </div>
                                 </div>
 

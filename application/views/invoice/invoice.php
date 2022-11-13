@@ -223,9 +223,9 @@
                                     <div class="col-sm-6">
                                         <select name="paytype" id="paytype" class="form-control" required="" onchange="bank_paymet(this.value)">
                                             <option value="1">Cash</option>
-                                            <option value="2">Bank</option>
+                                            <option value="4">Bank</option>
                                             <option value="3">Bkash</option>
-                                            <option value="4">Nagad</option>
+                                            <option value="5">Nagad</option>
                                             <option value="7">Rocket</option>
 
                                         </select>

@@ -603,7 +603,7 @@ class Ccourier extends CI_Controller {
                 //  echo '<pre>';print_r($data3);exit();
                 $ddd = $this->db->insert('acc_transaction', $data3);
             }
-            if ($paytype == 2) {
+            if ($paytype == 4) {
 
                 $bankc = array(
                     'VNo' => $invoice_id,
@@ -638,7 +638,7 @@ class Ccourier extends CI_Controller {
                 );
                 $this->db->insert('acc_transaction', $bkashc);
             }
-            if ($paytype == 4) {
+            if ($paytype == 5) {
                 $nagadc = array(
                     'VNo'            =>  $invoice_id,
                     'Vtype'          =>  'INVOICE',
