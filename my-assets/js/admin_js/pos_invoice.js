@@ -3,8 +3,11 @@
 
     function addInputField(t) {
 
-        var row = $("#normalinvoice tbody tr").length;
+        var row = $("#addinvoice tbody tr").length;
         var count = row + 1;
+
+      //  alert(count)
+
         var  tab1 = 0;
         var  tab2 = 0;
         var  tab3 = 0;
@@ -1193,12 +1196,13 @@ function cancelprint(){
 
                         $('#'+total_price).val(obj.purchase_price);
                         $('#'+total_price_wd).val(obj.purchase_price);
-                        $('.'+available_quantity).val(obj.total_product.toFixed(2,2));
+                        $('.'+available_quantity).val(obj.stock);
                         $('.'+unit).val(obj.unit);
                         $('.'+tax).val(obj.tax);
                         $('#txfieldnum').val(obj.txnmber);
                         $('#'+serial_no).html(obj.serial);
                         $('#'+discount_type).val(obj.discount_type);
+                        // $("#stock_"+sl).val(obj.stock);
 
                         //This Function Stay on others.js page
                         quantity_calculate(sl);
