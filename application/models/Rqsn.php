@@ -1001,7 +1001,9 @@ class Rqsn extends CI_Model
 
     public function approve_rqsn()
     {
-
+        $CI = &get_instance();
+        $CI->load->model('Web_settings');
+        $CI->load->model('Reports');
         ## Fetch records
         $records = $this->db->select('*')
             ->from('rqsn a')
@@ -1013,10 +1015,6 @@ class Rqsn extends CI_Model
             ->get()
             ->result();
 
-       // echo '<pre>';print_r($records);exit();
-
-        // $data = array();
-
         $sl = 1;
 
 
@@ -1024,33 +1022,10 @@ class Rqsn extends CI_Model
 
 
         foreach ($records as $record) {
-            $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
-            // $stock_r = $this->db->select('sum(a_qty) as totalQty')->from('rqsn_details')->where('product_id',$record->product_id)->where('status',2)->get()->row();
-            $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
-            //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
-            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->from('product_purchase_details')->where('status', 2)->where('product_id', $record->product_id)->get()->row();
-            $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')->from('rqsn_details')->where('isaprv', 1)->where('isrcv', 1)->where('product_id', $record->product_id)->get()->row();
-            $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
 
-            $stock_r = $this->db->select('sum(a.a_qty) as totalQty')
-                ->from('rqsn_details a')
-                ->join('rqsn b', 'a.rqsn_id=b.rqsn_id')
-                ->where('a.product_id', $record->product_id)
-                //  ->where('b.to_id','HK7TGDT69VFMXB7')
-                ->where('a.iscw', 1)->get()->row();
 
-            //   $out_qty=(!empty($stockin->totalSalesQnty)?$stockin->totalSalesQnty:0)+(!empty($stock_r->totalQty)?$stock_r->totalQty:0);
-            $sprice = (!empty($record->price) ? $record->price : 0);
-            $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-            $stock =  (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) - (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0);
-            // $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
-            $t = (!empty($stock) ? $stock : 0);
+            $stock = $CI->Reports->getCheckList(null, $record->product_id,'','')['central_stock'];
 
-            //           if($qty<0){
-            //               $qty=0;
-            //           }else{
-            //               $qty=$t;
-            //           }
 
             $data[] = array(
 
@@ -1065,7 +1040,7 @@ class Rqsn extends CI_Model
                 'unit' => $record->unit,
                 'details' => $record->details,
                 'rqsn_detail_id' => $record->rqsn_detail_id,
-                'stok_quantity' => sprintf('%0.2f', $t),
+                'stok_quantity' => sprintf('%0.2f', $stock),
 
             );
         }
