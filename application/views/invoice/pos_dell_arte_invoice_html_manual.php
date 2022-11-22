@@ -172,6 +172,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <span style="font-size: 11px !important;">
                                         <strong>{company_name}</strong>
                                     </span><br>
+                                    <span class="subt"><?= $outlet_name?></span><br>
                                     <span class="subt"><?= $outlet_address?></span><br>
                                     <span class="subt">{mobile}</span><br>
                                     {/company_info}
