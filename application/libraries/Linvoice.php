@@ -930,7 +930,7 @@ class Linvoice
 
 
         $data = array(
-            'title'             => display('invoice_details'),
+            'title'             => $invoice_detail[0]['invoice'].'-'.$outlet[0]['outlet_name'].'-'.date('Y-m-d'),
             'balance'        => $customer_balance[0]['balance'],
             'pay_type' => $invoice_detail[0]['payment_type'],
             'is_pre' => $invoice_detail[0]['is_pre'],
