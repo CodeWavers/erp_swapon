@@ -115,7 +115,7 @@ class Lwarehouse {
             'users_list' => $users_list,
             'customer_list' => $customer_list
         );
-        //echo '<pre>';print_r($data);exit();
+     //   echo '<pre>';print_r($category_list);exit();
         $categoryForm = $CI->parser->parse('warehouse/add_ow_form', $data, true);
         return $categoryForm;
     }
@@ -132,6 +132,7 @@ class Lwarehouse {
             'title'         =>'Branch Name Edit',
             'outlet_id'   => $category_detail[0]['outlet_id'],
             'outlet_name' => $category_detail[0]['outlet_name'],
+            'address' => $category_detail[0]['address'],
             'user_id'   => $category_detail[0]['user_id'],
             'first_name' => $category_detail[0]['first_name'],
             'last_name' => $category_detail[0]['last_name'],
@@ -141,7 +142,7 @@ class Lwarehouse {
         );
 
 
-        //  echo '<pre>';print_r($data);exit();
+          //echo '<pre>';print_r($category_detail);exit();
         $chapterList = $CI->parser->parse('warehouse/edit_ow_form', $data, true);
         return $chapterList;
     }

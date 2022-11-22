@@ -72,6 +72,7 @@
                                                     <!-- <th class="text-center">Central Warehouse Name</th> -->
                                                     <th class="text-center">Outlet Name</th>
                                                     <th class="text-center">User</th>
+                                                    <th class="text-center">Address</th>
                                                     <th class="text-center"><?php echo display('action') ?></th>
                                                 </tr>
                                             </thead>
@@ -85,6 +86,7 @@
                                                         <!-- <td class="text-center">{central_warehouse}</td> -->
                                                         <td class="text-center">{outlet_name}</td>
                                                         <td class="text-center">{first_name} {last_name}</td>
+                                                        <td class="text-center">{address}</td>
                                                         <td>
 
                                                             <center>
@@ -148,11 +150,19 @@
 
                                         </div>
 
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="category_name" class="col-sm-3 col-form-label">Outlet Address</label>
+                                        <div class="col-sm-6">
+
+                                            <textarea name="address" class="form-control" placeholder="Address"></textarea>
+
+                                        </div>
+
                                         <div class="col-sm-3">
                                             <input type="submit" id="add-category" class="btn btn-success btn-large" name="add-category" value="<?php echo display('add') ?>" />
                                         </div>
                                     </div>
-
 
 
                                     <?php echo form_close() ?>
