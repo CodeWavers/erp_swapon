@@ -943,6 +943,7 @@ class Linvoice
             'condition_cost'        => $invoice_detail[0]['condition_cost'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
             'outlet_name'        => $outlet[0]['outlet_name'],
+            'outlet_address'        => $outlet[0]['address'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
             'agg_name'     => $agg_name,
             'time'     => $invoice_detail[0]['time'],
