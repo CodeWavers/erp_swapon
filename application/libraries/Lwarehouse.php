@@ -115,7 +115,7 @@ class Lwarehouse {
             'users_list' => $users_list,
             'customer_list' => $customer_list
         );
-     //   echo '<pre>';print_r($category_list);exit();
+      //  echo '<pre>';print_r($data);exit();
         $categoryForm = $CI->parser->parse('warehouse/add_ow_form', $data, true);
         return $categoryForm;
     }
