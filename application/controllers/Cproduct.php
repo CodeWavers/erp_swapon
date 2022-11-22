@@ -26,6 +26,185 @@ class Cproduct extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    //Barcode Print
+
+    public function barcode_print()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+
+
+        $data = array(
+            'title'     => 'Barcode Print',
+            'outlet_list'     =>  $CI->Warehouse->get_outlet_user(),
+            'cw'            => $CI->Warehouse->central_warehouse(),
+            'access'  => '',
+
+        );
+
+
+
+        $view = $this->parser->parse('product/barcode_print', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+    public function append_product()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Products');
+        $product_id = $this->input->post('product_id', TRUE);
+        $rowCount = $this->input->post('rowCount', TRUE);
+
+
+        $product_details  = $CI->Products->product_details($product_id)[0];
+
+        //echo '<pre>';print_r($rowCount);exit();
+        $tr = " ";
+        if (!empty($product_details)) {
+            $qty=0;
+//         $sl=$rowCount+1;
+
+            $tr .= "
+            <tr id=\"row_" . $product_details->product_id . "\">
+                        <td style=\"width: 5%\">
+                                    $rowCount
+                        </td>
+                        <td style=\"width: 10%\">
+                                $product_details->sku
+                        </td>
+						<td class=\"\" style=\"width: 30%\">
+
+                            $product_details->product_name
+
+							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+                            <input type=\"hidden\" name=\"purchase_price[]\" class=\"purchase_price_" . $product_details->product_id . " form-control text-right\" id=\"purchase_price_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $product_details->purchase_price_ecom . "'/>
+
+						</td>	
+							<td class=\"\" style=\"width: 10%\">
+
+                            $product_details->price
+
+						
+						</td>	
+							<td class=\"\" style=\"width: 10%\">
+
+                            $product_details->purchase_price
+
+						
+						</td>
+
+                        <td>
+                            <input type=\"text\" name=\"sku[]\" class=\"sku_" . $product_details->product_id . " form-control text-left\" id=\"sku_" . $product_details->product_id . "\" placeholder=\"sku\" min=\"0\" value='".$product_details->sku."'/>
+                            <input type=\"text\" name=\"category_name[]\" class=\"category_name_" . $product_details->product_id . " form-control text-left\" id=\"category_name_" . $product_details->product_id . "\" placeholder=\"Category Name\" min=\"0\" value=''/>
+                        </td> 
+                        
+                          <td>
+                            <input type=\"text\" name=\"p_qty[]\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                        </td>
+
+       
+
+						<td>";
+            $sl = 0;
+
+
+            $tr .= "<button  class=\"btn btn-danger btn-md text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+						</td>
+					</tr>";
+            echo $tr;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function insert_barcode_print()
+    {
+        $CI = & get_instance();
+        $CI->load->library('zend');
+        $CI->zend->load('Zend/Barcode');
+        $barcode_id= mt_rand();
+
+        $date = date('Y-m-d');
+        $sku = $this->input->post('sku', TRUE);
+        $category_name = $this->input->post('category_name', TRUE);
+        $product_id = $this->input->post('product_id', TRUE);
+        $quantity = array_filter($this->input->post('p_qty', TRUE));
+
+        // echo '<pre>';print_r($purchase_price);exit();
+
+        if (empty($quantity)){
+            $this->session->set_userdata(array('error_message' => 'Quantity  Required!!'));
+            redirect(base_url('Cproduct/barcode_print'));
+            exit();
+        }
+
+
+
+        $data1 = array(
+            'barcode_id'   => $barcode_id,
+            'date'      => $this->input->post('date', TRUE),
+            'total_product'      => count(array_filter($quantity, function($x) { return !empty($x); })),
+
+        );
+
+
+        // echo '<pre>';print_r($data1);exit();
+            $this->db->insert('barcode_print', $data1);
+
+
+        for ($i = 0; $i < count($product_id); $i++) {
+            $pr_id = $product_id[$i];
+            $qty = $quantity[$i];
+            $cat_name = $category_name[$i];
+            $sk = $sku[$i];
+
+
+
+            $file = Zend_Barcode::draw('code128', 'image', array('text' => $sk), array());
+            $code = time().$pr_id;
+            $store_image = imagepng($file,"my-assets/image/barcode/{$code}.png");
+            $barcode_url = base_url()."my-assets/image/barcode/{$code}.png";
+
+            $data2 = array(
+                'barcode_details_id'    => mt_rand(),
+                'barcode_id'           => $barcode_id,
+                'product_id'        => $pr_id,
+                'category_name'        => $cat_name,
+                'quantity'        => $qty,
+                'create_date'            => $date,
+                'barcode_url'         => $barcode_url,
+
+            );
+
+
+            // echo '<pre>';print_r($data1);
+            if (!empty($qty)) {
+                $this->db->insert('barcode_print_details', $data2);
+            }
+
+
+        }
+
+
+        redirect(base_url('Cproduct/barcode_print_html/'.$barcode_id));
+
+    }
+
+
+    public function barcode_print_html($barcode_id) {
+        $CI = & get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lproduct');
+        $content = $CI->lproduct->barcode_print_html($barcode_id);
+        $this->template->full_admin_html_view($content);
+    }
 //Sync Product
     public function insert_finished_product_ecom()
     {

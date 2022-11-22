@@ -33,6 +33,19 @@ class Products extends CI_Model
         return false;
     }
 
+    public function barcode_details($barcode_id) {
+        $result = $this->db->select('b.*,p.sku,p.price,p.purchase_price')
+            ->from('barcode_print a')
+            ->join('barcode_print_details b','a.barcode_id=b.barcode_id')
+            ->join('product_information p','p.product_id=b.product_id')
+            ->where('a.barcode_id', $barcode_id)
+            ->get()
+            ->result();
+
+        return $result;
+    }
+
+
     //All Product List
     public function all_product_list($pr_status = null, $just_id = null)
     {

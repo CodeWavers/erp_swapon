@@ -13,13 +13,42 @@ class Lproduct
         $CI = &get_instance();
         $CI->load->model('Products');
         $CI->load->model('Web_settings');
-        $company_info = $CI->Products->retrieve_company();
+
         $data['total_product']    = $CI->Products->count_product();
-        $data['company_info']     = $company_info;
+        $data['company_info']     = $CI->Products->retrieve_company();;
         $productList = $CI->parser->parse('product/product', $data, true);
         return $productList;
     }
+    public function barcode_print_html($barcode_id) {
 
+        $CI = & get_instance();
+        $CI->load->model('Products');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->library('numbertowords');
+        $CI->load->library('zend');
+
+
+        // Load in folder Zend
+        $CI->zend->load('Zend/Barcode');
+        //  echo 'Ok';exit();
+        $barcode_details = $CI->Products->barcode_details($barcode_id);
+
+
+
+        $data = array(
+            'title'             => 'Barcode Print',
+            'barcode_details'             => $barcode_details,
+            'company_name'     =>$CI->Products->retrieve_company()[0]['company_name']
+
+
+        );
+
+  //      echo '<pre>';print_r($data);exit();
+
+        $chapterList = $CI->parser->parse('product/barcode_print_html', $data, true);
+        return $chapterList;
+    }
     public function finished_product_list()
     {
         $CI = &get_instance();

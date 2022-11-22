@@ -883,6 +883,16 @@ $birthday = $CI->Reports->birthday_noti();
                           'Cproduct/manage_finished_product'
                       ); ?>">Finished Products</a></li>
               <?php } ?>
+              <?php if ($this->permission1->method('manage_product', 'read')->access()) { ?>
+                  <li class="treeview <?php if (
+                      $this->uri->segment('1') == "Cproduct" &&
+                      $this->uri->segment('2') == "barcode_print"
+                  ) {
+                      echo "active";
+                  } else {
+                      echo " ";
+                  } ?>"><a href="<?php echo base_url('Cproduct/barcode_print'); ?>">Barcode Print</a></li>
+              <?php } ?>
 
             <?php if (
               $this->permission1->method('manage_category', 'create')->access() ||
