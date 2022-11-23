@@ -76,29 +76,29 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
                             <div class="">
-                            <?php foreach ($barcode_details as $bar) { ?>
-                                <?php for ($i = 0; $i < $bar->quantity; $i++) { ?>
-                                <div class="col-xs-2 ">
-                                    <div class="row">
+                                <?php foreach ($barcode_details as $bar) { ?>
+                                    <?php for ($i = 0; $i < $bar->quantity; $i++) { ?>
+                                        <div class="col-xs-2 ">
+                                            <div class="row">
 
-                                        <div class="col-xs-12" style="border: 1px solid gainsboro">
-                                            <div class="barcode-inner barcode-innerdiv" >
+                                                <div class="col-xs-12" style="border: 1px solid gainsboro">
+                                                    <div class="barcode-inner barcode-innerdiv" >
 
-                                                <div class="product-name-details barcode-productdetails" style="margin-bottom: 2%"><?= $company_name?></div>
-                                                <img style="margin-bottom: 2%" src="<?= $bar->barcode_url?>" class="img-responsive center-block barcode-image" alt="" >
-<!--                                                <div class="product-name-details barcode-productdetails" style="margin-bottom: 2%">{sku}</div>-->
+                                                        <div class="product-name-details barcode-productdetails" style="font-size:9px;margin-bottom: 2%"><nobr><?= $company_name?></nobr></div>
+                                                        <img style="margin-bottom: 2%" src="<?= $bar->barcode_url?>" class="img-responsive center-block barcode-image" alt="" >
+                                                        <!--                                                <div class="product-name-details barcode-productdetails" style="margin-bottom: 2%">{sku}</div>-->
 
-                                                <div  class="product-name-details barcode-productdetails"><?= $bar->category_name?></div>
-                                                <div class="product-name-details barcode-productdetails"><s><?= $bar->price?></s></div>
-                                                <div  class="product-name-details barcode-productdetails"><?= $bar->purchase_price?></div>
+                                                        <div  class="product-name-details barcode-productdetails" style="font-size:9px;"><nobr><?= $bar->category_name?></nobr></div>
+                                                        <div class="product-name-details barcode-productdetails"><s><?= $bar->price?></s></div>
+                                                        <div  class="product-name-details barcode-productdetails"><?= $bar->purchase_price?></div>
+
+                                                    </div>
+
+                                                </div>
 
                                             </div>
-
                                         </div>
-
-                                    </div>
-                                </div>
-                                <?php } ?>
+                                    <?php } ?>
                                 <?php } ?>
                             </div>
 

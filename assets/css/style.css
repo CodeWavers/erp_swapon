@@ -76,7 +76,7 @@
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	height: 60px;
+	height: 40px;
 	width: 143px;
 }
 
@@ -990,10 +990,10 @@
 }
 
 .ui-autocomplete {
-    max-height: 400px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index:1000 !important;
+	max-height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	z-index:1000 !important;
 }
 
 #tooltip {

@@ -99,7 +99,7 @@ class Cproduct extends CI_Controller
 						</td>
 
                         <td>
-                            <input type=\"text\" name=\"sku[]\" class=\"sku_" . $product_details->product_id . " form-control text-left\" id=\"sku_" . $product_details->product_id . "\" placeholder=\"sku\" min=\"0\" value='".$product_details->sku."'/>
+                            <input type=\"hidden\" name=\"sku[]\" class=\"sku_" . $product_details->product_id . " form-control text-left\" id=\"sku_" . $product_details->product_id . "\" placeholder=\"sku\" min=\"0\" value='".$product_details->sku."'/>
                             <input type=\"text\" name=\"category_name[]\" class=\"category_name_" . $product_details->product_id . " form-control text-left\" id=\"category_name_" . $product_details->product_id . "\" placeholder=\"Category Name\" min=\"0\" value=''/>
                         </td> 
                         
