@@ -72,7 +72,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
 
 
-                        <div class="panel-body" >
+                        <div class="panel-body p-0" >
 
 
                             <div class="">
@@ -81,7 +81,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                         <div class="col-xs-2 ">
                                             <div class="row">
 
-                                                <div class="col-xs-12" style="border: 1px solid gainsboro">
+                                                <div class="col-xs-12" style="border: 1px solid gainsboro;padding-bottom: 10px;padding-top: 10px;padding-right: 1px;padding-left: 1px">
                                                     <div class="barcode-inner barcode-innerdiv" >
 
                                                         <div class="product-name-details barcode-productdetails" style="font-size:9px;margin-bottom: 2%"><nobr><?= $company_name?></nobr></div>
