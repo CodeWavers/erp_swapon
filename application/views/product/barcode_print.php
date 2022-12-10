@@ -114,10 +114,10 @@
                         </div>
 
 
-                        <?php if ($access != 'view'){ ?>
-                            <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Submit</button>
 
-                        <?php } ?>
+                            <button type="submit" id="submit_btn" formtarget="_blank"  name="submit_form" class="btn btn-success btn-md submit_btn">Submit</button>
+
+
                     </div>
                 </div>
             </div>

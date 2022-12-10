@@ -167,7 +167,7 @@ class Cproduct extends CI_Controller
 
 
 
-            $file = Zend_Barcode::draw('code128', 'image', array('text' => $sk,'font'=>5,'fontSize'=>15), array());
+            $file = Zend_Barcode::draw('code128', 'image', array('text' => $sk,'font'=>5,'fontSize'=>17), array());
             $code = time().$pr_id;
             $store_image = imagepng($file,"my-assets/image/barcode/{$code}.png");
             $barcode_url = base_url()."my-assets/image/barcode/{$code}.png";
