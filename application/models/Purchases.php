@@ -1597,7 +1597,7 @@ class Purchases extends CI_Model
     //Retrieve purchase_details_data
     public function purchase_details_data($purchase_id)
     {
-        $this->db->select('a.*,b.*,c.*,e.purchase_details,d.product_id,d.product_name,d.product_model,sz.size_name,cl.color_name');
+        $this->db->select('a.*,b.*,c.*,d.*,e.purchase_details,d.product_id,d.product_name,d.product_model,sz.size_name,cl.color_name');
         $this->db->from('product_purchase a');
         $this->db->join('supplier_information b', 'b.supplier_id = a.supplier_id');
         $this->db->join('product_purchase_details c', 'c.purchase_id = a.purchase_id');

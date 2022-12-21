@@ -136,7 +136,7 @@
 											<td>{sl}</td>
 											<td>
 
-												{product_name}-({product_model})-({color_name})-({size_name})
+												{product_name}
 
 											</td>
 											<td class="text-right">{qty}</td>
