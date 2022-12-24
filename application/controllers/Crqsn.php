@@ -538,7 +538,7 @@ class Crqsn extends CI_Controller
             'IsAppove'       => 1
         );
         $this->db->insert('acc_transaction', $incCr);
-//Current Asset Receivable
+             //Current Asset Receivable
         $curDr = array(
             'VNo'            =>  $id,
             'Vtype'          =>  'RQSN',
@@ -590,6 +590,116 @@ class Crqsn extends CI_Controller
         } else {
             $this->session->set_flashdata('error_message', display('please_try_again'));
         }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    public function isreceiveall()
+    {
+        
+        $rqsn_ids = $this->input->post('rqsn_ids', true);
+        // echo "<pre>";
+        // print_r($rqsn_ids);
+        // exit();
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $user_id = $this->session->userdata('user_id');
+        $Vdate=date('Y-m-d');
+        // $action = ($action == 'active' ? 3 : 2);
+        $action = 3;
+        foreach ($rqsn_ids as $rqsn_id) {
+        $postData = array(
+            'rqsn_detail_id'     => $rqsn_id,
+            'status' => $action,
+            'isrcv' => 1
+        );
+
+        $item_total=$this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id',$rqsn_id)->get()->row()->item_total;
+        //Income Credit
+        // echo "<pre>";
+        // print_r($item_total);
+        // exit();
+        if ($item_total > 0){
+
+
+        $incCr = array(
+            'VNo'            =>  $rqsn_id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  306,
+            'Narration'      =>  'Income For ID -  ' . $rqsn_id ,
+            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
+            'Debit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $incCr);
+             //Current Asset Receivable
+        $curDr = array(
+            'VNo'            =>  $rqsn_id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  1020303,
+            'Narration'      =>  'Receivable For ID -  ' . $rqsn_id ,
+            'Credit'          =>  0,
+            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $curDr);
+        //Current Liabilties Payable
+        $curLCr = array(
+            'VNo'            =>  $rqsn_id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  50201,
+            'Narration'      =>  'Payable For  ID -  '  . $rqsn_id,
+            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
+            'Debit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $curLCr);
+        //Expense Debit
+        $exDr = array(
+            'VNo'            =>  $rqsn_id,
+            'Vtype'          =>  'RQSN',
+            'VDate'          =>  $Vdate,
+            'COAID'          =>  408,
+            'Narration'      =>  'Expense For ID -  ' . $rqsn_id,
+            'Credit'          => 0,
+            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
+            'IsPosted'       =>  1,
+            'CreateBy'       => $user_id,
+            'CreateDate'     => $Vdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $exDr);
+        }
+
+
+        $this->db->where('rqsn_detail_id', $rqsn_id)
+            ->update('rqsn_details', $postData);
+    }
+    // echo true;
+
+        // if ($this->Rqsn->received($postData)) {
+            $this->session->set_flashdata('message', display('successfully_approved'));
+            $data = [
+                'result' => 1,
+                'msg' => 'successfully_approved',
+            ];
+            echo json_encode($data);
+    
+           
+        // } else {
+            // $this->session->set_flashdata('error_message', display('please_try_again'));
+        // }
 
         redirect($_SERVER['HTTP_REFERER']);
     }
