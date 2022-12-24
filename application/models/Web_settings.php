@@ -189,4 +189,11 @@ class Web_settings extends CI_Model
         }
         return false;
     }
+    public function product_details($product_id)
+    {
+        $this->db->select('price');
+        $this->db->from('product_information');
+        $this->db->where('product_id', $product_id);
+        return $this->db->get()->result_array();
+    }
 }

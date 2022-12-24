@@ -101,6 +101,8 @@ class Rqsn extends CI_Model
 
     public function rqsn_entry()
     {
+          // echo "<pre>";print_r($_POST);exit();
+
         $this->load->model('Web_settings');
         $rqsn_id = mt_rand();
         $user_id = $this->session->userdata('user_id');
@@ -131,7 +133,9 @@ class Rqsn extends CI_Model
             $qty  = $quantity[$i];
             $un  = $unit[$i];
             $product_id   = $p_id[$i];
-            $rate   = $qty_price[$i];
+            //$rate   = $qty_price[$i];
+            $rate = $this->Web_settings->product_details($p_id[$i]);
+            //echo "<pre>";print_r($rate[0]['price']);exit();
 
 
             $rqsn_details = array(
@@ -140,10 +144,12 @@ class Rqsn extends CI_Model
                 'product_id'         => $product_id,
                 'quantity'                => $qty,
                 'unit'                => $un,
+                'rate'                => $rate[0]['price'],
+                'item_total'          => $rate[0]['price'] * $qty,
                 'status'                => 1,
 
             );
-          //  echo "<pre>";print_r($rqsn_details);exit();
+           // echo "<pre>";print_r($rate);exit();
             if (!empty($quantity)) {
                 $this->db->insert('rqsn_details', $rqsn_details);
             }
