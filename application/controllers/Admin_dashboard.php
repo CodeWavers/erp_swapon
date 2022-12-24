@@ -3046,8 +3046,11 @@ class Admin_dashboard extends CI_Controller
         $day_total_cash = array_sum(array_column($sales_data, 'pay_type_cash'));
         $day_total_bkash = array_sum(array_column($sales_data, 'pay_type_bkash'));
         $day_total_nagad = array_sum(array_column($sales_data, 'pay_type_nagad'));
+        $day_total_rocket = array_sum(array_column($sales_data, 'pay_type_rocket'));
         $day_total_bank = array_sum(array_column($sales_data, 'pay_type_bank'));
         $day_total_card = array_sum(array_column($sales_data, 'pay_type_card'));
+        $total = $day_total_due + $day_total_cash + $day_total_bkash + $day_total_nagad + $day_total_rocket + $day_total_bank + $day_total_card;
+
 
 
         $data = array(
@@ -3059,8 +3062,10 @@ class Admin_dashboard extends CI_Controller
             'day_total_cash'     => $day_total_cash,
             'day_total_bkash'     => $day_total_bkash,
             'day_total_nagad'     => $day_total_nagad,
+            'day_total_rocket'     => $day_total_rocket,
             'day_total_bank'     => $day_total_bank,
             'day_total_card'     => $day_total_card,
+            'total'     => $total,
 
         );
 

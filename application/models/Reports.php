@@ -3860,7 +3860,7 @@ class reports extends CI_Model
             ->order_by('i.id', 'desc');
 
         $res = $this->db->get()->result_array();
-
+       
         $new_res = array();
 
         foreach ($res as $re) {
@@ -3874,6 +3874,7 @@ class reports extends CI_Model
                     'pay_type_cash' => ($re['pay_type'] == 1) ? $re['paid_amnt'] : '0.00',
                     'pay_type_bkash' => ($re['pay_type'] == 3) ? $re['paid_amnt'] : '0.00',
                     'pay_type_nagad' => ($re['pay_type'] == 5) ? $re['paid_amnt'] : '0.00',
+                    'pay_type_rocket' => ($re['pay_type'] == 7) ? $re['paid_amnt'] : '0.00',
                     'pay_type_bank' => ($re['pay_type'] == 4) ? $re['paid_amnt'] : '0.00',
                     'pay_type_card' => ($re['pay_type'] == 6) ? $re['paid_amnt'] : '0.00',
                     'outlet_name' => $re['outlet_name'],
@@ -3900,15 +3901,21 @@ class reports extends CI_Model
                     case 6:
                         $new_res[$date]['pay_type_card'] = $re['paid_amnt'];
                         break;
+                    case 7:
+                        $new_res[$date]['pay_type_rocket'] = $re['paid_amnt'];
+                        break;
                 }
             }
         }
+        // echo '<pre>';
+        // print_r($new_res);
+        // exit();
 
-        if (!$from_date && !$to_date) {
-            if (count($new_res) > 6) {
-                $new_res = array_slice($new_res, 0, 7);
-            }
-        }
+        // if (!$from_date || !$to_date) {
+        //     if (count($new_res) > 6) {
+        //         $new_res = array_slice($new_res, 0, 7);
+        //     }
+        // }
 
 
         return $new_res;
