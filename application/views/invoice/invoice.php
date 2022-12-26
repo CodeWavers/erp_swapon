@@ -227,6 +227,7 @@
                                             <option value="3">Bkash</option>
                                             <option value="5">Nagad</option>
                                             <option value="7">Rocket</option>
+                                            <option value="6">Card</option>
 
                                         </select>
 
@@ -310,10 +311,25 @@
 
                                 </div>
                             </div>
+                            <div class="col-sm-6" id="card_div">
+                                <div class="form-group row">
+                                    <label for="bank" class="col-sm-3 col-form-label">Card Type</label>
+                                    <div class="col-sm-8">
+                                    <select name="card_id" class="form-control bankpayment" id="card_id" onchange="">
+                                            <option value="">Select One</option>
+                                            <?php foreach ($card_list as $card) { ?>
+                                                <option value="<?php echo html_escape($card['card_no_id']) ?>"><?php echo html_escape($card['card_no'] . ' (' . $card['card_name'] . ')'); ?></option>
+                                            <?php } ?>
+                                        </select>
+
+                                    </div>
 
 
 
 
+                                </div>
+                            </div>
+                           
                         </div>
 
 
@@ -425,6 +441,16 @@
         }
 
         document.getElementById('rocket_div').style.display = style;
+
+        if(val==6){
+                var style = 'block';
+                document.getElementById('card_id').setAttribute("required", true);
+            }else{
+                var style ='none';
+                document.getElementById('card_id').removeAttribute("required");
+            }
+
+            document.getElementById('card_div').style.display = style;
     }
 
 
@@ -452,6 +478,12 @@
             $("#rocket_div").css("display", "block");
         } else {
             $("#rocket_div").css("display", "none");
+        }
+
+        if (paytype == 6) {
+            $("#card_div").css("display", "block");
+        } else {
+            $("#card_div").css("display", "none");
         }
 
         $(".bankpayment").css("width", "100%");

@@ -13,6 +13,7 @@ class Linvoice
         $CI = &get_instance();
         $CI->load->model('Invoices');
         $CI->load->model('Web_settings');
+        $CI->load->model('Settings');
         $CI->load->library('occational');
         $company_info = $CI->Invoices->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
@@ -25,6 +26,7 @@ class Linvoice
             'bkash_list'        =>$CI->Web_settings->bkash_list(),
             'nagad_list'        =>  $CI->Web_settings->nagad_list(),
             'rocket_list'        =>  $CI->Web_settings->rocket_list(),
+            'card_list'            => $CI->Settings->get_real_card_data()
         );
         // echo "<pre>";
         // print_r($company_info);

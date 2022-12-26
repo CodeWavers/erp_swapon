@@ -323,7 +323,11 @@ class Cinvoice extends CI_Controller
 
     public function due_payment()
     {
+        $this->load->model('Settings');
         $invoice_id = $this->input->post('invoice_id');
+        // echo "<pre>";
+        // print_r($invoice_id);
+        // exit();
         $notes = $this->input->post('notes');
 
         $inv_details=$this->db->from('invoice')->where('invoice_id',$invoice_id)->get()->row();
@@ -332,6 +336,7 @@ class Cinvoice extends CI_Controller
         $createdate = date('Y-m-d H:i:s');
 
         $bank_id = $this->input->post('bank_id');
+        $card_id = $this->input->post('card_id');
         $bkash_id = $this->input->post('bkash_id');
         $nagad_id = $this->input->post('nagad_id');
         $rocket_id = $this->input->post('rocket_id');
@@ -393,6 +398,7 @@ class Cinvoice extends CI_Controller
         } else {
             $rocketcoaid = '';
         }
+       
 
         $cosdr= array(
             'VNo' => $invoice_id,
@@ -557,9 +563,7 @@ class Cinvoice extends CI_Controller
                 'IsAppove'       =>  1,
 
             );
-
             $this->db->insert('acc_transaction', $rocketc);
-
             $payment_data=array(
 
                 'invoice_id'    => $invoice_id,
@@ -571,11 +575,75 @@ class Cinvoice extends CI_Controller
                 'notes'       => $notes,
                 'COAID'         => $rocketcoaid
             );
-
             $this->db->insert('paid_amount', $payment_data);
-
-
         }
+        if ($paytype == 6) {
+            $card_info = $this->Settings->get_real_card_data($card_id);
+            if (!empty($card_id)) {
+                $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $card_info[0]['bank_id'])->get()->row()->bank_name;
+
+                $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+            } else {
+                $bankcoaid = '';
+            }
+            $bankc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $bankcoaid,
+                'Narration'      =>  'Paid amount for customer in card - ' . $card_info[0]['card_no'] . '  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
+                'Debit'          => ($pay_amount) - ($pay_amount * ($card_info[0]['percentage'] / 100)),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $data = array(
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => $pay_amount,
+                'account'       => $bankname,
+                'pay_date'       =>  $createdate,
+                'COAID'         => $bankcoaid,
+                'status'        =>  1,
+            );
+
+            $this->db->insert('paid_amount', $data);
+            $cuscredit = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $customer_headcode,
+                'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                'Debit'          =>  0,
+                'Credit'         =>  $pay_amount,
+                'IsPosted'       => 1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+
+            $carddebit = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  '40404',
+                'Narration'      =>  'Expense Debit for card no. ' . $card_info[0]['card_no'] . ' Invoice NO- ' . $invoice_id,
+                'Debit'          =>  $pay_amount * ($card_info[0]['percentage'] / 100),
+                'Credit'         =>  0,
+                'IsPosted'       => 1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cuscredit);
+            $this->db->insert('acc_transaction', $carddebit);
+            $this->db->insert('acc_transaction', $bankc);
+        }
+
 
         $data=array(
 
