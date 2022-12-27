@@ -3133,17 +3133,28 @@ class reports extends CI_Model
         $this->db->select('a.net_total_amount,a.*,b.customer_name, x.outlet_id');
         $this->db->from('product_return a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
-        $this->db->join('invoice x', 'x.invoice_id = a.invoice_id');
+        $this->db->join('invoice x', 'x.invoice = a.invoice_id');
         if ($outlet_id) {
             $this->db->where('x.outlet_id', $outlet_id);
         }
         $this->db->where('usablity', 1);
-        $this->db->where('a.date_return >=', $start);
-        $this->db->where('a.date_return <=', $end);
+        if(!$start)
+        {
+            $this->db->where('a.date_return >=', $start);
+
+        }
+        if(!$end)
+        {
+            $this->db->where('a.date_return <=', $end);
+        }
+        
         $this->db->group_by('a.invoice_id', 'desc');
         if ($perpage && $page)
             $this->db->limit($perpage, $page);
         $query = $this->db->get();
+        // echo "<pre>";
+        // print_r($this->db->get()->result_array);
+        // exit();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }

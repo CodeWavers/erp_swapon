@@ -429,7 +429,7 @@ class Returnse extends CI_Model
         $invoice_id_new =$this->generator(10);
         $invoice_no_generated =$this->number_generator();
 
-        $invoice_id =$this->input->post('invoice_id', TRUE);
+        $invoice_id =$this->input->post('invoice', TRUE);
         $delivery_type =$this->input->post('deliver_type', TRUE);
         $total =$this->input->post('grand_total_price', TRUE);
         $add_cost =( !empty($this->input->post('total_tax', TRUE))) ? $this->input->post('total_tax', TRUE): 0;
@@ -486,11 +486,13 @@ class Returnse extends CI_Model
         $re_n_total =$this->input->post('re_n_total', TRUE);
 
         $courier_id =$this->input->post('courier_id', TRUE);
+        if($courier_id){
         $corifo =$this->db->select('*')->from('courier_name')->where('courier_id', $courier_id)->get()->row();
         $headn_cour =$corifo->id . '-' . $corifo->courier_name;
         $coainfo_cor =$this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
         $courier_headcode =$coainfo_cor->HeadCode;
         $courier_name=$corifo->courier_name;
+        }
 
         $sales_return =array('VNo'=> $invoice_id_new,
             'Vtype'=> 'Return',
@@ -964,11 +966,20 @@ class Returnse extends CI_Model
                     'delivery_charge'=> $add_cost,
                     //                'total_tax'     => $this->input->post('total_tax', TRUE),
                     'total_ret_amount'=> $total_price,
-                    'net_total_amount'=> $this->input->post('grand_total_price', TRUE),
+                    // 'net_total_amount'=> $this->input->post('grand_total_price', TRUE),
+                    'net_total_amount'=> $total_price,
                     'reason'=> $this->input->post('details', TRUE),
-                    'usablity'=> $usabilty );
+                    'usablity'=> $usabilty
+                 );
 
-                $this->db->insert('product_return', $returns);
+                 try {
+                    //code...
+                    $returned_id = $this->db->insert('product_return', $returns);
+                 } catch (\Throwable $th) {
+                    echo '<pre>'; print_r($th); 
+                 }
+
+                exit();
 
             }
             redirect(base_url('Cinvoice/invoice_inserted_data/' . $invoice_id_new));
