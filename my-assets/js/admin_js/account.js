@@ -249,7 +249,10 @@ $(document).ready(function () {
 });
 
 function bank_paymet(val, sl) {
-  if (val == 2 || 3 || 4 || 5 || 6) {
+  // alert(val);
+  if (val == 2 || 3 || 4 || 5 || 6 || 7) {
+
+
     if (val == 2) {
       var style = "block";
       document.getElementById("bank_id_" + sl).setAttribute("required", true);
@@ -291,6 +294,15 @@ function bank_paymet(val, sl) {
     }
 
     document.getElementById("nagad_div_" + sl).style.display = style;
+
+    if (val == 7) {
+      var style = "block";
+      document.getElementById("rocket_id_" + sl).setAttribute("required", true);
+    } else {
+      var style = "none";
+      document.getElementById("rocket_id_" + sl).removeAttribute("required");
+    }
+    document.getElementById("rocket_div_" + sl).style.display = style;
 
     if (val == 6) {
       var style = "block";

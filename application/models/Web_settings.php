@@ -189,6 +189,21 @@ class Web_settings extends CI_Model
         }
         return false;
     }
+    public function outletwise_rocket_list($outlet_id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+
+        $this->db->select('*');
+        $this->db->from('rocket_add');
+        // $this->db->where('outlet_id', $outlet_id);
+        $query = $this->db->get();
+
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
     public function product_details($product_id)
     {
         $this->db->select('price');

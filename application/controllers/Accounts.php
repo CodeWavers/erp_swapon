@@ -1668,7 +1668,7 @@ class Accounts extends CI_Controller
         $card_list = $CI->Settings->get_real_card_data();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
-
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $is_outlet = $CI->warehouse->get_outlet_user();
         $outlet_list = $CI->warehouse->get_all_outlet();
         $cw = $CI->warehouse->central_warehouse();
@@ -1683,9 +1683,12 @@ class Accounts extends CI_Controller
             'bank_list'     => $bank_list,
             'card_list'     => $card_list,
             'bkash_list'    => $bkash_list,
-            'nagad_list'    => $nagad_list
+            'nagad_list'    => $nagad_list,
+            'rocket_list'    => $rocket_list
         );
-
+        // echo "<pre>";
+        // print_r($data);
+        // exit();
         $content = $this->parser->parse('newaccount/fund_transfer_form', $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -1701,6 +1704,7 @@ class Accounts extends CI_Controller
         $bank_list        = $CI->Web_settings->outletwise_bank_list($outlet_id);
         $bkash_list        = $CI->Web_settings->outletwise_bkash_list($outlet_id);
         $nagad_list        = $CI->Web_settings->outletwise_nagad_list($outlet_id);
+        $rocket_list        = $CI->Web_settings->outletwise_rocket_list($outlet_id);
         $card_list = $CI->Settings->get_real_card_data();
 
 
@@ -1714,6 +1718,7 @@ class Accounts extends CI_Controller
                 <option value="4">Bank</option>
                 <option value="3">Bkash</option>
                 <option value="5">Nagad</option>
+                <option value="7">Rocket</option>
             </select>
         </div>
     </div>
@@ -1790,6 +1795,24 @@ class Accounts extends CI_Controller
 
         </div>
     </div>
+    <div class="" style="display: none" id="rocket_div_1_to">
+        <div class="form-group row">
+            <label for="rocket" class="col-sm-2 col-form-label">Rocket Number <i class="text-danger">*</i></label>
+            <div class="col-sm-4">
+                <select name="rocket_id_to" class="form-control bankpayment" id="rocket_id_1_to">
+                    <option value="">Select One</option>';
+        if ($rocket_list) {
+            foreach ($rocket_list as $rocket) {
+                $html .= '<option value="' . html_escape($rocket['rocket_id']) . '">' . html_escape($rocket['rocket_no']) . ' (' . html_escape($rocket['ac_name']) . ')</option>';
+            }
+        }
+        $html .= '</select>
+
+            </div>
+
+
+        </div>
+    </div>
 
     <div class="" style="display: none" id="card_div_1">
         <div class="form-group row">
@@ -1814,6 +1837,9 @@ class Accounts extends CI_Controller
 
     public function submit_fund_transfer()
     {
+        // echo "<pre>";
+        // print_r($_POST);
+        // exit();
         $CI = &get_instance();
 
         $CI->load->model('warehouse');
@@ -1847,7 +1873,10 @@ class Accounts extends CI_Controller
         $Vtype = "Fund Transfer";
 
         $bkash_id = $this->input->post('bkash_id', TRUE);
+
         $nagad_id = $this->input->post('nagad_id', TRUE);
+
+        $rocket_id = $this->input->post('rocket_id', TRUE);
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
         if (!empty($bank_id)) {
@@ -1943,6 +1972,29 @@ class Accounts extends CI_Controller
             'IsAppove'       =>  1,
         );
 
+        //Rocket Added
+        if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
+        }
+
+        $rocketc = array(
+            'VNo'            =>  $voucher_no,
+            'Vtype'          =>  $Vtype,
+            'VDate'          =>  $date,
+            'COAID'          =>  $rocketcoaid,
+            'Narration'      =>  'Fund Transfer in Rocket From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
+            'Debit'          =>  0,
+            'Credit'         =>  $amount,
+            'IsPosted'       =>  1,
+            'CreateBy'       =>  $CreateBy,
+            'CreateDate'     =>  $createdate,
+            'IsAppove'       =>  1,
+        );
+
         $this->db->insert('acc_transaction', $fromtransferdr);
         if ($from_pay_type == 4) {
             $this->db->insert('acc_transaction', $bankc);
@@ -1956,10 +2008,14 @@ class Accounts extends CI_Controller
         if ($from_pay_type == 5) {
             $this->db->insert('acc_transaction', $nagadc);
         }
+        if ($from_pay_type == 7) {
+            $this->db->insert('acc_transaction', $rocketc);
+        }
 
         // transfer acc
         $bkash_id = $this->input->post('bkash_id_to', TRUE);
         $nagad_id = $this->input->post('nagad_id_to', TRUE);
+        $rocket_id = $this->input->post('rocket_id_to', TRUE);
 
         $bank_id = $this->input->post('bank_id_m_to', TRUE);
         if (!empty($bank_id)) {
@@ -2055,6 +2111,29 @@ class Accounts extends CI_Controller
             'IsAppove'       =>  1,
         );
 
+         //Rocket Added
+         if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
+        }
+
+        $rocketc = array(
+            'VNo'            =>  $voucher_no,
+            'Vtype'          =>  $Vtype,
+            'VDate'          =>  $date,
+            'COAID'          =>  $rocketcoaid,
+            'Narration'      =>  'Fund Transfer in Rocket From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
+            'Debit'          =>  0,
+            'Credit'         =>  $amount,
+            'IsPosted'       =>  1,
+            'CreateBy'       =>  $CreateBy,
+            'CreateDate'     =>  $createdate,
+            'IsAppove'       =>  1,
+        );
+
         $this->db->insert('acc_transaction', $toTransferCr);
         if ($to_pay_type == 4) {
             $this->db->insert('acc_transaction', $bankc);
@@ -2067,6 +2146,9 @@ class Accounts extends CI_Controller
         }
         if ($to_pay_type == 5) {
             $this->db->insert('acc_transaction', $nagadc);
+        }
+        if ($from_pay_type == 7) {
+            $this->db->insert('acc_transaction', $rocketc);
         }
 
         $this->session->set_flashdata('message', display('save_successfully'));
