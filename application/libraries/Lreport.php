@@ -2594,15 +2594,7 @@ class Lreport extends CI_Model
         }
         $sales_report = $CI->Reports->retrieve_dateWise_Shippingcost($from_date, $to_date, $outlet_id);
         $sales_amount = 0;
-        if (!empty($sales_report)) {
-            $i = 0;
-            foreach ($sales_report as $k => $v) {
-                $i++;
-                $sales_report[$k]['sl'] = $i;
-                $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
-                $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
-            }
-        }
+        
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -2621,6 +2613,46 @@ class Lreport extends CI_Model
             'company'       => $company_info,
         );
         $reportList = $CI->parser->parse('report/shippincost_report', $data, true);
+        return $reportList;
+    }
+    //Daily Summary Report
+    public function daily_summary_report($from_date)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->model('Warehouse');
+        $outlet_id = null;
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        
+        if($outlet_list)
+        {
+            $outlet_id = $outlet_list[0]['outlet_id'];
+        }
+        
+        $cw = $CI->Warehouse->branch_list_product();
+        $sales_report = $CI->Reports->daily_summary_report($from_date, $outlet_id);
+       
+        
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'        => display('shipping_cost_report'),
+            'sales_report' => $sales_report,
+            'company_info' => $company_info,
+            'from_date'    => $from_date,
+            'cw' => $cw,
+            'outlet_list' => $outlet_list,
+            'currency'     => $currency_details[0]['currency'],
+            'position'     => $currency_details[0]['currency_position'],
+            'software_info' => $currency_details,
+            'company'       => $company_info,
+        );
+        // echo "<pre>";
+        // print_r($data);
+        // exit();
+        $reportList = $CI->parser->parse('report/daily_summary_report', $data, true);
         return $reportList;
     }
     //sales return report

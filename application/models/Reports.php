@@ -1185,7 +1185,7 @@ class reports extends CI_Model
         return false;
     }
 
-    //Retrieve todays_sales_report
+    //Retrieve todays_sales_report daily_summary_report
     public function todays_sales_report($per_page = null, $page = null, $outlet_id = null)
     {
 
@@ -3224,7 +3224,120 @@ class reports extends CI_Model
         }
         return false;
     }
-    //stock report pdg
+    //Daily Summary Report
+    public function daily_summary_report($from_date = null,$outlet_id = null)
+    {
+        if ($outlet_id == 1) {
+            $outlet_id = null;
+        }
+        // echo "<pre>";
+        // print_r("test");
+        // exit();
+
+        $today = date('Y-m-d');
+        $this->db->select("a.date,a.invoice_id,a.due_amount,a.paid_amount,a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type");
+        $this->db->from('invoice a');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
+        // if(!($from_date))
+        // {
+        //     $this->db->where('a.date', $today);
+        // }
+         
+        // if ($outlet_id) {
+        //     $this->db->where('a.outlet_id', $outlet_id);
+        // }
+        if($from_date)
+        {
+            $this->db->where('a.date', $from_date);
+        }
+        $this->db->order_by('a.invoice_id', 'desc');
+        $query = $this->db->get()->result_array();
+        
+        $final_array= array();
+        $final_array['total_amount'] = 0;
+        $final_array['invoice_discount'] =0;
+        $final_array['sales_return'] = 0;
+        $final_array['due_amount'] =0;
+        $final_array['received_amount']= 0;
+
+        $final_array['payment_cash'] = 0;
+        $final_array['payment_bkash'] =0;
+        $final_array['payment_card'] = 0;
+        $final_array['payment_nagad'] =0;
+        $final_array['payment_rocket']= 0;
+
+        $final_array['return_cash'] = 0;
+        $final_array['return_bkash'] =0;
+        $final_array['return_card'] = 0;
+        $final_array['return_nagad'] =0;
+        $final_array['return_rocket']= 0;
+        foreach($query as $key => $value)
+        {
+        //     echo "<pre>";
+        // print_r($value);
+        // exit();
+            $final_array['total_amount'] += $value['total_amount'];
+            $final_array['invoice_discount'] += $value['invoice_discount'];
+            $final_array['sales_return'] += $value['sales_return'];
+            $final_array['due_amount'] += $value['due_amount'];
+            $final_array['received_amount'] += $value['paid_amount'];
+            if($value['sales_return'] < 1)
+            {
+                if($value['pay_type'] == 1)
+                {
+    
+                    $final_array['payment_cash'] += $value['amount'];
+                }
+                if($value['pay_type'] == 3)
+                {
+                    $final_array['payment_bkash'] +=$value['amount'];
+                }
+                if($value['pay_type'] == 6)
+                {
+                    $final_array['payment_card'] +=$value['amount'];
+                }
+                if($value['pay_type'] == 5)
+                {
+                    $final_array['payment_nagad'] +=$value['amount'];
+                }
+                if($value['pay_type'] == 7)
+                {
+                    $final_array['payment_rocket'] +=$value['amount'];
+                }
+            }
+            else{
+                if($value['pay_type'] == 1)
+                {
+                    $final_array['return_cash'] += $value['amount'];
+                }
+                if($value['pay_type'] == 3)
+                {
+                    $final_array['return_bkash'] +=$value['amount'];
+                }
+                if($value['pay_type'] == 6)
+                {
+                    $final_array['return_card'] +=$value['amount'];
+                }
+                if($value['pay_type'] == 5)
+                {
+                    $final_array['return_nagad'] +=$value['amount'];
+                }
+                if($value['pay_type'] == 7)
+                {
+                    $final_array['return_rocket'] +=$value['amount'];
+                }
+            }
+            
+        }
+        // echo "<pre>";
+        // print_r($final_array);
+        // exit();
+        if ($query) {
+            return $final_array;
+        }
+        return false;
+    }
 
     // sales return data
     public function sales_return_list($perpage, $page, $start, $end, $outlet_id = null)

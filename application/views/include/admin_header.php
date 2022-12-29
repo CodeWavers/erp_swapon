@@ -1962,6 +1962,20 @@ $birthday = $CI->Reports->birthday_noti();
                                                   ); ?>">Transfer Report</a></li>
             <?php } ?>
 
+            <?php if (
+              $this->permission1->method('todays_sales_report', 'read')->access()
+            ) { ?>
+              <li class="treeview <?php if (
+                                    $this->uri->segment('2') == "daily_summary_report"
+                                  ) {
+                                    echo "active";
+                                  } else {
+                                    echo " ";
+                                  } ?>"><a href="<?php echo base_url(
+                                                    'Admin_dashboard/daily_summary_report'
+                                                  ); ?>">Daily summary Report</a></li>
+            <?php } ?>
+
 
 
             <!-- <?php if (
