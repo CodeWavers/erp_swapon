@@ -137,7 +137,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                 </tr>
 
                             </table>
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="overflow: scroll">
                                 <table class="table table-bordered table-striped table-hover" id="salesReportTable">
                                     <thead>
                                         <tr>
@@ -145,6 +145,21 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             <th><?php echo display('sales_date') ?></th>
                                             <th><?php echo display('invoice_no') ?></th>
                                             <th><?php echo display('customer_name') ?></th>
+                                            <th><?php echo "Sku" ?></th>
+                                            <th><?php echo "Quantity" ?></th>
+                                            <th><?php echo "Total Sales" ?></th>
+                                            <th><?php echo "Discount" ?></th>
+                                            <th><?php echo "Net Sales" ?></th>
+                                            <th><?php echo "Return" ?></th>
+                                            <th><?php echo "Due" ?></th>
+                                            <th><?php echo "Cash" ?></th>
+                                            <th><?php echo "Card" ?></th>
+                                            <th><?php echo "Bkash" ?></th>
+                                            <th><?php echo "Rocket" ?></th>
+                                            <th><?php echo "Nagad" ?></th>
+                                            <th><?php echo "Total Amount" ?></th>
+                                           
+
                                             <th><?php echo display('total_amount') ?><?php echo form_open('Admin_dashboard/retrieve_dateWise_SalesReports', array('class' => 'form-inline', 'method' => 'get')) ?>
                                                 <input type="hidden" value="<?php echo (!empty($from_date) ? $from_date : date('Y-m-d')) ?>" name="from_date">
                                                 <input type="hidden" value="<?php echo (!empty($to_date) ? $to_date : date('Y-m-d')) ?>" name="to_date">
@@ -177,6 +192,22 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                         </a>
                                                     </td>
                                                     <td><?php echo $sales['customer_name'] ?></td>
+                                                    <td><?php echo $sales['sku'] ?></td>
+
+                                                    <td><?php echo $sales['qnty'] ?></td>
+                                                    <td><?php echo $sales['total_amount'] ?></td>
+                                                    <td><?php echo $sales['invoice_discount'] ?></td>
+                                                    <td><?php echo $sales['total_amount'] - $sales['invoice_discount'] ?></td>
+                                                    <td><?php echo $sales['sales_return'] ?></td>
+                                                    <td><?php echo $sales['due_amount'] ?></td>
+                                                    
+                                                    <td><?php echo $sales['cash'] ? $sales['cash'] : 0.00 ?></td>
+                                                    <td><?php echo $sales['card'] ? $sales['card'] : 0.00 ?></td>
+                                                    <td><?php echo $sales['bkash'] ? $sales['bkash'] : 0.00 ?></td>
+                                                    <td><?php echo $sales['nagad'] ? $sales['nagad'] : 0.00 ?></td>
+                                                    <td><?php echo $sales['rocket'] ? $sales['rocket'] : 0.00 ?></td>
+                                                    <td><?php echo ($sales['cash'] + $sales['card'] + $sales['bkash'] + $sales['nagad'] + $sales['rocket']); ?></td>
+
                                                     <td class="text-right">
                                                         <?php
                                                         if ($position == 0) {
@@ -186,13 +217,15 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                         }
                                                         $subtotal += $sales['total_amount']; ?>
                                                     </td>
+                                                    
+                                                    
                                                 </tr>
                                             <?php } ?>
                                         <?php } else {
                                         ?>
 
                                             <tr>
-                                                <th class="text-center" colspan="6"><?php echo display('not_found'); ?></th>
+                                                <th class="text-center" colspan="18"><?php echo display('not_found'); ?></th>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
@@ -201,6 +234,22 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+
+                                        
+
                                             <td colspan="" class="text-right"><b><?php echo display('total_seles') ?></b></td>
                                             <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($subtotal) : number_format($subtotal) . " $currency") ?></b></td>
                                         </tr>
@@ -221,8 +270,8 @@ $_SESSION['redirect_uri'] = $fullURL;
     $(document).ready(function() {
         $('#salesReportTable').DataTable({
             dom: "Bfrltip",
-            // select: true,
-            responsive: true,
+            //  select: true,
+            // responsive: true,
             processing: true,
             "order": [],
             lengthMenu: [
