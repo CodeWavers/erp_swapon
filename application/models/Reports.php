@@ -201,20 +201,21 @@ class reports extends CI_Model
         }
         return false;
     }
-    public function wastage_entry(){
+    public function wastage_entry()
+    {
         $this->load->model('Web_settings');
         $this->load->model('warehouse');
 
-        $quantity            = $this->input->post('product_quantity',true);
-        $p_id             = $this->input->post('product_id',true);
+        $quantity            = $this->input->post('product_quantity', true);
+        $p_id             = $this->input->post('product_id', true);
         //  $unit             = $this->input->post('unit',true);
 
 
-        $outlet_id=$this->warehouse->get_outlet_user()[0]['outlet_id'];
-        if (empty($outlet_id)){
-            $out='HK7TGDT69VFMXB7';
-        }else{
-            $out=$outlet_id;
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+        if (empty($outlet_id)) {
+            $out = 'HK7TGDT69VFMXB7';
+        } else {
+            $out = $outlet_id;
         }
 
         for ($i = 0, $n   = count($p_id); $i < $n; $i++) {
@@ -224,20 +225,16 @@ class reports extends CI_Model
 
             $data = array(
                 'outlet_id' => $out,
-                'product_id'=>$product_id,
-                'wastage_quantity'=>$qty,
-                'date'=>date('Y-m-d'),
-                'status'=>1
+                'product_id' => $product_id,
+                'wastage_quantity' => $qty,
+                'date' => date('Y-m-d'),
+                'status' => 1
 
 
             );
             if (!empty($quantity)) {
                 $this->db->insert('wastage_dec', $data);
-
-
             }
-
-
         }
 
         return $data;
@@ -268,34 +265,34 @@ class reports extends CI_Model
 
         $this->db->select("a.*,o.outlet_name,a.outlet_id as out");
         $this->db->from('stock_taking a');
-        $this->db->join('outlet_warehouse o','a.outlet_id=o.outlet_id','left');
-        if (!empty($outlet_id)){
-            $this->db->where('a.outlet_id',$outlet_id);
+        $this->db->join('outlet_warehouse o', 'a.outlet_id=o.outlet_id', 'left');
+        if (!empty($outlet_id)) {
+            $this->db->where('a.outlet_id', $outlet_id);
         }
-        $this->db->order_by('a.id','desc');
+        $this->db->order_by('a.id', 'desc');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
         return false;
     }
-    public function stock_taking_details($category,$product_id,$from_date,$to_date)
+    public function stock_taking_details($category, $product_id, $from_date, $to_date)
     {
         $dateRange = "a.create_date BETWEEN '$from_date' AND '$to_date'";
 
         $this->db->select("*");
         $this->db->from('stock_taking_details a');
         $this->db->join('product_information c', 'c.product_id = a.product_id', 'left');
-        if (!empty($category)){
-            $this->db->like('c.category_id',$category,'both');
+        if (!empty($category)) {
+            $this->db->like('c.category_id', $category, 'both');
         }
-        if (!empty($product_id)){
-            $this->db->where('a.product_id',$product_id);
+        if (!empty($product_id)) {
+            $this->db->where('a.product_id', $product_id);
         }
-        if (!empty($from_date)){
+        if (!empty($from_date)) {
             $this->db->where($dateRange);
         }
-        $this->db->order_by('a.create_date','desc');
+        $this->db->order_by('a.create_date', 'desc');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result();
@@ -303,7 +300,7 @@ class reports extends CI_Model
         return false;
     }
 
-    public function getCheckList($postData = null, $post_product_id = null, $pr_status = null,$from_date=null,$to_date=null)
+    public function getCheckList($postData = null, $post_product_id = null, $pr_status = null, $from_date = null, $to_date = null, $value = null)
     {
         $this->load->model('Warehouse');
         $this->load->model('suppliers');
@@ -311,13 +308,11 @@ class reports extends CI_Model
 
         $p_s = $this->input->post('product_status', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
-        if ($from_date == null){
+        if ($from_date == null) {
             $date = date('Y-m-d');
-            $op_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );
-
-        }else{
-            $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
-
+            $op_date = date('Y-m-d', strtotime($date . ' -1 day'));
+        } else {
+            $op_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
         }
 
 
@@ -351,10 +346,10 @@ class reports extends CI_Model
             ## Total number of records without filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information a');
-            $this->db->join('cats b','a.category_id=b.id','left');
+            $this->db->join('cats b', 'a.category_id=b.id', 'left');
 
             if ($product_sku != '') {
-                $this->db->where_in('a.sku',$product_sku);
+                $this->db->where_in('a.sku', $product_sku);
             }
 
 
@@ -375,16 +370,16 @@ class reports extends CI_Model
             ## Total number of record with filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information a');
-            $this->db->join('cats b','a.category_id=b.id','left');
+            $this->db->join('cats b', 'a.category_id=b.id', 'left');
             if ($product_sku != '') {
-                $this->db->where_in('a.sku',$product_sku);
+                $this->db->where_in('a.sku', $product_sku);
             }
 
-//            if ($product_sku != '') {
-//                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
-//                    $this->db->or_where('a.sku',$product_sku[$i]);
-//                }
-//            }
+            //            if ($product_sku != '') {
+            //                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+            //                    $this->db->or_where('a.sku',$product_sku[$i]);
+            //                }
+            //            }
 
 
             if ($searchValue != '') {
@@ -403,19 +398,19 @@ class reports extends CI_Model
              
                 ");
         $this->db->from('product_information a');
-        $this->db->join('cats b','a.category_id=b.id','left');
+        $this->db->join('cats b', 'a.category_id=b.id', 'left');
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->group_by('a.product_id');
         $this->db->limit($rowperpage, $start);
         if ($product_sku != '') {
-            $this->db->where_in('a.sku',$product_sku);
+            $this->db->where_in('a.sku', $product_sku);
         }
 
-//        if ($product_sku != '') {
-//            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
-//                $this->db->or_where('a.sku',$product_sku[$i]);
-//            }
-//        }
+        //        if ($product_sku != '') {
+        //            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+        //                $this->db->or_where('a.sku',$product_sku[$i]);
+        //            }
+        //        }
 
 
         if (!$post_product_id && $searchValue != '')
@@ -430,12 +425,12 @@ class reports extends CI_Model
             $this->db->where('a.finished_raw', $p_s);
         }
 
-//        if (!$post_product_id) {
-//            if ($pr_status) $this->db->where('a.finished_raw', $pr_status);
-//            $this->db->order_by($columnName, $columnSortOrder);
-//            $this->db->group_by('a.product_id');
-//            $this->db->limit($rowperpage, $start);
-//        }
+        //        if (!$post_product_id) {
+        //            if ($pr_status) $this->db->where('a.finished_raw', $pr_status);
+        //            $this->db->order_by($columnName, $columnSortOrder);
+        //            $this->db->group_by('a.product_id');
+        //            $this->db->limit($rowperpage, $start);
+        //        }
         $records = $this->db->get()->result();
         $data = array();
 
@@ -444,9 +439,9 @@ class reports extends CI_Model
         // exit();
 
         $sl = 1;
-        $stock=0;
-        $closing_stock=0;
-        $opening_stock=0;
+        $stock = 0;
+        $closing_stock = 0;
+        $opening_stock = 0;
 
 
 
@@ -529,7 +524,7 @@ class reports extends CI_Model
             }
             $production_qty = $this->db->select('SUM(quantity) as pro_qty')
                 ->from('production_goods')
-                ->join('production','production_goods.pro_id=production.pro_id','left')
+                ->join('production', 'production_goods.pro_id=production.pro_id', 'left')
                 ->where('production_goods.product_id', $record->product_id)
                 ->group_by('production_goods.product_id')
                 ->get()
@@ -543,7 +538,7 @@ class reports extends CI_Model
             }
             $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
                 ->from('item_usage')
-                ->join('production','item_usage.production_id=production.pro_id','left')
+                ->join('production', 'item_usage.production_id=production.pro_id', 'left')
                 ->where('item_usage.item_id', $record->product_id)
                 ->group_by('item_usage.item_id')
                 ->get()
@@ -556,13 +551,11 @@ class reports extends CI_Model
             $sprice = (!empty($record->price) ? $record->price : 0);
             $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
             $total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
-            $total_out='';
+            $total_out = '';
 
-            if ($record->finished_raw == 1){
+            if ($record->finished_raw == 1) {
                 $total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
-
-            }
-            else{
+            } else {
                 if ($from_date) {
                     $this->db->where('transfer_items.date >=', $from_date);
                 }
@@ -571,13 +564,12 @@ class reports extends CI_Model
                 }
                 $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                     ->from('transfer_item_details')
-                  ->join('transfer_items','transfer_item_details.pro_id=transfer_items.pro_id','left')
+                    ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
                     ->where('transfer_item_details.product_id', $record->product_id)
                     ->group_by('transfer_item_details.product_id')
                     ->get()
                     ->row();
                 $total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
-
             }
             if ($from_date) {
                 $this->db->where('a.create_date >=', $from_date);
@@ -589,14 +581,14 @@ class reports extends CI_Model
                 ->from('stock_taking_details a')
                 ->join('stock_taking b', 'b.stid = a.stid')
                 ->where(array(
-                    'b.outlet_id' =>'HK7TGDT69VFMXB7',
+                    'b.outlet_id' => 'HK7TGDT69VFMXB7',
                     'a.product_id' => $record->product_id,
-//                    'create_date >=' => $date,
+                    //                    'create_date >=' => $date,
                     'a.status' => 1,
 
                 ))
                 ->group_by('a.product_id')
-                ->order_by('a.id','desc')
+                ->order_by('a.id', 'desc')
                 ->get()
                 ->row();
 
@@ -604,7 +596,7 @@ class reports extends CI_Model
 
             $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
             $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-            $stock = (($total_in - $total_out)-$newStock)+$diff;
+            $stock = (($total_in - $total_out) - $newStock) + $diff;
 
             /************************
              *  Opening Stock Start *
@@ -616,13 +608,13 @@ class reports extends CI_Model
                 $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
                 //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
 
-               $this->db->where('product_purchase.purchase_date <=', $op_date);
+                $this->db->where('product_purchase.purchase_date <=', $op_date);
 
                 $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
                     ->from('product_purchase_details')
                     ->where('product_id', $record->product_id)
-                  //  ->where('product_purchase.purchase_date <=', $op_date)
+                    //  ->where('product_purchase.purchase_date <=', $op_date)
                     ->get()
                     ->row();
 
@@ -682,55 +674,52 @@ class reports extends CI_Model
 
                 $sprice = (!empty($record->price) ? $record->price : 0);
                 $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-//                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
-//                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet
-//                        ->totaloutletQnty) ? $stockin_outlet
-//                        ->totaloutletQnty : 0);
+                //                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
+                //                $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet
+                //                        ->totaloutletQnty) ? $stockin_outlet
+                //                        ->totaloutletQnty : 0);
                 $opening_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
 
-                $opening_total_out='';
+                $opening_total_out = '';
 
-                if ($record->finished_raw == 1){
+                if ($record->finished_raw == 1) {
                     $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
-
-                }
-                else{
+                } else {
 
 
-                  $this->db->where('transfer_items.date <=', $op_date);
+                    $this->db->where('transfer_items.date <=', $op_date);
                     $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                         ->from('transfer_item_details')
-                        ->join('transfer_items','transfer_item_details.pro_id=transfer_items.pro_id','left')
+                        ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
                         ->where('transfer_item_details.product_id', $record->product_id)
                         ->group_by('transfer_item_details.product_id')
                         ->get()
                         ->row();
                     $opening_total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
-
                 }
-              //  $this->db->where('b.date <=', $op_date);
+                //  $this->db->where('b.date <=', $op_date);
                 $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                     ->from('stock_taking_details a')
                     ->join('stock_taking b', 'b.stid = a.stid')
                     ->where(array(
-                        'b.outlet_id' =>'HK7TGDT69VFMXB7',
+                        'b.outlet_id' => 'HK7TGDT69VFMXB7',
                         'a.product_id' => $record->product_id,
-                   'create_date >=' => $op_date,
+                        'create_date >=' => $op_date,
                         'a.status' => 1,
 
                     ))
                     ->group_by('a.product_id')
-                    ->order_by('a.id','desc')
+                    ->order_by('a.id', 'desc')
                     ->get()
                     ->row();
                 $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
                 $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-                $opening_stock = (($opening_total_in - $opening_total_out)-$newStock)+$diff;
+                $opening_stock = (($opening_total_in - $opening_total_out) - $newStock) + $diff;
 
 
-//                $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+                //                $opening_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
 
-              //  $opening_stock = $opening_total_in - $opening_total_out;
+                //  $opening_stock = $opening_total_in - $opening_total_out;
             } else {
                 $opening_stock = $stock;
             }
@@ -804,47 +793,43 @@ class reports extends CI_Model
                     ->get()
                     ->row();
 
-                if ($record->finished_raw == 1){
+                if ($record->finished_raw == 1) {
                     $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
-
-                }
-                else{
+                } else {
 
                     $this->db->where('transfer_items.date <=', $to_date);
                     $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                         ->from('transfer_item_details')
-                        ->join('transfer_items','transfer_items.pro_id=transfer_items.pro_id','left')
+                        ->join('transfer_items', 'transfer_items.pro_id=transfer_items.pro_id', 'left')
                         ->where('transfer_item_details.product_id', $record->product_id)
                         ->group_by('transfer_item_details.product_id')
                         ->get()
                         ->row();
                     $closing_total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
-
                 }
                 $this->db->where('a.create_date <=', $to_date);
                 $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                     ->from('stock_taking_details a')
                     ->join('stock_taking b', 'b.stid = a.stid')
                     ->where(array(
-                        'b.outlet_id' =>'HK7TGDT69VFMXB7',
+                        'b.outlet_id' => 'HK7TGDT69VFMXB7',
                         'a.product_id' => $record->product_id,
-//                    'create_date >=' => $date,
+                        //                    'create_date >=' => $date,
                         'a.status' => 1,
 
                     ))
                     ->group_by('a.product_id')
-                    ->order_by('a.id','desc')
+                    ->order_by('a.id', 'desc')
                     ->get()
                     ->row();
 
                 $sprice = (!empty($record->price) ? $record->price : 0);
                 $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
                 $closing_total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0) + (!empty($stockin_outlet->totaloutletQnty) ? $stockin_outlet->totaloutletQnty : 0);
-             //   $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
-               // $closing_stock = $closing_total_in - $closing_total_out;
+                //   $closing_total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
+                // $closing_stock = $closing_total_in - $closing_total_out;
                 $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-                $closing_stock = (($closing_total_in - $closing_total_out)-$newStock)+$diff;
-
+                $closing_stock = (($closing_total_in - $closing_total_out) - $newStock) + $diff;
             } else {
                 $closing_stock = $stock;
             }
@@ -853,74 +838,155 @@ class reports extends CI_Model
 
 
 
+            // $value = 0;
+            if ($value == 1) {
+                // echo "<pre>";
+                // print_r($value);
+                // exit();
+                if ($closing_stock > 0) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_type'  =>  $record->finished_raw,
+                        'production_cost'  => $production_price,
+                        'product_model' => ($record->product_model ? $record->product_model : ''),
+                        'category' => ($record->name ? $record->name : ''),
+                        'sku' => ($record->sku ? $record->sku : ''),
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        'purchase_p'    =>  $pprice,
+                        'totalPurchaseQnty' => $total_in,
+                        'damagedQnty'   => $stockout->damaged_qty,
+                        'totalSalesQnty' =>  $total_out,
+                        'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                        //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock'     => $opening_stock,
+                        'total_sale_price' => $closing_stock * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
 
-            $data[] = array(
-                'sl'            =>   $sl,
-                'product_name'  =>  $record->product_name,
-                'product_type'  =>  $record->finished_raw,
-                'production_cost'  => $production_price,
-                'product_model' => ($record->product_model ? $record->product_model : ''),
-                'category' => ($record->name ? $record->name : ''),
-                'sku' => ($record->sku ? $record->sku : ''),
-                'sales_price'   =>  sprintf('%0.2f', $sprice),
-                'purchase_p'    =>  $pprice,
-                'totalPurchaseQnty' => $total_in,
-                'damagedQnty'   => $stockout->damaged_qty,
-                'totalSalesQnty' =>  $total_out,
-                'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                'stok_quantity' => sprintf('%0.2f',$closing_stock),
-                'opening_stock'     => $opening_stock,
-                'total_sale_price' => $closing_stock * $sprice,
-                'purchase_total' => (($closing_stock * $pprice) != 0)
-                    ? ($closing_stock * $pprice)
-                    : ($production_price
-                        ? $production_price * $closing_stock
-                        : 0),
-
-                'opening_inventory' => (($opening_stock * $pprice) != 0)
-                    ? ($opening_stock * $pprice)
-                    : ($product_supplier_price
-                        ? $production_price * $opening_stock
-                        : 0),
-
-
-            );
-            $sl++;
-
-
-
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
 
 
+                    );
+                    $sl++;
+                }
+            }
+            if ($value == 0) {
+                if ($closing_stock < 1) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_type'  =>  $record->finished_raw,
+                        'production_cost'  => $production_price,
+                        'product_model' => ($record->product_model ? $record->product_model : ''),
+                        'category' => ($record->name ? $record->name : ''),
+                        'sku' => ($record->sku ? $record->sku : ''),
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        'purchase_p'    =>  $pprice,
+                        'totalPurchaseQnty' => $total_in,
+                        'damagedQnty'   => $stockout->damaged_qty,
+                        'totalSalesQnty' =>  $total_out,
+                        'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                        //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock'     => $opening_stock,
+                        'total_sale_price' => $closing_stock * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+
+                    );
+                    $sl++;
+                }
+            }
+            if ($value == 2) {
+                $data[] = array(
+                    'sl'            =>   $sl,
+                    'product_name'  =>  $record->product_name,
+                    'product_type'  =>  $record->finished_raw,
+                    'production_cost'  => $production_price,
+                    'product_model' => ($record->product_model ? $record->product_model : ''),
+                    'category' => ($record->name ? $record->name : ''),
+                    'sku' => ($record->sku ? $record->sku : ''),
+                    'sales_price'   =>  sprintf('%0.2f', $sprice),
+                    'purchase_p'    =>  $pprice,
+                    'totalPurchaseQnty' => $total_in,
+                    'damagedQnty'   => $stockout->damaged_qty,
+                    'totalSalesQnty' =>  $total_out,
+                    'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                    'opening_stock'     => $opening_stock,
+                    'total_sale_price' => $closing_stock * $sprice,
+                    'purchase_total' => (($closing_stock * $pprice) != 0)
+                        ? ($closing_stock * $pprice)
+                        : ($production_price
+                            ? $production_price * $closing_stock
+                            : 0),
+
+                    'opening_inventory' => (($opening_stock * $pprice) != 0)
+                        ? ($opening_stock * $pprice)
+                        : ($product_supplier_price
+                            ? $production_price * $opening_stock
+                            : 0),
+
+
+                );
+                $sl++;
+            }
 
 
 
-           // $closing_inventory = array_sum(array_column($data, 'purchase_total'));
+
+
+
+
+
+
+
+            // $closing_inventory = array_sum(array_column($data, 'purchase_total'));
 
         }
-        $opening_finished= 0;
-        $opening_raw= 0;
-        $opening_tools= 0;
+        $opening_finished = 0;
+        $opening_raw = 0;
+        $opening_tools = 0;
 
-        $closing_finished= 0;
-        $closing_raw= 0;
-        $closing_tools= 0;
+        $closing_finished = 0;
+        $closing_raw = 0;
+        $closing_tools = 0;
 
 
 
-        foreach($data as $key => $value){
+        foreach ($data as $key => $value) {
 
-            if($value['product_type'] == 1) {
-                $opening_finished+= $value['opening_inventory'];
-                $closing_finished+= $value['purchase_total'];
+            if ($value['product_type'] == 1) {
+                $opening_finished += $value['opening_inventory'];
+                $closing_finished += $value['purchase_total'];
             }
-            if($value['product_type'] == 2) {
-                $opening_raw+= $value['opening_inventory'];
-                $closing_raw+= $value['purchase_total'];
+            if ($value['product_type'] == 2) {
+                $opening_raw += $value['opening_inventory'];
+                $closing_raw += $value['purchase_total'];
             }
-            if($value['product_type'] == 3) {
-                $opening_tools+= $value['opening_inventory'];
-                $closing_tools+= $value['purchase_total'];
+            if ($value['product_type'] == 3) {
+                $opening_tools += $value['opening_inventory'];
+                $closing_tools += $value['purchase_total'];
             }
         }
         ## Response
@@ -951,7 +1017,8 @@ class reports extends CI_Model
     }
 
 
-    public function current_stock($product_id,$status){
+    public function current_stock($product_id, $status)
+    {
         $this->load->model('suppliers');
         $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('a.pre_order', 1)->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $product_id)->get()->row();
         $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $product_id)->get()->row();
@@ -981,13 +1048,11 @@ class reports extends CI_Model
 
 
         $total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
-        $total_out='';
+        $total_out = '';
 
-        if ($status == 1){
+        if ($status == 1) {
             $total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0);
-
-        }
-        else{
+        } else {
 
             $transfer_item = $this->db->select('SUM(quantity) as transfer_item')
                 ->from('transfer_item_details')
@@ -996,7 +1061,6 @@ class reports extends CI_Model
                 ->get()
                 ->row();
             $total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
-
         }
 
 
@@ -1006,7 +1070,7 @@ class reports extends CI_Model
 
         $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
 
-        $closing_stock= sprintf('%0.2f', $stock - $newStock);
+        $closing_stock = sprintf('%0.2f', $stock - $newStock);
 
         return $closing_stock;
     }
@@ -1196,7 +1260,7 @@ class reports extends CI_Model
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
         $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id');
         $this->db->join('product_information pi', 'pi.product_id = id.product_id');
-         $this->db->where('a.date', $today);
+        $this->db->where('a.date', $today);
         // if($outlet_id)
         // {
         //     $this->db->where('a.outlet_id', $outlet_id);
@@ -1205,38 +1269,32 @@ class reports extends CI_Model
             $this->db->limit($per_page, $page);
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get()->result_array();
-        $final_array= array();
-            // $sl = 1;
+        $final_array = array();
+        // $sl = 1;
         //  echo "<pre>";
         // print_r($query);
         // exit();
-        foreach($query as $key => $value)
-        {
-            
+        foreach ($query as $key => $value) {
+
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-            $final_array[$value['invoice_id']]['sku'] = $value['sku']. ",";
-            if($value['pay_type'] == 1)
-            {
+            $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
+            if ($value['pay_type'] == 1) {
 
                 $final_array[$value['invoice_id']]['cash'] += $value['amount'];
             }
-            if($value['pay_type'] == 3)
-            {
-                $final_array[$value['invoice_id']]['bkash'] +=$value['amount'];
+            if ($value['pay_type'] == 3) {
+                $final_array[$value['invoice_id']]['bkash'] += $value['amount'];
             }
-            if($value['pay_type'] == 6)
-            {
-                $final_array[$value['invoice_id']]['card'] +=$value['amount'];
+            if ($value['pay_type'] == 6) {
+                $final_array[$value['invoice_id']]['card'] += $value['amount'];
             }
-            if($value['pay_type'] == 5)
-            {
-                $final_array[$value['invoice_id']]['nagad'] +=$value['amount'];
+            if ($value['pay_type'] == 5) {
+                $final_array[$value['invoice_id']]['nagad'] += $value['amount'];
             }
-            if($value['pay_type'] == 7)
-            {
-                $final_array[$value['invoice_id']]['rocket'] +=$value['amount'];
+            if ($value['pay_type'] == 7) {
+                $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
             }
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
@@ -1244,13 +1302,11 @@ class reports extends CI_Model
             $final_array[$value['invoice_id']]['invoice_discount'] = $value['invoice_discount'];
             $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['invoice_discount'];
             $final_array[$value['invoice_id']]['qnty'] = 3;
-            
-
         }
         // echo "<pre>";
         // print_r(array_values($final_array));
         // exit();
-        
+
         if ($query) {
             return array_values($final_array);
         }
@@ -1610,13 +1666,14 @@ class reports extends CI_Model
 
     //=================Stock takig details ================//
 
-    public function stock_taking_details_by_id($id){
+    public function stock_taking_details_by_id($id)
+    {
         $this->db->select('*,s.outlet_id as out')
             ->from('stock_taking_details a')
-            ->join('stock_taking s','s.stid=a.stid')
-            ->join('product_information b','a.product_id=b.product_id')
-            ->join('outlet_warehouse o','o.outlet_id=s.outlet_id','left')
-            ->where('a.stid',$id);
+            ->join('stock_taking s', 's.stid=a.stid')
+            ->join('product_information b', 'a.product_id=b.product_id')
+            ->join('outlet_warehouse o', 'o.outlet_id=s.outlet_id', 'left')
+            ->where('a.stid', $id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
@@ -1927,38 +1984,32 @@ class reports extends CI_Model
             $this->db->limit($per_page, $page);
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get()->result_array();
-        $final_array= array();
-            // $sl = 1;
+        $final_array = array();
+        // $sl = 1;
         //  echo "<pre>";
         // print_r($query);
         // exit();
-        foreach($query as $key => $value)
-        {
-            
+        foreach ($query as $key => $value) {
+
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-            $final_array[$value['invoice_id']]['sku'] = $value['sku']. ",";
-            if($value['pay_type'] == 1)
-            {
+            $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
+            if ($value['pay_type'] == 1) {
 
                 $final_array[$value['invoice_id']]['cash'] += $value['amount'];
             }
-            if($value['pay_type'] == 3)
-            {
-                $final_array[$value['invoice_id']]['bkash'] +=$value['amount'];
+            if ($value['pay_type'] == 3) {
+                $final_array[$value['invoice_id']]['bkash'] += $value['amount'];
             }
-            if($value['pay_type'] == 6)
-            {
-                $final_array[$value['invoice_id']]['card'] +=$value['amount'];
+            if ($value['pay_type'] == 6) {
+                $final_array[$value['invoice_id']]['card'] += $value['amount'];
             }
-            if($value['pay_type'] == 5)
-            {
-                $final_array[$value['invoice_id']]['nagad'] +=$value['amount'];
+            if ($value['pay_type'] == 5) {
+                $final_array[$value['invoice_id']]['nagad'] += $value['amount'];
             }
-            if($value['pay_type'] == 7)
-            {
-                $final_array[$value['invoice_id']]['rocket'] +=$value['amount'];
+            if ($value['pay_type'] == 7) {
+                $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
             }
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
@@ -1966,13 +2017,11 @@ class reports extends CI_Model
             $final_array[$value['invoice_id']]['invoice_discount'] = $value['invoice_discount'];
             $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['invoice_discount'];
             $final_array[$value['invoice_id']]['qnty'] = 3;
-            
-
         }
         // echo "<pre>";
         // print_r($final_array);
         // exit();
-        
+
         if ($query) {
             return array_values($final_array);
         }
@@ -2437,13 +2486,13 @@ class reports extends CI_Model
 
 
     //RETRIEVE DATE WISE SEARCH SINGLE PRODUCT REPORT
-    public function retrieve_product_search_sales_report($outlet_id, $start_date, $end_date, $product_id,$cat_id, $perpage = null, $page = null)
+    public function retrieve_product_search_sales_report($outlet_id, $start_date, $end_date, $product_id, $cat_id, $perpage = null, $page = null)
     {
         $this->db->select("a.*,b.product_name,b.sku,b.category_id,c.invoice,c.date,d.customer_name, sz.size_name, cl.color_name");
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
-        $this->db->join('customer_information d', 'd.customer_id = c.customer_id','left');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id', 'left');
 
         if ($outlet_id) {
             $this->db->where('c.outlet_id', $outlet_id);
@@ -2468,7 +2517,7 @@ class reports extends CI_Model
         }
         return false;
     }
-    public function retrieve_product_search_pre_sales_report($outlet_id, $start_date, $end_date, $product_id,$cat_id, $perpage = null, $page = null)
+    public function retrieve_product_search_pre_sales_report($outlet_id, $start_date, $end_date, $product_id, $cat_id, $perpage = null, $page = null)
     {
         $this->db->select("a.*,b.product_name,b.sku,b.category_id,c.invoice,c.date");
         $this->db->from('invoice_details a');
@@ -2504,7 +2553,7 @@ class reports extends CI_Model
         $this->db->from('product_purchase_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('product_purchase c', 'c.purchase_id = a.purchase_id');
-        $this->db->join('supplier_information d', 'd.supplier_id = c.supplier_id','left');
+        $this->db->join('supplier_information d', 'd.supplier_id = c.supplier_id', 'left');
 
         if ($outlet_id) {
             $this->db->where('c.outlet_id', $outlet_id);
@@ -2532,11 +2581,11 @@ class reports extends CI_Model
         $this->db->from('production_goods a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('production c', 'c.pro_id = a.pro_id');
-//        $this->db->join('supplier_information d', 'd.supplier_id = c.supplier_id','left');
+        //        $this->db->join('supplier_information d', 'd.supplier_id = c.supplier_id','left');
 
-//        if ($outlet_id) {
-//            $this->db->where('c.outlet_id', $outlet_id);
-//        }
+        //        if ($outlet_id) {
+        //            $this->db->where('c.outlet_id', $outlet_id);
+        //        }
 
         if ($product_id) {
             $this->db->where('b.product_id', $product_id);
@@ -2686,7 +2735,7 @@ class reports extends CI_Model
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
-        $this->db->join('customer_information d', 'd.customer_id = c.customer_id','left');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id', 'left');
         $this->db->where('b.product_id', $product_id);
         $this->db->where('c.date >=', $start_date);
         $this->db->where('c.date <=', $end_date);
@@ -2702,7 +2751,7 @@ class reports extends CI_Model
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
         $this->db->join('invoice c', 'c.invoice_id = a.invoice_id');
-        $this->db->join('customer_information d', 'd.customer_id = c.customer_id','left');
+        $this->db->join('customer_information d', 'd.customer_id = c.customer_id', 'left');
         $this->db->where('b.product_id', $product_id);
         $this->db->where('c.date >=', $start_date);
         $this->db->where('c.date <=', $end_date);
@@ -3225,7 +3274,7 @@ class reports extends CI_Model
         return false;
     }
     //Daily Summary Report
-    public function daily_summary_report($from_date = null,$outlet_id = null)
+    public function daily_summary_report($from_date = null, $outlet_id = null)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
@@ -3243,92 +3292,77 @@ class reports extends CI_Model
         // {
         //     $this->db->where('a.date', $today);
         // }
-         
+
         // if ($outlet_id) {
         //     $this->db->where('a.outlet_id', $outlet_id);
         // }
-        if($from_date)
-        {
+        if ($from_date) {
             $this->db->where('a.date', $from_date);
         }
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get()->result_array();
-        
-        $final_array= array();
+
+        $final_array = array();
         $final_array['total_amount'] = 0;
-        $final_array['invoice_discount'] =0;
+        $final_array['invoice_discount'] = 0;
         $final_array['sales_return'] = 0;
-        $final_array['due_amount'] =0;
-        $final_array['received_amount']= 0;
+        $final_array['due_amount'] = 0;
+        $final_array['received_amount'] = 0;
 
         $final_array['payment_cash'] = 0;
-        $final_array['payment_bkash'] =0;
+        $final_array['payment_bkash'] = 0;
         $final_array['payment_card'] = 0;
-        $final_array['payment_nagad'] =0;
-        $final_array['payment_rocket']= 0;
+        $final_array['payment_nagad'] = 0;
+        $final_array['payment_rocket'] = 0;
 
         $final_array['return_cash'] = 0;
-        $final_array['return_bkash'] =0;
+        $final_array['return_bkash'] = 0;
         $final_array['return_card'] = 0;
-        $final_array['return_nagad'] =0;
-        $final_array['return_rocket']= 0;
-        foreach($query as $key => $value)
-        {
-        //     echo "<pre>";
-        // print_r($value);
-        // exit();
+        $final_array['return_nagad'] = 0;
+        $final_array['return_rocket'] = 0;
+        foreach ($query as $key => $value) {
+            //     echo "<pre>";
+            // print_r($value);
+            // exit();
             $final_array['total_amount'] += $value['total_amount'];
             $final_array['invoice_discount'] += $value['invoice_discount'];
             $final_array['sales_return'] += $value['sales_return'];
             $final_array['due_amount'] += $value['due_amount'];
             $final_array['received_amount'] += $value['paid_amount'];
-            if($value['sales_return'] < 1)
-            {
-                if($value['pay_type'] == 1)
-                {
-    
+            if ($value['sales_return'] < 1) {
+                if ($value['pay_type'] == 1) {
+
                     $final_array['payment_cash'] += $value['amount'];
                 }
-                if($value['pay_type'] == 3)
-                {
-                    $final_array['payment_bkash'] +=$value['amount'];
+                if ($value['pay_type'] == 3) {
+                    $final_array['payment_bkash'] += $value['amount'];
                 }
-                if($value['pay_type'] == 6)
-                {
-                    $final_array['payment_card'] +=$value['amount'];
+                if ($value['pay_type'] == 6) {
+                    $final_array['payment_card'] += $value['amount'];
                 }
-                if($value['pay_type'] == 5)
-                {
-                    $final_array['payment_nagad'] +=$value['amount'];
+                if ($value['pay_type'] == 5) {
+                    $final_array['payment_nagad'] += $value['amount'];
                 }
-                if($value['pay_type'] == 7)
-                {
-                    $final_array['payment_rocket'] +=$value['amount'];
+                if ($value['pay_type'] == 7) {
+                    $final_array['payment_rocket'] += $value['amount'];
                 }
-            }
-            else{
-                if($value['pay_type'] == 1)
-                {
+            } else {
+                if ($value['pay_type'] == 1) {
                     $final_array['return_cash'] += $value['amount'];
                 }
-                if($value['pay_type'] == 3)
-                {
-                    $final_array['return_bkash'] +=$value['amount'];
+                if ($value['pay_type'] == 3) {
+                    $final_array['return_bkash'] += $value['amount'];
                 }
-                if($value['pay_type'] == 6)
-                {
-                    $final_array['return_card'] +=$value['amount'];
+                if ($value['pay_type'] == 6) {
+                    $final_array['return_card'] += $value['amount'];
                 }
-                if($value['pay_type'] == 5)
-                {
-                    $final_array['return_nagad'] +=$value['amount'];
+                if ($value['pay_type'] == 5) {
+                    $final_array['return_nagad'] += $value['amount'];
                 }
-                if($value['pay_type'] == 7)
-                {
-                    $final_array['return_rocket'] +=$value['amount'];
+                if ($value['pay_type'] == 7) {
+                    $final_array['return_rocket'] += $value['amount'];
                 }
             }
-            
         }
         // echo "<pre>";
         // print_r($final_array);
@@ -3353,16 +3387,13 @@ class reports extends CI_Model
             $this->db->where('x.outlet_id', $outlet_id);
         }
         $this->db->where('usablity', 1);
-        if(!$start)
-        {
+        if (!$start) {
             $this->db->where('a.date_return >=', $start);
-
         }
-        if(!$end)
-        {
+        if (!$end) {
             $this->db->where('a.date_return <=', $end);
         }
-        
+
         $this->db->group_by('a.invoice_id', 'desc');
         if ($perpage && $page)
             $this->db->limit($perpage, $page);
@@ -3735,7 +3766,7 @@ class reports extends CI_Model
 
     public function update_data()
     {
-       // exit();
+        // exit();
         $this->load->model('Invoices');
 
 
@@ -3911,9 +3942,9 @@ class reports extends CI_Model
                 'pay_type' => 2,
                 'amount' => $credit
             );
-//            echo '<pre>';
-//            print_r($paid_data);
-//            exit();
+            //            echo '<pre>';
+            //            print_r($paid_data);
+            //            exit();
 
             $this->db->insert('paid_amount', $paid_data);
             $this->db->set('payment_date', $payment_date);
@@ -3932,7 +3963,6 @@ class reports extends CI_Model
                 'ddd' => $ddd,
             );
         }
-
     }
 
 
@@ -4086,7 +4116,7 @@ class reports extends CI_Model
             ->order_by('i.id', 'desc');
 
         $res = $this->db->get()->result_array();
-       
+
         $new_res = array();
 
         foreach ($res as $re) {

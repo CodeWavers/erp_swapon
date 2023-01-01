@@ -943,7 +943,7 @@ $(document).ready(function () {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 2,4,5,6,7,8,9,10,11,12,13,14] },
+      { bSortable: false, aTargets: [0, 2,4,5,6,7,8,9,10,11,12,13] },
     ],
     processing: true,
     serverSide: true,
@@ -1005,11 +1005,11 @@ $(document).ready(function () {
         class: "text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },
-      {
-        data: "purchase_p",
-        class: "text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
-      },
+      // {
+      //   data: "purchase_p",
+      //   class: "text-right",
+      //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      // },
       {
         data: "production_cost",
         class: "text-right",
@@ -1277,12 +1277,15 @@ $(document).ready(function () {
   var from_date = $("#from_date").val();
   var to_date = $("#to_date").val();
   var pr_status = $("#pr_status").val();
+  var value = $("#value").val();
 
-  $("#product_status,#from_date, #to_date").on("change", function (e) {
+  $("#product_status,#from_date, #to_date , #value").on("change", function (e) {
     //var valueSelected = this.value;
     product_status = $("#product_status").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
+    value = $("#value").val();
+    console.log(value);
     table.ajax.reload();
   });
 
@@ -1371,6 +1374,8 @@ $(document).ready(function () {
         d.product_sku = $('.product_sku').val();
         d.from_date = from_date;
         d.to_date = to_date;
+         d.value = value;
+
       },
     },
     columns: [

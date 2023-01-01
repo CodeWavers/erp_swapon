@@ -65,18 +65,18 @@
 
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Product Type : </label>
-                                <select name="product_status" id="product_status" class="form-control"  >
-<!--                                    <option value="">Select One</option>-->
-                                    <?php if ($this->permission1->method('finished_goods', 'create')->access() ) { ?>
-                                    <option value="1">Finished Goods</option>
+                                <select name="product_status" id="product_status" class="form-control">
+                                    <!--                                    <option value="">Select One</option>-->
+                                    <?php if ($this->permission1->method('finished_goods', 'create')->access()) { ?>
+                                        <option value="1">Finished Goods</option>
                                     <?php } ?>
-                                    <?php if ($this->permission1->method('raw_materials', 'create')->access() ) { ?>
+                                    <?php if ($this->permission1->method('raw_materials', 'create')->access()) { ?>
 
-                                    <option value="2">Raw Materials</option>
+                                        <option value="2">Raw Materials</option>
                                     <?php } ?>
-                                    <?php if ($this->permission1->method('tools', 'create')->access() ) { ?>
+                                    <?php if ($this->permission1->method('tools', 'create')->access()) { ?>
 
-                                    <option value="3">Tools</option>
+                                        <option value="3">Tools</option>
                                     <?php } ?>
                                 </select>
 
@@ -84,11 +84,25 @@
 
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="product_sku" class="col-form-label">SKU: </label>
-                                <select name="product_sku" id="product_sku" class="form-control product_sku"   multiple>
+                                <select name="product_sku" id="product_sku" class="form-control product_sku" multiple>
                                     <option value="">Select SKU</option>
                                     {sku_list}
                                     <option value="{sku}">{sku}</option>
                                     {/sku_list}
+                                </select>
+
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="value" class="col-form-label">Quantity </label>
+                                <select name="value" id="value" class="form-control value">
+                                    <option value="2">Select Value</option>
+
+                                    <option value="0">Zero</option>
+                                    <option value="2">All</option>
+
+                                    <option value="1">Positive</option>
+
+
                                 </select>
 
                             </div>

@@ -1893,7 +1893,7 @@ class Rqsn extends CI_Model
                 'production_cost'  => $production_price,
                 'product_type'  =>  $record->finished_raw,
                 'sales_price'   =>  sprintf('%0.2f', $sprice),
-                'purchase_p'    =>  $pprice,
+                // 'purchase_p'    =>  $pprice,
                 'sku'          => $record->sku,
                 'category'  => (!empty($record->category_name) ? $record->category_name : ''),
                 'totalPurchaseQnty' => sprintf('%0.2f', $total_purchase->total_purchase),

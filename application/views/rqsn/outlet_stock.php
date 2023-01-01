@@ -97,7 +97,7 @@
 
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="product_sku" class="col-form-label">SKU: </label>
-                                <select name="product_sku" id="product_sku" class="form-control product_sku"   multiple>
+                                <select name="product_sku" id="product_sku" class="form-control product_sku" multiple>
                                     <option value="">Select SKU</option>
                                     {sku_list}
                                     <option value="{sku}">{sku}</option>
@@ -120,8 +120,8 @@
                                             <th class="text-center">SKU</th>
                                             <th class="text-center"><?php echo display('product_model') ?></th>
 
-                                            <th class="text-center"><?php echo display('sell_price') ?></th>
-                                            <th class="text-center"><?php echo display('purchase_price') ?></th>
+                                            <th class="text-center"><?php echo "Discounted Price" ?></th>
+
                                             <th class="text-center">Production Cost</th>
 
                                             <th class="text-center"><?php echo display('in_qnty') ?></th>
@@ -137,7 +137,7 @@
                                     <tfoot>
                                         <tr>
 
-                                            <th colspan="10" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th colspan="9" class="text-right"><?php echo display('total') ?> :</th>
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>
