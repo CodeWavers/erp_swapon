@@ -912,6 +912,7 @@ $(document).ready(function () {
   var total_stock = $("#total_stock").val();
   var cat_id = $("#cat_list").val();
   var outlet_id = $("#outlet").val();
+  var value = $("#value").val();
 
 
 
@@ -919,11 +920,12 @@ $(document).ready(function () {
   var to_date = $("#to_date").val();
 
 
-  $("#cat_list,#from_date,#to_date").on("change", function (e) {
+  $("#cat_list,#from_date,#to_date,#value").on("change", function (e) {
     var valueSelected = this.value;
     cat_id =  $("#cat_list").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
+    value = $("#value").val(); 
     table.ajax.reload();
   });
 
@@ -991,6 +993,8 @@ $(document).ready(function () {
         d.outlet_id = outlet_id;
         d.from_date = from_date;
         d.to_date = to_date;
+        d.value = value;
+        
       },
     },
     columns: [

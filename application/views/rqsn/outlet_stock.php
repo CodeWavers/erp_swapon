@@ -106,7 +106,20 @@
 
 
                             </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="value" class="col-form-label">Quantity </label>
+                                <select name="value" id="value" class="form-control value">
+                                    <option value="2">Select Value</option>
 
+                                    <option value="0">Zero</option>
+                                    <option value="2">All</option>
+
+                                    <option value="1">Positive</option>
+
+
+                                </select>
+
+                            </div>
                         </div>
                         <div>
 

@@ -729,8 +729,9 @@ class Crqsn extends CI_Controller
         $this->load->model('Rqsn');
         $from_date = $this->input->post('from_date');
         $to_date = $this->input->post('to_date');
+        $value = $this->input->post('value');
         $postData = $this->input->post();
-        $data = $this->Rqsn->outlet_stock($postData,null,$from_date,$to_date);
+        $data = $this->Rqsn->outlet_stock($postData,null,$from_date,$to_date,$value);
         echo json_encode($data);
     }
 
