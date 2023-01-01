@@ -394,6 +394,7 @@ class Cproduct extends CI_Controller
         $data2['product_name'] = $this->input->post('product_name', TRUE);
         $data2['finished_raw']  = $this->input->post('product_status', TRUE);
         $data2['price']        = $price;
+        $data2['purchase_price']        = $price;
         $data2['unit']         = $this->input->post('unit', TRUE);
         $data2['sku']  = $this->input->post('sku', TRUE);
         $data2['tax']          = 0;

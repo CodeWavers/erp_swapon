@@ -82,7 +82,8 @@
     function quantity_calculate(item) {
         var quantity = $("#total_qntt_" + item).val();
         var available_quantity = $(".available_quantity_" + item).val();
-        var price_item = parseInt($("#price_item_" + item).val());
+        var price_item = $("#price_item_" + item).val();
+        // var price_item = parseInt($("#price_item_" + item).val());
         var invoice_discount = $("#invoice_discount").val();
         var warrenty_date=$("#warrenty_date_"+item).val();
         var warehouse=$(".warehouse_"+item).val();
@@ -1203,6 +1204,7 @@ function cancelprint(){
                         $('#'+serial_no).html(obj.serial);
                         $('#'+discount_type).val(obj.discount_type);
                         // $("#stock_"+sl).val(obj.stock);
+                        
 
                         //This Function Stay on others.js page
                         quantity_calculate(sl);
