@@ -1967,7 +1967,8 @@ class reports extends CI_Model
         if ($outlet_id == 1) {
             $outlet_id = null;
         }
-        $this->db->select("a.date,a.invoice_id,a.due_amount,a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type,pi.sku");
+        $this->db->select("a.date,a.invoice_id,a.due_amount,
+        (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type,pi.sku");
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
@@ -1984,39 +1985,40 @@ class reports extends CI_Model
             $this->db->limit($per_page, $page);
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get()->result_array();
-        $final_array = array();
+        $final_array= array();
         // $sl = 1;
         //  echo "<pre>";
         // print_r($query);
         // exit();
-        foreach ($query as $key => $value) {
+        foreach($query as $key => $value)
+ {
 
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-            $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
-            if ($value['pay_type'] == 1) {
+            $final_array[$value['invoice_id']]['sku'] = $value['sku']. ",";
+            if ($value['pay_type'] == 1){
 
                 $final_array[$value['invoice_id']]['cash'] += $value['amount'];
             }
-            if ($value['pay_type'] == 3) {
-                $final_array[$value['invoice_id']]['bkash'] += $value['amount'];
+            if ($value['pay_type'] == 3){
+                $final_array[$value['invoice_id']]['bkash'] +=$value['amount'];
             }
-            if ($value['pay_type'] == 6) {
-                $final_array[$value['invoice_id']]['card'] += $value['amount'];
+            if ($value['pay_type'] == 6){
+                $final_array[$value['invoice_id']]['card'] +=$value['amount'];
             }
-            if ($value['pay_type'] == 5) {
-                $final_array[$value['invoice_id']]['nagad'] += $value['amount'];
+            if ($value['pay_type'] == 5){
+                $final_array[$value['invoice_id']]['nagad'] +=$value['amount'];
             }
-            if ($value['pay_type'] == 7) {
-                $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
+            if ($value['pay_type'] == 7){
+                $final_array[$value['invoice_id']]['rocket'] +=$value['amount'];
             }
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
             $final_array[$value['invoice_id']]['due_amount'] = $value['due_amount'];
             $final_array[$value['invoice_id']]['invoice_discount'] = $value['invoice_discount'];
             $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['invoice_discount'];
-            $final_array[$value['invoice_id']]['qnty'] = 3;
+            $final_array[$value['invoice_id']]['qnty'] = $value['total_sku'];
         }
         // echo "<pre>";
         // print_r($final_array);

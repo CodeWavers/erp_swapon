@@ -567,15 +567,15 @@ class Lreport extends CI_Model
         $cw = $CI->Warehouse->branch_list_product();
         $sales_report = $CI->Reports->retrieve_dateWise_SalesReports($outlet_id, $from_date, $to_date);
         $sales_amount = 0;
-        if (!empty($sales_report)) {
-            $i = 0;
-            foreach ($sales_report as $k => $v) {
-                $i++;
-                $sales_report[$k]['sl'] = $i;
-                $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
-                $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
-            }
-        }
+        // if (!empty($sales_report)) {
+        //     $i = 0;
+        //     foreach ($sales_report as $k => $v) {
+        //         $i++;
+        //         $sales_report[$k]['sl'] = $i;
+        //         $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
+        //         $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
+        //     }
+        // }
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -594,7 +594,9 @@ class Lreport extends CI_Model
             'company' => $company_info,
         );
 
-     //   echo '<pre>';print_r($sales_report);exit();
+
+
+    //    echo '<pre>';print_r($data);exit();
         $reportList = $CI->parser->parse('report/sales_report', $data, true);
         return $reportList;
     }

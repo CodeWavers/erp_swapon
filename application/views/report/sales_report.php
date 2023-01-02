@@ -175,6 +175,8 @@ $_SESSION['redirect_uri'] = $fullURL;
                                     <tbody>
                                         <?php
                                         $subtotal = 0;
+                                        $CI = &get_instance();
+                                        $CI->load->library('occational');
                                         if ($sales_report) {
                                         ?>
 
@@ -182,12 +184,14 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             $subtotal = 0;
                                             $sl = 0;
                                             foreach ($sales_report as $sales) {
-                                                $sl++; ?>
+                                                $sl++;
+                                               
+                                                ?>
                                                 <tr>
                                                     <td><?php echo $sl; ?></td>
-                                                    <td><?php echo $sales['sales_date'] ?></td>
+                                                    <td><?php echo $CI->occational->dateConvert($sales['sales_date']); ?></td>
                                                     <td>
-                                                        <a href="<?= base_url('Cinvoice/invoice_inserted_data/') . $sales['invoice_id'] ?>">
+                                                        <a href="<?= base_url('Cinvoice/invoice_inserted_data/') . $sales['invoice'] ?>">
                                                             <?php echo $sales['invoice'] ?>
                                                         </a>
                                                     </td>
@@ -195,7 +199,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <td><?php echo $sales['sku'] ?></td>
 
                                                     <td><?php echo $sales['qnty'] ?></td>
-                                                    <td><?php echo $sales['total_amount'] ?></td>
+                                                    <td><?php echo $sales['total_amount'] + $sales['invoice_discount']?></td>
                                                     <td><?php echo $sales['invoice_discount'] ?></td>
                                                     <td><?php echo $sales['total_amount'] - $sales['invoice_discount'] ?></td>
                                                     <td><?php echo $sales['sales_return'] ?></td>
