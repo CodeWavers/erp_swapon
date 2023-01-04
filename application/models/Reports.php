@@ -459,18 +459,27 @@ class reports extends CI_Model
                 $this->db->where('b.date <=', $to_date);
             }
 
-
+            // Stock Of Sold Quantity //
             $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('a.pre_order', 1)->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
+           // Stock Of Warranty Return 
             $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
             //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
-
+            // Stock Of Purchase Quantity //
             if ($from_date) {
                 $this->db->where('product_purchase.purchase_date >=', $from_date);
             }
             if ($to_date) {
                 $this->db->where('product_purchase.purchase_date <=', $to_date);
             }
-            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')->from('product_purchase_details')->where('product_id', $record->product_id)->get()->row();
+            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+            ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+            ->from('product_purchase_details')
+            ->where('product_id', $record->product_id)
+            ->get()
+            ->row();
+            // echo "<pre>";
+            // print_r($stockout);
+            // exit();
             if ($from_date) {
                 $this->db->where('rqsn.date >=', $from_date);
             }
@@ -480,7 +489,7 @@ class reports extends CI_Model
             //$stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')->from('rqsn_details')->where('isaprv', 1)->where('isrcv', 1)->where('product_id', $record->product_id)->get()->row();
 
 
-
+            // Transfered Quantity from Outlet //
             $stockin_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
                 ->from('rqsn_details')
                 ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
@@ -497,6 +506,8 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('rqsn.date <=', $to_date);
             }
+
+             // Transfered Quantity from Outlet //
             $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
                 ->from('rqsn_details')
                 ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
@@ -515,6 +526,7 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('opening_inventory.date <=', $to_date);
             }
+            //Get the Quantity From Opening Inventory
             $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
             if ($from_date) {
                 $this->db->where('production.date >=', $from_date);
@@ -522,6 +534,7 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('production.date <=', $to_date);
             }
+             //Get the Quantity From Production Goods Table
             $production_qty = $this->db->select('SUM(quantity) as pro_qty')
                 ->from('production_goods')
                 ->join('production', 'production_goods.pro_id=production.pro_id', 'left')
@@ -536,6 +549,7 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('production.date <=', $to_date);
             }
+              //Get the Quantity From item_usage Table
             $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
                 ->from('item_usage')
                 ->join('production', 'item_usage.production_id=production.pro_id', 'left')
@@ -550,7 +564,8 @@ class reports extends CI_Model
 
             $sprice = (!empty($record->price) ? $record->price : 0);
             $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-            $total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
+            $total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ?
+            $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
             $total_out = '';
 
             if ($record->finished_raw == 1) {
@@ -600,7 +615,7 @@ class reports extends CI_Model
 
             /************************
              *  Opening Stock Start *
-             * **********************/
+             * ********************** Investigation Done**/
 
             if ($op_date) {
                 $this->db->where('b.date <=', $op_date);
@@ -1254,7 +1269,15 @@ class reports extends CI_Model
     {
 
         $today = date('Y-m-d');
-        $this->db->select("a.date,a.invoice_id,a.due_amount,a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type,pi.sku");
+        $this->db->select('a.date,a.invoice_id,a.due_amount,
+        (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "6" AND paid.invoice_id = a.invoice_id) as total_card,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "5" AND paid.invoice_id = a.invoice_id) as total_nagad,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "7" AND paid.invoice_id = a.invoice_id) as total_rocket,
+
+        a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
@@ -1275,33 +1298,45 @@ class reports extends CI_Model
         // print_r($query);
         // exit();
         foreach ($query as $key => $value) {
-
+            $test_array[$value['invoice_id']] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-            $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
-            if ($value['pay_type'] == 1) {
+            if(array_key_exists($value['invoice_id'],$test_array))
+            {
+                $final_array[$value['invoice_id']]['sku'] = $final_array[$value['invoice_id']]['sku'] . ",".$value['sku'];
+                //$final_array[$value['invoice_id']]['sku'] = $this->stringToArray($final_array[$value['invoice_id']]['sku']);
+            }
+            else{
+                $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
+            }
+            // if ($value['pay_type'] == 1) {
 
-                $final_array[$value['invoice_id']]['cash'] += $value['amount'];
-            }
-            if ($value['pay_type'] == 3) {
-                $final_array[$value['invoice_id']]['bkash'] += $value['amount'];
-            }
-            if ($value['pay_type'] == 6) {
-                $final_array[$value['invoice_id']]['card'] += $value['amount'];
-            }
-            if ($value['pay_type'] == 5) {
-                $final_array[$value['invoice_id']]['nagad'] += $value['amount'];
-            }
-            if ($value['pay_type'] == 7) {
-                $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
-            }
+            //     $final_array[$value['invoice_id']]['cash'] += $value['amount'];
+            // }
+            // if ($value['pay_type'] == 3) {
+            //     $final_array[$value['invoice_id']]['bkash'] += $value['amount'];
+            // }
+            // if ($value['pay_type'] == 6) {
+            //     $final_array[$value['invoice_id']]['card'] += $value['amount'];
+            // }
+            // if ($value['pay_type'] == 5) {
+            //     $final_array[$value['invoice_id']]['nagad'] += $value['amount'];
+            // }
+            // if ($value['pay_type'] == 7) {
+            //     $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
+            // }
+             $final_array[$value['invoice_id']]['bkash'] = $value['total_bkash'];
+            $final_array[$value['invoice_id']]['cash'] = $value['total_cash'];
+            $final_array[$value['invoice_id']]['nagad'] = $value['total_nagad'];
+            $final_array[$value['invoice_id']]['card'] = $value['total_card'];
+            $final_array[$value['invoice_id']]['rocket'] = $value['total_rocket'];
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
             $final_array[$value['invoice_id']]['due_amount'] = $value['due_amount'];
             $final_array[$value['invoice_id']]['invoice_discount'] = $value['invoice_discount'];
             $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['invoice_discount'];
-            $final_array[$value['invoice_id']]['qnty'] = 3;
+            $final_array[$value['invoice_id']]['qnty'] = $value['total_sku'];
         }
         // echo "<pre>";
         // print_r(array_values($final_array));
@@ -1961,14 +1996,33 @@ class reports extends CI_Model
         return [$query1, $query2];
     }
 
+    // public function stringToArray($s)
+    // {
+    //     $final_array = explode(", ",ltrim($s, ','));
+    //     // echo "<pre>";
+    //     // print_r($final_array);
+    //     // exit();
+    //     $final_array = array_unique($final_array);
+
+            
+    //     return implode(",",$final_array);
+    // }
+
     //Retrieve all Report
     public function retrieve_dateWise_SalesReports($outlet_id, $from_date, $to_date, $per_page = null, $page = null)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
         }
-        $this->db->select("a.date,a.invoice_id,a.due_amount,
-        (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type,pi.sku");
+        $this->db->select('a.date,a.invoice_id,a.due_amount,
+        (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "6" AND paid.invoice_id = a.invoice_id) as total_card,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "5" AND paid.invoice_id = a.invoice_id) as total_nagad,
+        (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "7" AND paid.invoice_id = a.invoice_id) as total_rocket,
+
+        a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
@@ -1991,28 +2045,48 @@ class reports extends CI_Model
         // print_r($query);
         // exit();
         foreach($query as $key => $value)
- {
-
+           {
+        //    array_push($test_array,$value['invoice_id']);
+           $test_array[$value['invoice_id']] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-            $final_array[$value['invoice_id']]['sku'] = $value['sku']. ",";
-            if ($value['pay_type'] == 1){
+           
+            if(array_key_exists($value['invoice_id'],$test_array))
+            {
+                $final_array[$value['invoice_id']]['sku'] = $final_array[$value['invoice_id']]['sku'] . ",".$value['sku'];
+               // $final_array[$value['invoice_id']]['sku'] = $this->stringToArray($final_array[$value['invoice_id']]['sku']);
+            }
+            else{
+                $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
+            }
+            // $final_array[$value['invoice_id']]['sku'] = $value['sku'];
+            
+            // echo "<pre>";
+            // print_r($final_array[$value['invoice_id']]['sku']);
+            // exit();
+            // if ($value['pay_type'] == 1){
 
-                $final_array[$value['invoice_id']]['cash'] += $value['amount'];
-            }
-            if ($value['pay_type'] == 3){
-                $final_array[$value['invoice_id']]['bkash'] +=$value['amount'];
-            }
-            if ($value['pay_type'] == 6){
-                $final_array[$value['invoice_id']]['card'] +=$value['amount'];
-            }
-            if ($value['pay_type'] == 5){
-                $final_array[$value['invoice_id']]['nagad'] +=$value['amount'];
-            }
-            if ($value['pay_type'] == 7){
-                $final_array[$value['invoice_id']]['rocket'] +=$value['amount'];
-            }
+            //     $final_array[$value['invoice_id']]['cash'] += $value['amount'];
+            // }
+            // if ($value['pay_type'] == 3){
+            //     $final_array[$value['invoice_id']]['bkash'] +=$value['amount'];
+            // }
+            // if ($value['pay_type'] == 6){
+            //     $final_array[$value['invoice_id']]['card'] +=$value['amount'];
+            // }
+            // if ($value['pay_type'] == 5){
+            //     $final_array[$value['invoice_id']]['nagad'] +=$value['amount'];
+            // }
+            // if ($value['pay_type'] == 7){
+            //     $final_array[$value['invoice_id']]['rocket'] +=$value['amount'];
+            // }
+            $final_array[$value['invoice_id']]['bkash'] = $value['total_bkash'];
+            $final_array[$value['invoice_id']]['cash'] = $value['total_cash'];
+            $final_array[$value['invoice_id']]['nagad'] = $value['total_nagad'];
+            $final_array[$value['invoice_id']]['card'] = $value['total_card'];
+            $final_array[$value['invoice_id']]['rocket'] = $value['total_rocket'];
+
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
             $final_array[$value['invoice_id']]['due_amount'] = $value['due_amount'];
@@ -4086,7 +4160,7 @@ class reports extends CI_Model
         );
     }
 
-    public function get_sales_data_pay_wise($outlet_id = null, $from_date = null, $to_date)
+    public function get_sales_data_pay_wise($outlet_id = null, $from_date = null, $to_date =null)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;

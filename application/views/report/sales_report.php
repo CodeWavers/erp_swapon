@@ -164,7 +164,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                 <input type="hidden" value="<?php echo (!empty($from_date) ? $from_date : date('Y-m-d')) ?>" name="from_date">
                                                 <input type="hidden" value="<?php echo (!empty($to_date) ? $to_date : date('Y-m-d')) ?>" name="to_date">
                                                 <input type="hidden" name="all" value="all">
-                                                <button type="submit" class="btn btn-success"><?php echo display('all') ?></button>
+                                                <!-- <button type="submit" class="btn btn-success"><?php echo display('all') ?></button> -->
                                                 <?php echo form_close();
                                                 // $_SESSION['redirect_uri'] = 'Admin_dashboard/todays_sales_report';
                                                 ?>
@@ -177,6 +177,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                         $subtotal = 0;
                                         $CI = &get_instance();
                                         $CI->load->library('occational');
+                                         
                                         if ($sales_report) {
                                         ?>
 
@@ -196,12 +197,21 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                         </a>
                                                     </td>
                                                     <td><?php echo $sales['customer_name'] ?></td>
-                                                    <td><?php echo $sales['sku'] ?></td>
+                                                    <td><?php
+                                                    $test_array = array();
+                                                    $final_array = "";
+                                                    $final_array = ltrim($sales['sku'],",");
+                                                    $test_array= explode(" ",$final_array); 
+                                                     $test = array_unique($test_array);
+                                                    echo implode(",",$test);
+                                                     ?>
+                                                    </td>
+                                                   
 
                                                     <td><?php echo $sales['qnty'] ?></td>
                                                     <td><?php echo $sales['total_amount'] + $sales['invoice_discount']?></td>
                                                     <td><?php echo $sales['invoice_discount'] ?></td>
-                                                    <td><?php echo $sales['total_amount'] - $sales['invoice_discount'] ?></td>
+                                                    <td><?php echo (int)($sales['total_amount']) ?></td>
                                                     <td><?php echo $sales['sales_return'] ?></td>
                                                     <td><?php echo $sales['due_amount'] ?></td>
                                                     
@@ -215,9 +225,9 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <td class="text-right">
                                                         <?php
                                                         if ($position == 0) {
-                                                            echo $currency . ' ' . number_format($sales['total_amount'], 2);
+                                                            echo $currency . ' ' . number_format((int)$sales['total_amount'], 2);
                                                         } else {
-                                                            echo number_format($sales['total_amount'], 2) . ' ' . $currency;
+                                                            echo number_format((int)$sales['total_amount'], 2) . ' ' . $currency;
                                                         }
                                                         $subtotal += $sales['total_amount']; ?>
                                                     </td>
