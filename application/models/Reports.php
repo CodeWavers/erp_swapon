@@ -2014,7 +2014,7 @@ class reports extends CI_Model
         if ($outlet_id == 1) {
             $outlet_id = null;
         }
-        $this->db->select('a.date,a.invoice_id,a.due_amount,
+        $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,
         (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
@@ -2050,6 +2050,7 @@ class reports extends CI_Model
            $test_array[$value['invoice_id']] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
+            $final_array[$value['invoice_id']]['invoice_id'] = $value['invoice'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
            
             if(array_key_exists($value['invoice_id'],$test_array))

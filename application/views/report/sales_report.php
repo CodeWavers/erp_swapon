@@ -157,7 +157,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             <th><?php echo "Bkash" ?></th>
                                             <th><?php echo "Rocket" ?></th>
                                             <th><?php echo "Nagad" ?></th>
-                                            <th><?php echo "Total Amount" ?></th>
+                                            <th><?php echo "Total Received Amount" ?></th>
                                            
 
                                             <th><?php echo display('total_amount') ?><?php echo form_open('Admin_dashboard/retrieve_dateWise_SalesReports', array('class' => 'form-inline', 'method' => 'get')) ?>
@@ -175,6 +175,19 @@ $_SESSION['redirect_uri'] = $fullURL;
                                     <tbody>
                                         <?php
                                         $subtotal = 0;
+                                        $total_cash = 0;
+                                        $total_card = 0;
+                                        $total_bkash = 0;
+
+                                        $total_nagad = 0;
+                                        $received = 0;
+                                        $total_rocket = 0;
+                                        $total_due = 0;
+                                        $total_return = 0;
+                                        $total_invoice_discount = 0;
+                                        $ttotal_amount = 0;
+
+
                                         $CI = &get_instance();
                                         $CI->load->library('occational');
                                          
@@ -185,6 +198,14 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             $subtotal = 0;
                                             $sl = 0;
                                             foreach ($sales_report as $sales) {
+                                                $total_received = $sales['cash'] + $sales['card'] + $sales['bkash'] + $sales['nagad'] + $sales['rocket'];
+                                                if($total_received >= ceil($sales['total_amount']))
+                                                {
+                                                    $total_received = ceil($sales['total_amount']);
+                                                }
+                                                // echo "<pre>";
+                                                // print_r($total_received);
+                                                // exit();
                                                 $sl++;
                                                
                                                 ?>
@@ -193,7 +214,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <td><?php echo $CI->occational->dateConvert($sales['sales_date']); ?></td>
                                                     <td>
                                                         <a href="<?= base_url('Cinvoice/invoice_inserted_data/') . $sales['invoice'] ?>">
-                                                            <?php echo $sales['invoice'] ?>
+                                                            <?php echo $sales['invoice_id'] ?>
                                                         </a>
                                                     </td>
                                                     <td><?php echo $sales['customer_name'] ?></td>
@@ -209,9 +230,9 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                    
 
                                                     <td><?php echo $sales['qnty'] ?></td>
-                                                    <td><?php echo $sales['total_amount'] + $sales['invoice_discount']?></td>
+                                                    <td><?php echo ceil($sales['total_amount']) + $sales['invoice_discount']?></td>
                                                     <td><?php echo $sales['invoice_discount'] ?></td>
-                                                    <td><?php echo (int)($sales['total_amount']) ?></td>
+                                                    <td><?php echo ceil($sales['total_amount']) ?></td>
                                                     <td><?php echo $sales['sales_return'] ?></td>
                                                     <td><?php echo $sales['due_amount'] ?></td>
                                                     
@@ -220,16 +241,28 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <td><?php echo $sales['bkash'] ? $sales['bkash'] : 0.00 ?></td>
                                                     <td><?php echo $sales['nagad'] ? $sales['nagad'] : 0.00 ?></td>
                                                     <td><?php echo $sales['rocket'] ? $sales['rocket'] : 0.00 ?></td>
-                                                    <td><?php echo ($sales['cash'] + $sales['card'] + $sales['bkash'] + $sales['nagad'] + $sales['rocket']); ?></td>
+                                                    <td><?php echo $total_received ?></td>
 
                                                     <td class="text-right">
                                                         <?php
                                                         if ($position == 0) {
-                                                            echo $currency . ' ' . number_format((int)$sales['total_amount'], 2);
+                                                            echo $currency . ' ' . number_format(ceil($sales['total_amount']), 2);
                                                         } else {
-                                                            echo number_format((int)$sales['total_amount'], 2) . ' ' . $currency;
+                                                            echo number_format(ceil($sales['total_amount']), 2) . ' ' . $currency;
                                                         }
-                                                        $subtotal += $sales['total_amount']; ?>
+                                                        $subtotal += ceil($sales['total_amount']);
+                                                        $received += $total_received;
+                                                        $total_due += $sales['due_amount'];
+                                                        $total_return += $sales['sales_return'];
+                                                        $total_cash += $sales['cash'];
+                                                        $total_bkash += $sales['bkash'];
+                                                        $total_nagad += $sales['nagad'];
+                                                        $total_rocket += $sales['rocket'];
+                                                        $total_card += $sales['card'];
+                                                        $total_invoice_discount += $sales['invoice_discount'];
+                                                        
+
+                                                         ?>
                                                     </td>
                                                     
                                                     
@@ -250,21 +283,24 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td colspan="" class="text-right"><b><?php echo display('total_seles') ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($subtotal) : number_format($subtotal) . " $currency") ?></b></td>
+                                           
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_invoice_discount) : number_format($subtotal) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($subtotal) : number_format($subtotal) . " $currency") ?></b></td>
+                                            
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_return) : number_format($total_return) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_due) : number_format($total_due) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_cash) : number_format($total_cash) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_card) : number_format($total_card) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_bkash) : number_format($total_bkash) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_rocket) : number_format($total_rocket) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($total_nagad) : number_format($total_nagad) . " $currency") ?></b></td>
+                                            <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($received) : number_format($received) . " $currency") ?></b></td>
 
                                         
 
-                                            <td colspan="" class="text-right"><b><?php echo display('total_seles') ?></b></td>
+                                            
                                             <td class="text-right"><b><?php echo (($position == 0) ? "$currency " . number_format($subtotal) : number_format($subtotal) . " $currency") ?></b></td>
                                         </tr>
                                     </tfoot>
