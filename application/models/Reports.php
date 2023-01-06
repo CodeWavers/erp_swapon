@@ -461,10 +461,12 @@ class reports extends CI_Model
 
             // Stock Of Sold Quantity //
             $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('a.pre_order', 1)->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
-           // Stock Of Warranty Return 
+            // Stock Of Warranty Return 
+
             $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
             //$wastage_stock = $this->db->select('sum(ret_qty) as totalWastageQnty')->from('warrenty_return')->where('product_id',$record->product_id,'usablity',3)->get()->row();
             // Stock Of Purchase Quantity //
+
             if ($from_date) {
                 $this->db->where('product_purchase.purchase_date >=', $from_date);
             }
@@ -472,14 +474,12 @@ class reports extends CI_Model
                 $this->db->where('product_purchase.purchase_date <=', $to_date);
             }
             $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
-            ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-            ->from('product_purchase_details')
-            ->where('product_id', $record->product_id)
-            ->get()
-            ->row();
-            // echo "<pre>";
-            // print_r($stockout);
-            // exit();
+                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                ->from('product_purchase_details')
+                ->where('product_id', $record->product_id)
+                ->get()
+                ->row();
+
             if ($from_date) {
                 $this->db->where('rqsn.date >=', $from_date);
             }
@@ -507,7 +507,8 @@ class reports extends CI_Model
                 $this->db->where('rqsn.date <=', $to_date);
             }
 
-             // Transfered Quantity from Outlet //
+
+            // Transfered Quantity from Outlet //
             $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
                 ->from('rqsn_details')
                 ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
@@ -517,6 +518,7 @@ class reports extends CI_Model
                 ->where('product_id', $record->product_id)
                 ->get()
                 ->row();
+
             $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
 
 
@@ -534,7 +536,8 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('production.date <=', $to_date);
             }
-             //Get the Quantity From Production Goods Table
+
+            //Get the Quantity From Production Goods Table
             $production_qty = $this->db->select('SUM(quantity) as pro_qty')
                 ->from('production_goods')
                 ->join('production', 'production_goods.pro_id=production.pro_id', 'left')
@@ -549,7 +552,7 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('production.date <=', $to_date);
             }
-              //Get the Quantity From item_usage Table
+            //Get the Quantity From item_usage Table
             $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
                 ->from('item_usage')
                 ->join('production', 'item_usage.production_id=production.pro_id', 'left')
@@ -562,10 +565,12 @@ class reports extends CI_Model
 
 
 
+
             $sprice = (!empty($record->price) ? $record->price : 0);
             $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
             $total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ?
-            $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
+                $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
+
             $total_out = '';
 
             if ($record->finished_raw == 1) {
@@ -586,6 +591,7 @@ class reports extends CI_Model
                     ->row();
                 $total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
             }
+
             if ($from_date) {
                 $this->db->where('a.create_date >=', $from_date);
             }
@@ -609,15 +615,22 @@ class reports extends CI_Model
 
 
 
+
             $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
             $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
             $stock = (($total_in - $total_out) - $newStock) + $diff;
+            // if ($record->product_id == 27324) {
+            //     echo "<pre>";
+            //     print_r($stock);
+            //     exit();
+            // }
 
             /************************
              *  Opening Stock Start *
              * ********************** Investigation Done**/
 
             if ($op_date) {
+
                 $this->db->where('b.date <=', $op_date);
                 $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where('a.product_id', $record->product_id)->get()->row();
                 $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
@@ -1269,7 +1282,7 @@ class reports extends CI_Model
     {
 
         $today = date('Y-m-d');
-        $this->db->select('a.date,a.invoice_id,a.due_amount,
+        $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,
         (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
@@ -1300,14 +1313,13 @@ class reports extends CI_Model
         foreach ($query as $key => $value) {
             $test_array[$value['invoice_id']] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
+            $final_array[$value['invoice_id']]['invoice_id'] = $value['invoice'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-            if(array_key_exists($value['invoice_id'],$test_array))
-            {
-                $final_array[$value['invoice_id']]['sku'] = $final_array[$value['invoice_id']]['sku'] . ",".$value['sku'];
+            if (array_key_exists($value['invoice_id'], $test_array)) {
+                $final_array[$value['invoice_id']]['sku'] = $final_array[$value['invoice_id']]['sku'] . "," . $value['sku'];
                 //$final_array[$value['invoice_id']]['sku'] = $this->stringToArray($final_array[$value['invoice_id']]['sku']);
-            }
-            else{
+            } else {
                 $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
             }
             // if ($value['pay_type'] == 1) {
@@ -1326,7 +1338,7 @@ class reports extends CI_Model
             // if ($value['pay_type'] == 7) {
             //     $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
             // }
-             $final_array[$value['invoice_id']]['bkash'] = $value['total_bkash'];
+            $final_array[$value['invoice_id']]['bkash'] = $value['total_bkash'];
             $final_array[$value['invoice_id']]['cash'] = $value['total_cash'];
             $final_array[$value['invoice_id']]['nagad'] = $value['total_nagad'];
             $final_array[$value['invoice_id']]['card'] = $value['total_card'];
@@ -2004,7 +2016,7 @@ class reports extends CI_Model
     //     // exit();
     //     $final_array = array_unique($final_array);
 
-            
+
     //     return implode(",",$final_array);
     // }
 
@@ -2039,30 +2051,27 @@ class reports extends CI_Model
             $this->db->limit($per_page, $page);
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get()->result_array();
-        $final_array= array();
+        $final_array = array();
         // $sl = 1;
         //  echo "<pre>";
         // print_r($query);
         // exit();
-        foreach($query as $key => $value)
-           {
-        //    array_push($test_array,$value['invoice_id']);
-           $test_array[$value['invoice_id']] = $value['invoice_id'];
+        foreach ($query as $key => $value) {
+            //    array_push($test_array,$value['invoice_id']);
+            $test_array[$value['invoice_id']] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['sales_date'] = $value['date'];
             $final_array[$value['invoice_id']]['invoice'] = $value['invoice_id'];
             $final_array[$value['invoice_id']]['invoice_id'] = $value['invoice'];
             $final_array[$value['invoice_id']]['customer_name'] = $value['customer_name'];
-           
-            if(array_key_exists($value['invoice_id'],$test_array))
-            {
-                $final_array[$value['invoice_id']]['sku'] = $final_array[$value['invoice_id']]['sku'] . ",".$value['sku'];
-               // $final_array[$value['invoice_id']]['sku'] = $this->stringToArray($final_array[$value['invoice_id']]['sku']);
-            }
-            else{
+
+            if (array_key_exists($value['invoice_id'], $test_array)) {
+                $final_array[$value['invoice_id']]['sku'] = $final_array[$value['invoice_id']]['sku'] . "," . $value['sku'];
+                // $final_array[$value['invoice_id']]['sku'] = $this->stringToArray($final_array[$value['invoice_id']]['sku']);
+            } else {
                 $final_array[$value['invoice_id']]['sku'] = $value['sku'] . ",";
             }
             // $final_array[$value['invoice_id']]['sku'] = $value['sku'];
-            
+
             // echo "<pre>";
             // print_r($final_array[$value['invoice_id']]['sku']);
             // exit();
@@ -4161,7 +4170,7 @@ class reports extends CI_Model
         );
     }
 
-    public function get_sales_data_pay_wise($outlet_id = null, $from_date = null, $to_date =null)
+    public function get_sales_data_pay_wise($outlet_id = null, $from_date = null, $to_date = null)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;

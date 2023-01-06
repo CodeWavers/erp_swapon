@@ -11,20 +11,21 @@ class Lreport extends CI_Model
         $this->load->database();
     }
 
-    public function wastage_dec() {
-        $CI = & get_instance();
+    public function wastage_dec()
+    {
+        $CI = &get_instance();
         $CI->load->model('Rqsn');
         $CI->load->model('Web_settings');
         $CI->load->model('warehouse');
 
-        $outlet_id=$this->warehouse->get_outlet_user()[0]['outlet_id'];
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
 
         $data = array(
             'title'         => "Wastage Declaration",
             "outlet_id" => $outlet_id,
 
         );
-       // echo '<pre'; print_r($data);exit();
+        // echo '<pre'; print_r($data);exit();
 
         //    die();
         $invoiceForm = $CI->parser->parse('wastage/wastage_dec', $data, true);
@@ -596,7 +597,7 @@ class Lreport extends CI_Model
 
 
 
-    //    echo '<pre>';print_r($data);exit();
+        //    echo '<pre>';print_r($data);exit();
         $reportList = $CI->parser->parse('report/sales_report', $data, true);
         return $reportList;
     }
@@ -1202,7 +1203,7 @@ class Lreport extends CI_Model
     }
 
     //    ========== Variance Report ===========
-    public function variance_report($links = null, $per_page = null, $page = null,$category=null,$product_id=null,$from_date= null,$to_date=null)
+    public function variance_report($links = null, $per_page = null, $page = null, $category = null, $product_id = null, $from_date = null, $to_date = null)
     {
         $CI = &get_instance();
         $CI->load->model('Warehouse');
@@ -1217,7 +1218,7 @@ class Lreport extends CI_Model
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $outlet_list = $CI->Warehouse->get_outlet_user();
-        $response=$CI->Reports->stock_taking_details($category,$product_id,$from_date,$to_date);
+        $response = $CI->Reports->stock_taking_details($category, $product_id, $from_date, $to_date);
         $cw = $CI->Warehouse->branch_list_product();
         $data = array(
             'title'                      => "Variance_report",
@@ -1282,7 +1283,7 @@ class Lreport extends CI_Model
 
 
 
-            $chapterList = $CI->parser->parse('report/stock_taking_print', $data, true);
+        $chapterList = $CI->parser->parse('report/stock_taking_print', $data, true);
 
         return $chapterList;
     }
@@ -1555,7 +1556,7 @@ class Lreport extends CI_Model
         $CI->load->library('occational');
 
         $product_report = $CI->Reports->retrieve_product_sales_report($per_page, $page);
-       // echo '<pre>';print_r($product_report);exit();
+        // echo '<pre>';print_r($product_report);exit();
 
         $outlet_list = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->branch_list_product();
@@ -1605,7 +1606,7 @@ class Lreport extends CI_Model
         $CI->load->library('occational');
 
         $product_report = $CI->Reports->retrieve_product_sales_report($per_page, $page);
-       // echo '<pre>';print_r($product_report);exit();
+        // echo '<pre>';print_r($product_report);exit();
 
         $outlet_list = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->branch_list_product();
@@ -1935,7 +1936,7 @@ class Lreport extends CI_Model
 
 
     //Get Product Report Search
-    public function get_products_search_report($outlet_id, $from_date, $to_date, $product_id,$cat_id, $links, $per_page, $page)
+    public function get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $cat_id, $links, $per_page, $page)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
@@ -1950,7 +1951,7 @@ class Lreport extends CI_Model
         $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
-        $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id,$cat_id);
+        $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id, $cat_id);
         $product_list = $CI->Reports->product_list();
 
         if (!empty($product_report)) {
@@ -1989,11 +1990,57 @@ class Lreport extends CI_Model
             'cw' => $cw,
         );
 
-     //   echo '<pre>';print_r($product_report);exit();
+        //   echo '<pre>';print_r($product_report);exit();
         $reportList = $CI->parser->parse('report/product_report', $data, true);
         return $reportList;
     }
-    public function get_products_pre_sale_search_report($outlet_id, $from_date, $to_date, $product_id,$cat_id, $links, $per_page, $page)
+    //Print Daily Summary Invoice
+    public function invoice_html_data_manual($from_date, $outlet_id = null)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->library('numbertowords');
+        $CI->load->model('Warehouse');
+
+        $taxfield = $CI->db->select('*')
+            ->from('tax_settings')
+            ->where('is_show', 1)
+            ->get()
+            ->result_array();
+        $txregname = '';
+        foreach ($taxfield as $txrgname) {
+            $regname = $txrgname['tax_name'] . ' Reg No  - ' . $txrgname['reg_no'] . ', ';
+            $txregname .= $regname;
+        }
+        $redirect_url = $_SESSION['redirect_uri'];
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $sales_report = $CI->Reports->daily_summary_report($from_date, $outlet_id);
+        $company_info = $CI->Invoices->retrieve_company();
+        $data = array(
+
+            'company_info'      => $company_info,
+            'sales_report'          => $sales_report,
+            'tax_regno'         => $txregname,
+            'from_date'    => $from_date,
+            'currency'          => $currency_details[0]['currency'],
+            'position'          => $currency_details[0]['currency_position'],
+            'discount_type'     => $currency_details[0]['discount_type'],
+            'inv_logo'          => $currency_details[0]['invoice_logo'],
+
+
+
+        );
+        echo '<pre>';
+        print_r($data);
+        exit();
+
+        $chapterList = $CI->parser->parse('report/daily_summary_invoice', $data, true);
+
+        return $chapterList;
+    }
+    public function get_products_pre_sale_search_report($outlet_id, $from_date, $to_date, $product_id, $cat_id, $links, $per_page, $page)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
@@ -2008,7 +2055,7 @@ class Lreport extends CI_Model
         $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
-        $product_report = $CI->Reports->retrieve_product_search_pre_sales_report($outlet_id, $from_date, $to_date, $product_id,$cat_id);
+        $product_report = $CI->Reports->retrieve_product_search_pre_sales_report($outlet_id, $from_date, $to_date, $product_id, $cat_id);
         $product_list = $CI->Reports->product_list();
 
         if (!empty($product_report)) {
@@ -2047,7 +2094,7 @@ class Lreport extends CI_Model
             'cw' => $cw,
         );
 
-     //   echo '<pre>';print_r($product_report);exit();
+        //   echo '<pre>';print_r($product_report);exit();
         $reportList = $CI->parser->parse('report/product_report_pre_sale', $data, true);
         return $reportList;
     }
@@ -2101,7 +2148,7 @@ class Lreport extends CI_Model
             'cw' => $cw,
         );
 
-       // echo '<pre>';print_r($product_report);exit();
+        // echo '<pre>';print_r($product_report);exit();
         $reportList = $CI->parser->parse('report/product_report_purchase', $data, true);
         return $reportList;
     }
@@ -2155,7 +2202,7 @@ class Lreport extends CI_Model
             'cw' => $cw,
         );
 
-       // echo '<pre>';print_r($product_report);exit();
+        // echo '<pre>';print_r($product_report);exit();
         $reportList = $CI->parser->parse('report/product_report_production', $data, true);
         return $reportList;
     }
@@ -2596,7 +2643,7 @@ class Lreport extends CI_Model
         }
         $sales_report = $CI->Reports->retrieve_dateWise_Shippingcost($from_date, $to_date, $outlet_id);
         $sales_amount = 0;
-        
+
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -2627,16 +2674,15 @@ class Lreport extends CI_Model
         $CI->load->model('Warehouse');
         $outlet_id = null;
         $outlet_list = $CI->Warehouse->get_outlet_user();
-        
-        if($outlet_list)
-        {
+
+        if ($outlet_list) {
             $outlet_id = $outlet_list[0]['outlet_id'];
         }
-        
+
         $cw = $CI->Warehouse->branch_list_product();
         $sales_report = $CI->Reports->daily_summary_report($from_date, $outlet_id);
-       
-        
+
+
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -2672,6 +2718,9 @@ class Lreport extends CI_Model
 
 
         $return_list = $CI->Reports->sales_return_list(null, null, $start, $end, $outlet_id);
+        // echo "<pre>";
+        // print_r($return_list);
+        // exit();
         if (!empty($return_list)) {
             foreach ($return_list as $k => $v) {
                 $return_list[$k]['final_date'] = $CI->occational->dateConvert($return_list[$k]['date_return']);

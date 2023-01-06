@@ -25,7 +25,7 @@ $_SESSION['redirect_uri'] = $fullURL;
     <section class="content">
 
 
-        
+
 
         <!-- Sales report -->
         <div class="row">
@@ -65,10 +65,13 @@ $_SESSION['redirect_uri'] = $fullURL;
                             <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="<?php echo $today ?>">
                         </div>
 
-                        
+
 
                         <button type="submit" class="btn btn-success"><?php echo display('search') ?></button>
-                        <a class="btn btn-warning" href="#" onclick="printDiv('purchase_div')"><?php echo display('print') ?></a>
+                        <?php echo form_close() ?>
+                        <?php echo form_open('Admin_dashboard/invoice_inserted_data', array('class' => 'form-inline', 'method' => 'get')) ?>
+                            <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="<?php echo $today ?>">
+                        <button type="submit" class="btn btn-success"><?php echo display('print') ?></button>
                         <?php echo form_close() ?>
                     </div>
                 </div>
@@ -85,158 +88,181 @@ $_SESSION['redirect_uri'] = $fullURL;
                     </div>
                     <div class="panel-body">
                         <div id="purchase_div" class="table-responsive">
-                        <?php if ($sales_report) { ?>
-                            <table class="print-table" width="100%">
+                            <?php if ($sales_report) { ?>
+                                <table class="print-table" width="100%">
 
-                                <tr>
-                                    
-                                    <td class="text-center" class="print-cominfo">
-                                        
+                                    <tr>
+
+                                        <td class="text-center" class="print-cominfo">
+
                                             <h3 class="text-center">Day Wise Summary Report<br>
-                                            <?php echo $from_date; ?>
+                                                <?php echo $from_date; ?>
                                             </h3>
-                                      
-                                        <span class="text-center">
-                                        <img src="https://swaponsworld.com/public/uploads/logo/q4knLqxu0rwWRvDeZeZR6Ljsbe75EC3dOq2IhN38.png" alt="logo"><br>
-                                    
-                                            <!-- <?php echo $company[0]['company_name']; ?> -->
 
-                                        </span><br>
-                                        <?php echo $company[0]['address']; ?>
-                                        
+                                            <span class="text-center">
+                                                <img src="https://swaponsworld.com/public/uploads/logo/q4knLqxu0rwWRvDeZeZR6Ljsbe75EC3dOq2IhN38.png" alt="logo"><br>
 
-                                    </td>
+                                                <!-- <?php echo $company[0]['company_name']; ?> -->
 
-                                    <td align="right" class="print-table-tr">
-                                        <date>
-                                            <?php echo display('date') ?>: <?php
-                                                                            echo date($from_date);
-                                                                            ?>
-                                        </date>
-                                    </td>
-                                </tr>
+                                            </span><br>
+                                            <?php echo $company[0]['address']; ?>
 
-                            </table>
-                            
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th class="text-center"><?php echo "Day Wise Total" ?></th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                    </thead>
 
-                                    <tbody>
-                                       
-                                                <tr>
+                                        </td>
+
+                                        <td align="right" class="print-table-tr">
+                                            <date>
+                                                <?php echo display('date') ?>: <?php
+                                                                                echo date($from_date);
+                                                                                ?>
+                                            </date>
+                                        </td>
+                                    </tr>
+
+                                </table>
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center"><?php echo "Day Wise Total" ?></th>
+                                                <th>
+                                                </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                            <tr>
                                                 <td></td>
-                                                    <td><b>Day</b><p class="text-right"><b>Total</b></p>
-                                                    <b><?php echo $from_date ?></b><p class="text-right"><b><?php echo $sales_report['total_amount'] ?></b></p>
-                                                    <b>Grand Total</b><p class="text-right"><b><?php echo $sales_report['total_amount'] ?></b></p>
-                                                    
-                                                    </td>
-                                                    
-                                                    <td></td>
+                                                <td><b>Day</b>
+                                                    <p class="text-right"><b>Total</b></p>
+                                                    <b><?php echo $from_date ?></b>
+                                                    <p class="text-right"><b><?php echo $sales_report['total_amount'] ?></b></p>
+                                                    <b>Grand Total</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['total_amount'] ?></b></p>
 
-                                                </tr>
-                                            
+                                                </td>
 
-                                            
-                                    </tbody>
-                                </table>
-                                <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
+                                                <td></td>
 
-                                    
+                                            </tr>
 
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th class="text-center"><?php echo "Net Total" ?></th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       
-                                                <tr>
-                                                    <td></td>
-                                                    <td><b>Total Sales</b><p class="text-right"><b><?php echo $sales_report['total_amount'] ?></b></p>
-                                                    <b>Discount</b><p class="text-right"><b><?php echo $sales_report['invoice_discount'] ?></b></p>
-                                                    <b>Net Sales</b><p class="text-right"><b><?php echo $sales_report['total_amount'] - $sales_report['invoice_discount'] ?></b></p>
-                                                    <b>Return</b><p class="text-right"><b><?php echo $sales_report['sales_return'] ?></b></p>
-                                                    <b>Due</b><p class="text-right"><b><?php echo $sales_report['due_amount'] ?></b></p>
-                                                    <b>Total Received Amount</b><p class="text-right"><b><?php echo $sales_report['received_amount'] ?></b></p>
-                                                    <b>VAT 7.5% Inclusive </b><p class="text-right"><b><?php echo $sales_report['payment_cash'] ?></b></p></td>
-                                                    
-                                                    <td></td>
-                                                </tr>  
-                                    </tbody>
-                                </table>
-                                <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th class="text-center"><?php echo "Incomes" ?></th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       
-                                                <tr>
-                                                    <td></td>
-                                                    <td><b>Cash</b><p class="text-right"><b><?php echo $sales_report['payment_cash'] ?></b></p>
-                                                    <b>Card</b><p class="text-right"><b><?php echo $sales_report['payment_card'] ?></b></p>
-                                                    <b>Bkash</b><p class="text-right"><b><?php echo $sales_report['payment_card'] ?></b></p>
-                                                    <b>Rocket</b><p class="text-right"><b><?php echo $sales_report['payment_rocket'] ?></b></p>
-                                                    <b>Nagad</b><p class="text-right"><b><?php echo $sales_report['payment_nagad'] ?></b></p>
-                                                    <b>Total Amount</b><p class="text-right"><b><?php echo $sales_report['payment_cash'] +
-                                                     $sales_report['payment_card'] + $sales_report['payment_card'] + $sales_report['payment_rocket'] + $sales_report['payment_nagad']; ?></b></p>
-                                                    </td>
-                                                    
-                                                    <td></td>
-                                                </tr>  
-                                    </tbody>
-                                </table>
-                                <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th class="text-center"><?php echo "Return" ?></th>
-                                            <th>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       
-                                                <tr>
-                                                    <td></td>
-                                                    <td><b>Cash</b><p class="text-right"><b><?php echo $sales_report['return_cash'] ?></b></p>
-                                                    <b>Card</b><p class="text-right"><b><?php echo $sales_report['return_card'] ?></b></p>
-                                                    <b>Bkash</b><p class="text-right"><b><?php echo $sales_report['return_card'] ?></b></p>
-                                                    <b>Rocket</b><p class="text-right"><b><?php echo $sales_report['return_rocket'] ?></b></p>
-                                                    <b>Nagad</b><p class="text-right"><b><?php echo $sales_report['return_nagad'] ?></b></p>
-                                                    <b>Total Amount</b><p class="text-right"><b><?php echo $sales_report['return_cash'] +
-                                                     $sales_report['return_card'] + $sales_report['return_card'] + $sales_report['return_rocket'] + $sales_report['return_nagad']; ?></b></p>
-                                                    </td>
-                                                    
-                                                    <td></td>
-                                                </tr>  
-                                    </tbody>
-                                    
-                                    
-                                </table>
-                                <h5 class="text-center">Powered by Devenport</h5>
-                            </div>
-                            <?php } else{ ?>
+
+
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
+
+
+
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center"><?php echo "Net Total" ?></th>
+                                                <th>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td></td>
+                                                <td><b>Total Sales</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['total_amount'] ?></b></p>
+                                                    <b>Discount</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['invoice_discount'] ?></b></p>
+                                                    <b>Net Sales</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['total_amount'] - $sales_report['invoice_discount'] ?></b></p>
+                                                    <b>Return</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['sales_return'] ?></b></p>
+                                                    <b>Due</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['due_amount'] ?></b></p>
+                                                    <b>Total Received Amount</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['received_amount'] ?></b></p>
+                                                    <b>VAT 7.5% Inclusive </b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_cash'] ?></b></p>
+                                                </td>
+
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center"><?php echo "Incomes" ?></th>
+                                                <th>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td></td>
+                                                <td><b>Cash</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_cash'] ?></b></p>
+                                                    <b>Card</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_card'] ?></b></p>
+                                                    <b>Bkash</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_bkash'] ?></b></p>
+                                                    <b>Rocket</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_rocket'] ?></b></p>
+                                                    <b>Nagad</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_nagad'] ?></b></p>
+                                                    <b>Total Amount</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['payment_cash'] +
+                                                                                    $sales_report['payment_card'] + $sales_report['payment_card'] + $sales_report['payment_rocket'] + $sales_report['payment_nagad']; ?></b></p>
+                                                </td>
+
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-hover" id="shippingCostReportTable">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th class="text-center"><?php echo "Return" ?></th>
+                                                <th>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td></td>
+                                                <td><b>Cash</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['return_cash'] ?></b></p>
+                                                    <b>Card</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['return_card'] ?></b></p>
+                                                    <b>Bkash</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['return_card'] ?></b></p>
+                                                    <b>Rocket</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['return_rocket'] ?></b></p>
+                                                    <b>Nagad</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['return_nagad'] ?></b></p>
+                                                    <b>Total Amount</b>
+                                                    <p class="text-right"><b><?php echo $sales_report['return_cash'] +
+                                                                                    $sales_report['return_card'] + $sales_report['return_card'] + $sales_report['return_rocket'] + $sales_report['return_nagad']; ?></b></p>
+                                                </td>
+
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+
+
+                                    </table>
+                                    <h5 class="text-center">Powered by Devenport</h5>
+                                </div>
+                            <?php } else { ?>
                                 <h5 class="text-center"><?php echo display('not_found'); ?></h5>
-                                <?php } ?>
+                            <?php } ?>
                         </div>
-                        
-                        
+
+
                     </div>
                 </div>
             </div>
