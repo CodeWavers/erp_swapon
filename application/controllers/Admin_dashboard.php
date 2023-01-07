@@ -2017,9 +2017,7 @@ class Admin_dashboard extends CI_Controller
     //Get Daily Invoice 
     public function invoice_inserted_data()
     {
-        echo "<pre>";
-        print_r($_POST);
-        exit();
+        
         $from_date = $this->input->post('from_date');
         $outlet_id = $this->input->post('outlet_id');
 
@@ -2850,8 +2848,18 @@ class Admin_dashboard extends CI_Controller
         $CI = &get_instance();
         $this->auth->check_admin_auth();
         $CI->load->library('lreport');
+        $search = $this->input->get('search');
+        $print = $this->input->get('print');
+        $outlet_id = $this->input->post('outlet_id');
         $from_date = (!empty($this->input->get('from_date')) ? $this->input->get('from_date') : date('Y-m-d'));
-        $content = $CI->lreport->daily_summary_report($from_date);
+        if($print == "Print")
+        {
+            $content = $CI->lreport->invoice_html_data_manual($from_date, $outlet_id);
+ 
+        }
+        else{
+            $content = $CI->lreport->daily_summary_report($from_date, $outlet_id);
+        }
         $this->template->full_admin_html_view($content);
     }
 

@@ -1282,7 +1282,7 @@ class reports extends CI_Model
     {
 
         $today = date('Y-m-d');
-        $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,
+        $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,a.changeamount,
         (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
@@ -1338,6 +1338,7 @@ class reports extends CI_Model
             // if ($value['pay_type'] == 7) {
             //     $final_array[$value['invoice_id']]['rocket'] += $value['amount'];
             // }
+            $final_array[$value['invoice_id']]['changeamount'] = $value['changeamount'];
             $final_array[$value['invoice_id']]['bkash'] = $value['total_bkash'];
             $final_array[$value['invoice_id']]['cash'] = $value['total_cash'];
             $final_array[$value['invoice_id']]['nagad'] = $value['total_nagad'];
@@ -2026,7 +2027,7 @@ class reports extends CI_Model
         if ($outlet_id == 1) {
             $outlet_id = null;
         }
-        $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,
+        $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,a.changeamount,
         (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
@@ -2091,6 +2092,7 @@ class reports extends CI_Model
             // if ($value['pay_type'] == 7){
             //     $final_array[$value['invoice_id']]['rocket'] +=$value['amount'];
             // }
+            $final_array[$value['invoice_id']]['changeamount'] = $value['changeamount'];
             $final_array[$value['invoice_id']]['bkash'] = $value['total_bkash'];
             $final_array[$value['invoice_id']]['cash'] = $value['total_cash'];
             $final_array[$value['invoice_id']]['nagad'] = $value['total_nagad'];

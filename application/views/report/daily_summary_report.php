@@ -62,16 +62,13 @@ $_SESSION['redirect_uri'] = $fullURL;
                         <?php } ?>
                         <div class="form-group">
                             <label class="" for="from_date"><?php echo "Enter Date" ?></label>
-                            <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="<?php echo $today ?>">
+                            <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="">
                         </div>
 
 
 
-                        <button type="submit" class="btn btn-success"><?php echo display('search') ?></button>
-                        <?php echo form_close() ?>
-                        <?php echo form_open('Admin_dashboard/invoice_inserted_data', array('class' => 'form-inline', 'method' => 'get')) ?>
-                            <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="<?php echo $today ?>">
-                        <button type="submit" class="btn btn-success"><?php echo display('print') ?></button>
+                        <input type="submit" value="Search" name="search" class="btn btn-success">
+                        <input type="submit" value="Print" name="print" class="btn btn-success">
                         <?php echo form_close() ?>
                     </div>
                 </div>
@@ -272,6 +269,10 @@ $_SESSION['redirect_uri'] = $fullURL;
 <!-- Sales Report End -->
 
 <script type="text/javascript">
+    function setDate(){
+        var x = document.getElementById('from_date').value; //"Pulling" the value entered 
+        $("#from_date1").val(x)
+    }
     // $(document).ready(() => {
     //     setTimeout(() => {
     //         $('#shippingCostReportTable').DataTable({

@@ -198,14 +198,13 @@ $_SESSION['redirect_uri'] = $fullURL;
                                             $subtotal = 0;
                                             $sl = 0;
                                             foreach ($sales_report as $sales) {
+                                                $cash_amount = 0;
+                                                $cash_amount = $sales['cash'];
                                                 $total_received = $sales['cash'] + $sales['card'] + $sales['bkash'] + $sales['nagad'] + $sales['rocket'];
                                                 if ($total_received >= ceil($sales['total_amount'])) {
                                                     $total_received = ceil($sales['total_amount']);
+                                                    $cash_amount = ($sales['cash'] - $sales['changeamount']);
                                                 }
-
-                                                // echo "<pre>";
-                                                // print_r($total_received);
-                                                // exit();
                                                 $sl++;
 
                                             ?>
@@ -236,7 +235,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <td><?php echo $sales['sales_return'] ?></td>
                                                     <td><?php echo $sales['due_amount'] ?></td>
 
-                                                    <td><?php echo $sales['cash'] ? $sales['cash'] : 0.00 ?></td>
+                                                    <td><?php echo $cash_amount ? $cash_amount : 0.00 ?></td>
                                                     <td><?php echo $sales['card'] ? $sales['card'] : 0.00 ?></td>
                                                     <td><?php echo $sales['bkash'] ? $sales['bkash'] : 0.00 ?></td>
                                                     <td><?php echo $sales['nagad'] ? $sales['nagad'] : 0.00 ?></td>

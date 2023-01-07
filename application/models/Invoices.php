@@ -983,22 +983,23 @@ class Invoices extends CI_Model
         $condition_cost = $this->input->post('condition_cost', TRUE);
         $due_amount = $this->input->post('due_amount', TRUE);
 
-        if ($due_amount > 0) {
+        // if ($due_amount > 0) {
             $cosdr = array(
                 'VNo' => $invoice_id,
                 'Vtype' => 'INV-CC',
                 'VDate' => $Vdate,
                 'COAID' => $customer_headcode,
                 'Narration' => 'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
-                'Debit' => $due_amount,
+                'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
                 'Credit' => 0,
                 'IsPosted' => 1,
                 'CreateBy' => $createby,
                 'CreateDate' => $createdate,
                 'IsAppove' => 1
             );
+
             $this->db->insert('acc_transaction', $cosdr);
-        }
+        // }
 
 
         if ($shipping_cost > 0) {
@@ -1117,6 +1118,20 @@ class Invoices extends CI_Model
                             'IsAppove'       =>  1,
 
                         );
+                        $cuscredit = array(
+                            'VNo'            =>  $invoice_id,
+                            'Vtype'          =>  'INV',
+                            'VDate'          =>  $createdate,
+                            'COAID'          =>  $customer_headcode,
+                            'Narration'      =>  'Customer credit (Cash In Hand) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                            'Debit'          =>  0,
+                            'Credit'         =>  $paid[$i],
+                            'IsPosted'       => 1,
+                            'CreateBy'       => $createby,
+                            'CreateDate'     => $createdate,
+                            'IsAppove'       => 1
+                        );
+    
 
                         if ($paid[$i] >= $total_order_value) {
                             $data = array(
@@ -1139,6 +1154,8 @@ class Invoices extends CI_Model
                                 'COAID'         => 1020101
                             );
                         }
+                        $this->db->insert('acc_transaction', $cuscredit);
+
                         $this->db->insert('acc_transaction', $cc);
 
                         $this->db->insert('paid_amount', $data);

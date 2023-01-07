@@ -2032,10 +2032,6 @@ class Lreport extends CI_Model
 
 
         );
-        echo '<pre>';
-        print_r($data);
-        exit();
-
         $chapterList = $CI->parser->parse('report/daily_summary_invoice', $data, true);
 
         return $chapterList;

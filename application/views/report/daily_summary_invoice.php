@@ -182,7 +182,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                     <span class="subt">{tax_regno}</span>
                                 </div>
                             </div>
-                            <div class="row" style="font-size: 11px; margin-top: 0.2cm !important">
+                            <!-- <div class="row" style="font-size: 11px; margin-top: 0.2cm !important">
 
                                 <div class="col-xs-6">
                                     <nobr>BIN: 002174765-0401</nobr>
@@ -193,8 +193,8 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                                 </div>
 
 
-                            </div>
-                            <h5 class="text-center">Day Wise Total</h5>
+                            </div> -->
+                            <h5 class="text-right">Day Wise Total</h5>
                             <hr>
                             </hr>
                             <div class="row" style="font-size: 11px; margin-top: 0cm !important">
@@ -237,7 +237,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             </div>
                             <hr style="font-size: 11px; margin-top: 0cm !important">
                             </hr>
-                            <h5 style="font-size: 11px; margin-top: 0cm !important" class="text-center">Net Total</h5>
+                            <h5 style="font-size: 11px; margin-top: 0cm !important" class="text-right">Net Total</h5>
                             <hr>
                             </hr>
                             <div class="row" style="font-size: 11px; margin-top: 0cm !important">
@@ -337,7 +337,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             <hr>
                             </hr>
 
-                            <h5 class="text-center">Incomes</h5>
+                            <h6 class="text-right">Incomes</h6>
                             <hr>
                             </hr>
                             <div class="row" style="font-size: 11px; margin-top: 0cm !important">
@@ -423,7 +423,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
                             </hr>
 
 
-                            <h5 class="text-center">Return</h5>
+                            <h6 class="text-right">Return</h6>
                             <hr>
                             </hr>
                             <div class="row" style="font-size: 11px; margin-top: 0cm !important">
