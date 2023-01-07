@@ -131,7 +131,7 @@ class Web_settings extends CI_Model
 
         $this->db->select('*');
         $this->db->from('bkash_add');
-        $this->db->where('outlet_id', $outlet_id);
+        // $this->db->where('outlet_id', $outlet_id);
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
