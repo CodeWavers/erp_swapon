@@ -221,7 +221,9 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                         $test_array = array();
                                                         $final_array = "";
                                                         $final_array = ltrim($sales['sku'], ",");
-                                                        $test_array = explode(" ", $final_array);
+                                                        
+                                                        $test_array = explode(",", $final_array);
+                                                       
                                                         $test = array_unique($test_array);
                                                         echo implode(",", $test);
                                                         ?>
