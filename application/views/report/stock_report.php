@@ -106,6 +106,18 @@
                                 </select>
 
                             </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="cat_list" class="col-form-label">Category : </label>
+                                <div class="form-group">
+                                    <select id="cat_list" class="form-control" name="cat_list">
+                                        <option value="">Select One</option>
+                                        {cat_list}
+                                        <option value="{id}">{name}</option>
+                                        {/cat_list}
+                                    </select>
+                                </div>
+
+                            </div>
 
                         </div>
 

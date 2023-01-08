@@ -307,6 +307,7 @@ class reports extends CI_Model
         $response = array();
 
         $p_s = $this->input->post('product_status', TRUE);
+        $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
         if ($from_date == null) {
             $date = date('Y-m-d');
@@ -351,6 +352,9 @@ class reports extends CI_Model
             if ($product_sku != '') {
                 $this->db->where_in('a.sku', $product_sku);
             }
+            if (isset($cat_id) && $cat_id != '') {
+                $this->db->like('a.category_id', $cat_id,'both');
+            }
 
 
 
@@ -380,6 +384,10 @@ class reports extends CI_Model
             //                    $this->db->or_where('a.sku',$product_sku[$i]);
             //                }
             //            }
+
+            if (isset($cat_id) && $cat_id != '') {
+                $this->db->like('a.category_id', $cat_id,'both');
+              }
 
 
             if ($searchValue != '') {
@@ -419,6 +427,9 @@ class reports extends CI_Model
         if ($post_product_id) {
             $this->db->where('a.product_id', $post_product_id);
         }
+        if (isset($cat_id) && $cat_id != '') {
+            $this->db->like('a.category_id', $cat_id,'both');
+          }
 
 
         if (isset($p_s) && $p_s != '') {
