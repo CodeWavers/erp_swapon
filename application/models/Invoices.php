@@ -1096,6 +1096,7 @@ class Invoices extends CI_Model
         }
         ///Customer credit for Paid Amount
         $paid = $this->input->post('p_amount', TRUE);
+        
         $total_order_value = $this->input->post('grand_total_price');
 
         if (count($paid) > 0) {
@@ -1103,7 +1104,7 @@ class Invoices extends CI_Model
 
                 if ($paid[$i] > 0) {
                     if ($pay_type[$i] == 1) {
-
+                        
                         $cc = array(
                             'VNo'            =>  $invoice_id,
                             'Vtype'          =>  'INV',
@@ -1131,6 +1132,23 @@ class Invoices extends CI_Model
                             'CreateDate'     => $createdate,
                             'IsAppove'       => 1
                         );
+
+                        $coscr = array(
+                            'VNo' => $invoice_id,
+                            'Vtype' => 'INV-CC',
+                            'VDate' => $Vdate,
+                            'COAID' => $customer_headcode,
+                            'Narration' => 'Customer credit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                            'Debit' => 0,
+                            'Credit' =>  $paid[$i],
+                            'IsPosted' => 1,
+                            'CreateBy' => $createby,
+                            'CreateDate' => $createdate,
+                            'IsAppove' => 1
+                        );
+                      
+
+                        $this->db->insert('acc_transaction', $coscr);
     
 
                         if ($paid[$i] >= $total_order_value) {
@@ -1154,11 +1172,15 @@ class Invoices extends CI_Model
                                 'COAID'         => 1020101
                             );
                         }
-                        $this->db->insert('acc_transaction', $cuscredit);
+                       
+                        // $this->db->insert('acc_transaction', $cuscredit);
 
                         $this->db->insert('acc_transaction', $cc);
 
                         $this->db->insert('paid_amount', $data);
+                        // echo "<pre>";
+                        // print_r($coscr);
+                        // exit();
                     }
                     if ($pay_type[$i] == 4) {
                         if (!empty($bank_id)) {
@@ -1235,6 +1257,20 @@ class Invoices extends CI_Model
                             'IsAppove'       =>  1,
 
                         );
+                        $coscr = array(
+                            'VNo' => $invoice_id,
+                            'Vtype' => 'INV-CC',
+                            'VDate' => $Vdate,
+                            'COAID' => $customer_headcode,
+                            'Narration' => 'Customer credit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                            'Debit' => 0,
+                            'Credit' =>  $paid[$i],
+                            'IsPosted' => 1,
+                            'CreateBy' => $createby,
+                            'CreateDate' => $createdate,
+                            'IsAppove' => 1
+                        );
+                        $this->db->insert('acc_transaction', $coscr);
 
                         $data = array(
                             'invoice_id'    => $invoice_id,
@@ -1273,6 +1309,20 @@ class Invoices extends CI_Model
                             'IsAppove'       =>  1,
 
                         );
+                        $coscr = array(
+                            'VNo' => $invoice_id,
+                            'Vtype' => 'INV-CC',
+                            'VDate' => $Vdate,
+                            'COAID' => $customer_headcode,
+                            'Narration' => 'Customer credit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                            'Debit' => 0,
+                            'Credit' =>  $paid[$i],
+                            'IsPosted' => 1,
+                            'CreateBy' => $createby,
+                            'CreateDate' => $createdate,
+                            'IsAppove' => 1
+                        );
+                        $this->db->insert('acc_transaction', $coscr);
 
                         $data = array(
                             'invoice_id'    => $invoice_id,
@@ -1312,6 +1362,20 @@ class Invoices extends CI_Model
                             'IsAppove'       =>  1,
 
                         );
+                        $coscr = array(
+                            'VNo' => $invoice_id,
+                            'Vtype' => 'INV-CC',
+                            'VDate' => $Vdate,
+                            'COAID' => $customer_headcode,
+                            'Narration' => 'Customer credit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                            'Debit' => 0,
+                            'Credit' =>  $paid[$i],
+                            'IsPosted' => 1,
+                            'CreateBy' => $createby,
+                            'CreateDate' => $createdate,
+                            'IsAppove' => 1
+                        );
+                        $this->db->insert('acc_transaction', $coscr);
 
                         $data = array(
                             'invoice_id'    => $invoice_id,
@@ -1352,6 +1416,20 @@ class Invoices extends CI_Model
                             'IsAppove'       =>  1,
 
                         );
+                        $coscr = array(
+                            'VNo' => $invoice_id,
+                            'Vtype' => 'INV-CC',
+                            'VDate' => $Vdate,
+                            'COAID' => $customer_headcode,
+                            'Narration' => 'Customer credit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+                            'Debit' => 0,
+                            'Credit' =>  $paid[$i],
+                            'IsPosted' => 1,
+                            'CreateBy' => $createby,
+                            'CreateDate' => $createdate,
+                            'IsAppove' => 1
+                        );
+                        $this->db->insert('acc_transaction', $coscr);
 
                         $data = array(
                             'invoice_id'    => $invoice_id,

@@ -4,19 +4,31 @@ function checkboxcheck(sl) {
   var total_qntt = "total_qntt_" + sl;
   var product_id = "product_id_" + sl;
   var total_price = "total_price_" + sl;
+  var total_price_tmp = $('#price_item_'+ sl).val();
+  var total_qnty = $('#total_qntt_'+ sl).val();
+  // alert(total_price);
   var discount = "discount_" + sl;
   if ($("#" + check_id).prop("checked") == true) {
+    
+     $("#total_price_" + sl).val(total_price_tmp * total_qnty);
     document.getElementById(total_qntt).setAttribute("required", "required");
     document.getElementById(product_id).setAttribute("name", "product_id[]");
     document.getElementById(total_qntt).setAttribute("name", "product_quantity[]");
     document.getElementById(total_price).setAttribute("name", "total_price[]");
     document.getElementById(discount).setAttribute("name", "discount[]");
+    quantity_calculate(sl);
+
   } else if ($("#" + check_id).prop("checked") == false) {
+    
     document.getElementById(total_qntt).removeAttribute("required");
     document.getElementById(product_id).removeAttribute("name", "");
     document.getElementById(total_qntt).removeAttribute("name", "");
     document.getElementById(total_price).setAttribute("name", "total_price[]");
     document.getElementById(discount).setAttribute("name", "");
+     $("#total_price_" + sl).val(0);
+    quantity_calculate(sl);
+    
+
   }
 }
 function addInputField(t) {
@@ -286,7 +298,7 @@ function quantity_calculate(item) {
   $(".total_p").each(function () {
     isNaN(this.value) || g == this.value.length || (g += parseFloat(this.value));
   });
-  $(".total_price").each(function () {
+  $(".total_p").each(function () {
     isNaN(this.value) || a == this.value.length || (a += parseFloat(this.value));
   });
 

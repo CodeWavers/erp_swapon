@@ -844,7 +844,7 @@ class Returnse extends CI_Model
                                 $rocketc = array(
                                     'VNo'            =>  $invoice_id,
                                     'Vtype'          =>  'INVOICE',
-                                    'VDate'          =>  $Vdate,
+                                    'VDate'          =>  $createdate,
                                     'COAID'          =>  $rocketcoaid,
                                     'Narration'      =>  'Cash in Rocket  paid amount for customer  Invoice ID - ' . $invoice_id . ' customer -' . $cusifo->customer_name,
                                     'Debit'          =>  $paid[$i],
@@ -860,7 +860,7 @@ class Returnse extends CI_Model
                                     'invoice_id'    => $invoice_id,
                                     'pay_type'      => $pay_type[$i],
                                     'amount'        => $paid[$i],
-                                    'pay_date'       =>  $Vdate,
+                                    'pay_date'       =>  $createdate,
                                     'account'       => $rocketname,
                                     'COAID'         => $rocketcoaid,
                                     'status'        =>  1,
