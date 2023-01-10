@@ -1055,6 +1055,261 @@ class reports extends CI_Model
         return $response;
     }
 
+    public function getExpiryCheckList($post_product_id = null, $is_exp = null)
+    {
+        $this->load->library('occational');
+        $this->load->model('Warehouse');
+        $this->load->model('suppliers');
+        $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+        $response = array();
+
+
+        $date = date('Y-m-d');
+
+
+        $this->db->select("a.*,
+                a.product_name,
+                a.product_id,
+                a.product_model,
+                b.name,
+                p.purchase_id,
+                p.expired_date,
+             
+                ");
+        $this->db->from('product_purchase_details p');
+        $this->db->join('product_information a', 'p.product_id=a.product_id', 'left');
+        $this->db->join('cats b', 'a.category_id=b.id', 'left');
+
+        if ($is_exp == 2) {
+            $this->db->where('p.expired_date <', $date);
+        } else {
+            $this->db->where('p.expired_date >=', $date);
+        }
+        $this->db->order_by('p.id', 'asc');
+        $this->db->group_by(array('p.purchase_id', 'a.product_id'));
+
+
+
+        if ($post_product_id) {
+            $this->db->where('a.product_id', $post_product_id);
+        }
+
+
+        //        }
+        $records = $this->db->get()->result();
+
+        //echo '<pre>';print_r($records);exit();
+        $data = array();
+
+
+        $sl = 1;
+        $stock = 0;
+
+
+        $expired_stock = 0;
+
+
+
+        foreach ($records as $record) {
+            $purchase_id = $record->purchase_id;
+
+
+
+            if ($purchase_id) {
+                $this->db->where('a.purchase_id', $purchase_id);
+            }
+
+            $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')->from('invoice_details a')->join('invoice b', 'b.invoice_id = a.invoice_id')->where('a.pre_order', 1)->where('b.outlet_id', 'HK7TGDT69VFMXB7')->where(array('a.product_id' => $record->product_id))->get()->row();
+            $warrenty_stock = $this->db->select('sum(ret_qty) as totalWarrentyQnty')->from('warrenty_return')->where('product_id', $record->product_id)->get()->row();
+
+            if ($purchase_id) {
+                $this->db->where('product_purchase.purchase_id', $purchase_id);
+            }
+
+            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                ->from('product_purchase_details')
+                ->where('product_purchase.outlet_id', $outlet_id)
+                ->where(array('product_purchase_details.product_id' => $record->product_id, 'product_purchase_details.purchase_id' => $record->purchase_id))
+                ->get()->row();
+
+
+
+
+            if ($purchase_id) {
+                $this->db->where('product_return.purchase_id', $purchase_id);
+            }
+            $product_return = $this->db->select('sum(ret_qty) as totalReturn')->from('product_return')->where('usablity', 2)->where(array('product_id' => $record->product_id, 'purchase_id' => $record->purchase_id))->get()->row();
+
+
+            if ($purchase_id) {
+                $this->db->where('rqsn_details.purchase_id', $purchase_id);
+            }
+            $stockin_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                ->from('rqsn_details')
+                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id', 'left')
+                ->where('rqsn.from_id', $outlet_id)
+                ->where('rqsn_details.isaprv', 1)
+                ->where('rqsn_details.isrcv', 1)
+                ->where('rqsn_details.is_return', 2)
+                ->where(array('rqsn_details.product_id' => $record->product_id))
+                ->get()
+                ->row();
+
+            if ($purchase_id) {
+                $this->db->where('rqsn_details.purchase_id', $purchase_id);
+            }
+            $stockout_outlet = $this->db->select('sum(a_qty) as totaloutletQnty')
+                ->from('rqsn_details')
+                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                ->where('rqsn.to_id', $outlet_id)
+                ->where('isaprv', 1)
+                ->where('isrcv', 1)
+                ->where(array('rqsn_details.product_id' => $record->product_id))
+                ->get()
+                ->row();
+
+
+            $open_stock = $this->db->select('stock_qty')->from('opening_inventory')->where('product_id', $record->product_id)->get()->row();
+
+            $production_qty = $this->db->select('SUM(quantity) as pro_qty')
+                ->from('production_goods')
+                ->join('production', 'production_goods.pro_id=production.pro_id', 'left')
+                ->where('production_goods.product_id', $record->product_id)
+                ->group_by('production_goods.product_id')
+                ->get()
+                ->row();
+
+            $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                ->from('item_usage')
+                ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+                ->where('item_usage.item_id', $record->product_id)
+                ->group_by('item_usage.item_id')
+                ->get()
+                ->row();
+
+
+
+
+
+            $sprice = (!empty($record->price) ? $record->price : 0);
+            $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
+            $total_in = (!empty($open_stock->stock_qty) ? $open_stock->stock_qty : 0) + (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) + (!empty($production_qty->pro_qty) ? $production_qty->pro_qty : 0);
+            $total_out = '';
+
+            if ($record->finished_raw == 1) {
+                $total_out = (!empty($stockout->damaged_qty) ? $stockout->damaged_qty : 0) + (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) + (!empty($stockout_outlet->totaloutletQnty) ? $stockout_outlet->totaloutletQnty : 0) + (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0) - (!empty($stockin_outlet->totaloutletQnty) ? $stockin_outlet->totaloutletQnty : 0);
+            } else {
+
+                $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+                    ->from('transfer_item_details')
+                    ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+                    ->where(array('transfer_item_details.product_id' => $record->product_id, 'transfer_item_details.purchase_id' => $record->purchase_id))
+                    ->group_by(array('transfer_item_details.product_id', 'transfer_item_details.purchase_id'))
+                    ->get()
+                    ->row();
+                $total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
+            }
+
+            $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                ->from('stock_taking_details a')
+                ->join('stock_taking b', 'b.stid = a.stid')
+                ->where(array(
+                    'b.outlet_id' => $outlet_id,
+                    'a.product_id' => $record->product_id,
+
+                    //                    'create_date >=' =purchase_id
+                    'a.status' => 1,
+
+                ))
+                ->group_by('a.product_id')
+                ->order_by('a.id', 'desc')
+                ->get()
+                ->row();
+
+
+
+            $newStock = (!empty($warrenty_stock->totalWarrentyQnty) ? $warrenty_stock->totalWarrentyQnty : 0);
+            $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+
+            // $stock = (($total_in - (($total_out + $product_return->totalReturn) - $newStock))) + $diff;
+
+            $stock = (($total_in - (($total_out)))) + $diff;
+
+            $expired_stock += $stock;
+
+            $date_now = new DateTime();
+            $expired_date   = new DateTime($record->expired_date);
+            if ($date_now > $expired_date) {
+                $expiry_status = '<span class="label label-danger ">Expired</span>';
+            } else {
+                $expiry_status = '<span class="label label-success ">Available</span>';
+            }
+
+
+
+
+
+            if ($stock > 0) {
+                $data[] = array(
+                    'sl'            =>   $sl,
+                    'product_name'  =>  $record->product_name_bn,
+                    'expiry_status'  =>  $expiry_status,
+                    'purchase_id'  =>  $record->purchase_id,
+                    'expiry_date'  =>  $this->occational->dateConvert($record->expired_date),
+                    'expired_date'  =>  $record->expired_date,
+                    'product_type'  =>  $record->finished_raw,
+                    'product_model' => ($record->product_model ? $record->product_model : ''),
+                    'category' => ($record->name ? $record->name : ''),
+                    'sku' => ($record->sku ? $record->sku : ''),
+                    'sales_price'   =>  sprintf('%0.2f', $sprice),
+                    'purchase_p'    =>  $pprice,
+                    'totalPurchaseQnty' => $total_in,
+                    'damagedQnty'   => $stockout->damaged_qty,
+                    'totalSalesQnty' =>  $total_out,
+                    'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                    'stok_quantity' => sprintf('%0.2f', $stock),
+                    'opening_stock'     => $stock,
+                    'total_sale_price' => $stock * $sprice,
+                    'out' => $outlet_id,
+
+
+
+                );
+                $sl++;
+            }
+        }
+
+        //        $expired_stock= 0;
+        //
+        //        foreach($data as $key => $value){
+        //            $date_now = new DateTime();
+        //            $expired_date   = new DateTime( $value['expired_date'] );
+        //            if ( $date_now > $expired_date ){
+        //                $expired_stock += $value['stok_quantity'];
+        //            }
+        //
+        //        }
+
+
+
+        $response = array(
+            "purchase_id" => $data[0]['purchase_id'],
+            "central_stock" => $stock,
+            "aaData" =>  $data,
+            "expired_stock" =>  $expired_stock,
+
+
+        );
+
+
+
+        //  echo '<pre>';print_r($response);exit();
+
+        return $response;
+    }
+
 
     public function current_stock($product_id, $status)
     {

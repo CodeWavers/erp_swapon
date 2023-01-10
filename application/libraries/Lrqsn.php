@@ -133,6 +133,34 @@ class Lrqsn
         return $invoiceForm;
     }
 
+    public function return_products_form()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $CI->load->model('Web_settings');
+        $outlet_list    = $CI->Rqsn->outlet_list();
+        $outlet_list_to    = $CI->Rqsn->outlet_list_to();
+        $cw_list    = $CI->Rqsn->cw_list();
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $taxfield = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $data = array(
+            'title'         => "Return Products",
+            'outlet_list' => $outlet_list,
+            'outlet_list_to' => $outlet_list_to,
+            'cw_list' => $cw_list,
+            'discount_type' => $currency_details[0]['discount_type'],
+            'taxes'         => $taxfield,
+        );
+
+        // echo '<pre'; print_r($cw_list);exit();
+        //    die();
+        $invoiceForm = $CI->parser->parse('rqsn/return_form', $data, true);
+        return $invoiceForm;
+    }
+
     public function purchase_rqsn_form()
     {
         $CI = &get_instance();

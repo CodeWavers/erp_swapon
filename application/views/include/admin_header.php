@@ -477,6 +477,21 @@ $birthday = $CI->Reports->birthday_noti();
                         echo " ";
                     } ?>"><a href="<?php echo base_url('Crqsn/transfer_form') ?>">Transfer to Outlet</a></li>
                 <?php } ?>
+                <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                    <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url('Crqsn/return_products') ?>">Return Products</a></li>
+                <?php } ?>
+
+                <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
+                    <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
+                        echo "active";
+                    } else {
+                        echo " ";
+                    } ?>"><a href="<?php echo base_url('Crqsn/return_rcv') ?>">Return Products Receive</a></li>
+                <?php } ?>
 
 
                 <!-- Product recieve start -->

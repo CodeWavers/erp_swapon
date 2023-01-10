@@ -54,6 +54,15 @@ class Crqsn extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function return_products()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lrqsn');
+        $content = $CI->lrqsn->return_products_form();
+        $this->template->full_admin_html_view($content);
+    }
+
     public function cw_purchase()
     {
         $CI = &get_instance();
@@ -398,6 +407,19 @@ class Crqsn extends CI_Controller
 
 
         $content = $this->parser->parse('rqsn/rqsn_approve_outlet', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function return_rcv()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->model('Rqsn');
+        $data['title'] = 'Return Receive';
+        $data['t'] = $this->Rqsn->return_rcv();
+
+
+        $content = $this->parser->parse('rqsn/return_rcv', $data, true);
         $this->template->full_admin_html_view($content);
     }
 
