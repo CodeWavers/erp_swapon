@@ -159,20 +159,12 @@ class Rqsn extends CI_Model
     }
     public function  transfer_entry()
     {
-
-
         $this->load->model('Web_settings');
-        $this->load->model('Reports');
-        $this->load->model('Rqsn');
         $rqsn_id = mt_rand();
         $user_id = $this->session->userdata('user_id');
         //    echo "Ok";exit();
-        $Vdate = date('Y-m-d');
+        $Vdate =date('Y-m-d');
         //Data inserting into invoice table
-
-        $outlet_id = $this->input->post('from_id', true);
-        $is_exp = $this->input->post('is_exp', true);
-
         $datarq = array(
             'rqsn_id'     => $rqsn_id,
             'date'            => (!empty($this->input->post('invoice_date', true)) ? $this->input->post('invoice_date', true) : date('Y-m-d')),
@@ -186,7 +178,7 @@ class Rqsn extends CI_Model
 
         $this->db->insert('rqsn', $datarq);
 
-        //$outlet_name = $this->db->select('outlet_name')->from('outlet_warehouse')->where('outlet_id', $this->input->post('to_id', true))->get()->row()->outlet_name;
+        $outlet_name=$this->db->select('outlet_name')->from('outlet_warehouse')->where('outlet_id',$this->input->post('to_id', true))->get()->row()->outlet_name;
 
 
 
@@ -198,9 +190,6 @@ class Rqsn extends CI_Model
         $total_price             = $this->input->post('total_price', true);
 
 
-        //  echo $outlet_id;exit();
-
-
         for ($i = 0, $n   = count($p_id); $i < $n; $i++) {
             $qty  = $quantity[$i];
             $un  = $unit[$i];
@@ -209,88 +198,88 @@ class Rqsn extends CI_Model
             $t_price   = $total_price[$i];
 
 
-
-            if ($outlet_id == 'HK7TGDT69VFMXB7') {
-                $stock_details = $this->Reports->getExpiryCheckList($product_id, $is_exp)['aaData'];
-            } else {
-                $stock_details = $this->Rqsn->expiry_outlet_stock($product_id, $is_exp)['aaData'];
-            }
-
-
-            $stock = $stock_details[0]['stok_quantity'];
-
-            $rest = $qty - $stock;
-
-
-            $array = array();
-
-            $aprv_qty = $rest > 0 ? $stock : $qty;
-
-            $first_array = array(
-
-
+            $rqsn_details = array(
                 'rqsn_detail_id'     => mt_rand(),
                 'rqsn_id'     => $rqsn_id,
                 'product_id'         => $product_id,
-                'purchase_id' => $stock_details[0]['purchase_id'],
-                'quantity'                => $aprv_qty,
+                'quantity'                => $qty,
                 'unit'                => $un,
                 'status'                => 2,
 
 
                 //temporary added
-                'rate' => $rate,
-                'item_total' => $t_price,
-                'a_qty' => $aprv_qty,
+                'rate' =>$rate,
+                'item_total' =>$t_price,
+                'a_qty' =>$qty,
                 'isaprv'                => 1,
-                'is_return'                => (isset($_POST['return']) ? 1 : 0),
+//                'isrcv'                => 1,
+                'is_return' => (isset($_POST['return']) ? 1 : 0),
+
             );
-
-            array_push($array, $first_array);
-
-            if ($rest > 0) {
-                foreach (array_slice($stock_details, 1) as $item) {
-
-                    $stockQty = $item['stok_quantity'];
-
-                    if ($stockQty >= $rest) {
-                        $stockQty -= $rest;
-                        $rest = 0;
-                    } else {
-                        $stockQty = 0;
-                        $rest = $rest - $stockQty;
-                    }
-
-                    $array[] = array(
-
-
-                        'rqsn_detail_id'     => mt_rand(),
-                        'rqsn_id'     => $rqsn_id,
-                        'product_id'         => $product_id,
-                        'purchase_id' => $item['purchase_id'],
-                        'quantity'                => $item['stok_quantity'] - $stockQty,
-                        'unit'                => $un,
-                        'status'                => 2,
-
-
-                        //temporary added
-                        'rate' => $rate,
-                        'item_total' => $t_price,
-                        'a_qty' => $item['stok_quantity'] - $stockQty,
-                        'isaprv'                => 1,
-                        'is_return'                => (isset($_POST['return']) ? 1 : 0),
-                    );
-                }
-            }
-
-            foreach ($array as $ar) {
-
-                if ($ar['a_qty'] > 0) {
-                    $this->db->insert('rqsn_details', $ar);
-                }
+            if (!empty($quantity)) {
+                $this->db->insert('rqsn_details', $rqsn_details);
             }
         }
-
+//        //Income Credit
+//        $incCr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  306,
+//            'Narration'      =>  'Income For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'Debit'         =>  0,
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $incCr);
+////Current Asset Receivable
+//        $curDr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  1020303,
+//            'Narration'      =>  'Receivable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          =>  0,
+//            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $curDr);
+//        //Current Liabilties Payable
+//        $curLCr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  50201,
+//            'Narration'      =>  'Payable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'Debit'         =>  0,
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $curLCr);
+//        //Expense Debit
+//        $exDr = array(
+//            'VNo'            =>  $rqsn_id,
+//            'Vtype'          =>  'Transfer',
+//            'VDate'          =>  $Vdate,
+//            'COAID'          =>  407,
+//            'Narration'      =>  'Transfer Expense For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+//            'Credit'          => 0,
+//            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+//            'IsPosted'       =>  1,
+//            'CreateBy'       => $user_id,
+//            'CreateDate'     => $Vdate,
+//            'IsAppove'       => 1
+//        );
+//        $this->db->insert('acc_transaction', $exDr);
 
         return $rqsn_id;
     }
@@ -1395,7 +1384,7 @@ class Rqsn extends CI_Model
             ->join('central_warehouse e', 'e.warehouse_id=a.to_id', 'left')
             ->join('product_information d', 'd.product_id=b.product_id')
             ->where('b.is_return', 1)
-            // ->where('b.isaprv',1)
+             ->where('b.isrcv',null)
             ->where('a.from_id', $outlet_id)
             ->group_by(array('b.product_id', 'b.rqsn_id'))
             ->get()

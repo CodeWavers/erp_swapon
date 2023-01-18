@@ -470,7 +470,7 @@ $birthday = $CI->Reports->birthday_noti();
                         echo " ";
                     } ?>"><a href="<?php echo base_url('Crqsn/rqsn_form') ?>">Requisition Form</a></li>
                 <?php } ?>
-                <?php if ($this->permission1->method('transfer_form', 'create')->access()) { ?>
+                <?php if ($this->permission1->method('rqsn_form', 'create')->access()) { ?>
                     <li class="treeview <?php if ($this->uri->segment('1') == ("Crqsn") && $this->uri->segment('2') == ("index")) {
                         echo "active";
                     } else {
