@@ -21,7 +21,7 @@ class Rqsn extends CI_Model
 
         return $list = $this->db->select('*')
             ->from('sec_role')
-            ->where('type','production')
+            ->where('type', 'production')
 
             ->get()->result_array();
     }
@@ -101,7 +101,7 @@ class Rqsn extends CI_Model
 
     public function rqsn_entry()
     {
-          // echo "<pre>";print_r($_POST);exit();
+        // echo "<pre>";print_r($_POST);exit();
 
         $this->load->model('Web_settings');
         $rqsn_id = mt_rand();
@@ -115,11 +115,11 @@ class Rqsn extends CI_Model
             'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Requisition'),
             'from_id' => $this->input->post('from_id', true),
             'to_id'  => $this->input->post('to_id', true),
-          //  'user_id'  => $user_id,
+            //  'user_id'  => $user_id,
             'status'   => 1,
         );
 
-          // echo "<pre>";print_r($datarq);exit();
+        // echo "<pre>";print_r($datarq);exit();
         $this->db->insert('rqsn', $datarq);
 
 
@@ -149,7 +149,7 @@ class Rqsn extends CI_Model
                 'status'                => 1,
 
             );
-           // echo "<pre>";print_r($rate);exit();
+            // echo "<pre>";print_r($rate);exit();
             if (!empty($quantity)) {
                 $this->db->insert('rqsn_details', $rqsn_details);
             }
@@ -163,7 +163,7 @@ class Rqsn extends CI_Model
         $rqsn_id = mt_rand();
         $user_id = $this->session->userdata('user_id');
         //    echo "Ok";exit();
-        $Vdate =date('Y-m-d');
+        $Vdate = date('Y-m-d');
         //Data inserting into invoice table
         $datarq = array(
             'rqsn_id'     => $rqsn_id,
@@ -178,7 +178,7 @@ class Rqsn extends CI_Model
 
         $this->db->insert('rqsn', $datarq);
 
-        $outlet_name=$this->db->select('outlet_name')->from('outlet_warehouse')->where('outlet_id',$this->input->post('to_id', true))->get()->row()->outlet_name;
+        $outlet_name = $this->db->select('outlet_name')->from('outlet_warehouse')->where('outlet_id', $this->input->post('to_id', true))->get()->row()->outlet_name;
 
 
 
@@ -208,11 +208,11 @@ class Rqsn extends CI_Model
 
 
                 //temporary added
-                'rate' =>$rate,
-                'item_total' =>$t_price,
-                'a_qty' =>$qty,
+                'rate' => $rate,
+                'item_total' => $t_price,
+                'a_qty' => $qty,
                 'isaprv'                => 1,
-//                'isrcv'                => 1,
+                //                'isrcv'                => 1,
                 'is_return' => (isset($_POST['return']) ? 1 : 0),
 
             );
@@ -220,66 +220,66 @@ class Rqsn extends CI_Model
                 $this->db->insert('rqsn_details', $rqsn_details);
             }
         }
-//        //Income Credit
-//        $incCr = array(
-//            'VNo'            =>  $rqsn_id,
-//            'Vtype'          =>  'Transfer',
-//            'VDate'          =>  $Vdate,
-//            'COAID'          =>  306,
-//            'Narration'      =>  'Income For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
-//            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
-//            'Debit'         =>  0,
-//            'IsPosted'       =>  1,
-//            'CreateBy'       => $user_id,
-//            'CreateDate'     => $Vdate,
-//            'IsAppove'       => 1
-//        );
-//        $this->db->insert('acc_transaction', $incCr);
-////Current Asset Receivable
-//        $curDr = array(
-//            'VNo'            =>  $rqsn_id,
-//            'Vtype'          =>  'Transfer',
-//            'VDate'          =>  $Vdate,
-//            'COAID'          =>  1020303,
-//            'Narration'      =>  'Receivable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
-//            'Credit'          =>  0,
-//            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
-//            'IsPosted'       =>  1,
-//            'CreateBy'       => $user_id,
-//            'CreateDate'     => $Vdate,
-//            'IsAppove'       => 1
-//        );
-//        $this->db->insert('acc_transaction', $curDr);
-//        //Current Liabilties Payable
-//        $curLCr = array(
-//            'VNo'            =>  $rqsn_id,
-//            'Vtype'          =>  'Transfer',
-//            'VDate'          =>  $Vdate,
-//            'COAID'          =>  50201,
-//            'Narration'      =>  'Payable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
-//            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
-//            'Debit'         =>  0,
-//            'IsPosted'       =>  1,
-//            'CreateBy'       => $user_id,
-//            'CreateDate'     => $Vdate,
-//            'IsAppove'       => 1
-//        );
-//        $this->db->insert('acc_transaction', $curLCr);
-//        //Expense Debit
-//        $exDr = array(
-//            'VNo'            =>  $rqsn_id,
-//            'Vtype'          =>  'Transfer',
-//            'VDate'          =>  $Vdate,
-//            'COAID'          =>  407,
-//            'Narration'      =>  'Transfer Expense For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
-//            'Credit'          => 0,
-//            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
-//            'IsPosted'       =>  1,
-//            'CreateBy'       => $user_id,
-//            'CreateDate'     => $Vdate,
-//            'IsAppove'       => 1
-//        );
-//        $this->db->insert('acc_transaction', $exDr);
+        //        //Income Credit
+        //        $incCr = array(
+        //            'VNo'            =>  $rqsn_id,
+        //            'Vtype'          =>  'Transfer',
+        //            'VDate'          =>  $Vdate,
+        //            'COAID'          =>  306,
+        //            'Narration'      =>  'Income For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+        //            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+        //            'Debit'         =>  0,
+        //            'IsPosted'       =>  1,
+        //            'CreateBy'       => $user_id,
+        //            'CreateDate'     => $Vdate,
+        //            'IsAppove'       => 1
+        //        );
+        //        $this->db->insert('acc_transaction', $incCr);
+        ////Current Asset Receivable
+        //        $curDr = array(
+        //            'VNo'            =>  $rqsn_id,
+        //            'Vtype'          =>  'Transfer',
+        //            'VDate'          =>  $Vdate,
+        //            'COAID'          =>  1020303,
+        //            'Narration'      =>  'Receivable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+        //            'Credit'          =>  0,
+        //            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+        //            'IsPosted'       =>  1,
+        //            'CreateBy'       => $user_id,
+        //            'CreateDate'     => $Vdate,
+        //            'IsAppove'       => 1
+        //        );
+        //        $this->db->insert('acc_transaction', $curDr);
+        //        //Current Liabilties Payable
+        //        $curLCr = array(
+        //            'VNo'            =>  $rqsn_id,
+        //            'Vtype'          =>  'Transfer',
+        //            'VDate'          =>  $Vdate,
+        //            'COAID'          =>  50201,
+        //            'Narration'      =>  'Payable For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+        //            'Credit'          =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+        //            'Debit'         =>  0,
+        //            'IsPosted'       =>  1,
+        //            'CreateBy'       => $user_id,
+        //            'CreateDate'     => $Vdate,
+        //            'IsAppove'       => 1
+        //        );
+        //        $this->db->insert('acc_transaction', $curLCr);
+        //        //Expense Debit
+        //        $exDr = array(
+        //            'VNo'            =>  $rqsn_id,
+        //            'Vtype'          =>  'Transfer',
+        //            'VDate'          =>  $Vdate,
+        //            'COAID'          =>  407,
+        //            'Narration'      =>  'Transfer Expense For Transfer ID -  ' . $rqsn_id . ' for Outlet  ' . $outlet_name,
+        //            'Credit'          => 0,
+        //            'Debit'         =>  (!empty($this->input->post('total_expense', TRUE)) ? $this->input->post('total_expense', TRUE): 0),
+        //            'IsPosted'       =>  1,
+        //            'CreateBy'       => $user_id,
+        //            'CreateDate'     => $Vdate,
+        //            'IsAppove'       => 1
+        //        );
+        //        $this->db->insert('acc_transaction', $exDr);
 
         return $rqsn_id;
     }
@@ -297,8 +297,7 @@ class Rqsn extends CI_Model
             'details'         => (!empty($this->input->post('inva_details', true)) ? $this->input->post('inva_details', true) : 'Production Requisition'),
             'to_id'  => $this->input->post('to_id', true),
             'status'   => 1,
-        );
-   ;
+        );;
 
         $this->db->insert('pr_rqsn', $datarq);
 
@@ -315,16 +314,15 @@ class Rqsn extends CI_Model
             $product_id   = $p_id[$i];
 
 
-            $check_product = $this->db->select('*')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->num_rows();
-            $exist_qty = $this->db->select('quantity')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row()->quantity;
+            $check_product = $this->db->select('*')->from('pr_rqsn_details')->where('product_id', $product_id)->get()->num_rows();
+            $exist_qty = $this->db->select('quantity')->from('pr_rqsn_details')->where('product_id', $product_id)->get()->row()->quantity;
 
-            if ($check_product > 0){
+            if ($check_product > 0) {
 
-                $this->db->set(array('quantity'=> $qty+$exist_qty,'last_updated' =>date('Y-m-d')));
+                $this->db->set(array('quantity' => $qty + $exist_qty, 'last_updated' => date('Y-m-d')));
                 $this->db->where('product_id', $product_id);
                 $this->db->update('pr_rqsn_details');
-
-            }else{
+            } else {
                 $rqsn_details = array(
                     'pr_rqsn_detail_id'     => mt_rand(),
                     'pr_rqsn_id'     => $pr_rqsn_id,
@@ -339,18 +337,13 @@ class Rqsn extends CI_Model
 
 
                     'isaprv'                => 1,
-//                'isrcv'                => 1,
+                    //                'isrcv'                => 1,
 
                 );
                 if (!empty($quantity)) {
                     $this->db->insert('pr_rqsn_details', $rqsn_details);
                 }
-
             }
-
-
-
-
         }
 
         return $pr_rqsn_id;
@@ -1031,7 +1024,7 @@ class Rqsn extends CI_Model
         foreach ($records as $record) {
 
 
-            $stock = $CI->Reports->getCheckList(null, $record->product_id,'','')['central_stock'];
+            $stock = $CI->Reports->getCheckList2(null, $record->product_id, '', '', '', '')['central_stock'];
 
 
             $data[] = array(
@@ -1308,7 +1301,7 @@ class Rqsn extends CI_Model
             ->from('rqsn a')
             ->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id')
             ->join('outlet_warehouse c', 'c.outlet_id=a.from_id')
-            ->join('central_warehouse e', 'e.warehouse_id=a.to_id','left')
+            ->join('central_warehouse e', 'e.warehouse_id=a.to_id', 'left')
             ->join('product_information d', 'd.product_id=b.product_id')
 
 
@@ -1352,7 +1345,7 @@ class Rqsn extends CI_Model
                 'from' => $to->outlet_name,
                 'to' => $from->outlet_name,
                 'date' => $record->date,
-                'product_name' =>  '(' . $record->sku . ' )'.$record->product_name  ,
+                'product_name' =>  '(' . $record->sku . ' )' . $record->product_name,
                 'a_qty' => $record->a_qty,
                 'unit' => $record->unit,
                 'details' => $record->details,
@@ -1384,7 +1377,7 @@ class Rqsn extends CI_Model
             ->join('central_warehouse e', 'e.warehouse_id=a.to_id', 'left')
             ->join('product_information d', 'd.product_id=b.product_id')
             ->where('b.is_return', 1)
-             ->where('b.isrcv',null)
+            ->where('b.isrcv', null)
             ->where('a.from_id', $outlet_id)
             ->group_by(array('b.product_id', 'b.rqsn_id'))
             ->get()
@@ -1583,7 +1576,7 @@ class Rqsn extends CI_Model
         return false;
     }
 
-    public function outlet_stock($postData = null, $post_product_id = null,$from_date=null,$to_date=null, $value = null)
+    public function outlet_stock($postData = null, $post_product_id = null, $from_date = null, $to_date = null, $value = null)
     {
         $this->load->model('suppliers');
         $this->load->model('warehouse');
@@ -1592,16 +1585,14 @@ class Rqsn extends CI_Model
 
         $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
 
-//        echo $outlet_id;
-//        exit();
+        //        echo $outlet_id;
+        //        exit();
 
-        if ($from_date == null){
+        if ($from_date == null) {
             $date = date('Y-m-d');
-            $op_date = date( 'Y-m-d', strtotime( $date . ' -1 day' ) );
-
-        }else{
-            $op_date = date( 'Y-m-d', strtotime( $from_date . ' -1 day' ) );
-
+            $op_date = date('Y-m-d', strtotime($date . ' -1 day'));
+        } else {
+            $op_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
         }
 
         $product_sku = $this->input->post('product_sku', TRUE);
@@ -1629,9 +1620,9 @@ class Rqsn extends CI_Model
             ## Total number of records without filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information d');
-//            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
-//            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
-          //  $this->db->where('c.from_id', $outlet_id);
+            //            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+            //            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
+            //  $this->db->where('c.from_id', $outlet_id);
             if ($product_sku != '') {
                 $this->db->where_in('d.sku', $product_sku);
             }
@@ -1639,15 +1630,15 @@ class Rqsn extends CI_Model
 
 
             if (isset($cat_id) && $cat_id != '') {
-                $this->db->like('d.category_id', $cat_id,'both');
+                $this->db->like('d.category_id', $cat_id, 'both');
             }
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
 
-//                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
-//                    $this->db->or_where('d.sku',$product_sku[$i]);
-//                }
+            //                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+            //                    $this->db->or_where('d.sku',$product_sku[$i]);
+            //                }
 
             $this->db->group_by('d.product_id');
             $records = $this->db->get()->num_rows();
@@ -1656,22 +1647,22 @@ class Rqsn extends CI_Model
             ## Total number of record with filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information d');
-//            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
-//            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
+            //            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+            //            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
             //$this->db->where('c.from_id', $outlet_id);
             if ($product_sku != '') {
                 $this->db->where_in('d.sku', $product_sku);
             }
-           if (isset($cat_id) && $cat_id != '') {
-                $this->db->like('d.category_id', $cat_id,'both');
-              }
+            if (isset($cat_id) && $cat_id != '') {
+                $this->db->like('d.category_id', $cat_id, 'both');
+            }
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
 
-//                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
-//                    $this->db->or_where('d.sku',$product_sku[$i]);
-//                }
+            //                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+            //                    $this->db->or_where('d.sku',$product_sku[$i]);
+            //                }
 
 
             $this->db->group_by('d.product_id');
@@ -1680,17 +1671,17 @@ class Rqsn extends CI_Model
         }
         ## Fetch records
         $this->db->select("*");
-//        $this->db->from('rqsn a');
-//        $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
-//        $this->db->join('product_information d', 'd.product_id=b.product_id');
+        //        $this->db->from('rqsn a');
+        //        $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
+        //        $this->db->join('product_information d', 'd.product_id=b.product_id');
 
         $this->db->from('product_information d');
-//        $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
-//        $this->db->join('rqsn a', 'b.rqsn_id=a.rqsn_id','left');
+        //        $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+        //        $this->db->join('rqsn a', 'b.rqsn_id=a.rqsn_id','left');
 
-//        $this->db->where('b.status', 3);
-//        $this->db->where('b.isrcv', 1);
-//        $this->db->where('a.from_id', $outlet_id);
+        //        $this->db->where('b.status', 3);
+        //        $this->db->where('b.isrcv', 1);
+        //        $this->db->where('a.from_id', $outlet_id);
 
         if ($product_sku != '') {
             $this->db->where_in('d.sku', $product_sku);
@@ -1704,12 +1695,12 @@ class Rqsn extends CI_Model
         }
 
         if (isset($cat_id) && $cat_id != '') {
-            $this->db->like('d.category_id', $cat_id,'both');
+            $this->db->like('d.category_id', $cat_id, 'both');
         }
 
-//            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
-//                $this->db->or_where('d.sku',$product_sku[$i]);
-//            }
+        //            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+        //                $this->db->or_where('d.sku',$product_sku[$i]);
+        //            }
 
 
         if (!$post_product_id) {
@@ -1749,7 +1740,7 @@ class Rqsn extends CI_Model
 
             $sprice = (!empty($record->price) ? $record->price : 0);
             $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-           // $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
+            // $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
 
 
 
@@ -1799,23 +1790,23 @@ class Rqsn extends CI_Model
 
             $phy_count = $this->db->select('SUM(a.difference) as phy_qty')
                 ->from('stock_taking_details a')
-                ->join('stock_taking b', 'b.stid = a.stid','left')
+                ->join('stock_taking b', 'b.stid = a.stid', 'left')
                 ->where(array(
-                    'b.outlet_id' =>$outlet_id,
+                    'b.outlet_id' => $outlet_id,
                     'a.product_id' => $record->product_id,
                     'a.status' => 1,
 
                 ))
                 ->group_by('a.product_id')
-                ->order_by('a.id','desc')
+                ->order_by('a.id', 'desc')
                 ->get()
                 ->row();
 
-//            echo '<pre>';print_r($outlet_id);
-//            echo '<pre>';print_r($phy_count);
+            //            echo '<pre>';print_r($outlet_id);
+            //            echo '<pre>';print_r($phy_count);
             $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
 
-            $stock =  ((!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty)+$diff;
+            $stock =  ((!empty($total_purchase->total_purchase) ? $total_purchase->total_purchase : 0) - $out_qty) + $diff;
 
 
             //echo '<pre>';print_r($diff);
@@ -1882,19 +1873,17 @@ class Rqsn extends CI_Model
                     ->from('stock_taking_details a')
                     ->join('stock_taking b', 'b.stid = a.stid')
                     ->where(array(
-                        'b.outlet_id' =>$outlet_id,
+                        'b.outlet_id' => $outlet_id,
                         'a.product_id' => $record->product_id,
                         'a.status' => 1,
 
                     ))
                     ->group_by('a.product_id')
-                    ->order_by('a.id','desc')
+                    ->order_by('a.id', 'desc')
                     ->get()
                     ->row();
                 $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-                $opening_stock =  ((!empty($opening_total_purchase->total_purchase) ? $opening_total_purchase->total_purchase : 0) - $opening_out_qty)+$diff;
-
-
+                $opening_stock =  ((!empty($opening_total_purchase->total_purchase) ? $opening_total_purchase->total_purchase : 0) - $opening_out_qty) + $diff;
             } else {
                 $opening_stock = $stock;
             }
@@ -1965,99 +1954,26 @@ class Rqsn extends CI_Model
                     ->from('stock_taking_details a')
                     ->join('stock_taking b', 'b.stid = a.stid')
                     ->where(array(
-                        'b.outlet_id' =>$outlet_id,
+                        'b.outlet_id' => $outlet_id,
                         'a.product_id' => $record->product_id,
                         'a.status' => 1,
 
                     ))
                     ->group_by('a.product_id')
-                    ->order_by('a.id','desc')
+                    ->order_by('a.id', 'desc')
                     ->get()
                     ->row();
                 $closing_out_qty = (!empty($closing_total_sale->total_sale) ? $closing_total_sale->total_sale : 0);
                 $diff = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
-                $closing_stock =  ((!empty($closing_total_purchase->total_purchase) ? $closing_total_purchase->total_purchase : 0) - $closing_out_qty)+$diff;
-
-
+                $closing_stock =  ((!empty($closing_total_purchase->total_purchase) ? $closing_total_purchase->total_purchase : 0) - $closing_out_qty) + $diff;
             } else {
                 $closing_stock = $stock;
             }
-            
+
             // Closing stock end
             if ($value == 1) {
-               
+
                 if ($closing_stock > 0) {
-                        $data[] = array(
-                            'sl'            =>   $sl,
-                            'product_name'  =>  $record->product_name,
-                            'product_model' =>  $record->product_model,
-                            // 'production_cost'  => $production_price,
-                            'product_type'  =>  $record->finished_raw,
-                            'sales_price'   =>  sprintf('%0.2f', $sprice),
-                            // 'purchase_p'    =>  $pprice,
-                            'sku'          => $record->sku,
-                            'category'  => (!empty($record->category_name) ? $record->category_name : ''),
-                            'totalPurchaseQnty' => sprintf('%0.2f', $total_purchase->total_purchase),
-                            'totalSalesQnty' => sprintf('%0.2f', $out_qty),
-                            'dispatch' => $total_sale->total_sale,
-                            'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
-                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                            'opening_stock' => $opening_stock,
-                            'closing_stock' => $closing_stock,
-                            'total_sale_price' => ($closing_stock) * $sprice,
-                            'purchase_total' => (($closing_stock * $pprice) != 0)
-                                ? ($closing_stock * $pprice)
-                                : ($production_price
-                                    ? $production_price * $closing_stock
-                                    : 0),
-
-                            'opening_inventory' => (($opening_stock * $pprice) != 0)
-                                ? ($opening_stock * $pprice)
-                                : ($product_supplier_price
-                                    ? $production_price * $opening_stock
-                                    : 0),
-
-                        );
-                        $sl++;
-                    }
-               }
-                if ($value == 0) {
-                    if ($closing_stock < 1) {
-                        $data[] = array(
-                            'sl'            =>   $sl,
-                            'product_name'  =>  $record->product_name,
-                            'product_model' =>  $record->product_model,
-                            // 'production_cost'  => $production_price,
-                            'product_type'  =>  $record->finished_raw,
-                            'sales_price'   =>  sprintf('%0.2f', $sprice),
-                            // 'purchase_p'    =>  $pprice,
-                            'sku'          => $record->sku,
-                            'category'  => (!empty($record->category_name) ? $record->category_name : ''),
-                            'totalPurchaseQnty' => sprintf('%0.2f', $total_purchase->total_purchase),
-                            'totalSalesQnty' => sprintf('%0.2f', $out_qty),
-                            'dispatch' => $total_sale->total_sale,
-                            'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
-                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                            'opening_stock' => $opening_stock,
-                            'closing_stock' => $closing_stock,
-                            'total_sale_price' => ($closing_stock) * $sprice,
-                            'purchase_total' => (($closing_stock * $pprice) != 0)
-                                ? ($closing_stock * $pprice)
-                                : ($production_price
-                                    ? $production_price * $closing_stock
-                                    : 0),
-
-                            'opening_inventory' => (($opening_stock * $pprice) != 0)
-                                ? ($opening_stock * $pprice)
-                                : ($product_supplier_price
-                                    ? $production_price * $opening_stock
-                                    : 0),
-
-                        );
-                        $sl++;
-                    }
-                }
-                if ($value == 2) {
                     $data[] = array(
                         'sl'            =>   $sl,
                         'product_name'  =>  $record->product_name,
@@ -2091,31 +2007,102 @@ class Rqsn extends CI_Model
                     );
                     $sl++;
                 }
+            }
+            if ($value == 0) {
+                if ($closing_stock < 1) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_model' =>  $record->product_model,
+                        // 'production_cost'  => $production_price,
+                        'product_type'  =>  $record->finished_raw,
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        // 'purchase_p'    =>  $pprice,
+                        'sku'          => $record->sku,
+                        'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                        'totalPurchaseQnty' => sprintf('%0.2f', $total_purchase->total_purchase),
+                        'totalSalesQnty' => sprintf('%0.2f', $out_qty),
+                        'dispatch' => $total_sale->total_sale,
+                        'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock' => $opening_stock,
+                        'closing_stock' => $closing_stock,
+                        'total_sale_price' => ($closing_stock) * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+                    );
+                    $sl++;
+                }
+            }
+            if ($value == 2) {
+                $data[] = array(
+                    'sl'            =>   $sl,
+                    'product_name'  =>  $record->product_name,
+                    'product_model' =>  $record->product_model,
+                    // 'production_cost'  => $production_price,
+                    'product_type'  =>  $record->finished_raw,
+                    'sales_price'   =>  sprintf('%0.2f', $sprice),
+                    // 'purchase_p'    =>  $pprice,
+                    'sku'          => $record->sku,
+                    'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                    'totalPurchaseQnty' => sprintf('%0.2f', $total_purchase->total_purchase),
+                    'totalSalesQnty' => sprintf('%0.2f', $out_qty),
+                    'dispatch' => $total_sale->total_sale,
+                    'return_given' => sprintf('%0.2f', $return_given->totalReturnQnty),
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                    'opening_stock' => $opening_stock,
+                    'closing_stock' => $closing_stock,
+                    'total_sale_price' => ($closing_stock) * $sprice,
+                    'purchase_total' => (($closing_stock * $pprice) != 0)
+                        ? ($closing_stock * $pprice)
+                        : ($production_price
+                            ? $production_price * $closing_stock
+                            : 0),
+
+                    'opening_inventory' => (($opening_stock * $pprice) != 0)
+                        ? ($opening_stock * $pprice)
+                        : ($product_supplier_price
+                            ? $production_price * $opening_stock
+                            : 0),
+
+                );
+                $sl++;
+            }
 
             //$closing_inventory = array_sum(array_column($data, 'purchase_total'));
-     }
-        $opening_finished= 0;
-        $opening_raw= 0;
-        $opening_tools= 0;
+        }
+        $opening_finished = 0;
+        $opening_raw = 0;
+        $opening_tools = 0;
 
-        $closing_finished= 0;
-        $closing_raw= 0;
-        $closing_tools= 0;
+        $closing_finished = 0;
+        $closing_raw = 0;
+        $closing_tools = 0;
 
 
-        foreach($data as $key => $value){
+        foreach ($data as $key => $value) {
 
-            if($value['product_type'] == 1) {
-                $opening_finished+= $value['opening_inventory'];
-                $closing_finished+= $value['purchase_total'];
+            if ($value['product_type'] == 1) {
+                $opening_finished += $value['opening_inventory'];
+                $closing_finished += $value['purchase_total'];
             }
-            if($value['product_type'] == 2) {
-                $opening_raw+= $value['opening_inventory'];
-                $closing_raw+= $value['purchase_total'];
+            if ($value['product_type'] == 2) {
+                $opening_raw += $value['opening_inventory'];
+                $closing_raw += $value['purchase_total'];
             }
-            if($value['product_type'] == 3) {
-                $opening_tools+= $value['opening_inventory'];
-                $closing_tools+= $value['purchase_total'];
+            if ($value['product_type'] == 3) {
+                $opening_tools += $value['opening_inventory'];
+                $closing_tools += $value['purchase_total'];
             }
         }
 
@@ -2146,6 +2133,740 @@ class Rqsn extends CI_Model
         }
 
         return $response;
+    }
+
+    public function outlet_stock2($postData = null, $post_product_id = null, $from_date = null, $to_date = null, $value = null)
+    {
+        $this->load->model('suppliers');
+        $this->load->model('warehouse');
+        $response = array();
+
+
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+
+        //        echo $outlet_id;
+        //        exit();
+
+        if ($from_date == null) {
+            $date = date('Y-m-d');
+            $op_date = date('Y-m-d', strtotime($date . ' -1 day'));
+        } else {
+            $op_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
+        }
+
+        $product_sku = $this->input->post('product_sku', TRUE);
+
+        $cat_id = $this->input->post('cat_id', TRUE);
+
+
+        ## Read value
+        if (!$post_product_id) {
+
+            $draw = $postData['draw'];
+            $start = $postData['start'];
+            $rowperpage = $postData['length']; // Rows display per page
+            $columnIndex = $postData['order'][0]['column']; // Column index
+            $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+            $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+            $searchValue = $postData['search']['value']; // Search value
+
+            ## Search
+            $searchQuery = "";
+            if ($searchValue != '') {
+                $searchQuery = " (d.product_name like '%" . $searchValue . "%' or d.product_model like '%" . $searchValue . "%'  or d.sku like '%" . $searchValue . "%') ";
+            }
+
+            ## Total number of records without filtering
+            $this->db->select('count(*) as allcount');
+            $this->db->from('product_information d');
+            //            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+            //            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
+            //  $this->db->where('c.from_id', $outlet_id);
+            if ($product_sku != '') {
+                $this->db->where_in('d.sku', $product_sku);
+            }
+
+
+
+            if (isset($cat_id) && $cat_id != '') {
+                $this->db->like('d.category_id', $cat_id, 'both');
+            }
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+
+            //                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+            //                    $this->db->or_where('d.sku',$product_sku[$i]);
+            //                }
+
+            $this->db->group_by('d.product_id');
+            $records = $this->db->get()->num_rows();
+            $totalRecords = $records;
+
+            ## Total number of record with filtering
+            $this->db->select('count(*) as allcount');
+            $this->db->from('product_information d');
+            //            $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+            //            $this->db->join('rqsn c', 'b.rqsn_id=c.rqsn_id','left');
+            //$this->db->where('c.from_id', $outlet_id);
+            if ($product_sku != '') {
+                $this->db->where_in('d.sku', $product_sku);
+            }
+            if (isset($cat_id) && $cat_id != '') {
+                $this->db->like('d.category_id', $cat_id, 'both');
+            }
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+
+            //                for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+            //                    $this->db->or_where('d.sku',$product_sku[$i]);
+            //                }
+
+
+            $this->db->group_by('d.product_id');
+            $records = $this->db->get()->num_rows();
+            $totalRecordwithFilter = $records;
+        }
+        ## Fetch records
+        $this->db->select("*");
+        //        $this->db->from('rqsn a');
+        //        $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
+        //        $this->db->join('product_information d', 'd.product_id=b.product_id');
+
+        $this->db->from('product_information d');
+        //        $this->db->join('rqsn_details b', 'd.product_id=b.product_id','left');
+        //        $this->db->join('rqsn a', 'b.rqsn_id=a.rqsn_id','left');
+
+        //        $this->db->where('b.status', 3);
+        //        $this->db->where('b.isrcv', 1);
+        //        $this->db->where('a.from_id', $outlet_id);
+
+        if ($product_sku != '') {
+            $this->db->where_in('d.sku', $product_sku);
+        }
+
+        if (!$post_product_id && $searchValue != '')
+            $this->db->where($searchQuery);
+
+        if ($post_product_id) {
+            $this->db->where('d.product_id', $post_product_id);
+        }
+
+        if (isset($cat_id) && $cat_id != '') {
+            $this->db->like('d.category_id', $cat_id, 'both');
+        }
+
+        //            for ($i = 0, $ien = count($product_sku); $i < $ien; $i++) {
+        //                $this->db->or_where('d.sku',$product_sku[$i]);
+        //            }
+
+
+        if (!$post_product_id) {
+            $this->db->order_by($columnName, $columnSortOrder);
+            $this->db->group_by('d.product_id');
+            $this->db->limit($rowperpage, $start);
+        }
+
+
+        $records = $this->db->get()->result();
+        $data = array();
+
+        $sl = 1;
+
+
+
+        $closing_inventory = '';
+
+
+        foreach ($records as $record) {
+
+            $production_cost = $this->db->select('avg(production_cost) as cost')->from('production_cost a')->where('a.product_id', $record->product_id)->get()->row();
+            $production_price = (!empty($production_cost->cost) ? sprintf('%0.2f', $production_cost->cost) : 0);
+
+
+
+            $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,Avg(rate) as purchaseprice')->from('product_purchase_details')->where('product_id', $record->product_id)->get()->row();
+
+            $product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
+
+
+            $sprice = (!empty($record->price) ? $record->price : 0);
+            $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
+            // $stock =  (!empty($stockout->totalPurchaseQnty) ? $stockout->totalPurchaseQnty : 0) - (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0);
+
+
+            $total_in = $this->total_in($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+
+            $total_out = $this->total_out($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+
+            $total_return_given = $this->total_return_given($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+
+            $total_damage = $this->total_damage($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+
+            $stock = $total_in - $total_out - $total_return_given - $total_damage;
+
+            $new_opening_from_date = '';
+            $new_opening_to_date = '';
+            if ($from_date == '') {
+                $new_date = date_create("0001-01-01");
+                $new_change_date = date_format($new_date, "Y-m-d");
+                $new_opening_from_date = date('Y-m-d', strtotime($new_change_date . ' -1 day'));
+            } else {
+                $new_opening_from_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
+            }
+
+            if ($to_date == '') {
+                $date = date('Y-m-d');
+                $new_opening_to_date = date('Y-m-d', strtotime($date . ' -1 day'));
+            } else {
+                $new_opening_to_date = date('Y-m-d', strtotime($to_date . ' -1 day'));
+            }
+
+            if ($from_date) {
+                $opening_stock = $this->stock2(null, $new_opening_from_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+            } else {
+                $opening_stock = $this->stock2($new_opening_from_date, $new_opening_to_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+            }
+
+            if ($to_date) {
+                $closing_stock = $this->stock2(null, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null);
+                // $closing_stock = $opening_stock + $stock;
+            } else {
+                // $closing_stock = $this->stock2($new_from_date, $new_to_date, $new_outlet_id, $record->product_id, $record->finished_raw, null);
+                $closing_stock = $stock;
+            }
+
+
+
+
+
+            // Closing stock end
+            if ($value == 1) {
+
+                if ($closing_stock > 0) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_model' =>  $record->product_model,
+                        // 'production_cost'  => $production_price,
+                        'product_type'  =>  $record->finished_raw,
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        // 'purchase_p'    =>  $pprice,
+                        'sku'          => $record->sku,
+                        'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                        'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
+                        'totalSalesQnty' => sprintf('%0.2f', $total_out),
+                        // 'dispatch' => $total_sale->total_sale,
+                        'damagedQnty'   => $total_damage,
+                        'return_given' => sprintf('%0.2f', $total_return_given),
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock' => $opening_stock,
+                        'closing_stock' => $closing_stock,
+                        'total_sale_price' => ($closing_stock) * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+                    );
+                    $sl++;
+                }
+            }
+            if ($value == 0) {
+                if ($closing_stock < 1) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_model' =>  $record->product_model,
+                        // 'production_cost'  => $production_price,
+                        'product_type'  =>  $record->finished_raw,
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        // 'purchase_p'    =>  $pprice,
+                        'sku'          => $record->sku,
+                        'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                        'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
+                        'totalSalesQnty' => sprintf('%0.2f', $total_out),
+                        // 'dispatch' => $total_sale->total_sale,
+                        'damagedQnty'   => $total_damage,
+                        'return_given' => sprintf('%0.2f', $total_return_given),
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock' => $opening_stock,
+                        'closing_stock' => $closing_stock,
+                        'total_sale_price' => ($closing_stock) * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+                    );
+                    $sl++;
+                }
+            }
+            if ($value == 2) {
+                $data[] = array(
+                    'sl'            =>   $sl,
+                    'product_name'  =>  $record->product_name,
+                    'product_model' =>  $record->product_model,
+                    // 'production_cost'  => $production_price,
+                    'product_type'  =>  $record->finished_raw,
+                    'sales_price'   =>  sprintf('%0.2f', $sprice),
+                    // 'purchase_p'    =>  $pprice,
+                    'sku'          => $record->sku,
+                    'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                    'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
+                    'totalSalesQnty' => sprintf('%0.2f', $total_out),
+                    // 'dispatch' => $total_sale->total_sale,
+                    'damagedQnty'   => $total_damage,
+                    'return_given' => sprintf('%0.2f', $total_return_given),
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                    'opening_stock' => $opening_stock,
+                    'closing_stock' => $closing_stock,
+                    'total_sale_price' => ($closing_stock) * $sprice,
+                    'purchase_total' => (($closing_stock * $pprice) != 0)
+                        ? ($closing_stock * $pprice)
+                        : ($production_price
+                            ? $production_price * $closing_stock
+                            : 0),
+
+                    'opening_inventory' => (($opening_stock * $pprice) != 0)
+                        ? ($opening_stock * $pprice)
+                        : ($product_supplier_price
+                            ? $production_price * $opening_stock
+                            : 0),
+
+                );
+                $sl++;
+            }
+
+            //$closing_inventory = array_sum(array_column($data, 'purchase_total'));
+        }
+        $opening_finished = 0;
+        $opening_raw = 0;
+        $opening_tools = 0;
+
+        $closing_finished = 0;
+        $closing_raw = 0;
+        $closing_tools = 0;
+
+
+        foreach ($data as $key => $value) {
+
+            if ($value['product_type'] == 1) {
+                $opening_finished += $value['opening_inventory'];
+                $closing_finished += $value['purchase_total'];
+            }
+            if ($value['product_type'] == 2) {
+                $opening_raw += $value['opening_inventory'];
+                $closing_raw += $value['purchase_total'];
+            }
+            if ($value['product_type'] == 3) {
+                $opening_tools += $value['opening_inventory'];
+                $closing_tools += $value['purchase_total'];
+            }
+        }
+
+        // print_r($data);
+        // exit();
+        ## Response
+        if (!$post_product_id) {
+
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecordwithFilter,
+                "iTotalDisplayRecords" => $totalRecords,
+                "aaData" => $data,
+                "closing_inventory"     => $closing_inventory,
+                "opening_finished" => $opening_finished,
+                "opening_raw" => $opening_raw,
+                "opening_tools" => $opening_tools,
+
+                "closing_finished" => $closing_finished,
+                "closing_raw" => $closing_raw,
+                "closing_tools" => $closing_tools,
+            );
+        } else {
+            $response = array(
+                "draw" => intval($draw),
+                "outlet_stock"     => sprintf('%0.2f', $stock)
+            );
+        }
+
+        return $response;
+    }
+
+    public function total_in($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+        $purchase_qnty = $this->total_purchase($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $rqsn_transfer_taken = $this->rqsn_transfer_taken($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $total_stock_tack_in =
+            $this->total_stock_tack_in($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        // $rqsn_return_taken = $this->rqsn_return_taken($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+
+        $total_in = (!empty($purchase_qnty->totalPurchaseQnty) ? $purchase_qnty->totalPurchaseQnty : 0) + (!empty($rqsn_transfer_taken->total_rqsn_transfer) ? $rqsn_transfer_taken->total_rqsn_transfer : 0) + (!empty($total_stock_tack_in->phy_qty) ? $total_stock_tack_in->phy_qty : 0);
+
+        return $total_in;
+    }
+
+    public function total_out($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+        if ($from_date) {
+            $this->db->where('b.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('b.date <=', $to_date);
+        }
+
+        if ($outlet_id) {
+            $this->db->where('b.outlet_id', $outlet_id);
+        }
+        $stockin = $this->db->select('sum(a.quantity) as totalSalesQnty')
+            ->from('invoice_details a')
+            ->join('invoice b', 'b.invoice_id = a.invoice_id')
+            ->where('a.pre_order', 1)
+            ->where('a.product_id', $product_id)
+            ->get()
+            ->row();
+
+
+        if ($from_date) {
+            $this->db->where('production.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('production.date <=', $to_date);
+        }
+
+        $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+            ->from('item_usage')
+            ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+            ->where('item_usage.item_id', $product_id)
+            ->group_by('item_usage.item_id')
+            ->get()
+            ->row();
+
+
+        $rqsn_transfer_given = $this->rqsn_transfer_given($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $rqsn_return_taken = $this->rqsn_return_taken($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+
+        $total_out = '';
+
+        if ($finished_raw == 1) {
+
+            $total_out = (!empty($stockin->totalSalesQnty) ? $stockin->totalSalesQnty : 0) +
+                (!empty($used_qty->used_qty) ? $used_qty->used_qty : 0) +
+                (!empty($rqsn_transfer_given->total_rqsn_transfer) ? $rqsn_transfer_given->total_rqsn_transfer : 0) -
+                (!empty($rqsn_return_taken->total_rqsn_return) ? $rqsn_return_taken->total_rqsn_return : 0);
+        } else {
+
+            if ($from_date) {
+                $this->db->where('transfer_items.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('transfer_items.date <=', $to_date);
+            }
+            $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+                ->from('transfer_item_details')
+                ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+                ->where('transfer_item_details.product_id', $product_id)
+                ->group_by('transfer_item_details.product_id')
+                ->get()
+                ->row();
+            $total_out = (!empty($transfer_item->transfer_item) ? $transfer_item->transfer_item : 0);
+        }
+
+        return $total_out;
+    }
+
+    public function total_return_given($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+        $purchase_return = $this->purchase_return($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $rqsn_return_given = $this->rqsn_return_given($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $total_return = (!empty($purchase_return->totalReturn) ? $purchase_return->totalReturn : 0) + (!empty($rqsn_return_given->total_rqsn_return) ? $rqsn_return_given->total_rqsn_return : 0);
+
+        return $total_return;
+    }
+
+    public function total_damage($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+        $total_purchase = $this->total_purchase($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $total_wastage = $this->total_wastage($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+
+        $total_damage = (!empty($total_purchase->totalDamagedQnty) ? $total_purchase->totalDamagedQnty : 0) + (!empty($total_wastage->total_wastage_qnty) ? $total_wastage->total_wastage_qnty : 0);
+
+        return $total_damage;
+    }
+
+    public function total_purchase($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+        if ($from_date) {
+            $this->db->where('product_purchase.purchase_date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('product_purchase.purchase_date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('product_purchase.outlet_id', $outlet_id);
+        }
+        if ($purchase_id) {
+            $this->db->where('product_purchase_details.purchase_id', $purchase_id);
+        }
+        $total_purchase = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
+            ->from('product_purchase_details')
+            ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+            ->where('product_purchase_details.product_id', $product_id)
+            ->where('product_purchase_details.qty >', 0)
+            ->get()
+            ->row();
+
+
+        // $total_in = (!empty($total_purchase->totalPurchaseQnty) ? $total_purchase->totalPurchaseQnty : 0);
+
+        return $total_purchase;
+    }
+
+    public function total_stock_tack_in($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+        if ($from_date) {
+            $this->db->where('a.create_date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('a.create_date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('b.outlet_id', $outlet_id);
+        }
+        $total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+            ->from('stock_taking_details a')
+            ->join('stock_taking b', 'b.stid = a.stid')
+            ->where(array(
+                'a.product_id' => $product_id,
+                'a.status' => 1,
+
+            ))
+            ->group_by('a.product_id')
+            ->order_by('a.id', 'desc')
+            ->get()
+            ->row();
+
+        // $total_phy_count = (!empty($phy_count->phy_qty) ? $phy_count->phy_qty : 0);
+
+        return $total_phy_count;
+    }
+
+    public function total_wastage($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+        if ($from_date) {
+            $this->db->where('wastage_dec.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('wastage_dec.date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('wastage_dec.outlet_id', $outlet_id);
+        }
+        if ($purchase_id) {
+            $this->db->where('wastage_dec.purchase_id', $purchase_id);
+        }
+        $total_wastage_qnty = $this->db->select('sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
+            ->from('wastage_dec')
+            ->where('wastage_dec.product_id', $product_id)
+            ->get()
+            ->row();
+
+        return $total_wastage_qnty;
+    }
+
+    public function purchase_return($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+        if ($from_date) {
+            $this->db->where('product_return.date_return >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('product_return.date_return <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('product_return.outlet_id', $outlet_id);
+        }
+        $product_return = $this->db->select('sum(ret_qty) as totalReturn')
+            ->from('product_return')
+            ->where('usablity', 2)
+            ->where('product_id', $product_id)
+            ->where('customer_id', '')
+            ->get()
+            ->row();
+
+        return $product_return;
+    }
+
+    public function rqsn_transfer_taken($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+        if ($from_date) {
+            $this->db->where('rqsn.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('rqsn.date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('rqsn.from_id', $outlet_id);
+        }
+        if ($purchase_id) {
+            $this->db->where('rqsn_details.purchase_id', $purchase_id);
+        }
+
+        $total_rqsn_transfer = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_transfer')
+            ->from('rqsn_details')
+            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+            ->where('rqsn_details.product_id', $product_id)
+            ->where('rqsn_details.status', 3)
+            ->where('rqsn_details.isaprv', 1)
+            ->where('rqsn_details.isrcv', 1)
+            ->where('rqsn_details.is_return', 0)
+            ->get()
+            ->row();
+
+        return $total_rqsn_transfer;
+    }
+
+    public function rqsn_transfer_given($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+
+        if ($from_date) {
+            $this->db->where('rqsn.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('rqsn.date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('rqsn.to_id', $outlet_id);
+        }
+        if ($purchase_id) {
+            $this->db->where('rqsn_details.purchase_id', $purchase_id);
+        }
+
+        $total_rqsn_transfer = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_transfer')
+            ->from('rqsn_details')
+            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+            ->where('rqsn_details.product_id', $product_id)
+            // ->where('rqsn_details.status', 3)
+            ->where('rqsn_details.isaprv', 1)
+            // ->where('rqsn_details.isrcv', 1)
+            ->where('rqsn_details.is_return', 0)
+            ->get()
+            ->row();
+
+        // echo "<pre>";
+        // print_r($outlet_id);
+        // exit();
+
+        return $total_rqsn_transfer;
+    }
+
+    public function rqsn_return_taken($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+        if ($from_date) {
+            $this->db->where('rqsn.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('rqsn.date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('rqsn.from_id', $outlet_id);
+        }
+        if ($purchase_id) {
+            $this->db->where('rqsn_details.purchase_id', $purchase_id);
+        }
+
+        $total_rqsn_return = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_return')
+            ->from('rqsn_details')
+            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+            ->where('rqsn_details.product_id', $product_id)
+            ->where('rqsn_details.status', 3)
+            ->where('rqsn_details.isaprv', 1)
+            ->where('rqsn_details.isrcv', 1)
+            ->where('rqsn_details.is_return', 2)
+            ->get()
+            ->row();
+
+        return $total_rqsn_return;
+    }
+
+    public function rqsn_return_given($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+        if ($from_date) {
+            $this->db->where('rqsn.date >=', $from_date);
+        }
+        if ($to_date) {
+            $this->db->where('rqsn.date <=', $to_date);
+        }
+        if ($outlet_id) {
+            $this->db->where('rqsn.to_id', $outlet_id);
+        }
+        if ($purchase_id) {
+            $this->db->where('rqsn_details.purchase_id', $purchase_id);
+        }
+
+        $total_rqsn_return = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_return')
+            ->from('rqsn_details')
+            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+            ->where('rqsn_details.product_id', $product_id)
+            // ->where('rqsn_details.status', 3)
+            ->where('rqsn_details.isaprv', 1)
+            // ->where('rqsn_details.isrcv', 1)
+            ->where('rqsn_details.is_return !=', 0)
+            ->get()
+            ->row();
+
+        // echo "<pre>";
+        // print_r($total_rqsn_return);
+        // exit();
+
+        return $total_rqsn_return;
+    }
+
+    public function stock2($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null)
+    {
+
+        $total_in = $this->total_in($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $total_out = $this->total_out($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $total_return_given = $this->total_return_given($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $total_damage = $this->total_damage($from_date, $to_date, $outlet_id, $product_id, $finished_raw, $purchase_id);
+
+        $stock = $total_in - $total_return_given - $total_out - $total_damage;
+
+        return $stock;
     }
 
     public function expiry_outlet_stock($post_product_id = null, $is_exp = null)
@@ -2544,7 +3265,7 @@ class Rqsn extends CI_Model
         $this->db->group_by('b.product_id');
         $this->db->where('a.status', 1);
         $this->db->where('b.isaprv', 1);
-       // $this->db->where('b.isRcv', 0);
+        // $this->db->where('b.isRcv', 0);
 
         // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');
 
@@ -2557,8 +3278,6 @@ class Rqsn extends CI_Model
         }
 
         return false;
-
-
     }
     public function get_item_list_finalize()
     {
@@ -2581,7 +3300,5 @@ class Rqsn extends CI_Model
         }
 
         return false;
-
-
     }
 }

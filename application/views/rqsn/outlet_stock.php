@@ -138,8 +138,10 @@
                                             <!-- <th class="text-center">Production Cost</th> -->
 
                                             <th class="text-center"><?php echo display('in_qnty') ?></th>
-                                            <th class="text-center"><?php echo display('out_qnty') ?></th>
+                                            <th class="text-center">Damaged Quantity</th>
                                             <th class="text-center">Return Given</th>
+                                            <th class="text-center"><?php echo display('out_qnty') ?></th>
+
                                             <th class="text-center">Opening Stock </th>
                                             <th class="text-center">Closing Stock</th>
                                             <th class="text-center"><?php echo display('stock_sale') ?></th>
@@ -150,7 +152,7 @@
                                     <tfoot>
                                         <tr>
 
-                                            <th colspan="7" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th colspan="8" class="text-right"><?php echo display('total') ?> :</th>
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>

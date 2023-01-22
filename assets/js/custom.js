@@ -204,7 +204,7 @@ $(function ($) {
       { data: "sl" },
       // { data: "customer_id_two" },
       { data: "customer_name" },
-      { data: "shop_name"},
+      { data: "shop_name" },
       { data: "address" },
       { data: "address2" },
       { data: "mobile" },
@@ -233,11 +233,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -337,11 +337,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -440,11 +440,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -544,11 +544,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -562,7 +562,7 @@ $(function ($) {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 3, 6,7] },
+      { bSortable: false, aTargets: [0, 3, 6, 7] },
     ],
     processing: true,
     serverSide: true,
@@ -629,7 +629,7 @@ $(function ($) {
       { data: "product_status" },
       { data: "sku" },
       // { data: "product_category" },
-      
+
       // { data: "supplier_name" },
       { data: "price" },
       // { data: "purchase_p" },
@@ -798,21 +798,21 @@ $(function ($) {
   });
 
 
-  var order_table=$("#order_table").DataTable({
+  var order_table = $("#order_table").DataTable({
 
     responsive: true,
     // bPaginate: false,
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 1, 2, 3, 4,5,6,7,8,9,10,11] },
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
     ],
     processing: true,
     serverSide: true,
 
     lengthMenu: [
-      [30,50, 100, 250, 500, total_product],
-      [30,50, 100, 250, 500, "All"],
+      [30, 50, 100, 250, 500, total_product],
+      [30, 50, 100, 250, 500, "All"],
     ],
 
     dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
@@ -922,10 +922,10 @@ $(document).ready(function () {
 
   $("#cat_list,#from_date,#to_date,#value").on("change", function (e) {
     var valueSelected = this.value;
-    cat_id =  $("#cat_list").val();
+    cat_id = $("#cat_list").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
-    value = $("#value").val(); 
+    value = $("#value").val();
     table.ajax.reload();
   });
 
@@ -945,7 +945,7 @@ $(document).ready(function () {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 2,4,5,6,7,8,9,10,11] },
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11] },
     ],
     processing: true,
     serverSide: true,
@@ -994,7 +994,7 @@ $(document).ready(function () {
         d.from_date = from_date;
         d.to_date = to_date;
         d.value = value;
-        
+
       },
     },
     columns: [
@@ -1020,8 +1020,10 @@ $(document).ready(function () {
       //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
       // },
       { data: "totalPurchaseQnty", class: "text-right" },
-      { data: "totalSalesQnty", class: "text-right" },
+      { data: "damagedQnty", class: "text-right" },
       { data: "return_given", class: " stock text-right" },
+      { data: "totalSalesQnty", class: "text-right" },
+
       //   { data: 'warrenty_stock' ,class:"stock text-right" },
       { data: "opening_stock", class: "stock text-right" },
       { data: "stok_quantity", class: "stock text-right" },
@@ -1065,11 +1067,11 @@ $(document).ready(function () {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
 
@@ -1106,7 +1108,7 @@ $(document).ready(function () {
     responsive: true,
 
     aaSorting: [[1, "desc"]],
-    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8,9,10,11,12,13] }],
+    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] }],
     processing: true,
     serverSide: true,
 
@@ -1120,7 +1122,7 @@ $(document).ready(function () {
       {
         extend: "copy",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -1128,14 +1130,14 @@ $(document).ready(function () {
         extend: "csv",
         title: "InvoiceList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         className: "btn-sm prints",
       },
       {
         extend: "excel",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         title: "InvoiceList",
         className: "btn-sm prints",
@@ -1143,7 +1145,7 @@ $(document).ready(function () {
       {
         extend: "pdf",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         title: "Invoice List",
         className: "btn-sm prints",
@@ -1151,7 +1153,7 @@ $(document).ready(function () {
       {
         extend: "print",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5,6, 7, 8,9,10,11,12], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         title: "<center> Invoice List</center>",
         className: "btn-sm prints",
@@ -1211,11 +1213,11 @@ $(document).ready(function () {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -1289,7 +1291,7 @@ $(document).ready(function () {
     product_status = $("#product_status").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
-    cat_id =  $("#cat_list").val();
+    cat_id = $("#cat_list").val();
     value = $("#value").val();
     console.log(value);
     table.ajax.reload();
@@ -1305,7 +1307,7 @@ $(document).ready(function () {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 2,4, 5, 6, 7,8,9,10,11,12] },
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     ],
     processing: true,
     serverSide: true,
@@ -1381,7 +1383,7 @@ $(document).ready(function () {
         d.product_sku = $('.product_sku').val();
         d.from_date = from_date;
         d.to_date = to_date;
-         d.value = value;
+        d.value = value;
 
       },
     },
@@ -1409,6 +1411,7 @@ $(document).ready(function () {
       },
       { data: "totalPurchaseQnty", class: "text-right" },
       { data: "damagedQnty", class: "text-right" },
+      { data: "returnQnty", class: "text-right" },
       { data: "totalSalesQnty", class: "text-right" },
       { data: "opening_stock", class: "stock text-right" },
       { data: "stok_quantity", class: "stock text-right" },
@@ -1451,11 +1454,11 @@ $(document).ready(function () {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
 
@@ -1471,11 +1474,11 @@ $(document).ready(function () {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -2058,8 +2061,8 @@ function popOverInit(button, tooltip) {
   });
 }
 
-function get_text(){
+function get_text() {
 
-  var text=$( "#outlet option:selected" ).text();
+  var text = $("#outlet option:selected").text();
   $('#outlet_text').val(text);
 }

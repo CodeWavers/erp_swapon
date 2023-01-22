@@ -579,10 +579,10 @@ class Invoices extends CI_Model
             $total_sale = $this->db->get()->row();
 
             if ($outlet_id == 'HK7TGDT69VFMXB7') {
-                $available_quantity = $this->Reports->getCheckList(null, $p_id, '', '')['central_stock'];
+                $available_quantity = $this->Reports->getCheckList2(null, $p_id, '', '', '', '')['central_stock'];
                 //   $available_quantity = $this->Reports->current_stock($product_id,1);
             } else {
-                $available_quantity = $this->Rqsn->outlet_stock(null, $p_id, '', '')['outlet_stock'];
+                $available_quantity = $this->Rqsn->outlet_stock2(null, $p_id, '', '', '')['outlet_stock'];
 
                 // echo '<pre>';print_r($available_quantity);exit();
             }
@@ -984,21 +984,21 @@ class Invoices extends CI_Model
         $due_amount = $this->input->post('due_amount', TRUE);
 
         // if ($due_amount > 0) {
-            $cosdr = array(
-                'VNo' => $invoice_id,
-                'Vtype' => 'INV-CC',
-                'VDate' => $Vdate,
-                'COAID' => $customer_headcode,
-                'Narration' => 'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
-                'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
-                'Credit' => 0,
-                'IsPosted' => 1,
-                'CreateBy' => $createby,
-                'CreateDate' => $createdate,
-                'IsAppove' => 1
-            );
+        $cosdr = array(
+            'VNo' => $invoice_id,
+            'Vtype' => 'INV-CC',
+            'VDate' => $Vdate,
+            'COAID' => $customer_headcode,
+            'Narration' => 'Customer debit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
+            'Debit'          =>  $this->input->post('n_total', TRUE) - (!empty($this->input->post('previous', TRUE)) ? $this->input->post('previous', TRUE) : 0),
+            'Credit' => 0,
+            'IsPosted' => 1,
+            'CreateBy' => $createby,
+            'CreateDate' => $createdate,
+            'IsAppove' => 1
+        );
 
-            $this->db->insert('acc_transaction', $cosdr);
+        $this->db->insert('acc_transaction', $cosdr);
         // }
 
 
@@ -1096,7 +1096,7 @@ class Invoices extends CI_Model
         }
         ///Customer credit for Paid Amount
         $paid = $this->input->post('p_amount', TRUE);
-        
+
         $total_order_value = $this->input->post('grand_total_price');
 
         if (count($paid) > 0) {
@@ -1104,7 +1104,7 @@ class Invoices extends CI_Model
 
                 if ($paid[$i] > 0) {
                     if ($pay_type[$i] == 1) {
-                        
+
                         $cc = array(
                             'VNo'            =>  $invoice_id,
                             'Vtype'          =>  'INV',
@@ -1146,10 +1146,10 @@ class Invoices extends CI_Model
                             'CreateDate' => $createdate,
                             'IsAppove' => 1
                         );
-                      
+
 
                         $this->db->insert('acc_transaction', $coscr);
-    
+
 
                         if ($paid[$i] >= $total_order_value) {
                             $data = array(
@@ -1172,7 +1172,7 @@ class Invoices extends CI_Model
                                 'COAID'         => 1020101
                             );
                         }
-                       
+
                         // $this->db->insert('acc_transaction', $cuscredit);
 
                         $this->db->insert('acc_transaction', $cc);
@@ -3505,10 +3505,10 @@ class Invoices extends CI_Model
 
 
         if ($outlet_id == 'HK7TGDT69VFMXB7') {
-            $available_quantity = $this->Reports->getCheckList(null, $product_id, '', '')['central_stock'];
+            $available_quantity = $this->Reports->getCheckList2(null, $product_id, '', '', '', '')['central_stock'];
             //   $available_quantity = $this->Reports->current_stock($product_id,1);
         } else {
-            $available_quantity = $this->Rqsn->outlet_stock(null, $product_id, '', '')['outlet_stock'];
+            $available_quantity = $this->Rqsn->outlet_stock2(null, $product_id, '', '', '')['outlet_stock'];
 
             // echo '<pre>';print_r($available_quantity);exit();
         }
