@@ -529,7 +529,7 @@ class Crqsn extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Rqsn');
         $user_id = $this->session->userdata('user_id');
-        $Vdate=date('Y-m-d');
+        $Vdate = date('Y-m-d');
         $action = ($action == 'active' ? 3 : 2);
         $postData = array(
             'rqsn_detail_id'     => $id,
@@ -537,74 +537,74 @@ class Crqsn extends CI_Controller
             'isrcv' => 1
         );
 
-        $item_total=$this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id',$id)->get()->row()->item_total;
+        $item_total = $this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id', $id)->get()->row()->item_total;
 
         //        print_r($postData);
         //        die();
         //Income Credit
 
-        if ($item_total > 0){
+        if ($item_total > 0) {
 
 
-        $incCr = array(
-            'VNo'            =>  $id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  306,
-            'Narration'      =>  'Income For ID -  ' . $id ,
-            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
-            'Debit'         =>  0,
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $incCr);
-             //Current Asset Receivable
-        $curDr = array(
-            'VNo'            =>  $id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  1020303,
-            'Narration'      =>  'Receivable For ID -  ' . $id ,
-            'Credit'          =>  0,
-            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $curDr);
-        //Current Liabilties Payable
-        $curLCr = array(
-            'VNo'            =>  $id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  50201,
-            'Narration'      =>  'Payable For  ID -  '  . $id,
-            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
-            'Debit'         =>  0,
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $curLCr);
-        //Expense Debit
-        $exDr = array(
-            'VNo'            =>  $id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  408,
-            'Narration'      =>  'Expense For ID -  ' . $id,
-            'Credit'          => 0,
-            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $exDr);
+            $incCr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  306,
+                'Narration'      =>  'Income For ID -  ' . $id,
+                'Credit'          => (!empty($item_total) ? $item_total : 0),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $incCr);
+            //Current Asset Receivable
+            $curDr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  1020303,
+                'Narration'      =>  'Receivable For ID -  ' . $id,
+                'Credit'          =>  0,
+                'Debit'         => (!empty($item_total) ? $item_total : 0),
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $curDr);
+            //Current Liabilties Payable
+            $curLCr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  50201,
+                'Narration'      =>  'Payable For  ID -  '  . $id,
+                'Credit'          => (!empty($item_total) ? $item_total : 0),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $curLCr);
+            //Expense Debit
+            $exDr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  408,
+                'Narration'      =>  'Expense For ID -  ' . $id,
+                'Credit'          => 0,
+                'Debit'         => (!empty($item_total) ? $item_total : 0),
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $exDr);
         }
 
         if ($this->Rqsn->received($postData)) {
@@ -617,7 +617,7 @@ class Crqsn extends CI_Controller
     }
     public function isreceiveall()
     {
-        
+
         $rqsn_ids = $this->input->post('rqsn_ids', true);
         // echo "<pre>";
         // print_r($rqsn_ids);
@@ -625,102 +625,102 @@ class Crqsn extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Rqsn');
         $user_id = $this->session->userdata('user_id');
-        $Vdate=date('Y-m-d');
+        $Vdate = date('Y-m-d');
         // $action = ($action == 'active' ? 3 : 2);
         $action = 3;
         foreach ($rqsn_ids as $rqsn_id) {
-        $postData = array(
-            'rqsn_detail_id'     => $rqsn_id,
-            'status' => $action,
-            'isrcv' => 1
-        );
+            $postData = array(
+                'rqsn_detail_id'     => $rqsn_id,
+                'status' => $action,
+                'isrcv' => 1
+            );
 
-        $item_total=$this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id',$rqsn_id)->get()->row()->item_total;
-        //Income Credit
-        // echo "<pre>";
-        // print_r($item_total);
-        // exit();
-        if ($item_total > 0){
+            $item_total = $this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id', $rqsn_id)->get()->row()->item_total;
+            //Income Credit
+            // echo "<pre>";
+            // print_r($item_total);
+            // exit();
+            if ($item_total > 0) {
 
 
-        $incCr = array(
-            'VNo'            =>  $rqsn_id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  306,
-            'Narration'      =>  'Income For ID -  ' . $rqsn_id ,
-            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
-            'Debit'         =>  0,
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $incCr);
-             //Current Asset Receivable
-        $curDr = array(
-            'VNo'            =>  $rqsn_id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  1020303,
-            'Narration'      =>  'Receivable For ID -  ' . $rqsn_id ,
-            'Credit'          =>  0,
-            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $curDr);
-        //Current Liabilties Payable
-        $curLCr = array(
-            'VNo'            =>  $rqsn_id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  50201,
-            'Narration'      =>  'Payable For  ID -  '  . $rqsn_id,
-            'Credit'          =>  (!empty($item_total) ? $item_total: 0),
-            'Debit'         =>  0,
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $curLCr);
-        //Expense Debit
-        $exDr = array(
-            'VNo'            =>  $rqsn_id,
-            'Vtype'          =>  'RQSN',
-            'VDate'          =>  $Vdate,
-            'COAID'          =>  408,
-            'Narration'      =>  'Expense For ID -  ' . $rqsn_id,
-            'Credit'          => 0,
-            'Debit'         =>  (!empty($item_total) ? $item_total: 0),
-            'IsPosted'       =>  1,
-            'CreateBy'       => $user_id,
-            'CreateDate'     => $Vdate,
-            'IsAppove'       => 1
-        );
-        $this->db->insert('acc_transaction', $exDr);
+                $incCr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  306,
+                    'Narration'      =>  'Income For ID -  ' . $rqsn_id,
+                    'Credit'          => (!empty($item_total) ? $item_total : 0),
+                    'Debit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $incCr);
+                //Current Asset Receivable
+                $curDr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  1020303,
+                    'Narration'      =>  'Receivable For ID -  ' . $rqsn_id,
+                    'Credit'          =>  0,
+                    'Debit'         => (!empty($item_total) ? $item_total : 0),
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $curDr);
+                //Current Liabilties Payable
+                $curLCr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  50201,
+                    'Narration'      =>  'Payable For  ID -  '  . $rqsn_id,
+                    'Credit'          => (!empty($item_total) ? $item_total : 0),
+                    'Debit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $curLCr);
+                //Expense Debit
+                $exDr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  408,
+                    'Narration'      =>  'Expense For ID -  ' . $rqsn_id,
+                    'Credit'          => 0,
+                    'Debit'         => (!empty($item_total) ? $item_total : 0),
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $exDr);
+            }
+
+
+            $this->db->where('rqsn_detail_id', $rqsn_id)
+                ->update('rqsn_details', $postData);
         }
-
-
-        $this->db->where('rqsn_detail_id', $rqsn_id)
-            ->update('rqsn_details', $postData);
-    }
-    // echo true;
+        // echo true;
 
         // if ($this->Rqsn->received($postData)) {
-            $this->session->set_flashdata('message', display('successfully_approved'));
-            $data = [
-                'result' => 1,
-                'msg' => 'successfully_approved',
-            ];
-            echo json_encode($data);
-    
-           
+        $this->session->set_flashdata('message', display('successfully_approved'));
+        $data = [
+            'result' => 1,
+            'msg' => 'successfully_approved',
+        ];
+        echo json_encode($data);
+
+
         // } else {
-            // $this->session->set_flashdata('error_message', display('please_try_again'));
+        // $this->session->set_flashdata('error_message', display('please_try_again'));
         // }
 
         redirect($_SERVER['HTTP_REFERER']);
@@ -753,7 +753,7 @@ class Crqsn extends CI_Controller
         $to_date = $this->input->post('to_date');
         $value = $this->input->post('value');
         $postData = $this->input->post();
-        $data = $this->Rqsn->outlet_stock($postData,null,$from_date,$to_date,$value);
+        $data = $this->Rqsn->outlet_stock2($postData, null, $from_date, $to_date, $value);
         echo json_encode($data);
     }
 
@@ -892,10 +892,10 @@ class Crqsn extends CI_Controller
 
     public function update_pr_rqsn()
     {
-        $product_id=$_POST["product_id"];
-        $rq_d_id=$_POST["rq_d_id"];
+        $product_id = $_POST["product_id"];
+        $rq_d_id = $_POST["rq_d_id"];
 
-        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row();
+        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id', $product_id)->get()->row();
 
 
         $data = array(
@@ -903,14 +903,14 @@ class Crqsn extends CI_Controller
             "printing"  => $_POST["printing"],
             "sewing"  => $_POST["sewing"],
             "finishing"  => $_POST["finishing"],
-            "finished_qty"  => $_POST["finishing"]+$exist_fq,
+            "finished_qty"  => $_POST["finishing"] + $exist_fq,
             "last_updated"  => date('Y-m-d'),
             "isrcv"  => '',
         );
 
 
         $this->db->where('product_id', $product_id);
-        $this->db->update('pr_rqsn_details',$data);
+        $this->db->update('pr_rqsn_details', $data);
 
         //            $sq = "UPDATE rqsn_details
         //            SET purchase_status = 2
@@ -925,8 +925,8 @@ class Crqsn extends CI_Controller
 
     public function update_item_finalize()
     {
-        $product_id=$_POST["product_id"];
-        $variation=$_POST["variation"];
+        $product_id = $_POST["product_id"];
+        $variation = $_POST["variation"];
 
         $data = array(
             "quantity"  => $_POST["quantity"],
@@ -935,8 +935,8 @@ class Crqsn extends CI_Controller
         );
 
 
-        $this->db->where(array('product_id'=> $product_id));
-        $this->db->update('pr_rqsn_details',$data);
+        $this->db->where(array('product_id' => $product_id));
+        $this->db->update('pr_rqsn_details', $data);
 
         //            $sq = "UPDATE rqsn_details
         //            SET purchase_status = 2
@@ -948,5 +948,4 @@ class Crqsn extends CI_Controller
 
         json_encode($data);
     }
-
 }

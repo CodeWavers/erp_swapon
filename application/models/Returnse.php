@@ -1524,6 +1524,7 @@ class Returnse extends CI_Model
                     'purchase_id'        => $purchase_id,
                     'product_id'         => $product_id,
                     'quantity'           => -$product_quantity,
+                    'qty'           => -$product_quantity,
                     'rate'               => $product_rate,
                     'discount'           => -is_numeric($discount),
                     'total_amount'       => -$total_price,
