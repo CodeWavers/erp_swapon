@@ -5237,13 +5237,20 @@ class reports extends CI_Model
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
-        }
-        $this->db->select('i.date, p.pay_type, o.outlet_name, sum(i.due_amount) as total_due, sum(p.amount) as paid_amnt')
+        }    
+        if ($outlet_id) {
+            $this->db->select('i.date, p.pay_type, o.outlet_name, sum(i.due_amount) as total_due, sum(p.amount) as paid_amnt')
             ->from('invoice i')
             ->join('paid_amount p', 'p.invoice_id = i.invoice_id');
-        if ($outlet_id) {
             $this->db->where('i.outlet_id', $outlet_id);
         }
+        else{
+            $this->db->select('i.date, p.pay_type, central_warehouse.central_warehouse as outlet_name, sum(i.due_amount) as total_due, sum(p.amount) as paid_amnt')
+            ->from('invoice i')
+            ->join('paid_amount p', 'p.invoice_id = i.invoice_id');
+        }
+        
+        
 
         if ($from_date && $to_date) {
             $this->db->where('i.date >=', $from_date);
@@ -5258,11 +5265,19 @@ class reports extends CI_Model
             $this->db->where('i.date <=', $to_date);
         }
 
-
-        $this->db->join('outlet_warehouse o', 'o.outlet_id = i.outlet_id')
+        if($outlet_id){
+            $this->db->join('outlet_warehouse o', 'o.outlet_id = i.outlet_id')
             ->group_by('i.date')
             ->group_by('p.pay_type')
             ->order_by('i.id', 'desc');
+        }
+        else{
+            $this->db->join('central_warehouse', 'central_warehouse.warehouse_id = i.outlet_id')
+            ->group_by('i.date')
+            ->group_by('p.pay_type')
+            ->order_by('i.id', 'desc');
+        }
+           
 
         $res = $this->db->get()->result_array();
 

@@ -346,7 +346,7 @@
                                                      <input type="text" name="unit[]" id="unit_{sl}" class="form-control text-right unit_1" value="{unit}" readonly="" />
                                                  </td>
                                                  <td >
-                                                     <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{sum_quantity}" readonly="" />
+                                                     <input type="text" name="sold_qty[]" id="sold_qty_{sl}" class="form-control text-right available_quantity_1" value="{quantity}" readonly="" />
                                                  </td>
                                                  <td>
                                                      <input type="number" onkeypress="quantity_calculate({sl});" onkeyup="quantity_calculate({sl});"onclick="quantity_calculate({sl});"  class="total_qntt_{sl} form-control text-right" id="total_qntt_{sl}" value="" min="0" placeholder="0.00" tabindex="4" />
