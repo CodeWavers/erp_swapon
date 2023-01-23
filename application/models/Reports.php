@@ -1062,6 +1062,7 @@ class reports extends CI_Model
         $response = array();
 
         $p_s = $this->input->post('product_status', TRUE);
+        $totalnumber = $this->input->post('total_stock', TRUE);
         $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
         if ($from_date == null) {
@@ -1070,6 +1071,10 @@ class reports extends CI_Model
         } else {
             $op_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
         }
+
+        // echo "<pre>";
+        // print_r($totalnumber);
+        // exit();
 
 
 
@@ -1123,6 +1128,7 @@ class reports extends CI_Model
             }
             if ($pr_status) $this->db->where('a.finished_raw', $pr_status);
             $this->db->group_by('a.product_id');
+            // $this->db->limit($rowperpage, $start);
             $records = $this->db->get()->num_rows();
             $totalRecords = $records;
 
@@ -1138,14 +1144,21 @@ class reports extends CI_Model
                 $this->db->like('a.category_id', $cat_id, 'both');
             }
 
-
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
             $this->db->group_by('a.product_id');
+            // $this->db->limit($rowperpage, $start);
             $records = $this->db->get()->num_rows();
             $totalRecordwithFilter = $records;
         }
+
+        // echo "<pre>";
+        // echo $totalRecords;
+        // echo ($totalRecordwithFilter);
+        // exit();
+
+
         ## Fetch records
         $this->db->select("a.*,
                 a.product_name,
@@ -1179,6 +1192,16 @@ class reports extends CI_Model
             $this->db->where('a.finished_raw', $p_s);
         }
         $records = $this->db->get()->result();
+
+        // echo "<pre>";
+        // echo $totalRecords . "<br>";
+        // echo $totalRecordwithFilter . "<br>";
+        // echo count($records) . "<br>";
+        // exit();
+
+
+
+
         $data = array();
 
 
@@ -1432,8 +1455,12 @@ class reports extends CI_Model
         if (!$post_product_id) {
             $response = array(
                 "draw" => intval($draw),
-                "iTotalRecords" => $totalRecordwithFilter,
-                "iTotalDisplayRecords" => $totalRecords,
+                "iTotalRecords" => $totalRecords,
+                "iTotalDisplayRecords" => $totalRecordwithFilter,
+
+                // "iTotalRecords" => 68758,
+                // "iTotalDisplayRecords" => 68758,
+
                 "aaData" =>  $data,
 
                 "opening_finished" => $opening_finished,

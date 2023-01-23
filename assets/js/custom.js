@@ -1384,6 +1384,7 @@ $(document).ready(function () {
         d.from_date = from_date;
         d.to_date = to_date;
         d.value = value;
+        d.total_stock = total_stock;
 
       },
     },

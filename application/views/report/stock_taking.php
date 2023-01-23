@@ -62,10 +62,11 @@
 
 
                                     <div class="col-sm-8">
-                                        <?php if ($access == 'view' || $access == 'edit'  ){ ?>
+                                        <?php if ($access == 'view' || $access == 'edit') { ?>
+                                            <input type="hidden" required tabindex="2" class="form-control " name="outlet_name" value="{outlet_id}" id="" readonly />
                                             <input type="text" required tabindex="2" class="form-control " name="" value="{outlet_name}" id="" readonly />
 
-                                        <?php }else{ ?>
+                                        <?php } else { ?>
                                             <select name="outlet_name" id="outlet_name" class="form-control">
                                                 <?php if ($outlet_list) { ?>
                                                     {outlet_list}
@@ -92,9 +93,9 @@
                                     <div class="col-sm-8">
 
 
-                                        <input type="text" required tabindex="2" class="form-control " name="stid" value="<?=(!empty($access)) ? "{st}" : 'ST-'.date('ymdhs') ?>" id="stid" readonly />
-                                        <input type="hidden"  tabindex="2" class="form-control " name="access" value="<?=(!empty($access)) ? "{access}" : '' ?>" id="access" readonly />
-                                        <input type="hidden"  tabindex="2" class="form-control " name="st_id" value="<?=(!empty($access)) ? "{stid}" : '' ?>" id="st_id" readonly />
+                                        <input type="text" required tabindex="2" class="form-control " name="stid" value="<?= (!empty($access)) ? "{st}" : 'ST-' . date('ymdhs') ?>" id="stid" readonly />
+                                        <input type="hidden" tabindex="2" class="form-control " name="access" value="<?= (!empty($access)) ? "{access}" : '' ?>" id="access" readonly />
+                                        <input type="hidden" tabindex="2" class="form-control " name="st_id" value="<?= (!empty($access)) ? "{stid}" : '' ?>" id="st_id" readonly />
                                     </div>
                                 </div>
                             </div>
@@ -105,10 +106,10 @@
                                         <i class="text-danger">*</i>
                                     </label>
                                     <div class="col-sm-8">
-                                        <?php if ($access == 'view'){ ?>
-                                        <input type="text" required tabindex="2" class="form-control datepicker" name="date" value="<?= ($access === "view") ? "{st_date}" : date('Y-m-d')?>" id="date" readonly/>
-                                        <?php }else{ ?>
-                                            <input type="text" required tabindex="2" class="form-control datepicker" name="date" value="<?= ($access === "edit") ? "{st_date}" : date('Y-m-d')?>" id="date"  />
+                                        <?php if ($access == 'view') { ?>
+                                            <input type="text" required tabindex="2" class="form-control datepicker" name="date" value="<?= ($access === "view") ? "{st_date}" : date('Y-m-d') ?>" id="date" readonly />
+                                        <?php } else { ?>
+                                            <input type="text" required tabindex="2" class="form-control datepicker" name="date" value="<?= ($access === "edit") ? "{st_date}" : date('Y-m-d') ?>" id="date" />
                                         <?php } ?>
                                     </div>
                                 </div>
@@ -122,39 +123,40 @@
 
                                     </label>
                                     <div class="col-sm-8">
-                                        <?php if ($access == 'view'){ ?>
-                                        <textarea class="form-control" tabindex="4" id="notes" name="notes" placeholder="Any Notes..." rows="3" readonly><?= ($access === "view") ? "{notes}" : ''?></textarea>
-                                        <?php }else{ ?>
-                                            <textarea class="form-control" tabindex="4" id="notes" name="notes" placeholder="Any Notes..." rows="3" ><?= ($access === "edit") ? "{notes}" : ''?></textarea>
+                                        <?php if ($access == 'view') { ?>
+                                            <textarea class="form-control" tabindex="4" id="notes" name="notes" placeholder="Any Notes..." rows="3" readonly><?= ($access === "view") ? "{notes}" : '' ?></textarea>
+                                        <?php } else { ?>
+                                            <textarea class="form-control" tabindex="4" id="notes" name="notes" placeholder="Any Notes..." rows="3"><?= ($access === "edit") ? "{notes}" : '' ?></textarea>
 
                                         <?php } ?>
                                     </div>
                                 </div>
                             </div>
-                            <?php if ($access == ''  ){ ?>
-                            <div class="col-sm-6">
-                                <div class="form-group row">
-                                    <label for="add_item" class="col-sm-4 col-form-label"><?php echo display('barcode') ?> <i class="text-danger">*</i></label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="product_name" class="form-control bq" placeholder='Barcode' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
-                                        <input type="hidden" id="product_value" name="">
+                            <?php if ($access == '') { ?>
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="add_item" class="col-sm-4 col-form-label"><?php echo display('barcode') ?> <i class="text-danger">*</i></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="product_name" class="form-control bq" placeholder='Barcode' id="add_item_m_p" autocomplete='off' tabindex="1" value="">
+                                            <input type="hidden" id="product_value" name="">
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             <?php } ?>
                             <div class="col-sm-6">
                                 <div class="form-group row">
                                     <label for="date" class="col-sm-10 col-form-label">
                                     </label>
                                     <div class="col-sm-2 text-right ">
-                                        <?php if ($access == 'view'){ ?>
-                                            <?php if ($approve == 0){ ?>
+                                        <?php if ($access == 'view') { ?>
+                                            <?php if ($approve == 0) { ?>
                                                 <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Approve</button>
-                                            <?php }else{ ?>
-                                                <a  href="<?php echo base_url() . 'Creport/manage_stock_taking/'?>" id="" name="" class="btn btn-black btn-md">Back</a>
+                                            <?php } else { ?>
+                                                <a href="<?php echo base_url() . 'Creport/manage_stock_taking/' ?>" id="" name="" class="btn btn-black btn-md">Back</a>
 
-                                            <?php } } ?>
+                                        <?php }
+                                        } ?>
 
 
                                     </div>
@@ -164,77 +166,77 @@
 
 
                         <div class="margin-top10">
-                            <?php if ($access == 'view'){ ?>
+                            <?php if ($access == 'view') { ?>
                                 <table id="st_table" class="table table-bordered table-hover ">
                                     <thead>
-                                    <tr>
-                                        <th><?php echo display('sl_no') ?></th>
-                                        <th>SKU </th>
-                                        <th>Product Name </th>
-                                        <th class="text-right ">System Stock </th>
-                                        <th class="text-right ">Physical Count</th>
-                                        <th class="text-right ">Difference</th>
-                                    </tr>
+                                        <tr>
+                                            <th><?php echo display('sl_no') ?></th>
+                                            <th>SKU </th>
+                                            <th>Product Name </th>
+                                            <th class="text-right ">System Stock </th>
+                                            <th class="text-right ">Physical Count</th>
+                                            <th class="text-right ">Difference</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {product_list}
-                                    <tr>
-                                        <td>{sl}</td>
-                                        <td>{sku}</td>
-                                        <td>
-                                            {product_name}
-                                            <input type="hidden" name="product_id[]" value={product_id}>
-                                        </td>
+                                        {product_list}
+                                        <tr>
+                                            <td>{sl}</td>
+                                            <td>{sku}</td>
+                                            <td>
+                                                {product_name}
+                                                <input type="hidden" name="product_id[]" value={product_id}>
+                                            </td>
 
 
-                                        <td align="right"><input class="form-control input-sm text-right"  placeholder="0" type="text" value="{stock_qty}" name="stock_qty[]" id="stock_qty_{sl}" readonly></td>
-                                        <td align="right"><input class="form-control input-sm p_qty  text-right"  placeholder="0" type="text" value="{physical_stock}" name="p_qty[]" id="p_qty_{sl}" readonly></td>
-                                        <td align="right"><input class="form-control input-sm  text-right"  placeholder="0" type="text" value="{difference}" name="difference[]" id="difference_{sl}" readonly></td>
+                                            <td align="right"><input class="form-control input-sm text-right" placeholder="0" type="text" value="{stock_qty}" name="stock_qty[]" id="stock_qty_{sl}" readonly></td>
+                                            <td align="right"><input class="form-control input-sm p_qty  text-right" placeholder="0" type="text" value="{physical_stock}" name="p_qty[]" id="p_qty_{sl}" readonly></td>
+                                            <td align="right"><input class="form-control input-sm  text-right" placeholder="0" type="text" value="{difference}" name="difference[]" id="difference_{sl}" readonly></td>
 
 
-                                    </tr>
-                                    {/product_list}
+                                        </tr>
+                                        {/product_list}
                                     </tbody>
 
                                 </table>
 
-                            <?php }else if ($access == 'edit'){?>
-                            <table id="st_table" class="table table-bordered table-hover ">
-                                <thead>
-                                <tr>
-                                    <th><?php echo display('sl_no') ?></th>
-                                    <th>SKU </th>
-                                    <th>Product Name </th>
-                                    <th class="text-right ">Physical Count</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {product_list}
-                                <tr>
-                                    <td>{sl}</td>
-                                    <td>{sku}</td>
-                                    <td>
-                                        {product_name}
-                                        <input type="hidden" name="product_id[]" value={product_id}>
+                            <?php } else if ($access == 'edit') { ?>
+                                <table id="st_table" class="table table-bordered table-hover ">
+                                    <thead>
+                                        <tr>
+                                            <th><?php echo display('sl_no') ?></th>
+                                            <th>SKU </th>
+                                            <th>Product Name </th>
+                                            <th class="text-right ">Physical Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {product_list}
+                                        <tr>
+                                            <td>{sl}</td>
+                                            <td>{sku}</td>
+                                            <td>
+                                                {product_name}
+                                                <input type="hidden" name="product_id[]" value={product_id}>
 
-                                    </td>
-                                    <td align="right"><input class="form-control p_qty text-right"  placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : ''?>" name="p_qty[]" id="p_qty_{sl}"></td>
-                                </tr>
-                                {/product_list}
-                                </tbody>
+                                            </td>
+                                            <td align="right"><input class="form-control p_qty text-right" placeholder="0" type="text" value="<?= ($access === "edit") ? "{physical_stock}" : '' ?>" name="p_qty[]" id="p_qty_{sl}"></td>
+                                        </tr>
+                                        {/product_list}
+                                    </tbody>
 
-                            </table>
+                                </table>
 
                             <?php } else { ?>
 
                                 <table id="addinvoice" class="table table-bordered table-hover ">
                                     <thead>
-                                    <tr>
-                                        <th><?php echo display('sl_no') ?></th>
-                                        <th>SKU </th>
-                                        <th>Product Name </th>
-                                        <th class="text-right ">Physical Count</th>
-                                    </tr>
+                                        <tr>
+                                            <th><?php echo display('sl_no') ?></th>
+                                            <th>SKU </th>
+                                            <th>Product Name </th>
+                                            <th class="text-right ">Physical Count</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
 
@@ -247,7 +249,7 @@
                         </div>
 
 
-                        <?php if ($access != 'view'){ ?>
+                        <?php if ($access != 'view') { ?>
                             <button type="submit" id="submit_btn" name="submit_form" class="btn btn-success btn-md submit_btn">Submit</button>
 
                         <?php } ?>
@@ -261,20 +263,15 @@
 </div>
 
 <script type="text/javascript">
-
-
-
-    $(document).ready(function () {
+    $(document).ready(function() {
         var table = $('#st_table').DataTable({
-            columnDefs: [
-                {
-                    orderable: false,
-                    targets: [1, 2, 3],
-                },
-            ],
+            columnDefs: [{
+                orderable: false,
+                targets: [1, 2, 3],
+            }, ],
         });
 
-        $('.submit_btn').click(function () {
+        $('.submit_btn').click(function() {
             // table.clear();
             table.destroy();
         });
@@ -333,7 +330,7 @@
 
     function deleteRow(t) {
         var a = $("#addinvoice > tbody > tr").length;
-//    alert(a);
+        //    alert(a);
         var e = t.parentNode.parentNode;
         e.parentNode.removeChild(e);
     }
@@ -345,8 +342,4 @@
             return false;
         }
     });
-
-
-
-
 </script>
