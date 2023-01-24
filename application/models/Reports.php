@@ -2364,7 +2364,7 @@ class reports extends CI_Model
         // }
         if ($per_page && $page)
             $this->db->limit($per_page, $page);
-        $this->db->order_by('a.invoice_id', 'desc');
+        $this->db->order_by('a.invoice', 'desc');
         $query = $this->db->get()->result_array();
         $final_array = array();
         // $sl = 1;
@@ -3111,7 +3111,7 @@ class reports extends CI_Model
         $this->db->order_by('a.date', 'desc');
         if ($per_page && $page)
             $this->db->limit($per_page, $page);
-        $this->db->order_by('a.invoice_id', 'desc');
+        $this->db->order_by('a.invoice', 'desc');
         $query = $this->db->get()->result_array();
         $final_array = array();
         // $sl = 1;
