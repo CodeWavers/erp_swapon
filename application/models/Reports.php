@@ -2353,10 +2353,10 @@ class reports extends CI_Model
 
         a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
-        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
-        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id');
-        $this->db->join('product_information pi', 'pi.product_id = id.product_id');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
+        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id','left');
+        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id','left');
+        $this->db->join('product_information pi', 'pi.product_id = id.product_id','left');
         $this->db->where('a.date', $today);
         // if($outlet_id)
         // {
@@ -3098,10 +3098,10 @@ class reports extends CI_Model
 
         a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
-        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
-        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id');
-        $this->db->join('product_information pi', 'pi.product_id = id.product_id');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
+        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id','left');
+        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id','left');
+        $this->db->join('product_information pi', 'pi.product_id = id.product_id','left');
         $this->db->where('a.date >=', $from_date);
         $this->db->where('a.date <=', $to_date);
         if ($outlet_id) {
