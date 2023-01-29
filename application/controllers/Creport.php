@@ -65,6 +65,10 @@ class Creport extends CI_Controller
 
         $res = $CI->Reports->stock_taking_details_by_id($id);
 
+        // echo "<pre>";
+        // print_r($res);
+        // exit();
+
 
 
         $sl = 1;
@@ -91,6 +95,7 @@ class Creport extends CI_Controller
             'notes'  => $res[0]['notes'],
             'approve'  => $res[0]['approve'],
             'outlet_name'  => $outlet_name,
+            'outlet_id'  => $res[0]['out'],
 
 
         );
@@ -122,13 +127,19 @@ class Creport extends CI_Controller
             $res[$k]['sl']  = $sl;
 
             if ($outlet_id == 'HK7TGDT69VFMXB7') {
-                $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'], '', '', '')['central_stock'];
+                // $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'], '', '', '')['central_stock'];
+                $stock = $CI->Reports->getCheckList2(null, $res[$k]['product_id'], '', '', '', '')['central_stock'];
                 //   $available_quantity = $this->Reports->current_stock($product_id,1);
             } else {
-                $stock = $CI->Rqsn->outlet_stock(null, $res[$k]['product_id'], '', '')['outlet_stock'];
+                // $stock = $CI->Rqsn->outlet_stock(null, $res[$k]['product_id'], '', '')['outlet_stock'];
+                $stock = $CI->Rqsn->available_outlet_stock2(null, $res[$k]['product_id'], '', '', '', $outlet_id)['outlet_stock'];
 
                 // echo '<pre>';print_r($available_quantity);exit();
             }
+
+            // echo "<pre>";
+            // print_r($stock);
+            // exit();
 
 
 
@@ -319,18 +330,16 @@ class Creport extends CI_Controller
         $outlet_id = $this->input->post('outlet_name', TRUE);
         $product_id = $this->input->post('product_id', TRUE);
         $purchase_price = $this->input->post('purchase_price', TRUE);
-        $quantity = array_filter($this->input->post('p_qty', TRUE));
+        // $quantity = array_filter($this->input->post('p_qty', TRUE));
+        $quantity = ($this->input->post('p_qty', TRUE));
 
         // echo '<pre>';print_r($purchase_price);exit();
 
-        if (empty($quantity)) {
-            $this->session->set_userdata(array('error_message' => 'Physical count is empty!!'));
-            redirect(base_url('Creport/stock_taking'));
-            exit();
-        }
-
-
-
+        // if (empty($quantity)) {
+        //     $this->session->set_userdata(array('error_message' => 'Physical count is empty!!'));
+        //     redirect(base_url('Creport/stock_taking'));
+        //     exit();
+        // }
 
 
         $data1 = array(
@@ -338,15 +347,15 @@ class Creport extends CI_Controller
             'outlet_id'   => $outlet_id,
             'stid_no'      => $this->input->post('stid', TRUE),
             'date'      => $this->input->post('date', TRUE),
-            'total_product'      => count(array_filter($quantity, function ($x) {
-                return !empty($x);
-            })),
+            // 'total_product'      => count(array_filter($quantity, function ($x) {
+            //     // return !empty($x);
+            //     return $x;
+            // })),
+            'total_product'      => count($quantity),
             'notes'   => $this->input->post('notes', TRUE),
 
         );
 
-
-        // echo '<pre>';print_r($data1);exit();
 
         if ($access == 'edit') {
             $this->db->where('stid', $stid);
@@ -399,9 +408,10 @@ class Creport extends CI_Controller
 
 
             // echo '<pre>';print_r($data1);
-            if (!empty($qty)) {
-                $this->db->insert('stock_taking_details', $data2);
-            }
+            // if (!empty($qty)) {
+            //     $this->db->insert('stock_taking_details', $data2);
+            // }
+            $this->db->insert('stock_taking_details', $data2);
         }
 
         if (!empty($total_amount)) {
