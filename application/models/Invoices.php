@@ -1140,7 +1140,9 @@ class Invoices extends CI_Model
                             'COAID' => $customer_headcode,
                             'Narration' => 'Customer credit For Invoice No -  ' . $invoice_no_generated . ' Customer ' . $cs_name,
                             'Debit' => 0,
-                            'Credit' =>  $paid[$i],
+                            // 'Credit' =>  $paid[$i],
+                            'Credit' => $this->input->post('paid_amount', TRUE) > $this->input->post('n_total', TRUE) ? 
+                            $paid[$i] - ($this->input->post('paid_amount', TRUE) - $this->input->post('n_total', TRUE)) : $paid[$i],
                             'IsPosted' => 1,
                             'CreateBy' => $createby,
                             'CreateDate' => $createdate,
@@ -1151,11 +1153,11 @@ class Invoices extends CI_Model
                         $this->db->insert('acc_transaction', $coscr);
 
 
-                        if ($paid[$i] >= $total_order_value) {
+                        if ($this->input->post('paid_amount', TRUE) > $this->input->post('n_total', TRUE)) {
                             $data = array(
                                 'invoice_id'    => $invoice_id,
                                 'pay_type'      => $pay_type[$i],
-                                'amount'        => $total_order_value,
+                                'amount'        => $paid[$i] - ($this->input->post('paid_amount', TRUE) - $this->input->post('n_total', TRUE)), 
                                 'pay_date'      =>  $Vdate,
                                 'status'        =>  1,
                                 'account'       => '',
@@ -2472,9 +2474,10 @@ class Invoices extends CI_Model
     //Retrieve invoice Edit Data
     public function retrieve_invoice_editdata($invoice_id)
     {
-        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount,c.total_price_wd, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*');
+        $this->db->select('a.*,cr.courier_name,br.branch_name,rr.receiver_name,rr.id as rid ,a.due_amount as due_amnt, a.paid_amount as p_amnt, sum(c.quantity) as sum_quantity,sum(c.total_price) as sum_amount,c.total_price_wd, a.total_tax as taxs,a.prevous_due,b.customer_name,b.customer_mobile,c.*,c.tax as total_tax,c.product_id,d.product_name,d.product_model,d.tax,d.unit,d.*,sum(paid_amount.amount) as total_amount_paid');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id', 'left');
+        $this->db->join('paid_amount', 'paid_amount.invoice_id = a.invoice_id','left');
         $this->db->join('invoice_details c', 'c.invoice_id = a.invoice_id');
         $this->db->join('courier_name cr', 'cr.courier_id = a.courier_id', 'left');
         $this->db->join('branch_name br', 'br.branch_id = a.branch_id', 'left');
