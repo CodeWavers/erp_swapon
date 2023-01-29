@@ -2385,10 +2385,10 @@ class reports extends CI_Model
         $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id','left');
         $this->db->join('product_information pi', 'pi.product_id = id.product_id','left');
         $this->db->where('a.date', $today);
-        // if($outlet_id)
-        // {
-        //     $this->db->where('a.outlet_id', $outlet_id);
-        // }
+        if($outlet_id)
+        {
+            $this->db->where('a.outlet_id', $outlet_id);
+        }
         if ($per_page && $page)
             $this->db->limit($per_page, $page);
         $this->db->order_by('a.invoice', 'desc');

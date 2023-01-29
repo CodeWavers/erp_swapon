@@ -240,8 +240,9 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <td><?php echo $cash_amount ? $cash_amount : 0.00 ?></td>
                                                     <td><?php echo $sales['card'] ? $sales['card'] : 0.00 ?></td>
                                                     <td><?php echo $sales['bkash'] ? $sales['bkash'] : 0.00 ?></td>
+                                                     <td><?php echo $sales['rocket'] ? $sales['rocket'] : 0.00 ?></td>
                                                     <td><?php echo $sales['nagad'] ? $sales['nagad'] : 0.00 ?></td>
-                                                    <td><?php echo $sales['rocket'] ? $sales['rocket'] : 0.00 ?></td>
+                                                   
                                                     <td><?php echo $total_received ?></td>
 
                                                     <td class="text-right">
