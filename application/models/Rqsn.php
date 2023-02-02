@@ -1010,10 +1010,14 @@ class Rqsn extends CI_Model
             ->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id')
             ->join('outlet_warehouse c', 'c.outlet_id=a.from_id')
             ->join('product_information d', 'd.product_id=b.product_id')
+            ->limit(10)
             ->where('b.status', 1)
             ->where('a.to_id', 'HK7TGDT69VFMXB7')
             ->get()
             ->result();
+            // echo "<pre>";
+            // print_r($records);
+            // exit();
 
         $sl = 1;
 
@@ -1048,6 +1052,126 @@ class Rqsn extends CI_Model
 
 
         return $data;
+    }
+    public function approve_rqsn2($postData = null, $post_product_id = null)
+    {
+        $this->load->model('Warehouse');
+        $this->load->model('suppliers');
+        $response = array();
+        ## Read value
+            $draw = $postData['draw'];
+            $start = $postData['start'];
+            $rowperpage = $postData['length']; // Rows display per page
+            $columnIndex = $postData['order'][0]['column']; // Column index
+            $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+            $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+            $searchValue = $postData['search']['value']; // Search value
+
+            ## Search
+            $searchQuery = "";
+            // if ($searchValue != '') {
+            //     $searchQuery = " (a.product_name like '%"
+            //         . $searchValue .
+            //         "%' or a.product_model like '%"
+            //         . $searchValue .
+            //         "%' or a.sku like '%"
+            //         . $searchValue .
+            //         "%' or b.name like '%"
+            //         . $searchValue .
+            //         "%'  or a.product_id like '%"
+            //         . $searchValue .
+            //         "%') ";
+            // }
+
+            ## Total number of records without filtering
+            $this->db->select('count(*) as allcount');
+            $this->db->from('rqsn a');
+            $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
+            $this->db->join('outlet_warehouse c', 'c.outlet_id=a.from_id');
+            $this->db->join('product_information d', 'd.product_id=b.product_id');
+            $this->db->where('b.status', 1);
+            $this->db->where('a.to_id', 'HK7TGDT69VFMXB7');
+            $this->db->limit($rowperpage, $start);
+            $records = $this->db->get()->num_rows();
+            $totalRecords = $records;
+
+            ## Total number of record with filtering
+            $this->db->select('count(*) as allcount');
+            $this->db->from('rqsn a');
+            $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
+            $this->db->join('outlet_warehouse c', 'c.outlet_id=a.from_id');
+            $this->db->join('product_information d', 'd.product_id=b.product_id');
+            $this->db->where('b.status', 1);
+            $this->db->where('a.to_id', 'HK7TGDT69VFMXB7');
+            $this->db->limit($rowperpage, $start);
+            $records = $this->db->get()->num_rows();
+            $totalRecordwithFilter = $records;
+        
+
+        // echo "<pre>";
+        // echo $totalRecords;
+        // exit();
+        ## Fetch records
+        $records = $this->db->select('*')
+            ->from('rqsn a')
+            ->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id')
+            ->join('outlet_warehouse c', 'c.outlet_id=a.from_id')
+            ->join('product_information d', 'd.product_id=b.product_id')
+            ->where('b.status', 1)
+            ->where('a.to_id', 'HK7TGDT69VFMXB7')
+            ->order_by($columnName, $columnSortOrder)
+            ->limit($rowperpage, $start)
+            ->get()
+            ->result();
+        // echo "<pre>";
+        // print_r($records);
+        // exit();
+        $data = array();
+        $sl = 1;
+        $CI = &get_instance();
+        $CI->load->model('Web_settings');
+        $CI->load->model('Reports');
+        foreach ($records as $record) {
+            $base_url = base_url();
+            $button = '';
+            $button .= '<a id="approve" href="" onclick="this.href=\''. base_url("Crqsn/isactive/$record->rqsn_detail_id/active/") .
+            '\'+$(this).closest(\'tr\').find(\'.a_qty\').val();return confirm(\''. display("are_you_sure").'\')" 
+            class="btn btn-info btn-sm " data-toggle="tooltip" data-placement="right" title=""><i 
+            class="fa fa-check" aria-hidden="true"></i></a>';
+
+            if ($this->permission1->method('aprove_v', 'delete')->access()) {
+                $button .= '<a href="'. base_url("Crqsn/rqsn_delete/$record->rqsn_detail_id/") .'" 
+                class="btn btn-danger btn-sm" onclick="return confirm(\'Are You Sure?\')" 
+                title="delete"><i class="fa fa-trash"></i></a>';
+            }
+            $qnty = '<input id="a_qty" style="width: 80px" type="number" class="form-control a_qty" data="" name="a_qty" value="1" />';
+            //$details_i = '<a href="' . $base_url . 'Crqsn/isactive/$id/active/' . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
+            $stock = $CI->Reports->available_stock($record->product_id);
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'outlet_name' => $record->outlet_name,
+                        'date' => $record->date,
+                        'product_name' => $record->product_name ."(".$record->sku . ")",
+                         'stok_quantity' => sprintf('%0.2f', $stock),
+                        'quantity' => $record->quantity,
+
+                        'unit' => $qnty,
+                        'details' => $record->details,
+                        'rqsn_detail_id' => $record->rqsn_detail_id,
+
+                        'action' => $button,
+                    );
+                    $sl++;
+                }
+        ## Response
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecords,
+                "iTotalDisplayRecords" => $totalRecordwithFilter,
+                "aaData" =>  $data,
+            );
+
+        return $response;
     }
 
     public function approve_rqsn_outlet_count()

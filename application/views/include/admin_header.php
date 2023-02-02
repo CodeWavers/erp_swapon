@@ -539,7 +539,7 @@ $birthday = $CI->Reports->birthday_noti();
                                     echo "active";
                                 } else {
                                     echo " ";
-                                } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn') ?>">Approve Requisition CW</a></li>
+                                } ?>"><a href="<?php echo base_url('Crqsn/aprove_rqsn2') ?>">Approve Requisition CW</a></li>
                             <?php } ?>
 
                             <!-- <?php if ($this->permission1->method('aprove_rqsn_outlet', 'create')->access()) { ?>

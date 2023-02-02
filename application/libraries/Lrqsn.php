@@ -48,6 +48,18 @@ class Lrqsn
         $invoiceForm = $CI->parser->parse('rqsn/outlet_stock', $data, true);
         return $invoiceForm;
     }
+     // Retrieve Single Item Stock Stock Report
+     public function approve_outlet_rqsn()
+     {
+         $CI = &get_instance();
+         $CI->load->model('Rqsn');
+         $CI->load->model('Web_settings');
+         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+         $data['currency'] = $currency_details[0]['currency'];
+         $data['heading_text'] = "Stock Report";
+         $reportList = $CI->parser->parse('rqsn/central_rqsn_approve', $data, true);
+         return $reportList;
+     }
 
     public function rqsn_add_form()
     {

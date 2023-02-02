@@ -2061,9 +2061,155 @@ function popOverInit(button, tooltip) {
     button.addEventListener(event, hide);
   });
 }
+$(document).ready(function() {
+
+
+  $('.a_qty').on('keyup', function() {
+
+  var qty = this.value;
+  var y = $(this).closest('tr').find('.r_qty').html()
+  var s = $(this).closest('tr').find('.s_qty').html()
+  var z = parseInt(y);
+  var s_qty = parseInt(s);
+  //  console.log( qty);
+  if (qty > z) {
+      var msg = "You can not transfer more than requested " + z + " Items";
+      alert(msg);
+      $(".a_qty").val(z);
+      
+  }
+  
+  if (qty > s_qty) {
+      var msg = "You can transfer maximum " + s_qty + " Items";
+      alert(msg);
+      $(".a_qty").val(z);
+      
+  }
+ 
+  });
+  $('.a_qty').on('change', function() {
+
+      var qty = this.value;
+      var y = $(this).closest('tr').find('.r_qty').html()
+      var s = $(this).closest('tr').find('.s_qty').html()
+      var z = parseInt(y);
+      var s_qty = parseInt(s);
+      //  console.log( qty);
+      if (qty > z) {
+          var msg = "You can not transfer more than requested " + z + " Items";
+          alert(msg);
+          $(".a_qty").val(z);
+      }
+      
+      if (qty > s_qty) {
+          var msg = "You can transfer maximum " + s_qty + " Items";
+          alert(msg);
+          $(".a_qty").val(z);
+      }
+      
+  });
+});
 
 function get_text() {
 
   var text = $("#outlet option:selected").text();
   $('#outlet_text').val(text);
 }
+
+$(document).ready(function () {
+  "use strict";
+  var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
+  var base_url = $("#base_url").val();
+  var table = $("#rqsn_approve").DataTable({
+    responsive: true,
+
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [10, 25, 50, 100, 250, 500, 1000],
+      [10, 25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "csv",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "excel",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "pdf",
+        title: "Stock List",
+        className: "btn-sm prints",
+        footer: true,
+        orientation: "landscape",
+      },
+      {
+        extend: "print",
+        title: "<center>Stock List</center>",
+        className: "btn-sm prints",
+        footer: true,
+        customize: function (win) {
+          var last = null;
+          var current = null;
+          var bod = [];
+
+          var css = "@page { size: landscape; }",
+            head =
+              win.document.head || win.document.getElementsByTagName("head")[0],
+            style = win.document.createElement("style");
+
+          style.type = "text/css";
+          style.media = "print";
+
+          if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+          } else {
+            style.appendChild(win.document.createTextNode(css));
+          }
+
+          head.appendChild(style);
+        },
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Crqsn/Req_Approve",
+      data: function (d) {
+        d.csrf_test_name = CSRF_TOKEN;
+      },
+      
+    },
+    columns: [
+      { data: "sl" },
+      { data: "outlet_name" },
+      { data: "date" },
+      { data: "product_name" },
+      // { data: "sku", class: "text-center" },
+      { data: "stok_quantity", class: "text-right" },
+      { data: "quantity", class: "text-right" },
+      { data: "unit", class: "text-right" },
+      { data: "details", class: "text-right" },
+      { data: "rqsn_detail_id", class: " text-right" },
+      { data: "action", class: " text-right" },
+    ]
+  });
+})

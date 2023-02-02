@@ -1482,6 +1482,51 @@ class reports extends CI_Model
         return $response;
     }
 
+    public function available_stock($post_product_id = null)
+    {
+        $this->load->model('Warehouse');
+        $this->load->model('suppliers');
+        $response = array();
+
+
+        ## Fetch records
+        $this->db->select("a.*,
+                a.product_name,
+                a.product_id,
+                a.product_model,
+                b.name
+             
+                ");
+        $this->db->from('product_information a');
+        $this->db->join('cats b', 'a.category_id=b.id', 'left');
+        if ($post_product_id) {
+            $this->db->where('a.product_id', $post_product_id);
+        }
+        $records = $this->db->get()->result();
+
+        $stock = 0;
+
+        $outlet_id  = 'HK7TGDT69VFMXB7';
+        $type = 1;
+
+
+
+        foreach ($records as $record) {
+
+            $total_in = $this->total_in(null, null, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
+
+            $total_out = $this->total_out(null, null, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
+
+            $total_return_given = $this->total_return_given(null, null, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
+
+            $total_damage = $this->total_damage(null, null, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
+
+            $stock = $total_in - $total_out - $total_return_given - $total_damage;
+        }
+
+        return $stock;
+    }
+
     public function total_in($from_date = null, $to_date = null, $outlet_id = null, $product_id = null, $finished_raw = null, $purchase_id = null, $type = null)
     {
 

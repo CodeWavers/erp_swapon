@@ -189,6 +189,21 @@ class Crqsn extends CI_Controller
         $content = $this->parser->parse('rqsn/rqsn_approve', $data, true);
         $this->template->full_admin_html_view($content);
     }
+    public function aprove_rqsn2()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $content = $this->lrqsn->approve_outlet_rqsn();
+
+        $this->template->full_admin_html_view($content);
+    }
+    public function Req_Approve()
+    {
+        $postData = $this->input->post();
+        $this->load->model('Rqsn');
+        $data = $this->Rqsn->approve_rqsn2($postData);
+        echo json_encode($data);
+    }
 
     public function aprove_rqsn_outlet()
     {
