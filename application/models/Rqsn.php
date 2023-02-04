@@ -1069,19 +1069,13 @@ class Rqsn extends CI_Model
 
             ## Search
             $searchQuery = "";
-            // if ($searchValue != '') {
-            //     $searchQuery = " (a.product_name like '%"
-            //         . $searchValue .
-            //         "%' or a.product_model like '%"
-            //         . $searchValue .
-            //         "%' or a.sku like '%"
-            //         . $searchValue .
-            //         "%' or b.name like '%"
-            //         . $searchValue .
-            //         "%'  or a.product_id like '%"
-            //         . $searchValue .
-            //         "%') ";
-            // }
+            if ($searchValue != '') {
+                $searchQuery = " (d.product_name like '%"
+                    . $searchValue .
+                    "%' or d.sku like '%"
+                    . $searchValue .
+                    "%') ";
+            }
 
             ## Total number of records without filtering
             $this->db->select('count(*) as allcount');
@@ -1091,9 +1085,11 @@ class Rqsn extends CI_Model
             $this->db->join('product_information d', 'd.product_id=b.product_id');
             $this->db->where('b.status', 1);
             $this->db->where('a.to_id', 'HK7TGDT69VFMXB7');
-            $this->db->limit($rowperpage, $start);
-            $records = $this->db->get()->num_rows();
-            $totalRecords = $records;
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+            $records = $this->db->get()->result();
+            $totalRecords = $records[0]->allcount;
 
             ## Total number of record with filtering
             $this->db->select('count(*) as allcount');
@@ -1103,26 +1099,30 @@ class Rqsn extends CI_Model
             $this->db->join('product_information d', 'd.product_id=b.product_id');
             $this->db->where('b.status', 1);
             $this->db->where('a.to_id', 'HK7TGDT69VFMXB7');
-            $this->db->limit($rowperpage, $start);
-            $records = $this->db->get()->num_rows();
-            $totalRecordwithFilter = $records;
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+            $records = $this->db->get()->result();
+            $totalRecordwithFilter = $records[0]->allcount;
         
 
         // echo "<pre>";
         // echo $totalRecords;
         // exit();
         ## Fetch records
-        $records = $this->db->select('*')
-            ->from('rqsn a')
-            ->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id')
-            ->join('outlet_warehouse c', 'c.outlet_id=a.from_id')
-            ->join('product_information d', 'd.product_id=b.product_id')
-            ->where('b.status', 1)
-            ->where('a.to_id', 'HK7TGDT69VFMXB7')
-            ->order_by($columnName, $columnSortOrder)
-            ->limit($rowperpage, $start)
-            ->get()
-            ->result();
+        $this->db->select('*');
+            $this->db->from('rqsn a');
+            $this->db->join('rqsn_details b', 'a.rqsn_id=b.rqsn_id');
+            $this->db->join('outlet_warehouse c', 'c.outlet_id=a.from_id');
+            $this->db->join('product_information d', 'd.product_id=b.product_id');
+            $this->db->where('b.status', 1);
+            $this->db->where('a.to_id', 'HK7TGDT69VFMXB7');
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+            $this->db->order_by($columnName, $columnSortOrder);
+            $this->db->limit($rowperpage, $start);
+            $records = $this->db->get()->result();
         // echo "<pre>";
         // print_r($records);
         // exit();
@@ -1155,9 +1155,9 @@ class Rqsn extends CI_Model
                          'stok_quantity' => sprintf('%0.2f', $stock),
                         'quantity' => $record->quantity,
 
-                        'unit' => $qnty,
+                        'qnty' => $qnty,
+                        'unit' => "",
                         'details' => $record->details,
-                        'rqsn_detail_id' => $record->rqsn_detail_id,
 
                         'action' => $button,
                     );
