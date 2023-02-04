@@ -173,23 +173,23 @@ class Crqsn extends CI_Controller
     }
 
     //Aprove voucher
+    // public function aprove_rqsn()
+    // {
+    //     $CI = &get_instance();
+    //     $this->auth->check_admin_auth();
+    //     $CI->load->model('Rqsn');
+    //     $CI->load->model('Reports');
+    //     $data['title'] = 'Approve Requisition';
+    //     $data['t'] = $this->Rqsn->approve_rqsn();
+    //     //$data['t'] = $this->Reports->getCheckList_rqsn();
+    //     // $data = $this->Reports->getCheckLi st_rqsn();
+
+
+    //     //  echo '<pre>';print_r($data);exit();
+    //     $content = $this->parser->parse('rqsn/rqsn_approve', $data, true);
+    //     $this->template->full_admin_html_view($content);
+    // }
     public function aprove_rqsn()
-    {
-        $CI = &get_instance();
-        $this->auth->check_admin_auth();
-        $CI->load->model('Rqsn');
-        $CI->load->model('Reports');
-        $data['title'] = 'Approve Requisition';
-        $data['t'] = $this->Rqsn->approve_rqsn();
-        //$data['t'] = $this->Reports->getCheckList_rqsn();
-        // $data = $this->Reports->getCheckLi st_rqsn();
-
-
-        //  echo '<pre>';print_r($data);exit();
-        $content = $this->parser->parse('rqsn/rqsn_approve', $data, true);
-        $this->template->full_admin_html_view($content);
-    }
-    public function aprove_rqsn2()
     {
         $CI = &get_instance();
         $this->auth->check_admin_auth();
