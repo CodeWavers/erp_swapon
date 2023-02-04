@@ -5,12 +5,12 @@
             <i class="pe-7s-note2"></i>
         </div>
         <div class="header-title">
-            <h1><?php echo display('stock_report') ?></h1>
-            <small><?= $heading_text ?></small>
+            <h1>Approve Requisition</h1>
+            <small>Requisition</small>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
-                <li><a href="#"><?php echo display('stock') ?></a></li>
-                <li class="active"><?= $heading_text ?></li>
+                <li><a href="#">Approve Requisition</a></li>
+                <li class="active">Approve Requisition</li>
             </ol>
         </div>
     </section>
