@@ -2061,9 +2061,85 @@ function popOverInit(button, tooltip) {
     button.addEventListener(event, hide);
   });
 }
-
 function get_text() {
 
   var text = $("#outlet option:selected").text();
   $('#outlet_text').val(text);
 }
+
+$(document).ready(function () {
+  "use strict";
+  var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
+  var base_url = $("#base_url").val();
+  var table = $("#rqsn_approve").DataTable({
+    responsive: true,
+    dom: "bfltip",
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [10, 25, 50, 100, 250, 500, 1000],
+      [10, 25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "csv",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "excel",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "pdf",
+        title: "Stock List",
+        className: "btn-sm prints",
+        footer: true,
+        orientation: "landscape",
+      },
+      {
+        extend: "print",
+        title: "<center>Stock List</center>",
+        className: "btn-sm prints",
+        footer: true,
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Crqsn/Req_Approve",
+      data: function (d) {
+        d.csrf_test_name = CSRF_TOKEN;
+      },
+      
+    },
+    columns: [
+      { data: "sl" },
+      { data: "outlet_name" },
+      { data: "date" },
+      { data: "product_name" },
+      // { data: "sku", class: "text-center" },
+      { data: "stok_quantity", class: "text-right" },
+      { data: "quantity", class: "text-right" },
+      { data: "qnty", class: "text-right" },
+      { data: "unit", class: "text-right" },
+      { data: "details", class: " text-right" },
+      { data: "action", class: " text-right" },
+    ]
+  });
+})
