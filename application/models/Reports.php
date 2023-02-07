@@ -2416,14 +2416,14 @@ class reports extends CI_Model
 
         $today = date('Y-m-d');
         $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,a.changeamount,
-        (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
+        (SELECT sum(id.quantity) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "6" AND paid.invoice_id = a.invoice_id) as total_card,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "5" AND paid.invoice_id = a.invoice_id) as total_nagad,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "7" AND paid.invoice_id = a.invoice_id) as total_rocket,
 
-        a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
+        a.total_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id','left');
@@ -2480,8 +2480,8 @@ class reports extends CI_Model
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
             $final_array[$value['invoice_id']]['due_amount'] = $value['due_amount'];
-            $final_array[$value['invoice_id']]['invoice_discount'] = $value['invoice_discount'];
-            $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['invoice_discount'];
+            $final_array[$value['invoice_id']]['invoice_discount'] = $value['total_discount'];
+            $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['total_discount'];
             $final_array[$value['invoice_id']]['qnty'] = $value['total_sku'];
         }
         // echo "<pre>";
@@ -3161,14 +3161,14 @@ class reports extends CI_Model
             $outlet_id = null;
         }
         $this->db->select('a.date,a.invoice,a.invoice_id,a.due_amount,a.changeamount,
-        (SELECT count(id.invoice_details_id) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
+        (SELECT sum(id.quantity) from invoice_details as id WHERE id.invoice_id = a.invoice_id) as total_sku,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "1" AND paid.invoice_id = a.invoice_id) as total_cash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "3" AND paid.invoice_id = a.invoice_id) as total_bkash,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "6" AND paid.invoice_id = a.invoice_id) as total_card,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "5" AND paid.invoice_id = a.invoice_id) as total_nagad,
         (SELECT sum(paid.amount) from paid_amount as paid WHERE paid.pay_type = "7" AND paid.invoice_id = a.invoice_id) as total_rocket,
 
-        a.invoice_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
+        a.total_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id','left');
@@ -3176,7 +3176,7 @@ class reports extends CI_Model
         $this->db->join('product_information pi', 'pi.product_id = id.product_id','left');
         $this->db->where('a.date >=', $from_date);
         $this->db->where('a.date <=', $to_date);
-        if ($outlet_id) {
+        if (!empty($outlet_id)) {
             $this->db->where('a.outlet_id', $outlet_id);
         }
 
@@ -3235,8 +3235,8 @@ class reports extends CI_Model
             $final_array[$value['invoice_id']]['total_amount'] = $value['total_amount'];
             $final_array[$value['invoice_id']]['sales_return'] = $value['sales_return'];
             $final_array[$value['invoice_id']]['due_amount'] = $value['due_amount'];
-            $final_array[$value['invoice_id']]['invoice_discount'] = $value['invoice_discount'];
-            $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['invoice_discount'];
+            $final_array[$value['invoice_id']]['invoice_discount'] = $value['total_discount'];
+            $final_array[$value['invoice_id']]['net_sales'] = $value['total_amount'] - $value['total_discount'];
             $final_array[$value['invoice_id']]['qnty'] = $value['total_sku'];
         }
         // echo "<pre>";

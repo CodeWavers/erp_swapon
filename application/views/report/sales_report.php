@@ -201,9 +201,9 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                 $cash_amount = 0;
                                                 $cash_amount = $sales['cash'];
                                                 $total_received = $sales['cash'] + $sales['card'] + $sales['bkash'] + $sales['nagad'] + $sales['rocket'];
-                                                if ($total_received >= ceil($sales['total_amount'])) {
-                                                    $total_received = ceil($sales['total_amount']);
-                                                    $cash_amount = ($sales['cash'] - $sales['changeamount']);
+                                                if ($total_received >= $sales['total_amount']) {
+                                                    $total_received = $sales['total_amount'];
+                                                    $cash_amount = $sales['cash'];
                                                 }
                                                 $sl++;
 
@@ -231,26 +231,26 @@ $_SESSION['redirect_uri'] = $fullURL;
 
 
                                                     <td><?php echo $sales['qnty'] ?></td>
-                                                    <td><?php echo ceil($sales['total_amount']) + $sales['invoice_discount'] ?></td>
-                                                    <td><?php echo $sales['invoice_discount'] ?></td>
-                                                    <td><?php echo ceil($sales['total_amount']) ?></td>
-                                                    <td><?php echo $sales['sales_return'] ?></td>
-                                                    <td><?php echo $sales['due_amount'] ?></td>
+                                                    <td><?php echo number_format(($sales['total_amount'] + $sales['invoice_discount']),2) ?></td>
+                                                    <td><?php echo number_format($sales['invoice_discount'],2) ?></td>
+                                                    <td><?php echo number_format($sales['total_amount'],2) ?></td>
+                                                    <td><?php echo number_format($sales['sales_return'],2) ?></td>
+                                                    <td><?php echo number_format($sales['due_amount'],2) ?></td>
 
-                                                    <td><?php echo $cash_amount ? $cash_amount : 0.00 ?></td>
-                                                    <td><?php echo $sales['card'] ? $sales['card'] : 0.00 ?></td>
-                                                    <td><?php echo $sales['bkash'] ? $sales['bkash'] : 0.00 ?></td>
-                                                     <td><?php echo $sales['rocket'] ? $sales['rocket'] : 0.00 ?></td>
-                                                    <td><?php echo $sales['nagad'] ? $sales['nagad'] : 0.00 ?></td>
+                                                    <td><?php echo $cash_amount ? number_format($cash_amount,2) : 0.00 ?></td>
+                                                    <td><?php echo $sales['card'] ? number_format($sales['card'],2) : 0.00 ?></td>
+                                                    <td><?php echo $sales['bkash'] ? number_format($sales['bkash'],2) : 0.00 ?></td>
+                                                     <td><?php echo $sales['rocket'] ? number_format($sales['rocket'],2) : 0.00 ?></td>
+                                                    <td><?php echo $sales['nagad'] ? number_format($sales['nagad'],2) : 0.00 ?></td>
                                                    
-                                                    <td><?php echo $total_received ?></td>
+                                                    <td><?php echo number_format($total_received,2) ?></td>
 
                                                     <td class="text-right">
                                                         <?php
                                                         if ($position == 0) {
-                                                            echo $currency . ' ' . number_format(ceil($sales['total_amount']), 2);
+                                                            echo $currency . ' ' . number_format($sales['total_amount'], 2);
                                                         } else {
-                                                            echo number_format(ceil($sales['total_amount']), 2) . ' ' . $currency;
+                                                            echo number_format($sales['total_amount'], 2) . ' ' . $currency;
                                                         }
                                                         $subtotal += ceil($sales['total_amount']);
                                                         $received += $total_received;
