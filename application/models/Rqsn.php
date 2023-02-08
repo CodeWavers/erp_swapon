@@ -1133,6 +1133,11 @@ class Rqsn extends CI_Model
         $CI->load->model('Reports');
         foreach ($records as $record) {
             $base_url = base_url();
+            $chk_rqsn = '<input type="hidden" name="rqsn_id" id="rqsn_id" 
+            value="'
+            .$record->rqsn_detail_id .'"/>';
+            $chk_rqsn .='<input type="checkbox" class="data-check flat-green" />';
+            
             $button = '';
             $button .= '<a id="approve" href="" onclick="this.href=\''. base_url("Crqsn/isactive/$record->rqsn_detail_id/active/") .
             '\'+$(this).closest(\'tr\').find(\'.a_qty\').val();return confirm(\''. display("are_you_sure").'\')" 
@@ -1147,7 +1152,11 @@ class Rqsn extends CI_Model
             $qnty = '<input id="a_qty" style="width: 80px" type="number" class="form-control a_qty" data="" name="a_qty" value="1" />';
             //$details_i = '<a href="' . $base_url . 'Crqsn/isactive/$id/active/' . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
             $stock = $CI->Reports->available_stock($record->product_id);
+            $chk_rqsn .= '<input type="hidden" name="stocks" id="stocks" 
+            value="'
+            .$stock .'"/>';
                     $data[] = array(
+                        'a'            =>   $chk_rqsn,
                         'sl'            =>   $sl,
                         'outlet_name' => $record->outlet_name,
                         'date' => $record->date,

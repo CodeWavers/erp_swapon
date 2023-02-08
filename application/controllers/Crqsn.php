@@ -450,12 +450,6 @@ class Crqsn extends CI_Controller
             'isaprv' => 1,
             'iscw' => 1
         );
-
-        //        print_r($postData);
-        //        die();
-
-        // echo '<script>alert("Welcome to Geeks for Geeks")</script>';
-
         if ($this->Rqsn->approved($postData)) {
             $this->session->set_flashdata('message', display('successfully_approved'));
         } else {
@@ -464,6 +458,53 @@ class Crqsn extends CI_Controller
 
         redirect($_SERVER['HTTP_REFERER']);
     }
+    public function isactiveall()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $rqsn_ids = $this->input->post('rqsn_ids', true);
+        $stocks = $this->input->post('stocks', true);
+        
+        $approve_qntys = $this->input->post('approve_qntys', true);
+        $action = 2;
+        foreach ($rqsn_ids as $key=> $value) {
+            if($stocks[$key] >= $approve_qntys[$key])
+            {
+                $postData = array(
+                    'rqsn_detail_id'     => $rqsn_ids[$key],
+                    'a_qty' => $approve_qntys[$key],
+                    'status' => $action,
+                    'isaprv' => 1,
+                    'iscw' => 1
+                );
+                $result = $this->Rqsn->approved($postData);
+            }
+      }
+       
+        if ($result) {
+            $this->session->set_flashdata('message', display('successfully_approved'));
+        } else {
+            $this->session->set_flashdata('error_message', display('please_try_again'));
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function rqsn_delete_all()
+    {
+        $rqsn_ids = $this->input->post('rqsn_ids', true);
+        foreach ($rqsn_ids as $key=> $value) {
+            $result = $this->Rqsn->delete_rqsn($value);
+        }
+        if ($result) {
+            $this->session->set_flashdata('message', display('successfully_delete'));
+        } else {
+            $this->session->set_flashdata('error_message', display('please_try_again'));
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
     public function ischalan($id = null, $action = null, $value = null)
     {
         $CI = &get_instance();

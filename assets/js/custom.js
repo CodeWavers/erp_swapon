@@ -2074,7 +2074,7 @@ $(document).ready(function () {
   var table = $("#rqsn_approve").DataTable({
     responsive: true,
     dom: "bfltip",
-    aaSorting: [[1, "asc"]],
+    aaSorting: [[2, "asc"]],
     columnDefs: [
       { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8] },
     ],
@@ -2129,6 +2129,7 @@ $(document).ready(function () {
       
     },
     columns: [
+      { data: "a" },
       { data: "sl" },
       { data: "outlet_name" },
       { data: "date" },
@@ -2142,4 +2143,5 @@ $(document).ready(function () {
       { data: "action", class: " text-right" },
     ]
   });
+  
 })
