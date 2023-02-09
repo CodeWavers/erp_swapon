@@ -2850,7 +2850,7 @@ class Admin_dashboard extends CI_Controller
         $CI->load->library('lreport');
         $search = $this->input->get('search');
         $print = $this->input->get('print');
-        $outlet_id = $this->input->post('outlet_id');
+        $outlet_id = $this->input->get('outlet_id');
         $from_date = (!empty($this->input->get('from_date')) ? $this->input->get('from_date') : date('Y-m-d'));
         if($print == "Print")
         {

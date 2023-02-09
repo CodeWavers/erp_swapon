@@ -179,7 +179,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <b>Total Received Amount</b>
                                                     <p class="text-right"><b><?php echo $sales_report['received_amount'] ?></b></p>
                                                     <b>VAT 7.5% Inclusive </b>
-                                                    <p class="text-right"><b><?php echo $sales_report['payment_cash'] ?></b></p>
+                                                    <p class="text-right"><b><?php echo "0" ?></b></p>
                                                 </td>
 
                                                 <td></td>

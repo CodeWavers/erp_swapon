@@ -40,7 +40,7 @@
         }
         ?>
 
-        <!-- <div class="row">
+        <div class="row">
             <div class="col-sm-12">
 
                 <?php if ($this->permission1->method('create_product', 'create')->access()) { ?>
@@ -53,7 +53,7 @@
                 <a href="<?php echo base_url('Cproduct/insert_finished_product_ecom') ?>" class="sync btn btn-danger m-b-5 m-r-2 "><i class="fa fa-refresh"> </i>  Sync Product</a>
 
             </div>
-        </div> -->
+        </div>
 
 
 

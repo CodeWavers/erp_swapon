@@ -2682,7 +2682,7 @@ class Lreport extends CI_Model
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
-            'title'        => display('shipping_cost_report'),
+            'title'        => 'Daily Summary Report',
             'sales_report' => $sales_report,
             'company_info' => $company_info,
             'from_date'    => $from_date,
