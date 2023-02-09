@@ -1062,7 +1062,6 @@ class reports extends CI_Model
         $response = array();
 
         $p_s = $this->input->post('product_status', TRUE);
-        $totalnumber = $this->input->post('total_stock', TRUE);
         $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
         if ($from_date == null) {
@@ -1071,10 +1070,6 @@ class reports extends CI_Model
         } else {
             $op_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
         }
-
-        // echo "<pre>";
-        // print_r($totalnumber);
-        // exit();
 
 
 
@@ -1128,7 +1123,6 @@ class reports extends CI_Model
             }
             if ($pr_status) $this->db->where('a.finished_raw', $pr_status);
             $this->db->group_by('a.product_id');
-            // $this->db->limit($rowperpage, $start);
             $records = $this->db->get()->num_rows();
             $totalRecords = $records;
 
@@ -1144,21 +1138,14 @@ class reports extends CI_Model
                 $this->db->like('a.category_id', $cat_id, 'both');
             }
 
+
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
             $this->db->group_by('a.product_id');
-            // $this->db->limit($rowperpage, $start);
             $records = $this->db->get()->num_rows();
             $totalRecordwithFilter = $records;
         }
-
-        // echo "<pre>";
-        // echo $totalRecords;
-        // echo ($totalRecordwithFilter);
-        // exit();
-
-
         ## Fetch records
         $this->db->select("a.*,
                 a.product_name,
@@ -1192,16 +1179,6 @@ class reports extends CI_Model
             $this->db->where('a.finished_raw', $p_s);
         }
         $records = $this->db->get()->result();
-
-        // echo "<pre>";
-        // echo $totalRecords . "<br>";
-        // echo $totalRecordwithFilter . "<br>";
-        // echo count($records) . "<br>";
-        // exit();
-
-
-
-
         $data = array();
 
 
@@ -1303,7 +1280,7 @@ class reports extends CI_Model
 
 
             // $value = 0;
-            if ($value == 1) {
+            if ($value == 1 ) {
                 // echo "<pre>";
                 // print_r($value);
                 // exit();
@@ -1345,6 +1322,136 @@ class reports extends CI_Model
                     $sl++;
                 }
             }
+
+             // All Transaction Items
+             if ($value == 3) {
+
+                if ($closing_stock > 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_type'  =>  $record->finished_raw,
+                        'production_cost'  => $production_price,
+                        'product_model' => ($record->product_model ? $record->product_model : ''),
+                        'category' => ($record->name ? $record->name : ''),
+                        'sku' => ($record->sku ? $record->sku : ''),
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        'purchase_p'    =>  $pprice,
+                        'totalPurchaseQnty' => $total_in,
+                        // 
+                        'damagedQnty'   => $total_damage,
+                        'returnQnty' => $total_return_given,
+                        'totalSalesQnty' =>  $total_out,
+                        // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                        //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock'     => $opening_stock,
+                        'total_sale_price' => $closing_stock * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+
+                    );
+                    $sl++;
+                }
+            }
+
+             // Positive Transaction Items
+             if ($value == 4) {
+
+                if (($closing_stock > 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock > 0) {
+
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_type'  =>  $record->finished_raw,
+                        'production_cost'  => $production_price,
+                        'product_model' => ($record->product_model ? $record->product_model : ''),
+                        'category' => ($record->name ? $record->name : ''),
+                        'sku' => ($record->sku ? $record->sku : ''),
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        'purchase_p'    =>  $pprice,
+                        'totalPurchaseQnty' => $total_in,
+                        // 
+                        'damagedQnty'   => $total_damage,
+                        'returnQnty' => $total_return_given,
+                        'totalSalesQnty' =>  $total_out,
+                        // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                        //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock'     => $opening_stock,
+                        'total_sale_price' => $closing_stock * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+
+                    );
+                    $sl++;
+                }
+            }
+
+            // Zero Transaction Items
+            if ($value == 5) {
+                if (($closing_stock> 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock <= 0) {
+
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_type'  =>  $record->finished_raw,
+                        'production_cost'  => $production_price,
+                        'product_model' => ($record->product_model ? $record->product_model : ''),
+                        'category' => ($record->name ? $record->name : ''),
+                        'sku' => ($record->sku ? $record->sku : ''),
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        'purchase_p'    =>  $pprice,
+                        'totalPurchaseQnty' => $total_in,
+                        // 
+                        'damagedQnty'   => $total_damage,
+                        'returnQnty' => $total_return_given,
+                        'totalSalesQnty' =>  $total_out,
+                        // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                        //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock'     => $opening_stock,
+                        'total_sale_price' => $closing_stock * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+
+                    );
+                    $sl++;
+                }
+            }
+
+
+
             if ($value == 0) {
                 if ($closing_stock < 1) {
                     $data[] = array(
@@ -1421,6 +1528,9 @@ class reports extends CI_Model
                 );
                 $sl++;
             }
+
+
+            
         }
 
         // echo "<pre>";
@@ -1455,12 +1565,8 @@ class reports extends CI_Model
         if (!$post_product_id) {
             $response = array(
                 "draw" => intval($draw),
-                "iTotalRecords" => $totalRecords,
-                "iTotalDisplayRecords" => $totalRecordwithFilter,
-
-                // "iTotalRecords" => 68758,
-                // "iTotalDisplayRecords" => 68758,
-
+                "iTotalRecords" => $totalRecordwithFilter,
+                "iTotalDisplayRecords" => $totalRecords,
                 "aaData" =>  $data,
 
                 "opening_finished" => $opening_finished,
@@ -1481,7 +1587,6 @@ class reports extends CI_Model
 
         return $response;
     }
-
     public function available_stock($post_product_id = null)
     {
         $this->load->model('Warehouse');

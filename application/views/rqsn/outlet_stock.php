@@ -110,11 +110,12 @@
                                 <label for="value" class="col-form-label">Quantity </label>
                                 <select name="value" id="value" class="form-control value">
                                     <option value="2">Select Value</option>
-
                                     <option value="0">Zero</option>
                                     <option value="2">All</option>
-
-                                    <option value="1">Positive</option>
+                                    <option value="1">Positive</option> 
+                                    <option value="3">All Transaction Items</option>
+                                    <option value="4">Positive Transaction Items</option>
+                                    <option value="5">Zero Transaction Items</option>
 
 
                                 </select>

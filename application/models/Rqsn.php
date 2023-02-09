@@ -2513,6 +2513,126 @@ class Rqsn extends CI_Model
                     $sl++;
                 }
             }
+
+              // All Transaction Items
+              if ($value == 3) {
+
+                if ($closing_stock > 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_model' =>  $record->product_model,
+                        // 'production_cost'  => $production_price,
+                        'product_type'  =>  $record->finished_raw,
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        // 'purchase_p'    =>  $pprice,
+                        'sku'          => $record->sku,
+                        'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                        'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
+                        'totalSalesQnty' => sprintf('%0.2f', $total_out),
+                        // 'dispatch' => $total_sale->total_sale,
+                        'damagedQnty'   => $total_damage,
+                        'return_given' => sprintf('%0.2f', $total_return_given),
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock' => $opening_stock,
+                        'closing_stock' => $closing_stock,
+                        'total_sale_price' => ($closing_stock) * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+                    );
+                    $sl++;
+                }
+            }
+
+             // Positive Transaction Items
+             if ($value == 4) {
+                if (($closing_stock > 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock > 0 ) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'product_model' =>  $record->product_model,
+                        // 'production_cost'  => $production_price,
+                        'product_type'  =>  $record->finished_raw,
+                        'sales_price'   =>  sprintf('%0.2f', $sprice),
+                        // 'purchase_p'    =>  $pprice,
+                        'sku'          => $record->sku,
+                        'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+                        'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
+                        'totalSalesQnty' => sprintf('%0.2f', $total_out),
+                        // 'dispatch' => $total_sale->total_sale,
+                        'damagedQnty'   => $total_damage,
+                        'return_given' => sprintf('%0.2f', $total_return_given),
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'opening_stock' => $opening_stock,
+                        'closing_stock' => $closing_stock,
+                        'total_sale_price' => ($closing_stock) * $sprice,
+                        'purchase_total' => (($closing_stock * $pprice) != 0)
+                            ? ($closing_stock * $pprice)
+                            : ($production_price
+                                ? $production_price * $closing_stock
+                                : 0),
+
+                        'opening_inventory' => (($opening_stock * $pprice) != 0)
+                            ? ($opening_stock * $pprice)
+                            : ($product_supplier_price
+                                ? $production_price * $opening_stock
+                                : 0),
+
+                    );
+                    $sl++;
+                }
+            }
+
+ // Zero Transaction Items
+ if ($value == 5) {
+    if ( ($closing_stock> 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock <= 0) {
+        $data[] = array(
+            'sl'            =>   $sl,
+            'product_name'  =>  $record->product_name,
+            'product_model' =>  $record->product_model,
+            // 'production_cost'  => $production_price,
+            'product_type'  =>  $record->finished_raw,
+            'sales_price'   =>  sprintf('%0.2f', $sprice),
+            // 'purchase_p'    =>  $pprice,
+            'sku'          => $record->sku,
+            'category'  => (!empty($record->category_name) ? $record->category_name : ''),
+            'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
+            'totalSalesQnty' => sprintf('%0.2f', $total_out),
+            // 'dispatch' => $total_sale->total_sale,
+            'damagedQnty'   => $total_damage,
+            'return_given' => sprintf('%0.2f', $total_return_given),
+            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+            'opening_stock' => $opening_stock,
+            'closing_stock' => $closing_stock,
+            'total_sale_price' => ($closing_stock) * $sprice,
+            'purchase_total' => (($closing_stock * $pprice) != 0)
+                ? ($closing_stock * $pprice)
+                : ($production_price
+                    ? $production_price * $closing_stock
+                    : 0),
+
+            'opening_inventory' => (($opening_stock * $pprice) != 0)
+                ? ($opening_stock * $pprice)
+                : ($product_supplier_price
+                    ? $production_price * $opening_stock
+                    : 0),
+
+        );
+        $sl++;
+    }
+}
+
+
             if ($value == 0) {
                 if ($closing_stock < 1) {
                     $data[] = array(

@@ -28,17 +28,31 @@ class Categories extends CI_Model
         }
         return false;
     }
+    // public function cates()
+    // {
+    //     $this->db->select('name,id');
+    //     $this->db->from('cats');
+
+    //     $query = $this->db->get();
+    //     if ($query->num_rows() > 0) {
+    //         return $query->result_array();
+    //     }
+    //     return false;
+    // }
+
     public function cates()
     {
-        $this->db->select('name,id');
-        $this->db->from('cats');
+      $query = $this->db->query("SELECT name,id FROM cats  WHERE  parent_id=0
+      UNION all
+            SELECT (CONCAT(`name`, ' - ', (SELECT Name FROM cats cc WHERE cc.id=cd.parent_id ) )) AS NAME,id FROM cats cd WHERE  cd.parent_id>0");
 
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        }
-        return false;
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
     }
+    return false;
+    }
+
+    
     public function cates_by_id($id)
     {
         $this->db->select('name,id');
