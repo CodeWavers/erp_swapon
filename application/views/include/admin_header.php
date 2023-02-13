@@ -1282,7 +1282,7 @@ $birthday = $CI->Reports->birthday_noti();
         $this->permission1->method('outlet_stock', 'read')->access() ||
         $this->permission1->method('outlet_stock', 'read')->access()
       ) { ?>
-        <li class="treeview <?php if ($this->uri->segment('1') == "Creport") {
+        <li class="treeview <?php if ($this->uri->segment('1') == "Creport" && $this->uri->segment('2') != "product_wise_sales_report") {
                               echo "active";
                             } else {
                               echo " ";
@@ -1525,6 +1525,7 @@ $birthday = $CI->Reports->birthday_noti();
                               $this->uri->segment('2') == "filter_sales_report_category_wise" ||
                               $this->uri->segment('2') == "filter_customer_wise_receipt" ||
                               $this->uri->segment('2') == "closing" ||
+                              $this->uri->segment('2') == "product_wise_sales_report" ||
                               $this->uri->segment('2') == "closing_report" ||
                               $this->uri->segment('2') == "date_wise_closing_reports" ||
                               $this->uri->segment('2') == "retrieve_dateWise_Shippingcost" ||
@@ -1697,6 +1698,23 @@ $birthday = $CI->Reports->birthday_noti();
                             ); ?>"><?php echo display('purchase_report'); ?></a></li>
 
             <?php } ?>
+            <?php if (
+              $this->permission1
+              ->method('product_sales_reports_date_wise', 'read')
+              ->access()
+            ) { ?>
+              <li class="treeview <?php if (
+                                    $this->uri->segment('2') == "product_wise_sales_report"
+                                  ) {
+                                    echo "active";
+                                  } else {
+                                    echo " ";
+                                  } ?>"><a href="<?php echo base_url(
+                                                    'Creport/product_wise_sales_report'
+                                                  ); ?>"><?php echo "Product Wise Sales Report"; ?></a></li>
+
+            <?php } ?>
+
 
               <?php if (
               $this->permission1

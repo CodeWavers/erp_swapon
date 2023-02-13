@@ -2067,6 +2067,236 @@ function get_text() {
   $('#outlet_text').val(text);
 }
 
+
+
+
+//Product report salewise
+$(document).ready(function () {
+  "use strict";
+  var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
+  var base_url = $("#base_url").val();
+  // var product_id = $("#product_id").val();
+  var currency = $("#currency").val();
+  var from_date = $("#from_date").val();
+  var to_date = $("#to_date").val();
+  var outlet_id = $("#outlet_id").val();
+
+  $("#product_id,#from_date, #to_date,#outlet_id").on("change", function (e) {
+    from_date = $("#from_date").val();
+    to_date = $("#to_date").val();
+    // product_id =  $("#product_id").val();
+    outlet_id = $("#outlet_id").val();
+    table.ajax.reload();
+  });
+
+  var table = $("#ProductSalesReport").DataTable({
+    responsive: true,
+
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0,1,2,3,4,5,6] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [10, 25, 50, 100, 250, 500,1000],
+      [10, 25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "csv",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "excel",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "pdf",
+        title: "Stock List",
+        className: "btn-sm prints",
+        footer: true,
+        orientation: "landscape",
+      },
+      {
+        extend: "print",
+        title: "<center>Stock List</center>",
+        className: "btn-sm prints",
+        footer: true,
+        customize: function (win) {
+          var last = null;
+          var current = null;
+          var bod = [];
+
+          var css = "@page { size: landscape; }",
+            head =
+              win.document.head || win.document.getElementsByTagName("head")[0],
+            style = win.document.createElement("style");
+
+          style.type = "text/css";
+          style.media = "print";
+
+          if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+          } else {
+            style.appendChild(win.document.createTextNode(css));
+          }
+
+          head.appendChild(style);
+        },
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Creport/ProductSalesReport",
+      data: function (d) {
+        d.csrf_test_name = CSRF_TOKEN;
+        d.outlet_id = outlet_id;
+        // d.product_id = product_id;
+        d.from_date = from_date;
+        d.to_date = to_date;
+      },
+    },
+    columns: [
+      { data: "sl" },
+      { data: "product_name" },
+      { data: "qnty" },
+      { data: "total_sales", class: "total_sales text-right" },
+      {
+        data: "discount",
+        class: "discount text-right"
+        // render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+      // {
+      //   data: "vat",
+      //   class: "text-right",
+      //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      // },
+      { data: "net_sales", class: "net_sales text-right" },
+      // { data: "dc", class: "text-right" },
+      { data: "cost_price", class: "cost_price text-right" },
+      { data: "gross_profit", class: "gross_profit text-right" },
+    ],
+    footerCallback: function (row, data, start, end, display) {
+      var api = this.api();
+     //total gross profit
+      api
+        .columns(".gross_profit", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+  //total Cost Price
+        api
+        .columns(".cost_price", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+        //total Net Sales
+        api
+        .columns(".net_sales", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+        //total Cost Price
+        api
+        .columns(".total_sales", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+
+        //total Cost Price
+        api
+        .columns(".discount", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+    },
+  });
+});
+
 $(document).ready(function () {
   "use strict";
   var CSRF_TOKEN = $('[name="csrf_test_name"]').val();

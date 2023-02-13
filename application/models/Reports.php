@@ -5518,4 +5518,220 @@ class reports extends CI_Model
 
         return $new_res;
     }
+    
+    //sales report Prodcut Wise
+    public function ProductSalesReport($postData = null, $post_product_id = null)
+    {
+        
+        $this->load->model('Warehouse');
+        $this->load->model('suppliers');
+        $response = array();
+        $from_date = $this->input->post('from_date', TRUE);
+        $to_date = $this->input->post('to_date', TRUE);
+         $outlet_id = $this->input->post('outlet_id', TRUE);
+        if ($outlet_id ==''){
+            $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+        }elseif ($outlet_id === 'All'){
+            $outlet_id = null;
+        }else{
+            $outlet_id =$this->input->post('outlet_id', TRUE);;
+        }
+        
+        ## Read value
+        if (!$post_product_id) {
+            $draw = $postData['draw'];
+            $start = $postData['start'];
+            $rowperpage = $postData['length']; // Rows display per page
+            $columnIndex = $postData['order'][0]['column']; // Column index
+            $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+            $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+            $searchValue = $postData['search']['value']; // Search value
+
+            ## Search
+            $searchQuery = "";
+            if ($searchValue != '') {
+                $searchQuery = " (p.product_name like '%"
+                    . $searchValue.
+                    "%') ";
+            }
+
+            ## Total number of records without filtering
+            $this->db->select('count(*) as allcount');
+            $this->db->from('product_information p');
+            $this->db->join('invoice_details id','id.product_id = p.product_id');
+            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            if ($from_date != '') {
+                $this->db->where('i.date >=', $from_date);
+            }
+    
+            if ($to_date) {
+                $this->db->where('i.date <=', $to_date);
+            }
+            if ($outlet_id && $outlet_id != '') {
+                $this->db->where('i.outlet_id', $outlet_id);
+            }
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+            $this->db->group_by('p.product_id');
+            $records = $this->db->get()->num_rows();
+            $totalRecords = $records;
+            ## Total number of record with filtering
+            $this->db->select('count(*) as allcount');
+            $this->db->from('product_information p');
+            $this->db->join('invoice_details id','id.product_id = p.product_id');
+            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            if ($from_date != '') {
+                $this->db->where('i.date >=', $from_date);
+            }
+    
+            if ($to_date) {
+                $this->db->where('i.date <=', $to_date);
+            }
+            if ($outlet_id && $outlet_id != '') {
+                $this->db->where('i.outlet_id', $outlet_id);
+            }
+            if ($searchValue != '') {
+                $this->db->where($searchQuery);
+            }
+            $this->db->group_by('p.product_id');
+            $records = $this->db->get()->num_rows();
+            $totalRecordwithFilter = $records;
+            ## Fetch records
+
+            $this->db->select("p.product_id,p.product_name,
+            (SELECT sum(i.total_discount) from invoice as i WHERE i.invoice_id = id.invoice_id) as total_discount,
+            (SELECT sum(id.quantity) from invoice_details as id WHERE i.invoice_id = id.invoice_id AND id.product_id = p.product_id) as total_sold,
+            (SELECT sum(id.total_price_wd) from invoice_details as id WHERE i.invoice_id = id.invoice_id AND id.product_id = p.product_id) as total_sales,
+            (SELECT sum(id.tax) from invoice_details as id WHERE i.invoice_id = id.invoice_id AND id.product_id = p.product_id) as total_vat
+            ");
+            $this->db->join('invoice_details id','id.product_id = p.product_id');
+            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            $this->db->from('product_information p');
+            $this->db->order_by($columnName, $columnSortOrder);
+            $this->db->group_by('p.product_id');
+            $this->db->limit($rowperpage, $start);
+            if ($from_date && $from_date != '') {
+                $this->db->where('i.date >=', $from_date);
+            }
+            if ($to_date && $to_date != '') {
+                $this->db->where('i.date <=', $to_date);
+            }
+            if ($outlet_id && $outlet_id != '') {
+                $this->db->where('i.outlet_id', $outlet_id);
+            }
+            if ($searchValue != '')
+                $this->db->where($searchQuery);
+            $records = $this->db->get()->result();
+           
+        }
+        if(!($from_date))
+        {
+            $from_date = 0;
+        } 
+        if(!($to_date))
+        {
+            $to_date = 0;
+        }  
+        $data = array();
+        $sl =1;
+        $base_url = base_url();
+        $net_sales = 0;
+        $cost_price = 0;
+        foreach ($records as $record) {
+            $details_i = '  <a href="' . $base_url . 'Creport/product_details_report/' . $record->product_id .'/'.$from_date .'/'.$to_date.'/'.$outlet_id.'" class="" >' . $record->product_name . '</a>';
+            $purchase_price = $this->weighted_average_price($record->product_id);
+            // $net_sales = ($record->total_sales - $record->total_discount) + $record->total_vat;
+            $net_sales = $record->total_sales + $record->total_vat;
+            $cost_price = $purchase_price * $record->total_sold;
+            $data[] = array(
+                'sl'            =>   $sl,
+                'product_name'  =>  $details_i,
+                'qnty'  =>  $record->total_sold ? $record->total_sold : 0,
+                'total_sales'  => $record->total_sales ? $record->total_sales : 0,
+                // 'discount' => $record->total_discount ? ($record->total_discount) : 0,
+                'discount' => 0,
+                'net_sales' => $net_sales ? $net_sales : 0,
+               'cost_price' => $cost_price ? number_format((float)$cost_price, 2, '.', '') : 0,
+                'gross_profit' => number_format((float)($net_sales - $cost_price), 2, '.', ''),
+                //number_format((float)$foo, 2, '.', ''); ($val->rate) ? $currency_symbol->currency_symbol . number_format_unchanged_precision($val->rate, $currency_symbol->currency_code) : '',
+            );
+            $sl++;
+
+        }
+        ## Response
+        if ($data) {
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => $totalRecordwithFilter,
+                "iTotalDisplayRecords" => $totalRecords,
+                "aaData" =>  $data,
+            );
+        } else {
+            $response = array(
+                "draw" => intval($draw),
+                "iTotalRecords" => 0,
+                "iTotalDisplayRecords" => 0,
+                "aaData" =>  array(),
+            );
+        }
+        return $response;
+    }
+    public function weighted_average_price($product_id)
+    {
+        $stockout_for_purchase_price = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.total_amount) as purchaseprice')
+        ->from('product_purchase_details')
+        ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+        ->where('product_purchase_details.product_id', $product_id)
+        ->where('product_purchase_details.qty >=', 0)
+        ->get()->row();
+      if(!empty($stockout_for_purchase_price->purchaseprice) && !empty($stockout_for_purchase_price->totalPurchaseQnty))
+        {
+            $stockout_for_weighted_average = $stockout_for_purchase_price->purchaseprice / $stockout_for_purchase_price->totalPurchaseQnty;
+        }
+        return $stockout_for_weighted_average;
+    }
+    public function product_sales_details_data($product_id, $from_date = null, $to_date = null, $outlet_id = null)
+    {
+        
+        $this->db->select("p.product_name,
+        i.date,count(id.invoice_id) as total_sold,sum(id.total_price_wd) as total_sales,
+        i.total_discount");
+            $this->db->join('invoice_details id','id.product_id = p.product_id','left');
+            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            $this->db->from('product_information p');
+            $this->db->where('p.product_id',$product_id);
+            $this->db->group_by('i.date');
+            if ($outlet_id && $outlet_id != '') {
+                $this->db->where('i.outlet_id', $outlet_id);
+            }
+            if ($from_date != 0) {
+                $this->db->where('i.date >=', $from_date);
+            }
+            if ($to_date != 0) {
+                $this->db->where('i.date <=', $to_date);
+            }   
+        $records = $this->db->get()->result_array();
+        $data = array();
+        $sl =1;
+        $purchase_price = $this->weighted_average_price($product_id);
+        foreach ($records as $record) {
+            $net_sales = $record['total_sales'] - $record['total_discount'];
+            $cost_price = $purchase_price * $record['total_sold'];
+            $data[] = array(
+                'sl'            =>   $sl,
+                'product_name'  =>  $record['product_name'],
+                'date' => $record['date'],
+                'qnty'  =>  $record['total_sold'],
+                'total_sales'  => $record['total_sales'] ? $record['total_sales'] : 0,
+                'discount' => $record['total_discount'] ? $record['total_discount']/$record['total_sold'] : 0,
+                'net_sales' => $net_sales ? $net_sales : 0,
+               'cost_price' => $cost_price ? $cost_price : 0,
+                'gross_profit' => $net_sales - $cost_price,
+            );
+            $sl++;
+
+        }
+        return $data;
+    }
 }

@@ -127,7 +127,65 @@ class Lreport extends CI_Model
         $reportList = $CI->parser->parse('report/birthday_noti', $data, true);
         return $reportList;
     }
+    //Retrieve Product wise sales
+    public function product_wise_sales_report()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
+        $CI->load->model('Products');
+        $CI->load->model('categories');
+        $CI->load->model('Warehouse');
 
+        $data['title'] = 'Sales Report( Product Wise)';
+
+        $cat_list = $CI->categories->cates();
+        $sku_list = $this->Products->sku_list();
+        $company_info = $CI->Reports->retrieve_company();
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $data['currency'] = $currency_details[0]['currency'];
+        $data['totalnumber'] = $CI->Reports->totalnumberof_product();
+        $data['company_info'] = $company_info;
+        $data['pr_status'] = 1;
+        $data['cat_list'] = $cat_list;
+        $data['sku_list'] = $sku_list;
+        $data['outlet_list'] =  $CI->Rqsn->outlet_list_to();
+        $data['cw_list'] =  $CI->Rqsn->cw_list();
+        $data['heading_text'] = "Sales Report( Product Wise)";
+
+     //   echo '<pre>';print_r($data['outlet_list']);exit();
+        $reportList = $CI->parser->parse('report/productwise_sales_report', $data, true);
+        return $reportList;
+    }
+
+     //Purchase details data
+     public function product_details_report($product_id, $from_date=null, $to_date=null,$outlet_id=null)
+     {
+         $CI = &get_instance();
+         $CI->load->model('Reports');
+         $CI->load->library('occational');
+         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+         $product_sales_detail = $CI->Reports->product_sales_details_data($product_id,$from_date,$to_date,$outlet_id);
+        
+       
+ 
+         if (!empty($product_sales_detail)) {
+             foreach ($product_sales_detail as $k => $v) {
+                 $product_sales_detail[$k]['sales_date'] = $CI->occational->dateConvert($product_sales_detail[$k]['date']);
+             }
+         }
+        
+        //  echo "<pre>";
+        //  print_r($product_sales_detail);
+        //  exit();
+        $data['currency'] = $currency_details[0]['currency'];
+         $data['currency_details'] = $currency_details;
+        $data['company'] = $company_info;
+        $data['product_sales_detail'] = $product_sales_detail;
+         $chapterList = $CI->parser->parse('report/details_product_sale', $data, true);
+         return $chapterList;
+     }
     // Retrieve Single Item Stock Stock Report
     public function stock_report_single_item()
     {

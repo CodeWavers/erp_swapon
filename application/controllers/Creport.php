@@ -25,6 +25,32 @@ class Creport extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function product_wise_sales_report()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lreport');
+
+        $content = $CI->lreport->product_wise_sales_report();
+
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function ProductSalesReport()
+    {
+        $this->load->model('Reports');
+        $postData = $this->input->post();
+        $data = $this->Reports->ProductSalesReport($postData, null);
+        echo json_encode($data);
+    }
+    public function product_details_report($product_id,$from_date = null,$to_date = null,$outlet_id = null)
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $content = $CI->lreport->product_details_report($product_id,$from_date,$to_date,$outlet_id);
+        $this->template->full_admin_html_view($content);
+    }
     public function raw_stock()
     {
         $CI = &get_instance();
