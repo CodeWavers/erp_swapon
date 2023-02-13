@@ -4605,17 +4605,9 @@ class reports extends CI_Model
         if ($outlet_id == 1) {
             $outlet_id = null;
         }   
-        $this->db->select("a.date,a.invoice_id,
-        (SELECT sum(a.due_amount) from invoice as a WHERE p.invoice_id = a.invoice_id) as due_amount,
-        (SELECT sum(p.amount) from paid_amount as p WHERE p.invoice_id = a.invoice_id) as paid_amount,
-        (SELECT sum(a.total_discount) from invoice as a WHERE p.invoice_id = a.invoice_id) as invoice_discount,
-        (SELECT sum(a.total_amount) from invoice as a WHERE p.invoice_id = a.invoice_id) as total_amount,
-        (SELECT sum(a.sales_return) from invoice as a WHERE p.invoice_id = a.invoice_id) as sales_return,
-        a.invoice,
-        p.amount,p.pay_type
-        ");
+        $this->db->select("a.date,a.invoice_id,a.due_amount,a.paid_amount,a.total_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type");
         $this->db->from('invoice a');
-        // $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
         $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id');
         if ($outlet_id && $outlet_id != '') {
             $this->db->where('a.outlet_id', $outlet_id);
@@ -4625,9 +4617,9 @@ class reports extends CI_Model
         }
         $this->db->order_by('a.invoice_id', 'desc');
         $query = $this->db->get()->result_array();
-        echo "<pre>";
-        print_r($query);
-        exit();
+        // echo "<pre>";
+        // print_r($query);
+        // exit();
         $final_array = array();
         $final_array['total_amount'] = 0;
         $final_array['invoice_discount'] = 0;
@@ -4646,13 +4638,19 @@ class reports extends CI_Model
         $final_array['return_card'] = 0;
         $final_array['return_nagad'] = 0;
         $final_array['return_rocket'] = 0;
+        $check_array = array();
+
         foreach ($query as $key => $value) {
-          
+
+           
+            if (!(array_key_exists($value['invoice_id'], $check_array))) {
             $final_array['total_amount'] += $value['total_amount'];
-            $final_array['invoice_discount'] += $value['invoice_discount'];
+            $final_array['invoice_discount'] += $value['total_discount'];
             $final_array['sales_return'] += $value['sales_return'];
             $final_array['due_amount'] += $value['due_amount'];
             $final_array['received_amount'] += $value['paid_amount'];
+            }
+            
             if ($value['sales_return'] < 1) {
                 if ($value['pay_type'] == 1) {
 
@@ -4687,9 +4685,14 @@ class reports extends CI_Model
                     $final_array['return_rocket'] += $value['amount'];
                 }
             }
+            $check_array[$value['invoice_id']] = $value['invoice_id'];
+            
+
         }
         // echo "<pre>";
         // print_r($final_array);
+        // // print_r($check_array);
+
         // exit();
         if ($query) {
             return $final_array;

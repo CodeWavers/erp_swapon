@@ -410,7 +410,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                 <div class="col-xs-6 text-right m-0">
                                     <nobr><?php echo $sales_report['payment_cash'] +
-                                                $sales_report['payment_card'] + $sales_report['payment_card'] + $sales_report['payment_rocket'] + $sales_report['payment_nagad']; ?>
+                                                $sales_report['payment_bkash'] + $sales_report['payment_card'] + $sales_report['payment_rocket'] + $sales_report['payment_nagad']; ?>
 
                                     </nobr>
                                 </div>

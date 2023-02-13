@@ -211,7 +211,7 @@ $_SESSION['redirect_uri'] = $fullURL;
                                                     <p class="text-right"><b><?php echo $sales_report['payment_nagad'] ?></b></p>
                                                     <b>Total Amount</b>
                                                     <p class="text-right"><b><?php echo $sales_report['payment_cash'] +
-                                                                                    $sales_report['payment_card'] + $sales_report['payment_card'] + $sales_report['payment_rocket'] + $sales_report['payment_nagad']; ?></b></p>
+                                                                                    $sales_report['payment_bkash'] + $sales_report['payment_card'] + $sales_report['payment_rocket'] + $sales_report['payment_nagad']; ?></b></p>
                                                 </td>
 
                                                 <td></td>
