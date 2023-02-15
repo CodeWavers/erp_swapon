@@ -1281,17 +1281,19 @@ $(document).ready(function () {
   var product_status = $("#product_status").val();
   var product_sku = $("#product_sku").val();
   var from_date = $("#from_date").val();
+  var outlet_id = $("#outlet_id").val();
   var to_date = $("#to_date").val();
   var pr_status = $("#pr_status").val();
   var cat_id = $("#cat_list").val();
   var value = $("#value").val();
 
-  $("#cat_list,#product_status,#from_date, #to_date , #value").on("change", function (e) {
+  $("#cat_list,#product_status,#from_date, #to_date , #value,#outlet_id").on("change", function (e) {
     //var valueSelected = this.value;
     product_status = $("#product_status").val();
     from_date = $("#from_date").val();
     to_date = $("#to_date").val();
     cat_id = $("#cat_list").val();
+    outlet_id = $("#outlet_id").val();
     value = $("#value").val();
     console.log(value);
     table.ajax.reload();
@@ -1377,6 +1379,7 @@ $(document).ready(function () {
       url: base_url + "Creport/CheckList",
       data: function (d) {
         d.csrf_test_name = CSRF_TOKEN;
+        d.outlet_id = outlet_id;
         d.pr_status = pr_status;
         d.cat_id = cat_id;
         d.product_status = product_status;

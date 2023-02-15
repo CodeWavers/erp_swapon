@@ -62,6 +62,22 @@
                                 <label class="" for="to_date"><?php echo display('end_date') ?></label>
                                 <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="" autocomplete="off">
                             </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="product_sku" class="col-form-label">Outlet: </label>
+                                <select name="outlet_id" class="form-control" id="outlet_id" required=""  tabindex="3">
+                                    <?php foreach($cw_list as $cw){?>
+                                        <option selected value="<?php echo html_escape($cw['warehouse_id'])?>"><?php echo html_escape($cw['central_warehouse']) ;?></option>
+                                    <?php }?>
+                                    <?php foreach($outlet_list as $outlet){?>
+                                        <option value="<?php echo html_escape($outlet['outlet_id'])?>"><?php echo html_escape($outlet['outlet_name']) ;?></option>
+                                    <?php }?>
+
+                                    <option value="All">Consolidated</option>
+
+
+                                </select>
+
+                            </div>
 
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Product Type : </label>

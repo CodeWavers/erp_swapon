@@ -193,6 +193,7 @@ class Lreport extends CI_Model
         $CI->load->model('Reports');
         $CI->load->model('Products');
         $CI->load->model('categories');
+        $CI->load->model('Rqsn');
         $data['title'] = 'Stock Report';
 
         $cat_list = $CI->categories->cates();
@@ -205,6 +206,8 @@ class Lreport extends CI_Model
         $data['pr_status'] = 1;
         $data['cat_list'] = $cat_list;
         $data['sku_list'] = $sku_list;
+        $data['outlet_list'] =  $CI->Rqsn->outlet_list_to();
+        $data['cw_list'] =  $CI->Rqsn->cw_list();
         $data['heading_text'] = "Stock Report";
         $reportList = $CI->parser->parse('report/stock_report', $data, true);
         return $reportList;

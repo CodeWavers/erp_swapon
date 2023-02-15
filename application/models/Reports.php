@@ -1064,6 +1064,14 @@ class reports extends CI_Model
         $p_s = $this->input->post('product_status', TRUE);
         $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
+        $outlet_id = $this->input->post('outlet_id', TRUE);
+        if ($outlet_id ==''){
+            $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+        }elseif ($outlet_id === 'All'){
+            $outlet_id = null;
+        }else{
+            $outlet_id =$this->input->post('outlet_id', TRUE);;
+        }
         if ($from_date == null) {
             $date = date('Y-m-d');
             $op_date = date('Y-m-d', strtotime($date . ' -1 day'));
@@ -1209,6 +1217,9 @@ class reports extends CI_Model
             }
             if ($to_date) {
                 $this->db->where('product_purchase.purchase_date <=', $to_date);
+            }
+            if ($outlet_id){
+                $this->db->where('product_purchase.outlet_id', $outlet_id);
             }
             $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
                 ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
