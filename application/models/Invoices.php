@@ -177,6 +177,7 @@ class Invoices extends CI_Model
 
             $details = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
             $details_i = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
+            $ecom_order_id = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->ecom_invoice_id . '</a>';
 
             if ($record->outlt == 'HK7TGDT69VFMXB7') {
                 $out = $cw_name;
@@ -258,6 +259,7 @@ class Invoices extends CI_Model
                 'sl'               => $sl,
                 'invoice_id'       => $details_i,
                 'invoice'          => $details,
+                'ecom_invoice'      => $ecom_order_id,
                 'outlet_name'      => $out,
                 'delivery_type'      => ($record->delivery_type == '1') ? 'Pick Up' : (($record->delivery_type == '2') ? 'Courier' : 'Nothing Selected'),
                 'courier_status'      => $courier_status,

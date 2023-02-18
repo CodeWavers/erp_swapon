@@ -1173,6 +1173,7 @@ $(document).ready(function () {
       { data: "sl" },
       { data: "invoice_id" },
       { data: "invoice" },
+      { data: "ecom_invoice" },
       { data: "final_date" },
       { data: "outlet_name" },
       { data: "salesman" },

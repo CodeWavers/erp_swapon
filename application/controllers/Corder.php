@@ -148,6 +148,7 @@ class Corder extends CI_Controller
                 'customer_id' => (!empty($this->input->post('customer_id', TRUE)) ? $this->input->post('customer_id', TRUE) :1),
                 'invoice' => $invoice_no_generated,
                 'total_discount' => $this->input->post('discount', TRUE),
+                'ecom_invoice_id' => $this->input->post('ecom_invoice_id', TRUE),
                 'paid_amount' => $this->input->post('paid_amount', TRUE),
                 'due_amount' => $this->input->post('due_amount', TRUE),
                 'shipping_cost' => $this->input->post('shipping_cost', TRUE),

@@ -281,7 +281,7 @@ $Web_settings = $CI->Web_settings->retrieve_setting_editdata();
 
                                                 <address  >
                                                     <u><h4><b>Order Information:</b></h4></u>
-                                                    <abbr><nobr>Order No: {invoice_no}</nobr></abbr><br>
+                                                    <abbr><nobr>Order No: {ecom_invoice_id}</nobr></abbr><br>
                                                     <abbr><nobr>Date:{final_date}</nobr></abbr><br>
 <!--                                                    <abbr><nobr>Payment Method: {pt}</nobr></abbr><br>-->
                                                     <abbr><nobr>Shipping Method: {dt}</nobr></abbr><br>

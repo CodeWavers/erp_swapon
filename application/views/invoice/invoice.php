@@ -103,6 +103,7 @@
                                         <th><?php echo display('sl') ?></th>
                                         <th>Invoice ID</th>
                                         <th><?php echo display('invoice_no') ?></th>
+                                        <th>Ecommerce Invoice ID</th>
                                         <th><?php echo display('date') ?>/Time</th>
                                         <th>Outlet Name</th>
                                         <th><?php echo display('sale_by') ?></th>
@@ -120,7 +121,7 @@
 
                                 </tbody>
                                 <tfoot>
-                                    <th colspan="12" class="text-right"><?php echo display('total') ?>:</th>
+                                    <th colspan="13" class="text-right"><?php echo display('total') ?>:</th>
 
                                     <th></th>
                                     <th></th>

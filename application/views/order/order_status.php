@@ -125,6 +125,7 @@
                                 <div class="col-sm-6 text-xs-center">
                                     <address>
                                         <input type="hidden" name="customer_id" value="<?php echo $order[0]->customer_id?>"    id="customer_id<?php echo $od->id?>">
+                                        <input type="hidden" value="<?php echo $order[0]->code?>"  name="ecom_invoice_id">
 
                                         <strong class="text-main"><?php echo $customer_name?></strong><br>
                                         <?php echo $email?><br>
@@ -261,6 +262,7 @@
                                             </td>
                                             <td class="text-center">
                                                 <?php echo $currency.' '.$od->price?>
+                                                
                                                 <input type="hidden" value="<?php echo $od->price?>"  name="total_price[]" id="total_price<?php echo $od->id?>">
 
                                             </td>
@@ -849,14 +851,14 @@
 <script type="text/javascript">
     $( "#status_change" ).click(function() {
 
-        $.ajax({
-            url: '<?= api_url() ?>' + "order/status_change/"+'<?= $order_id ?>',
-            method: "get",
-            success: function(data) {
-                console.log("success");
-            },
+        // $.ajax({
+        //     url: '<?= api_url() ?>' + "order/status_change/"+'<?= $order_id ?>',
+        //     method: "get",
+        //     success: function(data) {
+        //         console.log("success");
+        //     },
 
-        });
+        // });
     });
 
 
@@ -870,28 +872,28 @@
             e.preventDefault();
 
 
-            $.ajax({
-                url: '<?= api_url() ?>' + "order/update_order/"+'<?= $order_id ?>',
-                method : $(this).attr('method'),
-                // dataType : 'json',
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                success: function(d)
-                {
+            // $.ajax({
+            //     url: '<?= api_url() ?>' + "order/update_order/"+'<?= $order_id ?>',
+            //     method : $(this).attr('method'),
+            //     // dataType : 'json',
+            //     data: new FormData(this),
+            //     processData: false,
+            //     contentType: false,
+            //     success: function(d)
+            //     {
 
-                    toastr.success('Data Updated')
-                    // location.reload();
-
-
-                },
-                error: function(xhr)
-                {
+            //         toastr.success('Data Updated')
+            //         // location.reload();
 
 
-                    alert('failed!');
-                }
-            });
+            //     },
+            //     error: function(xhr)
+            //     {
+
+
+            //         alert('failed!');
+            //     }
+            // });
             $.ajax({
                 url: '<?= base_url() ?>' + "Corder/order_invoice/",
                 method : $(this).attr('method'),

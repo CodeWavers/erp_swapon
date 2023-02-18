@@ -938,6 +938,7 @@ class Linvoice
             'is_pre' => $invoice_detail[0]['is_pre'],
             'delivery_type'        => $invoice_detail[0]['delivery_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
+            'ecom_invoice_id'        => $invoice_detail[0]['ecom_invoice_id'],
             'dt'        => $dt,
             'pt'        => $pt,
             'st'        => $st,
