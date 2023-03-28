@@ -497,7 +497,7 @@ class Creport extends CI_Controller
         $from_date = $this->input->post('from_date');
         $to_date = $this->input->post('to_date');
         $value = $this->input->post('value');
-        $data = $this->Reports->getCheckList2($postData, null, $pr_status, $from_date, $to_date, $value);
+        $data = $this->Reports->getCheckList3($postData, null, $pr_status, $from_date, $to_date, $value);
         // $data = $this->Reports->getCheckListNew2(
         //     $postData,
         //     null,
@@ -1052,4 +1052,77 @@ class Creport extends CI_Controller
 
         echo json_encode($response);
     }
+    //csv excel
+    public function exportintocsv()
+    {
+        // file name
+        $this->load->model('Reports');
+        $filename = 'sale_' . date('Ymd') . '.csv';
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$filename");
+        header("Content-Type: application/csv; ");
+        $invoicedata = $this->Reports->getCheckList3(null,null,null,null,null,null,'export');
+        // echo "<pre>";
+        // print_r($invoicedata);
+        // exit();
+        // file creation
+        $file = fopen('php://output', 'w');
+
+        $header = array('Sl No', 'Product Name', 'SKU', 'Product Model', 'Sale Price','Purchase Price', 
+        'Production Cost','Product Type', 'In Qnty', 'Damaged Quantity', 'Return Given','Out Qnty', 'Opening Stock', 'Closing Stock', 'Stock Sale Price', 'Stock Value', 'Opening Inventory');
+        fputcsv($file, $header);
+        foreach ($invoicedata as $line) {
+            fputcsv($file, $line);
+        }
+        fclose($file);
+        exit;
+    }
+    //generate report
+    // public function generate_report()
+    // {
+    //     $this->load->model('Reports');
+    //     $results = $this->Reports->getCheckList4(null,null,null,null,null,null);
+    //     echo "<pre>";
+    //     print_r($results);
+    //     exit();
+    //     if (!empty($results)) {
+    //         // export as an excel sheet
+    //         $this->load->library('excel');
+    //         $this->excel->setActiveSheetIndex(0);
+    //         //name the worksheet
+    //         $this->excel->getActiveSheet()->setTitle('Reports');
+    //         $headers = array("Restaurant", "User Name", "Order Total", "Order Delivery", "Order Date", "Order Status", "Status");
+
+    //         for ($h = 0, $c = 'A'; $h < count($headers); $h++, $c++) {
+    //             $this->excel->getActiveSheet()->setCellValue($c . '1', $headers[$h]);
+    //             $this->excel->getActiveSheet()->getStyle($c . '1')->getFont()->setBold(true);
+    //         }
+    //         $row = 2;
+    //         for ($r = 0; $r < count($results); $r++) {
+    //             $status = ($results[$r]->status) ? 'Active' : 'Deactive';
+    //             $this->excel->getActiveSheet()->setCellValue('A' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('B' . $row, $results[$r]->product_name );
+    //             $this->excel->getActiveSheet()->setCellValue('C' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('D' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('E' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('F' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('G' . $row, $results[$r]->product_name);
+    //             $row++;
+    //         }
+    //         $filename = 'report-export.xls'; //save our workbook as this file name
+    //         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+    //         header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
+    //         header('Cache-Control: max-age=0'); //no cache
+    //         //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //         //if you want to save it as .XLSX Excel 2007 format
+    //         $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+
+    //         //force user to download the Excel file without writing it to server's HD
+    //         $objWriter->save('php://output');
+    //         exit;
+    //     } else {
+    //         $this->session->set_flashdata('not_found', $this->lang->line('not_found'));
+    //         redirect(base_url() . ADMIN_URL . '/' . $this->controller_name . '/view');
+    //     }
+    // }
 }

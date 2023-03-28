@@ -129,9 +129,9 @@ class Products extends CI_Model
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
         $records = $this->db->get()->result();
-        // echo "<pre>";
-        // print_r($records[0]);
-        // exit();
+        echo "<pre>";
+        print_r($records);
+        exit();
         $data = array();
         $sl = 1;
 
@@ -140,8 +140,8 @@ class Products extends CI_Model
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
-            // $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
-            $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
+             $image = '';
+          //  $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
             if ($this->permission1->method('manage_product', 'delete')->access()) {
 
                 $button .= '<a href="' . $base_url . 'Cproduct/product_delete/' . $record->product_id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';

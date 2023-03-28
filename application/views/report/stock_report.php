@@ -135,6 +135,14 @@
                                 </div>
 
                             </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                
+                                       <form method="" action="<?php  echo base_url(); ?>Creport/exportintocsv">
+                                            <button class="btn btn-info" id="submit-buttons" type="submit"​​​​​>Export</button>
+                                        </form>
+                            </div>
+                            
+                            
 
                         </div>
 

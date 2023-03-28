@@ -1316,8 +1316,8 @@ $(document).ready(function () {
     serverSide: true,
 
     lengthMenu: [
-      [10, 25, 50, 100, 250, 500, total_stock],
-      [10, 25, 50, 100, 250, 500, "All"],
+      [10, 25, 50, 100, 250, 500, 1000],
+      [10, 25, 50, 100, 250, 500, 1000],
     ],
 
     dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
@@ -1398,7 +1398,6 @@ $(document).ready(function () {
       { data: "category" },
       { data: "sku" },
       { data: "product_model", class: "text-center" },
-
       {
         data: "sales_price",
         class: "text-right",
@@ -1414,6 +1413,8 @@ $(document).ready(function () {
         class: "text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },
+
+      
       { data: "totalPurchaseQnty", class: "text-right" },
       { data: "damagedQnty", class: "text-right" },
       { data: "returnQnty", class: "text-right" },
