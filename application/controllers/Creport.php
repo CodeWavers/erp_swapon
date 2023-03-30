@@ -1055,13 +1055,14 @@ class Creport extends CI_Controller
     //csv excel
     public function exportintocsv()
     {
-        // file name
         $this->load->model('Reports');
         $filename = 'sale_' . date('Ymd') . '.csv';
         header("Content-Description: File Transfer");
         header("Content-Disposition: attachment; filename=$filename");
         header("Content-Type: application/csv; ");
-        $invoicedata = $this->Reports->getCheckList3(null,null,null,null,null,null,'export');
+        $postData = $this->input->post();
+
+        $invoicedata = $this->Reports->ExportStockData($postData,null,1,$_POST['from_date'],$_POST['to_date'],$_POST['value']);
         // echo "<pre>";
         // print_r($invoicedata);
         // exit();

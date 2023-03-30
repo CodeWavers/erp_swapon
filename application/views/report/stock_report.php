@@ -52,6 +52,8 @@
                     </div>
                     <div class="panel-body">
                         <input type="hidden" name="" id="pr_status" value="<?= $pr_status ?>">
+                        <?php echo form_open_multipart('Creport/exportintocsv', array('class' => 'form-vertical', 'id' => 'insert_category')) ?>
+                        <!-- <form method="post" action="<?php  echo base_url(); ?>Creport/exportintocsv"> -->
 
                         <div class="row">
                             <div class="col-sm-6">
@@ -64,9 +66,10 @@
                             </div>
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="product_sku" class="col-form-label">Outlet: </label>
-                                <select name="outlet_id" class="form-control" id="outlet_id" required=""  tabindex="3">
+                                <select name="outlet_id" class="form-control" id="outlet_id"  tabindex="3">
+                                <option selected value="">Select</option>
                                     <?php foreach($cw_list as $cw){?>
-                                        <option selected value="<?php echo html_escape($cw['warehouse_id'])?>"><?php echo html_escape($cw['central_warehouse']) ;?></option>
+                                        <option value="<?php echo html_escape($cw['warehouse_id'])?>"><?php echo html_escape($cw['central_warehouse']) ;?></option>
                                     <?php }?>
                                     <?php foreach($outlet_list as $outlet){?>
                                         <option value="<?php echo html_escape($outlet['outlet_id'])?>"><?php echo html_escape($outlet['outlet_name']) ;?></option>
@@ -82,7 +85,7 @@
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Product Type : </label>
                                 <select name="product_status" id="product_status" class="form-control">
-                                    <!--                                    <option value="">Select One</option>-->
+                                        <option value="">Select One</option>
                                     <?php if ($this->permission1->method('finished_goods', 'create')->access()) { ?>
                                         <option value="1">Finished Goods</option>
                                     <?php } ?>
@@ -136,11 +139,16 @@
 
                             </div>
                             <div class="col-md-6" style="margin-bottom: 10px;">
+                              <div class="col-md-2" style="margin-bottom: 10px;">
                                 
-                                       <form method="" action="<?php  echo base_url(); ?>Creport/exportintocsv">
-                                            <button class="btn btn-info" id="submit-buttons" type="submit"​​​​​>Export</button>
-                                        </form>
+                                <button class="btn btn-info" id="submit-buttons" type="submit"​​​​​>Export</button>
+                               
+                               </div>
+                               <!-- <div class="col-md-3" style="margin-bottom: 10px;"> 
+                                  <input name="range" type="number" id="typeNumber" class="form-control" />
+                               </div> -->
                             </div>
+                            <?php echo form_close() ?>
                             
                             
 
