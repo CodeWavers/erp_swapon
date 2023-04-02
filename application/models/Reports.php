@@ -5844,7 +5844,7 @@ class reports extends CI_Model
             $this->db->where_in('a.sku', $product_sku);
         }
         if (!$post_product_id && $searchValue != '')
-        $this->db->where($searchQuery);
+          $this->db->where($searchQuery);
 
         if ($post_product_id) {
             $this->db->where('a.product_id', $post_product_id);
@@ -5872,8 +5872,7 @@ class reports extends CI_Model
         $stock = 0;
         $closing_stock = 0;
         $opening_stock = 0;
-        $outlet_id  = 'HK7TGDT69VFMXB7';
-        $type = 1;
+        //  $outlet_id  = 'HK7TGDT69VFMXB7';
      //------------------------------------//------------------ Date Filter -------------//---------------------//--------------------------//
         $new_from_date = $this->input->post('from_date');
         $new_to_date = $this->input->post('to_date');
@@ -5917,7 +5916,7 @@ class reports extends CI_Model
         // print_r($production_cost);
         // exit();
         //Supplier Price
-        $supplier_cost = $this->db->select('supplier_price') 
+        $supplier_cost = $this->db->select('product_id,supplier_price') 
                 ->from('supplier_product')
                 ->where_in('product_id', $product_ids)
                 ->group_by('product_id')
@@ -5931,13 +5930,10 @@ class reports extends CI_Model
         if ($to_date) {
             $this->db->where('product_purchase.purchase_date <=', $to_date);
         }
-        if ($outlet_id){
-            $this->db->where('product_purchase.outlet_id', $outlet_id);
-        }
-        $total_purchased = $this->db->select('sum(total_amount) as totalAmount, product_id, sum(quantity) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+        $total_purchased = $this->db->select('sum(total_amount) as totalAmount,product_id, sum(quantity) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')        
                 ->from('product_purchase_details')
-                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                ->where_in('product_id', $product_ids)
+                ->where_in('product_purchase_details.product_id', $product_ids)
                 ->group_by('product_id')
                 ->get()
                 ->result();
@@ -6119,11 +6115,11 @@ class reports extends CI_Model
                 ->get()
                 ->result();
 
-     // ------------------------ ---------------------------------------------X ---------------------------------------------------------------     
+     //---------------------------------------------Opening Stock Data -------------------------------------------  
        
         if ($new_from_date) {
-            //Opening Stock Data Fetch
-                //-------------------------------------------------- Opening Stock Total In -------------------------------------------------------//
+            
+                //-------------------------------------------------- Opening Stock Total In -------------------------
                     //Purchase Details Price
                     // if ($from_date) {
                     //     $this->db->where('product_purchase.purchase_date >=', $from_date);
@@ -6858,7 +6854,7 @@ class reports extends CI_Model
         ## Phase 5 ##
         // Iterate Array and Store Data // ------------------------//---------------------------------------//--------------------------------------
          foreach ($total_purchased as $row) {
-            $total_purchased[$row->product_id] = $row->totalPurchaseQnty;
+            $total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
             $damaged_qty_array[$row->product_id] = $row->damaged_qty;
             $purchaseprice_array[$row->product_id] = $row->purchaseprice;
         }
@@ -8618,28 +8614,19 @@ class reports extends CI_Model
                     'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
                     'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                     'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
+                    //'product_type'  =>  $record->finished_raw,
                     'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
                     'damagedQnty'   => $damaged_quantity,
                     'returnQnty' => $total_return_given,
                     'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'opening_stock'     => $opening_stock,
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
                     'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                         ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                         : ($record->production_price
                             ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
+                            : 0)
                 );
                 $sl++;
         
@@ -8659,28 +8646,19 @@ class reports extends CI_Model
                     'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
                     'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                     'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
+                    //'product_type'  =>  $record->finished_raw,
                     'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
                     'damagedQnty'   => $damaged_quantity,
                     'returnQnty' => $total_return_given,
                     'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'opening_stock'     => $opening_stock,
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
                     'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                         ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                         : ($record->production_price
                             ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
+                            : 0)
                 );
                 $sl++;
         
@@ -8701,28 +8679,19 @@ class reports extends CI_Model
                     'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
                     'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                     'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
+                    //'product_type'  =>  $record->finished_raw,
                     'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
                     'damagedQnty'   => $damaged_quantity,
                     'returnQnty' => $total_return_given,
                     'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'opening_stock'     => $opening_stock,
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
                     'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                         ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                         : ($record->production_price
                             ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
+                            : 0)
                 );
                 $sl++;
         
@@ -8742,28 +8711,19 @@ class reports extends CI_Model
                     'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
                     'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                     'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
+                    //'product_type'  =>  $record->finished_raw,
                     'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
                     'damagedQnty'   => $damaged_quantity,
                     'returnQnty' => $total_return_given,
                     'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'opening_stock'     => $opening_stock,
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
                     'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                         ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                         : ($record->production_price
                             ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
+                            : 0)
                 );
                 $sl++;
         
@@ -8783,28 +8743,19 @@ class reports extends CI_Model
                     'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
                     'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                     'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
+                    //'product_type'  =>  $record->finished_raw,
                     'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
                     'damagedQnty'   => $damaged_quantity,
                     'returnQnty' => $total_return_given,
                     'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'opening_stock'     => $opening_stock,
+                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
                     'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
                     'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                         ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                         : ($record->production_price
                             ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
+                            : 0)
                 );
                 $sl++;
         
@@ -8820,28 +8771,19 @@ class reports extends CI_Model
                 'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                'product_type'  =>  $record->finished_raw,
+                //'product_type'  =>  $record->finished_raw,
                 'totalPurchaseQnty' => $total_in,
-                // 'damagedQnty'   => $stockout->damaged_qty,
                 'damagedQnty'   => $damaged_quantity,
                 'returnQnty' => $total_return_given,
                 'totalSalesQnty' =>  $total_out,
-                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                'stok_quantity' => sprintf('%0.2f', $closing_stock),
                 'opening_stock'     => $opening_stock,
+                'stok_quantity' => sprintf('%0.2f', $closing_stock),
                 'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                     : ($record->production_price
                         ? $record->production_price * $closing_stock
-                        : 0),
-    
-                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                    : ($record->supplier_price
-                        ? $record->production_price * $opening_stock
-                        : 0),
+                        : 0)
             );
             $sl++;
     

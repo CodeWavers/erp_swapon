@@ -1069,8 +1069,8 @@ class Creport extends CI_Controller
         // file creation
         $file = fopen('php://output', 'w');
 
-        $header = array('Sl No', 'Product Name', 'SKU', 'Product Model', 'Sale Price','Purchase Price', 
-        'Production Cost','Product Type', 'In Qnty', 'Damaged Quantity', 'Return Given','Out Qnty', 'Opening Stock', 'Closing Stock', 'Stock Sale Price', 'Stock Value', 'Opening Inventory');
+        $header = array('Sl No', 'Product Name','Category', 'SKU', 'Product Model', 'Sale Price','Purchase Price', 
+        'Production Cost', 'In Qnty', 'Damaged Quantity', 'Return Given','Out Qnty', 'Opening Stock', 'Closing Stock', 'Stock Sale Price', 'Stock Value');
         fputcsv($file, $header);
         foreach ($invoicedata as $line) {
             fputcsv($file, $line);
