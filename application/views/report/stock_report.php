@@ -67,9 +67,9 @@
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="product_sku" class="col-form-label">Outlet: </label>
                                 <select name="outlet_id" class="form-control" id="outlet_id"  tabindex="3">
-                                <option selected value="">Select</option>
+                                <option  value="">Select</option>
                                     <?php foreach($cw_list as $cw){?>
-                                        <option value="<?php echo html_escape($cw['warehouse_id'])?>"><?php echo html_escape($cw['central_warehouse']) ;?></option>
+                                        <option selected   value="<?php echo html_escape($cw['warehouse_id'])?>"><?php echo html_escape($cw['central_warehouse']) ;?></option>
                                     <?php }?>
                                     <?php foreach($outlet_list as $outlet){?>
                                         <option value="<?php echo html_escape($outlet['outlet_id'])?>"><?php echo html_escape($outlet['outlet_name']) ;?></option>
@@ -129,7 +129,7 @@
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Category : </label>
                                 <div class="form-group">
-                                    <select id="cat_list" class="form-control" name="cat_list">
+                                    <select id="cat_list" class="form-control" name="cat_id">
                                         <option value="">Select One</option>
                                         {cat_list}
                                         <option value="{id}">{name}</option>

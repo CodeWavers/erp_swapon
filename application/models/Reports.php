@@ -1065,12 +1065,12 @@ class reports extends CI_Model
         $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
         $outlet_id = $this->input->post('outlet_id', TRUE);
-        if ($outlet_id ==''){
+        if ($outlet_id == '') {
             $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        }elseif ($outlet_id === 'All'){
+        } elseif ($outlet_id === 'All') {
             $outlet_id = null;
-        }else{
-            $outlet_id =$this->input->post('outlet_id', TRUE);;
+        } else {
+            $outlet_id = $this->input->post('outlet_id', TRUE);;
         }
         if ($from_date == null) {
             $date = date('Y-m-d');
@@ -1218,7 +1218,7 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('product_purchase.purchase_date <=', $to_date);
             }
-            if ($outlet_id){
+            if ($outlet_id) {
                 $this->db->where('product_purchase.outlet_id', $outlet_id);
             }
             $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
@@ -1291,7 +1291,7 @@ class reports extends CI_Model
 
 
             // $value = 0;
-            if ($value == 1 ) {
+            if ($value == 1) {
                 // echo "<pre>";
                 // print_r($value);
                 // exit();
@@ -1334,10 +1334,10 @@ class reports extends CI_Model
                 }
             }
 
-             // All Transaction Items
-             if ($value == 3) {
+            // All Transaction Items
+            if ($value == 3) {
 
-                if ($closing_stock > 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) {
+                if ($closing_stock > 0 || $open_stock > 0 || $total_damage > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) {
                     $data[] = array(
                         'sl'            =>   $sl,
                         'product_name'  =>  $record->product_name,
@@ -1376,10 +1376,10 @@ class reports extends CI_Model
                 }
             }
 
-             // Positive Transaction Items
-             if ($value == 4) {
+            // Positive Transaction Items
+            if ($value == 4) {
 
-                if (($closing_stock > 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock > 0) {
+                if (($closing_stock > 0 || $open_stock > 0 || $total_damage > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock > 0) {
 
                     $data[] = array(
                         'sl'            =>   $sl,
@@ -1421,7 +1421,7 @@ class reports extends CI_Model
 
             // Zero Transaction Items
             if ($value == 5) {
-                if (($closing_stock> 0 || $open_stock>0 ||$total_damage>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock <= 0) {
+                if (($closing_stock > 0 || $open_stock > 0 || $total_damage > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock <= 0) {
 
                     $data[] = array(
                         'sl'            =>   $sl,
@@ -1539,9 +1539,6 @@ class reports extends CI_Model
                 );
                 $sl++;
             }
-
-
-            
         }
 
         // echo "<pre>";
@@ -1818,7 +1815,7 @@ class reports extends CI_Model
         if ($outlet_id) {
             $this->db->where('b.outlet_id', $outlet_id);
         }
-        $total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+        $total_phy_count = $this->db->select('a.product_id,SUM(a.difference) as phy_qty')
             ->from('stock_taking_details a')
             ->join('stock_taking b', 'b.stid = a.stid')
             ->where(array(
@@ -2541,13 +2538,12 @@ class reports extends CI_Model
 
         a.total_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
-        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id','left');
-        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id','left');
-        $this->db->join('product_information pi', 'pi.product_id = id.product_id','left');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id', 'left');
+        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id', 'left');
+        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id', 'left');
+        $this->db->join('product_information pi', 'pi.product_id = id.product_id', 'left');
         $this->db->where('a.date', $today);
-        if($outlet_id)
-        {
+        if ($outlet_id) {
             $this->db->where('a.outlet_id', $outlet_id);
         }
         if ($per_page && $page)
@@ -3286,10 +3282,10 @@ class reports extends CI_Model
 
         a.total_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,pi.sku');
         $this->db->from('invoice a');
-        $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
-        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id','left');
-        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id','left');
-        $this->db->join('product_information pi', 'pi.product_id = id.product_id','left');
+        $this->db->join('customer_information b', 'b.customer_id = a.customer_id', 'left');
+        $this->db->join('paid_amount p', 'p.invoice_id = a.invoice_id', 'left');
+        $this->db->join('invoice_details id', 'id.invoice_id = a.invoice_id', 'left');
+        $this->db->join('product_information pi', 'pi.product_id = id.product_id', 'left');
         $this->db->where('a.date >=', $from_date);
         $this->db->where('a.date <=', $to_date);
         if (!empty($outlet_id)) {
@@ -4615,7 +4611,7 @@ class reports extends CI_Model
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
-        }   
+        }
         $this->db->select("a.date,a.invoice_id,a.due_amount,a.paid_amount,a.total_discount,a.total_amount,a.sales_return,a.invoice,b.customer_id,b.customer_name,p.amount,p.pay_type");
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id');
@@ -4653,15 +4649,15 @@ class reports extends CI_Model
 
         foreach ($query as $key => $value) {
 
-           
+
             if (!(array_key_exists($value['invoice_id'], $check_array))) {
-            $final_array['total_amount'] += $value['total_amount'];
-            $final_array['invoice_discount'] += $value['total_discount'];
-            $final_array['sales_return'] += $value['sales_return'];
-            $final_array['due_amount'] += $value['due_amount'];
-            $final_array['received_amount'] += $value['paid_amount'];
+                $final_array['total_amount'] += $value['total_amount'];
+                $final_array['invoice_discount'] += $value['total_discount'];
+                $final_array['sales_return'] += $value['sales_return'];
+                $final_array['due_amount'] += $value['due_amount'];
+                $final_array['received_amount'] += $value['paid_amount'];
             }
-            
+
             if ($value['sales_return'] < 1) {
                 if ($value['pay_type'] == 1) {
 
@@ -4697,8 +4693,6 @@ class reports extends CI_Model
                 }
             }
             $check_array[$value['invoice_id']] = $value['invoice_id'];
-            
-
         }
         // echo "<pre>";
         // print_r($final_array);
@@ -5426,20 +5420,19 @@ class reports extends CI_Model
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
-        }    
+        }
         if ($outlet_id) {
             $this->db->select('i.date, p.pay_type, o.outlet_name, sum(i.due_amount) as total_due, sum(p.amount) as paid_amnt')
-            ->from('invoice i')
-            ->join('paid_amount p', 'p.invoice_id = i.invoice_id');
+                ->from('invoice i')
+                ->join('paid_amount p', 'p.invoice_id = i.invoice_id');
             $this->db->where('i.outlet_id', $outlet_id);
-        }
-        else{
+        } else {
             $this->db->select('i.date, p.pay_type, central_warehouse.central_warehouse as outlet_name, sum(i.due_amount) as total_due, sum(p.amount) as paid_amnt')
-            ->from('invoice i')
-            ->join('paid_amount p', 'p.invoice_id = i.invoice_id');
+                ->from('invoice i')
+                ->join('paid_amount p', 'p.invoice_id = i.invoice_id');
         }
-        
-        
+
+
 
         if ($from_date && $to_date) {
             $this->db->where('i.date >=', $from_date);
@@ -5454,19 +5447,18 @@ class reports extends CI_Model
             $this->db->where('i.date <=', $to_date);
         }
 
-        if($outlet_id){
+        if ($outlet_id) {
             $this->db->join('outlet_warehouse o', 'o.outlet_id = i.outlet_id')
-            ->group_by('i.date')
-            ->group_by('p.pay_type')
-            ->order_by('i.id', 'desc');
-        }
-        else{
+                ->group_by('i.date')
+                ->group_by('p.pay_type')
+                ->order_by('i.id', 'desc');
+        } else {
             $this->db->join('central_warehouse', 'central_warehouse.warehouse_id = i.outlet_id')
-            ->group_by('i.date')
-            ->group_by('p.pay_type')
-            ->order_by('i.id', 'desc');
+                ->group_by('i.date')
+                ->group_by('p.pay_type')
+                ->order_by('i.id', 'desc');
         }
-           
+
 
         $res = $this->db->get()->result_array();
 
@@ -5529,25 +5521,25 @@ class reports extends CI_Model
 
         return $new_res;
     }
-    
+
     //sales report Prodcut Wise
     public function ProductSalesReport($postData = null, $post_product_id = null)
     {
-        
+
         $this->load->model('Warehouse');
         $this->load->model('suppliers');
         $response = array();
         $from_date = $this->input->post('from_date', TRUE);
         $to_date = $this->input->post('to_date', TRUE);
-         $outlet_id = $this->input->post('outlet_id', TRUE);
-        if ($outlet_id ==''){
+        $outlet_id = $this->input->post('outlet_id', TRUE);
+        if ($outlet_id == '') {
             $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        }elseif ($outlet_id === 'All'){
+        } elseif ($outlet_id === 'All') {
             $outlet_id = null;
-        }else{
-            $outlet_id =$this->input->post('outlet_id', TRUE);;
+        } else {
+            $outlet_id = $this->input->post('outlet_id', TRUE);;
         }
-        
+
         ## Read value
         if (!$post_product_id) {
             $draw = $postData['draw'];
@@ -5562,19 +5554,19 @@ class reports extends CI_Model
             $searchQuery = "";
             if ($searchValue != '') {
                 $searchQuery = " (p.product_name like '%"
-                    . $searchValue.
+                    . $searchValue .
                     "%') ";
             }
 
             ## Total number of records without filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information p');
-            $this->db->join('invoice_details id','id.product_id = p.product_id');
-            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            $this->db->join('invoice_details id', 'id.product_id = p.product_id');
+            $this->db->join('invoice i', 'i.invoice_id  = id.invoice_id ', 'left');
             if ($from_date != '') {
                 $this->db->where('i.date >=', $from_date);
             }
-    
+
             if ($to_date) {
                 $this->db->where('i.date <=', $to_date);
             }
@@ -5590,12 +5582,12 @@ class reports extends CI_Model
             ## Total number of record with filtering
             $this->db->select('count(*) as allcount');
             $this->db->from('product_information p');
-            $this->db->join('invoice_details id','id.product_id = p.product_id');
-            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            $this->db->join('invoice_details id', 'id.product_id = p.product_id');
+            $this->db->join('invoice i', 'i.invoice_id  = id.invoice_id ', 'left');
             if ($from_date != '') {
                 $this->db->where('i.date >=', $from_date);
             }
-    
+
             if ($to_date) {
                 $this->db->where('i.date <=', $to_date);
             }
@@ -5616,8 +5608,8 @@ class reports extends CI_Model
             (SELECT sum(id.total_price_wd) from invoice_details as id WHERE i.invoice_id = id.invoice_id AND id.product_id = p.product_id) as total_sales,
             (SELECT sum(id.tax) from invoice_details as id WHERE i.invoice_id = id.invoice_id AND id.product_id = p.product_id) as total_vat
             ");
-            $this->db->join('invoice_details id','id.product_id = p.product_id');
-            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
+            $this->db->join('invoice_details id', 'id.product_id = p.product_id');
+            $this->db->join('invoice i', 'i.invoice_id  = id.invoice_id ', 'left');
             $this->db->from('product_information p');
             $this->db->order_by($columnName, $columnSortOrder);
             $this->db->group_by('p.product_id');
@@ -5634,23 +5626,20 @@ class reports extends CI_Model
             if ($searchValue != '')
                 $this->db->where($searchQuery);
             $records = $this->db->get()->result();
-           
         }
-        if(!($from_date))
-        {
+        if (!($from_date)) {
             $from_date = 0;
-        } 
-        if(!($to_date))
-        {
+        }
+        if (!($to_date)) {
             $to_date = 0;
-        }  
+        }
         $data = array();
-        $sl =1;
+        $sl = 1;
         $base_url = base_url();
         $net_sales = 0;
         $cost_price = 0;
         foreach ($records as $record) {
-            $details_i = '  <a href="' . $base_url . 'Creport/product_details_report/' . $record->product_id .'/'.$from_date .'/'.$to_date.'/'.$outlet_id.'" class="" >' . $record->product_name . '</a>';
+            $details_i = '  <a href="' . $base_url . 'Creport/product_details_report/' . $record->product_id . '/' . $from_date . '/' . $to_date . '/' . $outlet_id . '" class="" >' . $record->product_name . '</a>';
             $purchase_price = $this->weighted_average_price($record->product_id);
             // $net_sales = ($record->total_sales - $record->total_discount) + $record->total_vat;
             $net_sales = $record->total_sales + $record->total_vat;
@@ -5663,12 +5652,11 @@ class reports extends CI_Model
                 // 'discount' => $record->total_discount ? ($record->total_discount) : 0,
                 'discount' => 0,
                 'net_sales' => $net_sales ? $net_sales : 0,
-               'cost_price' => $cost_price ? number_format((float)$cost_price, 2, '.', '') : 0,
+                'cost_price' => $cost_price ? number_format((float)$cost_price, 2, '.', '') : 0,
                 'gross_profit' => number_format((float)($net_sales - $cost_price), 2, '.', ''),
                 //number_format((float)$foo, 2, '.', ''); ($val->rate) ? $currency_symbol->currency_symbol . number_format_unchanged_precision($val->rate, $currency_symbol->currency_code) : '',
             );
             $sl++;
-
         }
         ## Response
         if ($data) {
@@ -5691,40 +5679,39 @@ class reports extends CI_Model
     public function weighted_average_price($product_id)
     {
         $stockout_for_purchase_price = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.total_amount) as purchaseprice')
-        ->from('product_purchase_details')
-        ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-        ->where('product_purchase_details.product_id', $product_id)
-        ->where('product_purchase_details.qty >=', 0)
-        ->get()->row();
-      if(!empty($stockout_for_purchase_price->purchaseprice) && !empty($stockout_for_purchase_price->totalPurchaseQnty))
-        {
+            ->from('product_purchase_details')
+            ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+            ->where('product_purchase_details.product_id', $product_id)
+            ->where('product_purchase_details.qty >=', 0)
+            ->get()->row();
+        if (!empty($stockout_for_purchase_price->purchaseprice) && !empty($stockout_for_purchase_price->totalPurchaseQnty)) {
             $stockout_for_weighted_average = $stockout_for_purchase_price->purchaseprice / $stockout_for_purchase_price->totalPurchaseQnty;
         }
         return $stockout_for_weighted_average;
     }
     public function product_sales_details_data($product_id, $from_date = null, $to_date = null, $outlet_id = null)
     {
-        
+
         $this->db->select("p.product_name,
         i.date,count(id.invoice_id) as total_sold,sum(id.total_price_wd) as total_sales,
         i.total_discount");
-            $this->db->join('invoice_details id','id.product_id = p.product_id','left');
-            $this->db->join('invoice i','i.invoice_id  = id.invoice_id ','left');
-            $this->db->from('product_information p');
-            $this->db->where('p.product_id',$product_id);
-            $this->db->group_by('i.date');
-            if ($outlet_id && $outlet_id != '') {
-                $this->db->where('i.outlet_id', $outlet_id);
-            }
-            if ($from_date != 0) {
-                $this->db->where('i.date >=', $from_date);
-            }
-            if ($to_date != 0) {
-                $this->db->where('i.date <=', $to_date);
-            }   
+        $this->db->join('invoice_details id', 'id.product_id = p.product_id', 'left');
+        $this->db->join('invoice i', 'i.invoice_id  = id.invoice_id ', 'left');
+        $this->db->from('product_information p');
+        $this->db->where('p.product_id', $product_id);
+        $this->db->group_by('i.date');
+        if ($outlet_id && $outlet_id != '') {
+            $this->db->where('i.outlet_id', $outlet_id);
+        }
+        if ($from_date != 0) {
+            $this->db->where('i.date >=', $from_date);
+        }
+        if ($to_date != 0) {
+            $this->db->where('i.date <=', $to_date);
+        }
         $records = $this->db->get()->result_array();
         $data = array();
-        $sl =1;
+        $sl = 1;
         $purchase_price = $this->weighted_average_price($product_id);
         foreach ($records as $record) {
             $net_sales = $record['total_sales'] - $record['total_discount'];
@@ -5735,18 +5722,17 @@ class reports extends CI_Model
                 'date' => $record['date'],
                 'qnty'  =>  $record['total_sold'],
                 'total_sales'  => $record['total_sales'] ? $record['total_sales'] : 0,
-                'discount' => $record['total_discount'] ? $record['total_discount']/$record['total_sold'] : 0,
+                'discount' => $record['total_discount'] ? $record['total_discount'] / $record['total_sold'] : 0,
                 'net_sales' => $net_sales ? $net_sales : 0,
-               'cost_price' => $cost_price ? $cost_price : 0,
+                'cost_price' => $cost_price ? $cost_price : 0,
                 'gross_profit' => $net_sales - $cost_price,
             );
             $sl++;
-
         }
         return $data;
     }
     public function getCheckList3($postData = null, $post_product_id = null, $pr_status = null, $from_date = null, $to_date = null, $value = null, $export = null)
-{
+    {
         $this->load->model('Warehouse');
         $this->load->model('suppliers');
         $response = array();
@@ -5755,12 +5741,13 @@ class reports extends CI_Model
         $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
         $outlet_id = $this->input->post('outlet_id', TRUE);
-        if ($outlet_id ==''){
+        $temp_value = $value;
+        if ($outlet_id == '' || $outlet_id == 'null') {
             $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        }elseif ($outlet_id === 'All'){
+        } elseif ($outlet_id === 'All' || $outlet_id === 'HK7TGDT69VFMXB7') {
             $outlet_id = null;
-        }else{
-            $outlet_id =$this->input->post('outlet_id', TRUE);;
+        } else {
+            $outlet_id = $this->input->post('outlet_id', TRUE);;
         }
         if ($from_date == null) {
             $date = date('Y-m-d');
@@ -5814,9 +5801,9 @@ class reports extends CI_Model
             if ($searchValue != '') {
                 $this->db->where($searchQuery);
             }
-            if ($pr_status){
+            if ($pr_status) {
                 $this->db->where('a.finished_raw', $pr_status);
-            } 
+            }
             $this->db->group_by('a.product_id');
             $records = $this->db->get()->num_rows();
             $totalRecords = $records;
@@ -5827,6 +5814,9 @@ class reports extends CI_Model
             $this->db->join('cats b', 'a.category_id=b.id', 'left');
             if ($product_sku != '') {
                 $this->db->where_in('a.sku', $product_sku);
+            }
+            if (isset($p_s) && $p_s != '') {
+                $this->db->where('a.finished_raw', $p_s);
             }
             if (isset($cat_id) && $cat_id != '') {
                 $this->db->like('a.category_id', $cat_id, 'both');
@@ -5844,7 +5834,7 @@ class reports extends CI_Model
             $this->db->where_in('a.sku', $product_sku);
         }
         if (!$post_product_id && $searchValue != '')
-          $this->db->where($searchQuery);
+            $this->db->where($searchQuery);
 
         if ($post_product_id) {
             $this->db->where('a.product_id', $post_product_id);
@@ -5855,15 +5845,17 @@ class reports extends CI_Model
         if (isset($p_s) && $p_s != '') {
             $this->db->where('a.finished_raw', $p_s);
         }
-        $records = $this->db->select("a.finished_raw,a.product_model,a.product_name,a.product_id,a.price,a.sku,a.purchase_price,
+       $this->db->select("a.finished_raw,a.product_model,a.product_name,a.product_id,a.price,a.sku,a.purchase_price,
             b.name
-            ")
-        ->from('product_information a')
-        ->join('cats b', 'a.category_id=b.id', 'left')
-        ->group_by('a.product_id')
-        ->limit($rowperpage, $start)
-        ->get()
-        ->result();
+            ");
+            $this->db->from('product_information a');
+            $this->db->join('cats b', 'a.category_id=b.id', 'left');
+            if($export != 'export')
+            {
+                $this->db->limit($rowperpage, $start);
+            }
+            $this->db->group_by('a.product_id');
+            $records =  $this->db->get()->result();
         // echo "<pre>";
         // print_r($records);
         // exit();
@@ -5873,81 +5865,58 @@ class reports extends CI_Model
         $closing_stock = 0;
         $opening_stock = 0;
         //  $outlet_id  = 'HK7TGDT69VFMXB7';
-     //------------------------------------//------------------ Date Filter -------------//---------------------//--------------------------//
-        $new_from_date = $this->input->post('from_date');
-        $new_to_date = $this->input->post('to_date');
-        $new_opening_from_date = '';
-        $new_opening_to_date = '';
-        if ($new_from_date == '') {
-            $new_date = date_create("0001-01-01");
-            $new_change_date = date_format($new_date, "Y-m-d");
-            $new_opening_from_date = date('Y-m-d', strtotime($new_change_date . ' -1 day'));
-        } else {
-            $new_opening_from_date = date('Y-m-d', strtotime($new_from_date . ' -1 day'));
-        }
+        //------------------------------------//------------------ Date Filter -------------//---------------------//--------------------------//
 
-        if ($new_to_date == '') {
-            $date = date('Y-m-d');
-            $new_opening_to_date = date('Y-m-d', strtotime($date . ' -1 day'));
-        } else {
-            $new_opening_to_date = date('Y-m-d', strtotime($new_to_date . ' -1 day'));
-        }
-
-
-        $new_outlet_id = $this->input->post('outlet_id', TRUE);
-        if ($new_outlet_id == '') {
-            $new_outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        } elseif ($new_outlet_id === 'All') {
-            $new_outlet_id = null;
-        } else {
-            $new_outlet_id = $this->input->post('outlet_id', TRUE);;
-        }
         ## Phase 3 ##
         // Array Column IDS and Fetch data in Array //---------------------------------//------------------------------//-------------------------------//-------------------------------
         $product_ids = array_column($records, 'product_id');
-        //Production Price
-        $production_cost = $this->db->select('product_id,avg(production_cost) as cost') 
+        // echo "<pre>";
+        // print_r($product_ids);
+        // exit();
+        if ($product_ids) {
+            //Production Price
+            $production_cost = $this->db->select('product_id,avg(production_cost) as cost')
                 ->from('production_cost')
                 ->where_in('product_id', $product_ids)
                 ->group_by('product_id')
                 ->get()
                 ->result();
-        // echo "<pre>";
-        // print_r($production_cost);
-        // exit();
-        //Supplier Price
-        $supplier_cost = $this->db->select('product_id,supplier_price') 
+            //Supplier Price
+            $supplier_cost = $this->db->select('product_id,supplier_price')
                 ->from('supplier_product')
                 ->where_in('product_id', $product_ids)
                 ->group_by('product_id')
                 ->get()
                 ->result();
-     // ------------------------------------------------- Total In --------------------------------------------------------//
-         //Purchase Details Price
-        if ($from_date) {
-            $this->db->where('product_purchase.purchase_date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('product_purchase.purchase_date <=', $to_date);
-        }
-        $total_purchased = $this->db->select('sum(total_amount) as totalAmount,product_id, sum(quantity) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
-                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')        
+            // ------------------------------------------------- Total In --------------------------------------------------------//
+            //Purchase Details Price
+            if ($from_date) {
+                $this->db->where('product_purchase.purchase_date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('product_purchase.purchase_date <=', $to_date);
+            }
+            if ($outlet_id) {
+                $this->db->where('product_purchase.outlet_id', $outlet_id);
+            }
+            $total_purchased = $this->db->select('sum(product_purchase_details.total_amount) as totalAmount,product_id, sum(product_purchase_details.qty) as totalPurchaseQnty,sum(product_purchase_details.damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
                 ->from('product_purchase_details')
                 ->where_in('product_purchase_details.product_id', $product_ids)
                 ->group_by('product_id')
                 ->get()
                 ->result();
-        //Rqsn Data
-                if ($from_date) {
-                    $this->db->where('rqsn.date >=', $from_date);
-                }
-                if ($to_date) {
-                    $this->db->where('rqsn.date <=', $to_date);
-                }
-                if ($outlet_id) {
-                    $this->db->where('rqsn.from_id', $outlet_id);
-                }
-        $total_rqsn_transfer_in = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+            //Rqsn Data
+            if ($from_date) {
+                $this->db->where('rqsn.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('rqsn.date <=', $to_date);
+            }
+            if ($outlet_id) {
+                $this->db->where('rqsn.from_id', $outlet_id);
+            }
+            $total_rqsn_transfer_in = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
                 ->from('rqsn_details')
                 ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
                 ->where_in('product_id', $product_ids)
@@ -5957,17 +5926,17 @@ class reports extends CI_Model
                 ->where('rqsn_details.is_return', 0)
                 ->get()
                 ->result();
-        //Physical Quantity
-                if ($from_date) {
-                    $this->db->where('a.create_date >=', $from_date);
-                }
-                if ($to_date) {
-                    $this->db->where('a.create_date <=', $to_date);
-                }
-                if ($outlet_id) {
-                    $this->db->where('b.outlet_id', $outlet_id);
-                }
-        $total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+            //Physical Quantity
+            if ($from_date) {
+                $this->db->where('a.create_date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('a.create_date <=', $to_date);
+            }
+            if ($outlet_id) {
+                $this->db->where('b.outlet_id', $outlet_id);
+            }
+            $total_phy_count = $this->db->select('product_id,SUM(a.difference) as phy_qty')
                 ->from('stock_taking_details a')
                 ->join('stock_taking b', 'b.stid = a.stid')
                 ->where_in('a.product_id', $product_ids)
@@ -5976,102 +5945,102 @@ class reports extends CI_Model
                 ->order_by('a.id', 'desc')
                 ->get()
                 ->result();
-       
 
-        // ------------------------------------------------- Total Out --------------------------------------------------------//
-        // Sales Quantity of Product
-        if ($from_date) {
-            $this->db->where('b.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('b.date <=', $to_date);
-        }
 
-        if ($outlet_id) {
-            $this->db->where('b.outlet_id', $outlet_id);
-        }
-        $total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-            ->from('invoice_details a')
-            ->join('invoice b', 'b.invoice_id = a.invoice_id')
-            ->where('a.pre_order', 1)
-            ->where_in('a.product_id', $product_ids)
-            ->get()
-            ->result();
-        // Used Quantity of Product
-        if ($from_date) {
-            $this->db->where('production.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('production.date <=', $to_date);
-        }
-        $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-            ->from('item_usage')
-            ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-            ->where_in('item_usage.item_id', $product_ids)
-            ->group_by('item_usage.item_id')
-            ->get()
-            ->result();
-             // Out Quantity of Product
-        if ($from_date) {
-            $this->db->where('rqsn.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('rqsn.date <=', $to_date);
-        }
-        if ($outlet_id) {
-            $this->db->where('rqsn.to_id', $outlet_id);
-        }
-      // Transfer Quantity of Product
-        $total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.is_return', 0)
-            ->get()
-            ->result();
-        if ($from_date) {
-            $this->db->where('rqsn.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('rqsn.date <=', $to_date);
-        }
-        if ($outlet_id) {
-            $this->db->where('rqsn.from_id', $outlet_id);
-        }
-        // Return Quantity of Product
-        $total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.status', 3)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.isrcv', 1)
-            ->where('rqsn_details.is_return', 1)
-            ->get()
-            ->result();
-        // Transfer Item Details
-        if ($from_date) {
-            $this->db->where('transfer_items.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('transfer_items.date <=', $to_date);
-        }
-        $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+            // ------------------------------------------------- Total Out --------------------------------------------------------//
+            // Sales Quantity of Product
+            if ($from_date) {
+                $this->db->where('b.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('b.date <=', $to_date);
+            }
+
+            if ($outlet_id) {
+                $this->db->where('b.outlet_id', $outlet_id);
+            }
+            $total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+                ->from('invoice_details a')
+                ->join('invoice b', 'b.invoice_id = a.invoice_id')
+                ->where('a.pre_order', 1)
+                ->where_in('a.product_id', $product_ids)
+                ->get()
+                ->result();
+            // Used Quantity of Product
+            if ($from_date) {
+                $this->db->where('production.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('production.date <=', $to_date);
+            }
+            $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                ->from('item_usage')
+                ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+                ->where_in('item_usage.item_id', $product_ids)
+                ->group_by('item_usage.item_id')
+                ->get()
+                ->result();
+            // Out Quantity of Product
+            if ($from_date) {
+                $this->db->where('rqsn.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('rqsn.date <=', $to_date);
+            }
+            if ($outlet_id) {
+                $this->db->where('rqsn.to_id', $outlet_id);
+            }
+            // Transfer Quantity of Product
+            $total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+                ->from('rqsn_details')
+                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                ->where_in('rqsn_details.product_id', $product_ids)
+                ->where('rqsn_details.isaprv', 1)
+                ->where('rqsn_details.is_return', 0)
+                ->get()
+                ->result();
+            if ($from_date) {
+                $this->db->where('rqsn.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('rqsn.date <=', $to_date);
+            }
+            if ($outlet_id) {
+                $this->db->where('rqsn.from_id', $outlet_id);
+            }
+            // Return Quantity of Product
+            $total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+                ->from('rqsn_details')
+                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                ->where_in('rqsn_details.product_id', $product_ids)
+                ->where('rqsn_details.status', 3)
+                ->where('rqsn_details.isaprv', 1)
+                ->where('rqsn_details.isrcv', 1)
+                ->where('rqsn_details.is_return', 1)
+                ->get()
+                ->result();
+            // Transfer Item Details
+            if ($from_date) {
+                $this->db->where('transfer_items.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('transfer_items.date <=', $to_date);
+            }
+            $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                 ->from('transfer_item_details')
                 ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
                 ->where_in('transfer_item_details.product_id', $product_ids)
                 ->group_by('transfer_item_details.product_id')
                 ->get()
                 ->result();
-     // ------------------------------------------------- Total Return Given  --------------------------------------------------------//
-        if ($from_date) {
-            $this->db->where('product_return.date_return >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('product_return.date_return <=', $to_date);
-        }
-         $product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
+            // ------------------------------------------------- Total Return Given  --------------------------------------------------------//
+            if ($from_date) {
+                $this->db->where('product_return.date_return >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('product_return.date_return <=', $to_date);
+            }
+            $product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
                 ->from('product_return')
                 ->where('usablity', 2)
                 ->where_in('product_id', $product_ids)
@@ -6079,16 +6048,16 @@ class reports extends CI_Model
                 ->where('customer_id', '')
                 ->get()
                 ->result();
-        if ($from_date) {
-            $this->db->where('rqsn.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('rqsn.date <=', $to_date);
-        }
-        if ($outlet_id) {
-            $this->db->where('rqsn.to_id', $outlet_id);
-        }
-         $rqsn_return_given = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+            if ($from_date) {
+                $this->db->where('rqsn.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('rqsn.date <=', $to_date);
+            }
+            if ($outlet_id) {
+                $this->db->where('rqsn.to_id', $outlet_id);
+            }
+            $rqsn_return_given = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
                 ->from('rqsn_details')
                 ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
                 ->where_in('rqsn_details.product_id', $product_ids)
@@ -6097,119 +6066,128 @@ class reports extends CI_Model
                 ->get()
                 ->result();
 
-        //-------------------------------------------Total Damage ----------------------------------------------------//
-        //Total Wastage Quantity
-        if ($from_date) {
-            $this->db->where('wastage_dec.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('wastage_dec.date <=', $to_date);
-        }
+            //-------------------------------------------Total Damage ----------------------------------------------------//
+            //Total Wastage Quantity
+            if ($from_date) {
+                $this->db->where('wastage_dec.date >=', $from_date);
+            }
+            if ($to_date) {
+                $this->db->where('wastage_dec.date <=', $to_date);
+            }
 
-        if ($outlet_id) {
-            $this->db->where('wastage_dec.outlet_id', $outlet_id);
-        }
-         $total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
+            if ($outlet_id) {
+                $this->db->where('wastage_dec.outlet_id', $outlet_id);
+            }
+            $total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
                 ->from('wastage_dec')
                 ->where_in('wastage_dec.product_id', $product_ids)
                 ->get()
                 ->result();
 
-     //---------------------------------------------Opening Stock Data -------------------------------------------  
-       
-        if ($new_from_date) {
-            
+            //---------------------------------------------Opening Stock Data -------------------------------------------  
+            $new_from_date = $this->input->post('from_date');
+            $new_to_date = $this->input->post('to_date');
+            $new_opening_from_date = '';
+            $new_opening_to_date = '';
+            if ($new_from_date == '') {
+                $new_date = date_create("0001-01-01");
+                $new_change_date = date_format($new_date, "Y-m-d");
+                $new_opening_from_date = date('Y-m-d', strtotime($new_change_date . ' -1 day'));
+            } else {
+                $new_opening_from_date = date('Y-m-d', strtotime($new_from_date . ' -1 day'));
+            }
+
+            if ($new_to_date == '') {
+                $date = date('Y-m-d');
+                $new_opening_to_date = date('Y-m-d', strtotime($date . ' -1 day'));
+            } else {
+                $new_opening_to_date = date('Y-m-d', strtotime($new_to_date . ' -1 day'));
+            }
+
+
+            $new_outlet_id = $this->input->post('outlet_id', TRUE);
+            if ($new_outlet_id == '' || $new_outlet_id == null) {
+                $new_outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+            } elseif ($new_outlet_id === 'All' || $new_outlet_id === 'HK7TGDT69VFMXB7') {
+                $new_outlet_id = null;
+            } else {
+                $new_outlet_id = $this->input->post('outlet_id', TRUE);;
+            }
+            if ($new_from_date) {
+
                 //-------------------------------------------------- Opening Stock Total In -------------------------
-                    //Purchase Details Price
-                    // if ($from_date) {
-                    //     $this->db->where('product_purchase.purchase_date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('product_purchase.purchase_date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id){
-                        $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
-                        ->from('product_purchase_details')
-                        ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                        ->where_in('product_purchase_details.product_id', $product_ids)
-                        ->where('product_purchase_details.qty >', 0)
-                        ->get()
-                        ->result();
-                    //Rqsn Data
-                    // if ($from_date) {
-                    //     $this->db->where('rqsn.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.from_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.status', 3)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.isrcv', 1)
-                        ->where('rqsn_details.is_return', 0)
-                        ->get()
-                        ->result();
-                    //Physical Quantity
-                    // if ($from_date) {
-                    //     $this->db->where('a.create_date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('a.create_date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('b.outlet_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
-                        ->from('stock_taking_details a')
-                        ->join('stock_taking b', 'b.stid = a.stid')
-                        ->where_in('a.product_id', $product_ids)
-                        ->where('a.status', 1)
-                        ->group_by('a.product_id')
-                        ->order_by('a.id', 'desc')
-                        ->get()
-                        ->result();
+                //Purchase Details Price
+                if ($new_opening_from_date) {
+                    $this->db->where('product_purchase.purchase_date <=', $new_opening_from_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+                }
+                $opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
+                    ->from('product_purchase_details')
+                    ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                    ->where_in('product_purchase_details.product_id', $product_ids)
+                    ->where('product_purchase_details.qty >', 0)
+                    ->get()
+                    ->result();
+                //Rqsn Data
+                if ($new_opening_from_date) {
+                    $this->db->where('rqsn.date <=', $new_opening_from_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.from_id', $new_outlet_id);
+                }
+                $opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.status', 3)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.isrcv', 1)
+                    ->where('rqsn_details.is_return', 0)
+                    ->get()
+                    ->result();
+                //Physical Quantity
+                if ($new_opening_from_date) {
+                    $this->db->where('a.create_date <=', $new_opening_from_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('b.outlet_id', $new_outlet_id);
+                }
+                $opening_stock_total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+                    ->from('stock_taking_details a')
+                    ->join('stock_taking b', 'b.stid = a.stid')
+                    ->where_in('a.product_id', $product_ids)
+                    ->where('a.status', 1)
+                    ->group_by('a.product_id')
+                    ->order_by('a.id', 'desc')
+                    ->get()
+                    ->result();
                 //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
-                // if ($from_date) {
-                //     $this->db->where('wastage_dec.date >=', $from_date);
-                // }
                 if ($new_opening_from_date) {
                     $this->db->where('wastage_dec.date <=', $new_opening_from_date);
                 }
-        
+
                 if ($new_outlet_id) {
                     $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
                 }
                 $opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                            ->from('wastage_dec')
-                            ->where_in('wastage_dec.product_id', $product_ids)
-                            ->get()
-                            ->result();
+                    ->from('wastage_dec')
+                    ->where_in('wastage_dec.product_id', $product_ids)
+                    ->get()
+                    ->result();
                 //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
-                // if ($from_date) {
-                //     $this->db->where('product_return.date_return >=', $from_date);
-                // }
                 if ($new_opening_from_date) {
                     $this->db->where('product_return.date_return <=', $new_opening_from_date);
                 }
                 $opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
-                        ->from('product_return')
-                        ->where('usablity', 2)
-                        ->where_in('product_id', $product_ids)
-                        ->where('product_return.outlet_id', null)
-                        ->where('customer_id', '')
-                        ->get()
-                        ->result();
-                // if ($from_date) {
-                //     $this->db->where('rqsn.date >=', $from_date);
-                // }
+                    ->from('product_return')
+                    ->where('usablity', 2)
+                    ->where_in('product_id', $product_ids)
+                    ->where('product_return.outlet_id', null)
+                    ->where('customer_id', '')
+                    ->get()
+                    ->result();
                 if ($new_opening_from_date) {
                     $this->db->where('rqsn.date <=', $new_opening_from_date);
                 }
@@ -6225,114 +6203,96 @@ class reports extends CI_Model
                     ->get()
                     ->result();
                 // -------------------------------------------------Opening Stock Total Out --------------------------------------------------------//
-                    // Sales Quantity of Product
-                    // if ($from_date) {
-                    //     $this->db->where('b.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('b.date <=', $new_opening_from_date);
-                    }
+                // Sales Quantity of Product
+                if ($new_opening_from_date) {
+                    $this->db->where('b.date <=', $new_opening_from_date);
+                }
 
-                    if ($new_outlet_id) {
-                        $this->db->where('b.outlet_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-                        ->from('invoice_details a')
-                        ->join('invoice b', 'b.invoice_id = a.invoice_id')
-                        ->where('a.pre_order', 1)
-                        ->where_in('a.product_id', $product_ids)
-                        ->get()
-                        ->result();
-                    // Used Quantity of Product
-                    // if ($from_date) {
-                    //     $this->db->where('production.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('production.date <=', $new_opening_from_date);
-                    }
-                    $opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-                        ->from('item_usage')
-                        ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-                        ->where_in('item_usage.item_id', $product_ids)
-                        ->group_by('item_usage.item_id')
-                        ->get()
-                        ->result();
-                        // Out Quantity of Product
-                    // if ($from_date) {
-                    //     $this->db->where('rqsn.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.to_id', $new_outlet_id);
-                    }
-                    // Transfer Quantity of Product
-                    $opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.is_return', 0)
-                        ->get()
-                        ->result();
-                    // if ($from_date) {
-                    //     $this->db->where('rqsn.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.from_id', $new_outlet_id);
-                    }
-                    // Return Quantity of Product
-                    $opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.status', 3)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.isrcv', 1)
-                        ->where('rqsn_details.is_return', 1)
-                        ->get()
-                        ->result();
-                    // Transfer Item Details
-                    // if ($from_date) {
-                    //     $this->db->where('transfer_items.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('transfer_items.date <=', $new_opening_from_date);
-                    }
-                    $opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
-                            ->from('transfer_item_details')
-                            ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
-                            ->where_in('transfer_item_details.product_id', $product_ids)
-                            ->group_by('transfer_item_details.product_id')
-                            ->get()
-                            ->result();
-            //Opening Stock Array
-                    $opening_stock_total_purchased_array = array();
-                    $opening_stock_damaged_qty_array = array();  
-                    $opening_stock_total_rqsn_transfer_in_array = array();
-                    $opening_stock_total_phy_count_array = array();
+                if ($new_outlet_id) {
+                    $this->db->where('b.outlet_id', $new_outlet_id);
+                }
+                $opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+                    ->from('invoice_details a')
+                    ->join('invoice b', 'b.invoice_id = a.invoice_id')
+                    ->where('a.pre_order', 1)
+                    ->where_in('a.product_id', $product_ids)
+                    ->get()
+                    ->result();
+                // Used Quantity of Product
+                if ($new_opening_from_date) {
+                    $this->db->where('production.date <=', $new_opening_from_date);
+                }
+                $opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                    ->from('item_usage')
+                    ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+                    ->where_in('item_usage.item_id', $product_ids)
+                    ->group_by('item_usage.item_id')
+                    ->get()
+                    ->result();
+                // Out Quantity of Product
+                if ($new_opening_from_date) {
+                    $this->db->where('rqsn.date <=', $new_opening_from_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.to_id', $new_outlet_id);
+                }
+                // Transfer Quantity of Product
+                $opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.is_return', 0)
+                    ->get()
+                    ->result();
+                if ($new_opening_from_date) {
+                    $this->db->where('rqsn.date <=', $new_opening_from_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.from_id', $new_outlet_id);
+                }
+                // Return Quantity of Product
+                $opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.status', 3)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.isrcv', 1)
+                    ->where('rqsn_details.is_return', 1)
+                    ->get()
+                    ->result();
+                // Transfer Item Details        
+                if ($new_opening_from_date) {
+                    $this->db->where('transfer_items.date <=', $new_opening_from_date);
+                }
+                $opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+                    ->from('transfer_item_details')
+                    ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+                    ->where_in('transfer_item_details.product_id', $product_ids)
+                    ->group_by('transfer_item_details.product_id')
+                    ->get()
+                    ->result();
+                //Opening Stock Array
+                $opening_stock_total_purchased_array = array();
+                $opening_stock_damaged_qty_array = array();
+                $opening_stock_total_rqsn_transfer_in_array = array();
+                $opening_stock_total_phy_count_array = array();
 
-                    $opening_stock_total_wastage_qnty_array = array();
-                    //Total Out
-                    $opening_stock_total_sales_array = array();
-                    $opening_stock_used_qty_array = array();
-                    $opening_stock_total_rqsn_transfer_out_array = array();
-                    $opening_stock_transfer_item_array = array();
-                    $opening_stock_total_rqsn_return_array = array();
-                    // total return given
-                    $opening_stock_product_return_array = array();
-                    $opening_stock_rqsn_return_given_array = array();
+                $opening_stock_total_wastage_qnty_array = array();
+                //Total Out
+                $opening_stock_total_sales_array = array();
+                $opening_stock_used_qty_array = array();
+                $opening_stock_total_rqsn_transfer_out_array = array();
+                $opening_stock_transfer_item_array = array();
+                $opening_stock_total_rqsn_return_array = array();
+                // total return given
+                $opening_stock_product_return_array = array();
+                $opening_stock_rqsn_return_given_array = array();
                 //Total In & Total Damage
                 foreach ($opening_stock_total_purchased as $row) {
                     $opening_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
                     $opening_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
-                }
-                foreach ($opening_stock_total_wastage_qnty as $row) {
-                    $opening_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
                 }
                 foreach ($opening_stock_total_rqsn_transfer_in as $row) {
                     $opening_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
@@ -6340,13 +6300,18 @@ class reports extends CI_Model
                 foreach ($opening_stock_total_phy_count as $row) {
                     $opening_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
                 }
+                foreach ($opening_stock_total_wastage_qnty as $row) {
+                    $opening_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+                }
+
+
                 //Total Return Given
                 foreach ($opening_stock_product_return as $row) {
                     $opening_stock_product_return_array[$row->product_id] = $row->totalReturn;
                 }
                 foreach ($opening_stock_rqsn_return_given as $row) {
                     $opening_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-                } 
+                }
                 //Total Out Related Array
                 foreach ($opening_stock_total_sales as $row) {
                     $opening_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
@@ -6359,68 +6324,68 @@ class reports extends CI_Model
                 }
                 foreach ($opening_stock_transfer_item as $row) {
                     $opening_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
-                }  
+                }
                 foreach ($opening_stock_total_rqsn_return as $row) {
                     $opening_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
                 }
-        } else {
+            } else {
                 //-------------------------------------------------- else Opening Stock Total In -------------------------------------------------------//
-                    //Purchase Details Price
-                    if ($new_opening_from_date) {
-                        $this->db->where('product_purchase.purchase_date >=', $new_opening_from_date);
-                    }
-                    if ($new_opening_to_date) {
-                        $this->db->where('product_purchase.purchase_date <=', $new_opening_to_date);
-                    }
-                    if ($new_outlet_id){
-                        $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                    }
-                    $else_opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
-                        ->from('product_purchase_details')
-                        ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                        ->where_in('product_purchase_details.product_id', $product_ids)
-                        ->where('product_purchase_details.qty >', 0)
-                        ->get()
-                        ->result();
-                    //Rqsn Data
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date >=', $new_opening_from_date);
-                    }
-                    if ($new_opening_to_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_to_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.from_id', $new_outlet_id);
-                    }
-                    $else_opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.status', 3)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.isrcv', 1)
-                        ->where('rqsn_details.is_return', 0)
-                        ->get()
-                        ->result();
-                    //Physical Quantity
-                    if ($new_opening_from_date) {
-                        $this->db->where('a.create_date >=', $new_opening_from_date);
-                    }
-                    if ($new_opening_to_date) {
-                        $this->db->where('a.create_date <=', $new_opening_to_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('b.outlet_id', $new_outlet_id);
-                    }
-                    $else_opening_stock_total_phy_count = $this->db->select('a.product_id,SUM(a.difference) as phy_qty')
-                        ->from('stock_taking_details a')
-                        ->join('stock_taking b', 'b.stid = a.stid')
-                        ->where_in('a.product_id', $product_ids)
-                        ->where('a.status', 1)
-                        ->group_by('a.product_id')
-                        ->order_by('a.id', 'desc')
-                        ->get()
-                        ->result();
+                //Purchase Details Price
+                if ($new_opening_from_date) {
+                    $this->db->where('product_purchase.purchase_date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('product_purchase.purchase_date <=', $new_opening_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+                }
+                $else_opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
+                    ->from('product_purchase_details')
+                    ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                    ->where_in('product_purchase_details.product_id', $product_ids)
+                    ->where('product_purchase_details.qty >', 0)
+                    ->get()
+                    ->result();
+                //Rqsn Data
+                if ($new_opening_from_date) {
+                    $this->db->where('rqsn.date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('rqsn.date <=', $new_opening_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.from_id', $new_outlet_id);
+                }
+                $else_opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.status', 3)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.isrcv', 1)
+                    ->where('rqsn_details.is_return', 0)
+                    ->get()
+                    ->result();
+                //Physical Quantity
+                if ($new_opening_from_date) {
+                    $this->db->where('a.create_date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('a.create_date <=', $new_opening_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('b.outlet_id', $new_outlet_id);
+                }
+                $else_opening_stock_total_phy_count = $this->db->select('a.product_id,SUM(a.difference) as phy_qty')
+                    ->from('stock_taking_details a')
+                    ->join('stock_taking b', 'b.stid = a.stid')
+                    ->where_in('a.product_id', $product_ids)
+                    ->where('a.status', 1)
+                    ->group_by('a.product_id')
+                    ->order_by('a.id', 'desc')
+                    ->get()
+                    ->result();
                 //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
                 if ($new_opening_from_date) {
                     $this->db->where('wastage_dec.date >=', $new_opening_from_date);
@@ -6428,30 +6393,30 @@ class reports extends CI_Model
                 if ($new_opening_to_date) {
                     $this->db->where('wastage_dec.date <=', $new_opening_to_date);
                 }
-        
+
                 if ($new_outlet_id) {
                     $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
-                }    
+                }
                 $else_opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                            ->from('wastage_dec')
-                            ->where_in('wastage_dec.product_id', $product_ids)
-                            ->get()
-                            ->result();
+                    ->from('wastage_dec')
+                    ->where_in('wastage_dec.product_id', $product_ids)
+                    ->get()
+                    ->result();
                 //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
                 if ($new_opening_from_date) {
                     $this->db->where('product_return.date_return >=', $new_opening_from_date);
                 }
                 if ($new_opening_to_date) {
                     $this->db->where('product_return.date_return <=', $new_opening_to_date);
-                }    
+                }
                 $else_opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
-                        ->from('product_return')
-                        ->where('usablity', 2)
-                        ->where_in('product_id', $product_ids)
-                        ->where('product_return.outlet_id', null)
-                        ->where('customer_id', '')
-                        ->get()
-                        ->result();
+                    ->from('product_return')
+                    ->where('usablity', 2)
+                    ->where_in('product_id', $product_ids)
+                    ->where('product_return.outlet_id', null)
+                    ->where('customer_id', '')
+                    ->get()
+                    ->result();
                 if ($new_opening_from_date) {
                     $this->db->where('rqsn.date >=', $new_opening_from_date);
                 }
@@ -6470,107 +6435,107 @@ class reports extends CI_Model
                     ->get()
                     ->result();
                 // -------------------------------------------------Opening Stock Total Out --------------------------------------------------------//
-            // Sales Quantity of Product
-            if ($new_opening_from_date) {
-                $this->db->where('b.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('b.date <=', $new_opening_to_date);
-            }
+                // Sales Quantity of Product
+                if ($new_opening_from_date) {
+                    $this->db->where('b.date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('b.date <=', $new_opening_to_date);
+                }
 
-            if ($new_outlet_id) {
-                $this->db->where('b.outlet_id', $new_outlet_id);
-            }
-            $else_opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-                ->from('invoice_details a')
-                ->join('invoice b', 'b.invoice_id = a.invoice_id')
-                ->where('a.pre_order', 1)
-                ->where_in('a.product_id', $product_ids)
-                ->get()
-                ->result();
-            // Used Quantity of Product
-            if ($new_opening_from_date) {
-                $this->db->where('production.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('production.date <=', $new_opening_to_date);
-            }
-            $else_opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-                ->from('item_usage')
-                ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-                ->where_in('item_usage.item_id', $product_ids)
-                ->group_by('item_usage.item_id')
-                ->get()
-                ->result();
+                if ($new_outlet_id) {
+                    $this->db->where('b.outlet_id', $new_outlet_id);
+                }
+                $else_opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+                    ->from('invoice_details a')
+                    ->join('invoice b', 'b.invoice_id = a.invoice_id')
+                    ->where('a.pre_order', 1)
+                    ->where_in('a.product_id', $product_ids)
+                    ->get()
+                    ->result();
+                // Used Quantity of Product
+                if ($new_opening_from_date) {
+                    $this->db->where('production.date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('production.date <=', $new_opening_to_date);
+                }
+                $else_opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                    ->from('item_usage')
+                    ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+                    ->where_in('item_usage.item_id', $product_ids)
+                    ->group_by('item_usage.item_id')
+                    ->get()
+                    ->result();
                 // Out Quantity of Product
-            if ($new_opening_from_date) {
-                $this->db->where('rqsn.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('rqsn.date <=', $new_opening_to_date);
-            }
-            if ($new_outlet_id) {
-                $this->db->where('rqsn.to_id', $new_outlet_id);
-            }
-        // Transfer Quantity of Product
-            $else_opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                ->from('rqsn_details')
-                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                ->where_in('rqsn_details.product_id', $product_ids)
-                ->where('rqsn_details.isaprv', 1)
-                ->where('rqsn_details.is_return', 0)
-                ->get()
-                ->result();
-            if ($new_opening_from_date) {
-                $this->db->where('rqsn.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('rqsn.date <=', $new_opening_to_date);
-            }
-            if ($new_outlet_id) {
-                $this->db->where('rqsn.from_id', $new_outlet_id);
-            }
-            // Return Quantity of Product
-            $else_opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                ->from('rqsn_details')
-                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                ->where_in('rqsn_details.product_id', $product_ids)
-                ->where('rqsn_details.status', 3)
-                ->where('rqsn_details.isaprv', 1)
-                ->where('rqsn_details.isrcv', 1)
-                ->where('rqsn_details.is_return', 1)
-                ->get()
-                ->result();
-            // Transfer Item Details
-            if ($new_opening_from_date) {
-                $this->db->where('transfer_items.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('transfer_items.date <=', $new_opening_to_date);
-            }
-            $else_opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+                if ($new_opening_from_date) {
+                    $this->db->where('rqsn.date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('rqsn.date <=', $new_opening_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.to_id', $new_outlet_id);
+                }
+                // Transfer Quantity of Product
+                $else_opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.is_return', 0)
+                    ->get()
+                    ->result();
+                if ($new_opening_from_date) {
+                    $this->db->where('rqsn.date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('rqsn.date <=', $new_opening_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.from_id', $new_outlet_id);
+                }
+                // Return Quantity of Product
+                $else_opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.status', 3)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.isrcv', 1)
+                    ->where('rqsn_details.is_return', 1)
+                    ->get()
+                    ->result();
+                // Transfer Item Details
+                if ($new_opening_from_date) {
+                    $this->db->where('transfer_items.date >=', $new_opening_from_date);
+                }
+                if ($new_opening_to_date) {
+                    $this->db->where('transfer_items.date <=', $new_opening_to_date);
+                }
+                $else_opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
                     ->from('transfer_item_details')
                     ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
                     ->where_in('transfer_item_details.product_id', $product_ids)
                     ->group_by('transfer_item_details.product_id')
                     ->get()
                     ->result();
-            //Opening Stock Array
-                    $else_opening_stock_total_purchased_array = array();
-                    $else_opening_stock_damaged_qty_array = array();  
-                    $else_opening_stock_total_rqsn_transfer_in_array = array();
-                    $else_opening_stock_total_phy_count_array = array();
+                //Opening Stock Array
+                $else_opening_stock_total_purchased_array = array();
+                $else_opening_stock_damaged_qty_array = array();
+                $else_opening_stock_total_rqsn_transfer_in_array = array();
+                $else_opening_stock_total_phy_count_array = array();
 
-                    $else_opening_stock_total_wastage_qnty_array = array();
-                    //Total Out
-                    $else_opening_stock_total_sales_array = array();
-                    $else_opening_stock_used_qty_array = array();
-                    $else_opening_stock_total_rqsn_transfer_out_array = array();
-                    $else_opening_stock_transfer_item_array = array();
-                    $else_opening_stock_total_rqsn_return_array = array();
-                    // total return given
-                    $else_opening_stock_product_return_array = array();
-                    $else_opening_stock_rqsn_return_given_array = array();
+                $else_opening_stock_total_wastage_qnty_array = array();
+                //Total Out
+                $else_opening_stock_total_sales_array = array();
+                $else_opening_stock_used_qty_array = array();
+                $else_opening_stock_total_rqsn_transfer_out_array = array();
+                $else_opening_stock_transfer_item_array = array();
+                $else_opening_stock_total_rqsn_return_array = array();
+                // total return given
+                $else_opening_stock_product_return_array = array();
+                $else_opening_stock_rqsn_return_given_array = array();
                 //Total In & Total Damage
                 foreach ($else_opening_stock_total_purchased as $row) {
                     $else_opening_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
@@ -6591,7 +6556,7 @@ class reports extends CI_Model
                 }
                 foreach ($else_opening_stock_rqsn_return_given as $row) {
                     $else_opening_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-                } 
+                }
                 //Total Out Related Array
                 foreach ($else_opening_stock_total_sales as $row) {
                     $else_opening_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
@@ -6604,14 +6569,14 @@ class reports extends CI_Model
                 }
                 foreach ($else_opening_stock_transfer_item as $row) {
                     $else_opening_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
-                }  
+                }
                 foreach ($else_opening_stock_total_rqsn_return as $row) {
                     $else_opening_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
                 }
-        }
-    if ($new_to_date) {
-           //Closing STock Data Fetch
-            //-------------------------------------------------- Closing Stock Total In -------------------------------------------------------//
+            }
+            if ($new_to_date) {
+                //Closing STock Data Fetch
+                //-------------------------------------------------- Closing Stock Total In -------------------------------------------------------//
                 //Purchase Details Price
                 // if ($new_opening_from_date) {
                 //     $this->db->where('product_purchase.purchase_date >=', $new_opening_from_date);
@@ -6619,7 +6584,7 @@ class reports extends CI_Model
                 if ($new_to_date) {
                     $this->db->where('product_purchase.purchase_date <=', $new_to_date);
                 }
-                if ($new_outlet_id){
+                if ($new_outlet_id) {
                     $this->db->where('product_purchase.outlet_id', $new_outlet_id);
                 }
                 $closing_stock_total_purchased = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
@@ -6662,24 +6627,24 @@ class reports extends CI_Model
                     ->order_by('a.id', 'desc')
                     ->get()
                     ->result();
-            //-------------------------------------------------- Closing Stock Total Damages --------------------------------------------------//
+                //-------------------------------------------------- Closing Stock Total Damages --------------------------------------------------//
                 if ($new_to_date) {
                     $this->db->where('wastage_dec.date <=', $new_to_date);
                 }
-        
+
                 if ($new_outlet_id) {
                     $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
-                }       
+                }
                 $closing_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                            ->from('wastage_dec')
-                            ->where_in('wastage_dec.product_id', $product_ids)
-                            ->get()
-                            ->result();
-            //-------------------------------------------------- Closing Stock Total Return Given ---------------------------------------------//
-            if ($new_to_date) {
-                $this->db->where('product_return.date_return <=', $new_to_date);
-            } 
-            $closing_stock_product_return = $this->db->select('sum(ret_qty) as totalReturn')
+                    ->from('wastage_dec')
+                    ->where_in('wastage_dec.product_id', $product_ids)
+                    ->get()
+                    ->result();
+                //-------------------------------------------------- Closing Stock Total Return Given ---------------------------------------------//
+                if ($new_to_date) {
+                    $this->db->where('product_return.date_return <=', $new_to_date);
+                }
+                $closing_stock_product_return = $this->db->select('sum(ret_qty) as totalReturn')
                     ->from('product_return')
                     ->where('usablity', 2)
                     ->where_in('product_id', $product_ids)
@@ -6687,13 +6652,13 @@ class reports extends CI_Model
                     ->where('customer_id', '')
                     ->get()
                     ->result();
-            if ($new_to_date) {
-                $this->db->where('rqsn.date <=', $new_to_date);
-            }
-            if ($new_outlet_id) {
-                $this->db->where('rqsn.to_id', $new_outlet_id);
-            }
-            $closing_stock_rqsn_return_given = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_return')
+                if ($new_to_date) {
+                    $this->db->where('rqsn.date <=', $new_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.to_id', $new_outlet_id);
+                }
+                $closing_stock_rqsn_return_given = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_return')
                     ->from('rqsn_details')
                     ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
                     ->where_in('rqsn_details.product_id', $product_ids)
@@ -6701,82 +6666,82 @@ class reports extends CI_Model
                     ->where('rqsn_details.is_return !=', 0)
                     ->get()
                     ->result();
-            // -------------------------------------------------Closing Stock Total Out --------------------------------------------------------//
-        // Sales Quantity of Product
-       
-        if ($new_to_date) {
-            $this->db->where('b.date <=', $new_to_date);
-        }
+                // -------------------------------------------------Closing Stock Total Out --------------------------------------------------------//
+                // Sales Quantity of Product
 
-        if ($new_outlet_id) {
-            $this->db->where('b.outlet_id', $new_outlet_id);
-        }
-        $closing_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-            ->from('invoice_details a')
-            ->join('invoice b', 'b.invoice_id = a.invoice_id')
-            ->where('a.pre_order', 1)
-            ->where_in('a.product_id', $product_ids)
-            ->get()
-            ->result();
-        // Used Quantity of Product
-        if ($new_to_date) {
-            $this->db->where('production.date <=', $new_to_date);
-        }
-        $closing_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-            ->from('item_usage')
-            ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-            ->where_in('item_usage.item_id', $product_ids)
-            ->group_by('item_usage.item_id')
-            ->get()
-            ->result();
-             // Out Quantity of Product
-       
-        if ($new_to_date) {
-            $this->db->where('rqsn.date <=', $new_to_date);
-        }
-        if ($new_outlet_id) {
-            $this->db->where('rqsn.to_id', $new_outlet_id);
-        }
-      // Transfer Quantity of Product
-        $closing_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.is_return', 0)
-            ->get()
-            ->result();
-        if ($new_to_date) {
-            $this->db->where('rqsn.date <=', $new_to_date);
-        }
-        if ($new_outlet_id) {
-            $this->db->where('rqsn.from_id', $new_outlet_id);
-        }
-        // Return Quantity of Product
-        $closing_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.status', 3)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.isrcv', 1)
-            ->where('rqsn_details.is_return', 1)
-            ->get()
-            ->result();
-        // Transfer Item Details
-        if ($new_to_date) {
-            $this->db->where('transfer_items.date <=', $new_to_date);
-        }
-        $closing_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
-                ->from('transfer_item_details')
-                ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
-                ->where_in('transfer_item_details.product_id', $product_ids)
-                ->group_by('transfer_item_details.product_id')
-                ->get()
-                ->result();
-           //Closing Stock Array
+                if ($new_to_date) {
+                    $this->db->where('b.date <=', $new_to_date);
+                }
+
+                if ($new_outlet_id) {
+                    $this->db->where('b.outlet_id', $new_outlet_id);
+                }
+                $closing_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+                    ->from('invoice_details a')
+                    ->join('invoice b', 'b.invoice_id = a.invoice_id')
+                    ->where('a.pre_order', 1)
+                    ->where_in('a.product_id', $product_ids)
+                    ->get()
+                    ->result();
+                // Used Quantity of Product
+                if ($new_to_date) {
+                    $this->db->where('production.date <=', $new_to_date);
+                }
+                $closing_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+                    ->from('item_usage')
+                    ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+                    ->where_in('item_usage.item_id', $product_ids)
+                    ->group_by('item_usage.item_id')
+                    ->get()
+                    ->result();
+                // Out Quantity of Product
+
+                if ($new_to_date) {
+                    $this->db->where('rqsn.date <=', $new_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.to_id', $new_outlet_id);
+                }
+                // Transfer Quantity of Product
+                $closing_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.is_return', 0)
+                    ->get()
+                    ->result();
+                if ($new_to_date) {
+                    $this->db->where('rqsn.date <=', $new_to_date);
+                }
+                if ($new_outlet_id) {
+                    $this->db->where('rqsn.from_id', $new_outlet_id);
+                }
+                // Return Quantity of Product
+                $closing_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+                    ->from('rqsn_details')
+                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+                    ->where_in('rqsn_details.product_id', $product_ids)
+                    ->where('rqsn_details.status', 3)
+                    ->where('rqsn_details.isaprv', 1)
+                    ->where('rqsn_details.isrcv', 1)
+                    ->where('rqsn_details.is_return', 1)
+                    ->get()
+                    ->result();
+                // Transfer Item Details
+                if ($new_to_date) {
+                    $this->db->where('transfer_items.date <=', $new_to_date);
+                }
+                $closing_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+                    ->from('transfer_item_details')
+                    ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+                    ->where_in('transfer_item_details.product_id', $product_ids)
+                    ->group_by('transfer_item_details.product_id')
+                    ->get()
+                    ->result();
+                //Closing Stock Array
                 $closing_stock_total_purchased_array = array();
-                $closing_stock_damaged_qty_array = array();  
+                $closing_stock_damaged_qty_array = array();
                 $closing_stock_total_rqsn_transfer_in_array = array();
                 $closing_stock_total_phy_count_array = array();
 
@@ -6790,646 +6755,729 @@ class reports extends CI_Model
                 // total return given
                 $closing_stock_product_return_array = array();
                 $closing_stock_rqsn_return_given_array = array();
-            //Total In & Total Damage
-            foreach ($closing_stock_total_purchased as $row) {
-                $closing_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
-                $closing_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
+                //Total In & Total Damage
+                foreach ($closing_stock_total_purchased as $row) {
+                    $closing_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
+                    $closing_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
+                }
+                foreach ($closing_stock_total_wastage_qnty as $row) {
+                    $closing_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+                }
+                foreach ($closing_stock_total_rqsn_transfer_in as $row) {
+                    $closing_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
+                }
+                foreach ($closing_stock_total_phy_count as $row) {
+                    $closing_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
+                }
+                //Total Return Given
+                foreach ($closing_stock_product_return as $row) {
+                    $closing_stock_product_return_array[$row->product_id] = $row->totalReturn;
+                }
+                foreach ($closing_stock_rqsn_return_given as $row) {
+                    $closing_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
+                }
+                //Total Out Related Array
+                foreach ($closing_stock_total_sales as $row) {
+                    $closing_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
+                }
+                foreach ($closing_stock_used_qty as $row) {
+                    $closing_stock_used_qty_array[$row->product_id] = $row->used_qty;
+                }
+                foreach ($closing_stock_total_rqsn_transfer_out as $row) {
+                    $closing_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
+                }
+                foreach ($closing_stock_transfer_item as $row) {
+                    $closing_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
+                }
+                foreach ($closing_stock_total_rqsn_return as $row) {
+                    $closing_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
+                }
             }
-            foreach ($closing_stock_total_wastage_qnty as $row) {
-                $closing_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+            ## Phase 4 ##
+            //Array Declearation
+            // Total In & Damaged Quantity
+            $total_purchased_array = array();
+            $damaged_qty_array = array();
+            $purchaseprice_array = array();
+            $productionprice_array = array();
+            $supplierprice_array = array();
+
+            $total_rqsn_transfer_in_array = array();
+            $total_phy_count_array = array();
+            $total_wastage_qnty_array = array();
+            //Total Out
+            $total_sales_array = array();
+            $total_used_qty_array = array();
+            $transfer_item_array = array();
+            $total_rqsn_transfer_out_array = array();
+            $total_rqsn_return_array = array();
+            // total return given
+            $product_return_array = array();
+            $rqsn_return_given_array = array();
+
+
+            ## Phase 5 ##
+            // Iterate Array and Store Data // ------------------------//---------------------------------------//--------------------------------------
+            foreach ($total_purchased as $row) {
+                $total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
+                $damaged_qty_array[$row->product_id] = $row->damaged_qty;
+                $purchaseprice_array[$row->product_id] = $row->purchaseprice;
             }
-            foreach ($closing_stock_total_rqsn_transfer_in as $row) {
-                $closing_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
+
+            foreach ($production_cost as $row) {
+                $productionprice_array[$row->product_id] = $row->cost;
             }
-            foreach ($closing_stock_total_phy_count as $row) {
-                $closing_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
+
+            foreach ($supplier_cost as $row) {
+                $supplierprice_array[$row->product_id] = $row->supplier_price;
             }
-            //Total Return Given
-            foreach ($closing_stock_product_return as $row) {
-                $closing_stock_product_return_array[$row->product_id] = $row->totalReturn;
+
+            foreach ($total_rqsn_transfer_in as $row) {
+                $total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
             }
-            foreach ($closing_stock_rqsn_return_given as $row) {
-                $closing_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-            } 
+            foreach ($total_phy_count as $row) {
+                $total_phy_count_array[$row->product_id] = $row->phy_qty;
+            }
+            foreach ($total_wastage_qnty as $row) {
+                $total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+            }
+
             //Total Out Related Array
-            foreach ($closing_stock_total_sales as $row) {
-                $closing_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
+            foreach ($total_sales as $row) {
+                $total_sales_array[$row->product_id] = $row->totalSalesQnty;
             }
-            foreach ($closing_stock_used_qty as $row) {
-                $closing_stock_used_qty_array[$row->product_id] = $row->used_qty;
+            foreach ($used_qty as $row) {
+                $total_used_qty_array[$row->product_id] = $row->used_qty;
             }
-            foreach ($closing_stock_total_rqsn_transfer_out as $row) {
-                $closing_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
+            foreach ($total_rqsn_transfer_out as $row) {
+                $total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
             }
-            foreach ($closing_stock_transfer_item as $row) {
-                $closing_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
-            }  
-            foreach ($closing_stock_total_rqsn_return as $row) {
-                $closing_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
+            foreach ($total_rqsn_return as $row) {
+                $total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
             }
-     }  
-                ## Phase 4 ##
-             //Array Declearation
-             // Total In & Damaged Quantity
-                $total_purchased_array = array();
-                $damaged_qty_array = array();
-                $purchaseprice_array = array();
-                $productionprice_array = array();
-                $supplierprice_array = array();
-                
-                $total_rqsn_transfer_in_array = array();
-                $total_phy_count_array = array();
-                $total_wastage_qnty_array = array();
-                //Total Out
-                $total_sales_array = array();
-                $total_used_qty_array = array();
-                $transfer_item_array = array();
-                $total_rqsn_transfer_out_array = array();
-                $total_rqsn_return_array = array();
-                // total return given
-                $product_return_array = array();
-                $rqsn_return_given_array = array();
-        
-        
-        ## Phase 5 ##
-        // Iterate Array and Store Data // ------------------------//---------------------------------------//--------------------------------------
-         foreach ($total_purchased as $row) {
-            $total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
-            $damaged_qty_array[$row->product_id] = $row->damaged_qty;
-            $purchaseprice_array[$row->product_id] = $row->purchaseprice;
-        }
 
-        foreach ($production_cost as $row) {
-            $productionprice_array[$row->product_id] = $row->cost;
-        }
-
-        foreach ($supplier_cost as $row) {
-            $supplierprice_array[$row->product_id] = $row->supplier_price;
-        }
-
-        foreach ($total_rqsn_transfer_in as $row) {
-            $total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
-        }
-        foreach ($total_phy_count as $row) {
-            $total_phy_count_array[$row->product_id] = $row->phy_qty;
-        }
-        foreach ($total_wastage_qnty as $row) {
-            $total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
-        }
-
-        //Total Out Related Array
-        foreach ($total_sales as $row) {
-            $total_sales_array[$row->product_id] = $row->totalSalesQnty;
-        }
-        foreach ($used_qty as $row) {
-            $total_used_qty_array[$row->product_id] = $row->used_qty;
-        }
-        foreach ($total_rqsn_transfer_out as $row) {
-            $total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
-        }
-        foreach ($total_rqsn_return as $row) {
-            $total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
-        }
-
-        foreach ($transfer_item as $row) {
-            $transfer_item_array[$row->product_id] = $row->transfer_item;
-        }
-         //Total Return Given Realted Array
-         foreach ($product_return as $row) {
-            $product_return_array[$row->product_id] = $row->totalReturn;
-        }
-        foreach ($rqsn_return_given as $row) {
-            $rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-        }
-        // echo "<pre>";
-        // print_r($productionprice_array);
-        // exit();
-        $data = array();
-        //Storing Data in Records Array ---------------------//----------------------//----------------------------------//--------------------
-     foreach ($records as $record) {
-            $record->totalPurchaseQnty = isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0;
-            $record->purchase_price = isset($purchaseprice_array[$record->product_id]) ? $purchaseprice_array[$record->product_id] : 0;
-            $record->production_price = isset($productionprice_array[$record->product_id]) ? $productionprice_array[$record->product_id] : 0;
-            $record->supplier_price = isset($supplierprice_array[$record->product_id]) ? $supplierprice_array[$record->product_id] : 0;
-              //Total In
-            $total_in = isset($total_rqsn_transfer_in_array[$record->product_id]) ? $total_rqsn_transfer_in_array[$record->product_id] : 0 +
-            (isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0) + 
-             (!empty($total_phy_count_array[$record->product_id]) ? $total_phy_count_array[$record->product_id] : 0);
-
-             $damaged_quantity = isset($damaged_qty_array[$record->product_id]) ? $damaged_qty_array[$record->product_id] : 0 +
-            (isset($total_wastage_qnty_array[$record->product_id]) ? $total_wastage_qnty_array[$record->product_id] : 0);
-            //Total Out 
-            if($record->finished_raw == 1)
-            {
-                $total_out = ((isset($total_sales_array[$record->product_id]) ? $total_sales_array[$record->product_id] : 0) +
-                (isset($total_used_qty_array[$record->product_id]) ? $total_used_qty_array[$record->product_id] : 0) +
-                (isset($total_rqsn_transfer_out_array[$record->product_id]) ? $total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                (isset($total_rqsn_return_array[$record->product_id]) ? $total_rqsn_return_array[$record->product_id] : 0);
+            foreach ($transfer_item as $row) {
+                $transfer_item_array[$row->product_id] = $row->transfer_item;
             }
-            else{
-            $total_out = (isset($transfer_item_array[$record->product_id]) ? $transfer_item_array[$record->product_id] : 0);
+            //Total Return Given Realted Array
+            foreach ($product_return as $row) {
+                $product_return_array[$row->product_id] = $row->totalReturn;
             }
-            //Total Return Given opening_stock_rqsn_return_given_array
-            $total_return_given = (isset($product_return_array[$record->product_id]) ? $product_return_array[$record->product_id] : 0)
-             + (isset($rqsn_return_given_array[$record->product_id]) ? $rqsn_return_given_array[$record->product_id] : 0);
-             $stock =  $total_in -$total_out - $total_return_given - $damaged_quantity;
+            foreach ($rqsn_return_given as $row) {
+                $rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
+            }
 
-      if ($new_from_date) {
+            $data = array();
+            //Storing Data in Records Array ---------------------//----------------------//----------------------------------//--------------------
+            foreach ($records as $record) {
+                $record->totalPurchaseQnty = isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0;
+                $record->purchase_price = isset($purchaseprice_array[$record->product_id]) ? $purchaseprice_array[$record->product_id] : 0;
+                $record->production_price = isset($productionprice_array[$record->product_id]) ? $productionprice_array[$record->product_id] : 0;
+                $record->supplier_price = isset($supplierprice_array[$record->product_id]) ? $supplierprice_array[$record->product_id] : 0;
+                //Total In
+                $total_in = isset($total_rqsn_transfer_in_array[$record->product_id]) ? $total_rqsn_transfer_in_array[$record->product_id] : 0 +
+                    (isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0) +
+                    (!empty($total_phy_count_array[$record->product_id]) ? $total_phy_count_array[$record->product_id] : 0);
+
+                $damaged_quantity = isset($damaged_qty_array[$record->product_id]) ? $damaged_qty_array[$record->product_id] : 0 +
+                    (isset($total_wastage_qnty_array[$record->product_id]) ? $total_wastage_qnty_array[$record->product_id] : 0);
+                //Total Out 
+                if ($record->finished_raw == 1) {
+                    $total_out = ((isset($total_sales_array[$record->product_id]) ? $total_sales_array[$record->product_id] : 0) +
+                        (isset($total_used_qty_array[$record->product_id]) ? $total_used_qty_array[$record->product_id] : 0) +
+                        (isset($total_rqsn_transfer_out_array[$record->product_id]) ? $total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                        (isset($total_rqsn_return_array[$record->product_id]) ? $total_rqsn_return_array[$record->product_id] : 0);
+                } else {
+                    $total_out = (isset($transfer_item_array[$record->product_id]) ? $transfer_item_array[$record->product_id] : 0);
+                }
+                //Total Return Given opening_stock_rqsn_return_given_array
+                $total_return_given = (isset($product_return_array[$record->product_id]) ? $product_return_array[$record->product_id] : 0)
+                    + (isset($rqsn_return_given_array[$record->product_id]) ? $rqsn_return_given_array[$record->product_id] : 0);
+                $stock =  $total_in - $total_out - $total_return_given - $damaged_quantity;
+
+                if ($new_from_date) {
                     $total_in_opening = isset($opening_stock_total_purchased_array[$record->product_id]) ? $opening_stock_total_purchased_array[$record->product_id] : 0 +
-                                        (isset($opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) + 
-                                        (!empty($opening_stock_total_phy_count_array[$record->product_id]) ? $opening_stock_total_phy_count_array[$record->product_id] : 0);
+                        (isset($opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) +
+                        (!empty($opening_stock_total_phy_count_array[$record->product_id]) ? $opening_stock_total_phy_count_array[$record->product_id] : 0);
                     $total_damage_opening = (isset($opening_stock_damaged_qty_array[$record->product_id]) ? $opening_stock_damaged_qty_array[$record->product_id] : 0 +
-                                        (isset($opening_stock_total_wastage_qnty_array[$record->product_id]) ? $opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
-                
+                        (isset($opening_stock_total_wastage_qnty_array[$record->product_id]) ? $opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
+
                     $total_return_given_opening = (isset($opening_stock_product_return_array[$record->product_id]) ? $opening_stock_product_return_array[$record->product_id] : 0 +
-                                            (isset($opening_stock_rqsn_return_given_array[$record->product_id]) ? $opening_stock_rqsn_return_given_array[$record->product_id] : 0));
-                    if($record->finished_raw == 1)
-                    {
+                        (isset($opening_stock_rqsn_return_given_array[$record->product_id]) ? $opening_stock_rqsn_return_given_array[$record->product_id] : 0));
+                    if ($record->finished_raw == 1) {
                         $total_out_opening = ((isset($opening_stock_total_sales_array[$record->product_id]) ? $opening_stock_total_sales_array[$record->product_id] : 0) +
-                        (isset($opening_stock_used_qty_array[$record->product_id]) ? $opening_stock_used_qty_array[$record->product_id] : 0) +
-                        (isset($opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                        (isset($opening_stock_total_rqsn_return_array[$record->product_id]) ? $opening_stock_total_rqsn_return_array[$record->product_id] : 0);
-                    }
-                    else{
+                            (isset($opening_stock_used_qty_array[$record->product_id]) ? $opening_stock_used_qty_array[$record->product_id] : 0) +
+                            (isset($opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                            (isset($opening_stock_total_rqsn_return_array[$record->product_id]) ? $opening_stock_total_rqsn_return_array[$record->product_id] : 0);
+                    } else {
                         $total_out_opening = (isset($opening_stock_transfer_item_array[$record->product_id]) ? $opening_stock_transfer_item_array[$record->product_id] : 0);
                     }
-                 $opening_stock =  $total_in_opening - $total_out_opening - $total_damage_opening - $total_return_given_opening;    
-        }
-      else{
-            $total_in_else_opening = isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0 +
-                                        (isset($else_opening_stock_total_rqsn_transfer_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_array[$record->product_id] : 0) + 
-                                        (!empty($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
-            $total_damage_else_opening = (isset($else_opening_stock_damaged_qty_array[$record->product_id]) ? $else_opening_stock_damaged_qty_array[$record->product_id] : 0 +
-                                        (isset($else_opening_stock_total_wastage_qnty_array[$record->product_id]) ? $else_opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
+                    $opening_stock =  $total_in_opening - $total_out_opening - $total_damage_opening - $total_return_given_opening;
+                } else {
+                    $total_in_else_opening = isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0 +
+                        (isset($else_opening_stock_total_rqsn_transfer_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_array[$record->product_id] : 0) +
+                        (!empty($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
+                    $total_damage_else_opening = (isset($else_opening_stock_damaged_qty_array[$record->product_id]) ? $else_opening_stock_damaged_qty_array[$record->product_id] : 0 +
+                        (isset($else_opening_stock_total_wastage_qnty_array[$record->product_id]) ? $else_opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
+
+                    $total_return_given_else_opening = (isset($else_opening_stock_product_return_array[$record->product_id]) ? $else_opening_stock_product_return_array[$record->product_id] : 0 +
+                        (isset($else_opening_stock_rqsn_return_given_array[$record->product_id]) ? $else_opening_stock_rqsn_return_given_array[$record->product_id] : 0));
+                    if ($record->finished_raw == 1) {
+                        $total_out_else_opening = ((isset($else_opening_stock_total_sales_array[$record->product_id]) ? $else_opening_stock_total_sales_array[$record->product_id] : 0) +
+                            (isset($else_opening_stock_used_qty_array[$record->product_id]) ? $else_opening_stock_used_qty_array[$record->product_id] : 0) +
+                            (isset($else_opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                            (isset($else_opening_stock_total_rqsn_return_array[$record->product_id]) ? $else_opening_stock_total_rqsn_return_array[$record->product_id] : 0);
+                    } else {
+                        $total_out_else_opening = (isset($else_opening_stock_transfer_item_array[$record->product_id]) ? $else_opening_stock_transfer_item_array[$record->product_id] : 0);
+                    }
+                    $opening_stock =  $total_in_else_opening - $total_out_else_opening - $total_damage_else_opening - $total_return_given_else_opening;
+                }
+                if ($new_to_date) {
+                    $total_in_closing = isset($closing_stock_total_purchased_array[$record->product_id]) ? $closing_stock_total_purchased_array[$record->product_id] : 0 +
+                        (isset($closing_stock_total_rqsn_transfer_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_array[$record->product_id] : 0) +
+                        (!empty($closing_stock_total_phy_count_array[$record->product_id]) ? $closing_stock_total_phy_count_array[$record->product_id] : 0);
+                    $total_damage_closing = (isset($closing_stock_damaged_qty_array[$record->product_id]) ? $closing_stock_damaged_qty_array[$record->product_id] : 0 +
+                        (isset($closing_stock_total_wastage_qnty_array[$record->product_id]) ? $closing_stock_total_wastage_qnty_array[$record->product_id] : 0));
+
+                    $total_return_given_closing = (isset($closing_stock_product_return_array[$record->product_id]) ? $closing_stock_product_return_array[$record->product_id] : 0 +
+                        (isset($closing_stock_rqsn_return_given_array[$record->product_id]) ? $closing_stock_rqsn_return_given_array[$record->product_id] : 0));
+                    if ($record->finished_raw == 1) {
+                        $total_out_closing = ((isset($closing_stock_total_sales_array[$record->product_id]) ? $closing_stock_total_sales_array[$record->product_id] : 0) +
+                            (isset($closing_stock_used_qty_array[$record->product_id]) ? $closing_stock_used_qty_array[$record->product_id] : 0) +
+                            (isset($closing_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                            (isset($closing_stock_total_rqsn_return_array[$record->product_id]) ? $closing_stock_total_rqsn_return_array[$record->product_id] : 0);
+                    } else {
+                        $total_out_closing = (isset($closing_stock_transfer_item_array[$record->product_id]) ? $closing_stock_transfer_item_array[$record->product_id] : 0);
+                    }
+                    $closing_stock =  $total_in_closing - $total_out_closing - $total_damage_closing - $total_return_given_closing;
+                } else {
+                    $closing_stock =  $stock;
+                }
+                if($export)
+                {
+                    if ($value == 1) {
+                        if ($closing_stock > 0) {
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                //'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                'opening_stock'     => $opening_stock,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0)
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    // All Transaction Items
+                    if ($value == 3) {
+                        if ($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) {
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                //'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                'opening_stock'     => $opening_stock,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0)
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    // Positive Transaction Items
+                    if ($value == 4) {
+    
+                        if (($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock > 0) {
+    
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                //'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                'opening_stock'     => $opening_stock,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0)
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    // Zero Transaction Items
+                    if ($value == 5) {
+                        if (($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock <= 0) {
+    
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                //'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                'opening_stock'     => $opening_stock,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0)
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    if ($value == 0) {
+                        if ($closing_stock < 1) {
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                //'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                'opening_stock'     => $opening_stock,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0)
+                            );
+                            $sl++;
+                        }
+                    }
+                    if ($value == 2) {
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            //'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            'opening_stock'     => $opening_stock,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0)
+                        );
+                        $sl++;
+                    }
+                }
+                else{
+                    if ($value == 1) {
+                        if ($closing_stock > 0) {
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                // 'damagedQnty'   => $stockout->damaged_qty,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'opening_stock'     => $opening_stock,
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0),
+    
+                                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->supplier_price
+                                        ? $record->production_price * $opening_stock
+                                        : 0),
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    // All Transaction Items
+                    if ($value == 3) {
+    
+                        if ($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) {
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                // 'damagedQnty'   => $stockout->damaged_qty,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'opening_stock'     => $opening_stock,
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0),
+    
+                                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->supplier_price
+                                        ? $record->production_price * $opening_stock
+                                        : 0),
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    // Positive Transaction Items
+                    if ($value == 4) {
+    
+                        if (($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock > 0) {
+    
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                // 'damagedQnty'   => $stockout->damaged_qty,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'opening_stock'     => $opening_stock,
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0),
+    
+                                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->supplier_price
+                                        ? $record->production_price * $opening_stock
+                                        : 0),
+                            );
+                            $sl++;
+                        }
+                    }
+    
+                    // Zero Transaction Items
+                    if ($value == 5) {
+                        if (($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock <= 0) {
+    
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                // 'damagedQnty'   => $stockout->damaged_qty,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'opening_stock'     => $opening_stock,
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0),
+    
+                                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->supplier_price
+                                        ? $record->production_price * $opening_stock
+                                        : 0),
+                            );
+                            $sl++;
+                        }
+                    }
+    
+    
+    
+                    if ($value == 0) {
+                        if ($closing_stock < 1) {
+                            $data[] = array(
+                                'sl'            =>   $sl,
+                                'product_name'  =>  $record->product_name,
+                                'category' => ($record->name ? $record->name : ''),
+                                'sku' => ($record->sku ? $record->sku : ''),
+                                'product_model' => ($record->product_model ? $record->product_model : ''),
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                                'product_type'  =>  $record->finished_raw,
+                                'totalPurchaseQnty' => $total_in,
+                                // 'damagedQnty'   => $stockout->damaged_qty,
+                                'damagedQnty'   => $damaged_quantity,
+                                'returnQnty' => $total_return_given,
+                                'totalSalesQnty' =>  $total_out,
+                                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                                'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                                'opening_stock'     => $opening_stock,
+                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->production_price
+                                        ? $record->production_price * $closing_stock
+                                        : 0),
+    
+                                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                    : ($record->supplier_price
+                                        ? $record->production_price * $opening_stock
+                                        : 0),
+                            );
+                            $sl++;
+                        }
+                    }
+                    if ($value == 2) {
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            // 'damagedQnty'   => $stockout->damaged_qty,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
+                            //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'opening_stock'     => $opening_stock,
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0),
+    
+                            'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->supplier_price
+                                    ? $record->production_price * $opening_stock
+                                    : 0),
+                        );
+                        $sl++;
+                    }
+                }
                 
-            $total_return_given_else_opening = (isset($else_opening_stock_product_return_array[$record->product_id]) ? $else_opening_stock_product_return_array[$record->product_id] : 0 +
-                                            (isset($else_opening_stock_rqsn_return_given_array[$record->product_id]) ? $else_opening_stock_rqsn_return_given_array[$record->product_id] : 0));
-            if($record->finished_raw == 1)
-            {
-                $total_out_else_opening = ((isset($else_opening_stock_total_sales_array[$record->product_id]) ? $else_opening_stock_total_sales_array[$record->product_id] : 0) +
-                (isset($else_opening_stock_used_qty_array[$record->product_id]) ? $else_opening_stock_used_qty_array[$record->product_id] : 0) +
-                (isset($else_opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                (isset($else_opening_stock_total_rqsn_return_array[$record->product_id]) ? $else_opening_stock_total_rqsn_return_array[$record->product_id] : 0);
             }
-            else{
-                $total_out_else_opening = (isset($else_opening_stock_transfer_item_array[$record->product_id]) ? $else_opening_stock_transfer_item_array[$record->product_id] : 0);
+            $opening_finished = 0;
+            $opening_raw = 0;
+            $opening_tools = 0;
+
+            $closing_finished = 0;
+            $closing_raw = 0;
+            $closing_tools = 0;
+
+
+
+            foreach ($data as $key => $value) {
+
+                if ($value['product_type'] == 1) {
+                    $opening_finished += $value['opening_inventory'];
+                    $closing_finished += $value['purchase_total'];
+                }
+                if ($value['product_type'] == 2) {
+                    $opening_raw += $value['opening_inventory'];
+                    $closing_raw += $value['purchase_total'];
+                }
+                if ($value['product_type'] == 3) {
+                    $opening_tools += $value['opening_inventory'];
+                    $closing_tools += $value['purchase_total'];
+                }
             }
-                 $opening_stock =  $total_in_else_opening - $total_out_else_opening - $total_damage_else_opening - $total_return_given_else_opening;
-        }
-      if ($new_to_date) {
-            $total_in_closing = isset($closing_stock_total_purchased_array[$record->product_id]) ? $closing_stock_total_purchased_array[$record->product_id] : 0 +
-                                (isset($closing_stock_total_rqsn_transfer_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_array[$record->product_id] : 0) + 
-                                (!empty($closing_stock_total_phy_count_array[$record->product_id]) ? $closing_stock_total_phy_count_array[$record->product_id] : 0);
-            $total_damage_closing = (isset($closing_stock_damaged_qty_array[$record->product_id]) ? $closing_stock_damaged_qty_array[$record->product_id] : 0 +
-                                (isset($closing_stock_total_wastage_qnty_array[$record->product_id]) ? $closing_stock_total_wastage_qnty_array[$record->product_id] : 0));
-        
-            $total_return_given_closing = (isset($closing_stock_product_return_array[$record->product_id]) ? $closing_stock_product_return_array[$record->product_id] : 0 +
-                                    (isset($closing_stock_rqsn_return_given_array[$record->product_id]) ? $closing_stock_rqsn_return_given_array[$record->product_id] : 0));
-            if($record->finished_raw == 1)
-            {
-                $total_out_closing = ((isset($closing_stock_total_sales_array[$record->product_id]) ? $closing_stock_total_sales_array[$record->product_id] : 0) +
-                (isset($closing_stock_used_qty_array[$record->product_id]) ? $closing_stock_used_qty_array[$record->product_id] : 0) +
-                (isset($closing_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                (isset($closing_stock_total_rqsn_return_array[$record->product_id]) ? $closing_stock_total_rqsn_return_array[$record->product_id] : 0);
-            }
-            else{
-                $total_out_closing = (isset($closing_stock_transfer_item_array[$record->product_id]) ? $closing_stock_transfer_item_array[$record->product_id] : 0);
-            }
-            $closing_stock =  $total_in_closing - $total_out_closing - $total_damage_closing - $total_return_given_closing;    
-       }
-      else{
-            $closing_stock =  $stock;
-          }
-         if ($value == 1 ) {
-            if ($closing_stock > 0) {
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'opening_stock'     => $opening_stock,
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
-                );
-                $sl++;
-        
-            }
-          }
-
-         // All Transaction Items
-         if ($value == 3) {
-
-            if ($closing_stock > 0 || $opening_stock>0 ||$damaged_quantity>0|| $total_return_given>0 || $total_out>0 || $total_in>0) {
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'opening_stock'     => $opening_stock,
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
-                );
-                $sl++;
-        
-            }
-        }
-
-         // Positive Transaction Items
-         if ($value == 4) {
-
-            if (($closing_stock > 0 || $opening_stock>0 ||$damaged_quantity>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock > 0) {
-
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'opening_stock'     => $opening_stock,
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
-                );
-                $sl++;
-        
-            }
-        }
-
-        // Zero Transaction Items
-        if ($value == 5) {
-            if (($closing_stock> 0 || $opening_stock>0 ||$damaged_quantity>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock <= 0) {
-
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'opening_stock'     => $opening_stock,
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
-                );
-                $sl++;
-        
-            }
-        }
-
-
-
-        if ($value == 0) {
-            if ($closing_stock < 1) {
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    // 'damagedQnty'   => $stockout->damaged_qty,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                    //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'opening_stock'     => $opening_stock,
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0),
-        
-                    'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->supplier_price
-                            ? $record->production_price * $opening_stock
-                            : 0),
-                );
-                $sl++;
-        
-            }
-        }
-        if ($value == 2) {
-            $data[] = array(
-                'sl'            =>   $sl,
-                'product_name'  =>  $record->product_name,
-                'category' => ($record->name ? $record->name : ''),
-                'sku' => ($record->sku ? $record->sku : ''),
-                'product_model' => ($record->product_model ? $record->product_model : ''),
-                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                'product_type'  =>  $record->finished_raw,
-                'totalPurchaseQnty' => $total_in,
-                // 'damagedQnty'   => $stockout->damaged_qty,
-                'damagedQnty'   => $damaged_quantity,
-                'returnQnty' => $total_return_given,
-                'totalSalesQnty' =>  $total_out,
-                // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-                //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-                'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                'opening_stock'     => $opening_stock,
-                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                    : ($record->production_price
-                        ? $record->production_price * $closing_stock
-                        : 0),
-    
-                'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                    ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                    : ($record->supplier_price
-                        ? $record->production_price * $opening_stock
-                        : 0),
-            );
-            $sl++;
-    
-        }
-             
-}
-            if($export == "export")
-            {
-                return $data;
-            }
-       
-        
-        
-
-        // foreach ($records as $record) {
-        //     // $production_cost = $this->db->select('avg(production_cost) as cost')->from('production_cost a')->where('a.product_id', $record->product_id)->get()->row();
-
-        //     // $production_price = (!empty($production_cost->cost) ? sprintf('%0.2f', $production_cost->cost) : 0);
-
-
-
-        //     //$product_supplier_price = $this->suppliers->pr_supp_price($record->product_id);
-
-
-        //     //$sprice = (!empty($record->price) ? $record->price : 0);
-
-        //     // if ($from_date) {
-        //     //     $this->db->where('product_purchase.purchase_date >=', $from_date);
-        //     // }
-        //     // if ($to_date) {
-        //     //     $this->db->where('product_purchase.purchase_date <=', $to_date);
-        //     // }
-        //     // if ($outlet_id){
-        //     //     $this->db->where('product_purchase.outlet_id', $outlet_id);
-        //     // }
-        //     // $stockout = $this->db->select('sum(qty) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
-        //     //     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-        //     //     ->from('product_purchase_details')
-        //     //     ->where('product_id', $record->product_id)
-        //     //     ->get()
-        //     //     ->row();
-        //   //  $pprice = (!empty($stockout->purchaseprice) ? sprintf('%0.2f', $stockout->purchaseprice) : 0);
-
-        //     //$total_in = $this->total_in($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
-        //     //$total_damage = $this->total_damage($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
-              
-        //     //$total_out = $this->total_out($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
-
-        //    // $total_return_given = $this->total_return_given($from_date, $to_date, $outlet_id, $record->product_id, $record->finished_raw, null, $type);
-
-
-        //    // $stock = $record->total_in - $record->total_out - $record->total_return_given - $record->damaged_quantity;
-
-
-
-            
-
-        //     // if ($new_from_date) {
-        //     //     $opening_stock = $this->stock2(null, $new_opening_from_date, $new_outlet_id, $record->product_id, $record->finished_raw, null, $type);
-        //     // } else {
-        //     //     $opening_stock = $this->stock2($new_opening_from_date, $new_opening_to_date, $new_outlet_id, $record->product_id, $record->finished_raw, null, $type);
-        //     // }
-
-        //     // if ($new_to_date) {
-        //     //     $closing_stock = $this->stock2(null, $new_to_date, $new_outlet_id, $record->product_id, $record->finished_raw, null, $type);
-        //     //     // $closing_stock = $opening_stock + $stock;
-        //     // } else {
-        //     //     // $closing_stock = $this->stock2($new_from_date, $new_to_date, $new_outlet_id, $record->product_id, $record->finished_raw, null);
-        //     //     $closing_stock = $stock;
-        //     // }
-
-        //     // echo "<pre>";
-        //     // print_r($closing_stock);
-        //     // exit();
-        //         $data[] = array(
-        //             'sl'            =>   $sl,
-        //             'product_name'  =>  $record->product_name,
-        //             'category' => ($record->name ? $record->name : ''),
-        //             'sku' => ($record->sku ? $record->sku : ''),
-        //             'product_model' => ($record->product_model ? $record->product_model : ''),
-        //             'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-        //             'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-        //             'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-        //             'product_type'  =>  $record->finished_raw,
-        //             'totalPurchaseQnty' => $record->total_in,
-        //             // 'damagedQnty'   => $stockout->damaged_qty,
-        //             'damagedQnty'   => $record->damaged_quantity,
-
-
-
-                    
-        //             'returnQnty' => $record->total_return_given,
-        //             'totalSalesQnty' =>  $record->total_out,
-        //             // 'warrenty_stock' =>  $warrenty_stock->totalWarrentyQnty,
-        //             //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
-        //             'stok_quantity' => sprintf('%0.2f', $closing_stock),
-        //             'opening_stock'     => $opening_stock,
-        //             'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-        //             'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-        //                 ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-        //                 : ($record->production_price
-        //                     ? $record->production_price * $closing_stock
-        //                     : 0),
-
-        //             'opening_inventory' => (($opening_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-        //                 ? ($opening_stock * ($record->purchase_price ? $record->purchase_price : 0))
-        //                 : ($record->supplier_price
-        //                     ? $record->production_price * $opening_stock
-        //                     : 0),
-
-
-        //         );
-        //         $sl++;
-           
-
-
-            
-        // }
-
-        // echo "<pre>";
-        // print_r($data);
-        // exit();
-        $opening_finished = 0;
-        $opening_raw = 0;
-        $opening_tools = 0;
-
-        $closing_finished = 0;
-        $closing_raw = 0;
-        $closing_tools = 0;
-
-
-
-        foreach ($data as $key => $value) {
-
-            if ($value['product_type'] == 1) {
-                $opening_finished += $value['opening_inventory'];
-                $closing_finished += $value['purchase_total'];
-            }
-            if ($value['product_type'] == 2) {
-                $opening_raw += $value['opening_inventory'];
-                $closing_raw += $value['purchase_total'];
-            }
-            if ($value['product_type'] == 3) {
-                $opening_tools += $value['opening_inventory'];
-                $closing_tools += $value['purchase_total'];
-            }
+        } else {
+            $data = array();
         }
         ## Response
-        if (!$post_product_id) {
-            $response = array(
-                "draw" => intval($draw),
-                "iTotalRecords" => $totalRecordwithFilter,
-                "iTotalDisplayRecords" => $totalRecords,
-                "aaData" =>  $data,
-
-                "opening_finished" => $opening_finished,
-                "opening_raw" => $opening_raw,
-                "opening_tools" => $opening_tools,
-
-                "closing_finished" => $closing_finished,
-                "closing_raw" => $closing_raw,
-                "closing_tools" => $closing_tools,
-
-            );
-        } else {
+        if (!$post_product_id ) {
+            if($temp_value != 2)
+            {
+                $response = array(
+                    "draw" => intval($draw),
+                    "iTotalRecords" => count($data),
+                    "iTotalDisplayRecords" => count($data),
+                    "aaData" =>  $data,
+    
+                    "opening_finished" => $opening_finished,
+                    "opening_raw" => $opening_raw,
+                    "opening_tools" => $opening_tools,
+    
+                    "closing_finished" => $closing_finished,
+                    "closing_raw" => $closing_raw,
+                    "closing_tools" => $closing_tools,
+    
+                );
+            }
+            else{
+                $response = array(
+                    "draw" => intval($draw),
+                    "iTotalRecords" => $totalRecordwithFilter,
+                    "iTotalDisplayRecords" => $totalRecords,
+                    "aaData" =>  $data,
+    
+                    "opening_finished" => $opening_finished,
+                    "opening_raw" => $opening_raw,
+                    "opening_tools" => $opening_tools,
+    
+                    "closing_finished" => $closing_finished,
+                    "closing_raw" => $closing_raw,
+                    "closing_tools" => $closing_tools,
+    
+                );
+            }
+            
+                
+                
+            
+            
+        }
+         else {
             $response = array(
                 "central_stock"     => $stock,
                 "pprice"            => $stock * $pprice
             );
         }
-
+        if($export)
+        {
+            
+            return $data;
+        }
+        else{
+            // echo "<pre>";
+            // print_r($temp_value);
+            // exit();
         return $response;
+           
+        }
+
     }
 
     //Export CSV 
     public function ExportStockData($postData = null, $post_product_id = null, $pr_status = null, $from_date = null, $to_date = null, $value = null)
-{
+    {
         $this->load->model('Warehouse');
         $this->load->model('suppliers');
         $response = array();
 
         $p_s = $this->input->post('product_status', TRUE);
-        $cat_id = $this->input->post('cat_list', TRUE);
+        $cat_id = $this->input->post('cat_id', TRUE);
         $product_sku = $this->input->post('product_sku', TRUE);
         $outlet_id = $this->input->post('outlet_id', TRUE);
-        $range = $this->input->post('range', TRUE);
-        // echo "<pre>";
-        // print_r($cat_id);
-        // exit();
-        if ($outlet_id ==''){
+        if ($outlet_id == '' || $outlet_id == null) {
             $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        }elseif ($outlet_id === 'All'){
+        } elseif ($outlet_id == 'All' || $outlet_id == 'HK7TGDT69VFMXB7') {
             $outlet_id = null;
-        }else{
-            $outlet_id =$this->input->post('outlet_id', TRUE);;
+        } else {
+            $outlet_id = $this->input->post('outlet_id', TRUE);;
         }
         if ($from_date == null) {
             $date = date('Y-m-d');
@@ -7440,13 +7488,14 @@ class reports extends CI_Model
 
 
 
-      
+
+
         ## Fetch records
         ## Phase 1 ##
         if ($product_sku != '') {
             $this->db->where_in('a.sku', $product_sku);
         }
-       
+
 
         if ($post_product_id) {
             $this->db->where('a.product_id', $post_product_id);
@@ -7460,12 +7509,12 @@ class reports extends CI_Model
         $records = $this->db->select("a.finished_raw,a.product_model,a.product_name,a.product_id,a.price,a.sku,a.purchase_price,
             b.name
             ")
-        ->from('product_information a')
-        ->join('cats b', 'a.category_id=b.id', 'left')
-        ->group_by('a.product_id')
-        // ->limit(1000, 1)
-        ->get()
-        ->result();
+            ->from('product_information a')
+            ->join('cats b', 'a.category_id=b.id', 'left')
+            ->group_by('a.product_id')
+            // ->limit(10, 1)
+            ->get()
+            ->result();
         // echo "<pre>";
         // print_r($records);
         // exit();
@@ -7474,1323 +7523,1274 @@ class reports extends CI_Model
         $stock = 0;
         $closing_stock = 0;
         $opening_stock = 0;
-        $outlet_id  = 'HK7TGDT69VFMXB7';
-        $type = 1;
-     //------------------------------------//------------------ Date Filter -------------//---------------------//--------------------------//
-        $new_from_date = $this->input->post('from_date');
-        $new_to_date = $this->input->post('to_date');
-        $new_opening_from_date = '';
-        $new_opening_to_date = '';
-        if ($new_from_date == '') {
-            $new_date = date_create("0001-01-01");
-            $new_change_date = date_format($new_date, "Y-m-d");
-            $new_opening_from_date = date('Y-m-d', strtotime($new_change_date . ' -1 day'));
-        } else {
-            $new_opening_from_date = date('Y-m-d', strtotime($new_from_date . ' -1 day'));
-        }
+        //  $outlet_id  = 'HK7TGDT69VFMXB7';
+        //------------------------------------//------------------ Date Filter -------------//---------------------//--------------------------//
 
-        if ($new_to_date == '') {
-            $date = date('Y-m-d');
-            $new_opening_to_date = date('Y-m-d', strtotime($date . ' -1 day'));
-        } else {
-            $new_opening_to_date = date('Y-m-d', strtotime($new_to_date . ' -1 day'));
-        }
-
-
-        $new_outlet_id = $this->input->post('outlet_id', TRUE);
-        if ($new_outlet_id == '') {
-            $new_outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-        } elseif ($new_outlet_id === 'All') {
-            $new_outlet_id = null;
-        } else {
-            $new_outlet_id = $this->input->post('outlet_id', TRUE);;
-        }
         ## Phase 3 ##
         // Array Column IDS and Fetch data in Array //---------------------------------//------------------------------//-------------------------------//-------------------------------
         $product_ids = array_column($records, 'product_id');
-        //Production Price
-        $production_cost = $this->db->select('product_id,avg(production_cost) as cost') 
-                ->from('production_cost')
-                ->where_in('product_id', $product_ids)
-                ->group_by('product_id')
-                ->get()
-                ->result();
-        // echo "<pre>";
-        // print_r($production_cost);
-        // exit();
-        //Supplier Price
-        $supplier_cost = $this->db->select('supplier_price') 
-                ->from('supplier_product')
-                ->where_in('product_id', $product_ids)
-                ->group_by('product_id')
-                ->get()
-                ->result();
-     // ------------------------------------------------- Total In --------------------------------------------------------//
-         //Purchase Details Price
-        if ($from_date) {
-            $this->db->where('product_purchase.purchase_date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('product_purchase.purchase_date <=', $to_date);
-        }
-        if ($outlet_id){
-            $this->db->where('product_purchase.outlet_id', $outlet_id);
-        }
-        $total_purchased = $this->db->select('sum(total_amount) as totalAmount, product_id, sum(quantity) as totalPurchaseQnty,sum(damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
-                ->from('product_purchase_details')
-                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                ->where_in('product_id', $product_ids)
-                ->group_by('product_id')
-                ->get()
-                ->result();
-        //Rqsn Data
-                if ($from_date) {
-                    $this->db->where('rqsn.date >=', $from_date);
-                }
-                if ($to_date) {
-                    $this->db->where('rqsn.date <=', $to_date);
-                }
-                if ($outlet_id) {
-                    $this->db->where('rqsn.from_id', $outlet_id);
-                }
-        $total_rqsn_transfer_in = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                ->from('rqsn_details')
-                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                ->where_in('product_id', $product_ids)
-                ->where('rqsn_details.status', 3)
-                ->where('rqsn_details.isaprv', 1)
-                ->where('rqsn_details.isrcv', 1)
-                ->where('rqsn_details.is_return', 0)
-                ->get()
-                ->result();
-        //Physical Quantity
-                if ($from_date) {
-                    $this->db->where('a.create_date >=', $from_date);
-                }
-                if ($to_date) {
-                    $this->db->where('a.create_date <=', $to_date);
-                }
-                if ($outlet_id) {
-                    $this->db->where('b.outlet_id', $outlet_id);
-                }
-        $total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
-                ->from('stock_taking_details a')
-                ->join('stock_taking b', 'b.stid = a.stid')
-                ->where_in('a.product_id', $product_ids)
-                ->where('a.status', 1)
-                ->group_by('a.product_id')
-                ->order_by('a.id', 'desc')
-                ->get()
-                ->result();
-       
-
-        // ------------------------------------------------- Total Out --------------------------------------------------------//
-        // Sales Quantity of Product
-        if ($from_date) {
-            $this->db->where('b.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('b.date <=', $to_date);
-        }
-
-        if ($outlet_id) {
-            $this->db->where('b.outlet_id', $outlet_id);
-        }
-        $total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-            ->from('invoice_details a')
-            ->join('invoice b', 'b.invoice_id = a.invoice_id')
-            ->where('a.pre_order', 1)
-            ->where_in('a.product_id', $product_ids)
-            ->get()
-            ->result();
-        // Used Quantity of Product
-        if ($from_date) {
-            $this->db->where('production.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('production.date <=', $to_date);
-        }
-        $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-            ->from('item_usage')
-            ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-            ->where_in('item_usage.item_id', $product_ids)
-            ->group_by('item_usage.item_id')
-            ->get()
-            ->result();
-             // Out Quantity of Product
-        if ($from_date) {
-            $this->db->where('rqsn.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('rqsn.date <=', $to_date);
-        }
-        if ($outlet_id) {
-            $this->db->where('rqsn.to_id', $outlet_id);
-        }
-      // Transfer Quantity of Product
-        $total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.is_return', 0)
-            ->get()
-            ->result();
-        if ($from_date) {
-            $this->db->where('rqsn.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('rqsn.date <=', $to_date);
-        }
-        if ($outlet_id) {
-            $this->db->where('rqsn.from_id', $outlet_id);
-        }
-        // Return Quantity of Product
-        $total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.status', 3)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.isrcv', 1)
-            ->where('rqsn_details.is_return', 1)
-            ->get()
-            ->result();
-        // Transfer Item Details
-        if ($from_date) {
-            $this->db->where('transfer_items.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('transfer_items.date <=', $to_date);
-        }
-        $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
-                ->from('transfer_item_details')
-                ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
-                ->where_in('transfer_item_details.product_id', $product_ids)
-                ->group_by('transfer_item_details.product_id')
-                ->get()
-                ->result();
-     // ------------------------------------------------- Total Return Given  --------------------------------------------------------//
-        if ($from_date) {
-            $this->db->where('product_return.date_return >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('product_return.date_return <=', $to_date);
-        }
-         $product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
-                ->from('product_return')
-                ->where('usablity', 2)
-                ->where_in('product_id', $product_ids)
-                ->where('product_return.outlet_id', null)
-                ->where('customer_id', '')
-                ->get()
-                ->result();
-        if ($from_date) {
-            $this->db->where('rqsn.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('rqsn.date <=', $to_date);
-        }
-        if ($outlet_id) {
-            $this->db->where('rqsn.to_id', $outlet_id);
-        }
-         $rqsn_return_given = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                ->from('rqsn_details')
-                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                ->where_in('rqsn_details.product_id', $product_ids)
-                ->where('rqsn_details.isaprv', 1)
-                ->where('rqsn_details.is_return !=', 0)
-                ->get()
-                ->result();
-
-        //-------------------------------------------Total Damage ----------------------------------------------------//
-        //Total Wastage Quantity
-        if ($from_date) {
-            $this->db->where('wastage_dec.date >=', $from_date);
-        }
-        if ($to_date) {
-            $this->db->where('wastage_dec.date <=', $to_date);
-        }
-
-        if ($outlet_id) {
-            $this->db->where('wastage_dec.outlet_id', $outlet_id);
-        }
-         $total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                ->from('wastage_dec')
-                ->where_in('wastage_dec.product_id', $product_ids)
-                ->get()
-                ->result();
-
-     // ------------------------ ---------------------------------------------X ---------------------------------------------------------------     
-       
-        if ($new_from_date) {
-            //Opening Stock Data Fetch
-                //-------------------------------------------------- Opening Stock Total In -------------------------------------------------------//
-                    //Purchase Details Price
-                    // if ($from_date) {
-                    //     $this->db->where('product_purchase.purchase_date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('product_purchase.purchase_date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id){
-                        $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
-                        ->from('product_purchase_details')
-                        ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                        ->where_in('product_purchase_details.product_id', $product_ids)
-                        ->where('product_purchase_details.qty >', 0)
-                        ->get()
-                        ->result();
-                    //Rqsn Data
-                    // if ($from_date) {
-                    //     $this->db->where('rqsn.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.from_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.status', 3)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.isrcv', 1)
-                        ->where('rqsn_details.is_return', 0)
-                        ->get()
-                        ->result();
-                    //Physical Quantity
-                    // if ($from_date) {
-                    //     $this->db->where('a.create_date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('a.create_date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('b.outlet_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
-                        ->from('stock_taking_details a')
-                        ->join('stock_taking b', 'b.stid = a.stid')
-                        ->where_in('a.product_id', $product_ids)
-                        ->where('a.status', 1)
-                        ->group_by('a.product_id')
-                        ->order_by('a.id', 'desc')
-                        ->get()
-                        ->result();
-                //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
-                // if ($from_date) {
-                //     $this->db->where('wastage_dec.date >=', $from_date);
-                // }
-                if ($new_opening_from_date) {
-                    $this->db->where('wastage_dec.date <=', $new_opening_from_date);
-                }
-        
-                if ($new_outlet_id) {
-                    $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
-                }
-                $opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                            ->from('wastage_dec')
-                            ->where_in('wastage_dec.product_id', $product_ids)
-                            ->get()
-                            ->result();
-                //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
-                // if ($from_date) {
-                //     $this->db->where('product_return.date_return >=', $from_date);
-                // }
-                if ($new_opening_from_date) {
-                    $this->db->where('product_return.date_return <=', $new_opening_from_date);
-                }
-                $opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
-                        ->from('product_return')
-                        ->where('usablity', 2)
-                        ->where_in('product_id', $product_ids)
-                        ->where('product_return.outlet_id', null)
-                        ->where('customer_id', '')
-                        ->get()
-                        ->result();
-                // if ($from_date) {
-                //     $this->db->where('rqsn.date >=', $from_date);
-                // }
-                if ($new_opening_from_date) {
-                    $this->db->where('rqsn.date <=', $new_opening_from_date);
-                }
-                if ($new_outlet_id) {
-                    $this->db->where('rqsn.to_id', $new_outlet_id);
-                }
-                $opening_stock_rqsn_return_given = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                    ->from('rqsn_details')
-                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                    ->where_in('rqsn_details.product_id', $product_ids)
-                    ->where('rqsn_details.isaprv', 1)
-                    ->where('rqsn_details.is_return !=', 0)
-                    ->get()
-                    ->result();
-                // -------------------------------------------------Opening Stock Total Out --------------------------------------------------------//
-                    // Sales Quantity of Product
-                    // if ($from_date) {
-                    //     $this->db->where('b.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('b.date <=', $new_opening_from_date);
-                    }
-
-                    if ($new_outlet_id) {
-                        $this->db->where('b.outlet_id', $new_outlet_id);
-                    }
-                    $opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-                        ->from('invoice_details a')
-                        ->join('invoice b', 'b.invoice_id = a.invoice_id')
-                        ->where('a.pre_order', 1)
-                        ->where_in('a.product_id', $product_ids)
-                        ->get()
-                        ->result();
-                    // Used Quantity of Product
-                    // if ($from_date) {
-                    //     $this->db->where('production.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('production.date <=', $new_opening_from_date);
-                    }
-                    $opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-                        ->from('item_usage')
-                        ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-                        ->where_in('item_usage.item_id', $product_ids)
-                        ->group_by('item_usage.item_id')
-                        ->get()
-                        ->result();
-                        // Out Quantity of Product
-                    // if ($from_date) {
-                    //     $this->db->where('rqsn.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.to_id', $new_outlet_id);
-                    }
-                    // Transfer Quantity of Product
-                    $opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.is_return', 0)
-                        ->get()
-                        ->result();
-                    // if ($from_date) {
-                    //     $this->db->where('rqsn.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_from_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.from_id', $new_outlet_id);
-                    }
-                    // Return Quantity of Product
-                    $opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.status', 3)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.isrcv', 1)
-                        ->where('rqsn_details.is_return', 1)
-                        ->get()
-                        ->result();
-                    // Transfer Item Details
-                    // if ($from_date) {
-                    //     $this->db->where('transfer_items.date >=', $from_date);
-                    // }
-                    if ($new_opening_from_date) {
-                        $this->db->where('transfer_items.date <=', $new_opening_from_date);
-                    }
-                    $opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
-                            ->from('transfer_item_details')
-                            ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
-                            ->where_in('transfer_item_details.product_id', $product_ids)
-                            ->group_by('transfer_item_details.product_id')
-                            ->get()
-                            ->result();
-            //Opening Stock Array
-                    $opening_stock_total_purchased_array = array();
-                    $opening_stock_damaged_qty_array = array();  
-                    $opening_stock_total_rqsn_transfer_in_array = array();
-                    $opening_stock_total_phy_count_array = array();
-
-                    $opening_stock_total_wastage_qnty_array = array();
-                    //Total Out
-                    $opening_stock_total_sales_array = array();
-                    $opening_stock_used_qty_array = array();
-                    $opening_stock_total_rqsn_transfer_out_array = array();
-                    $opening_stock_transfer_item_array = array();
-                    $opening_stock_total_rqsn_return_array = array();
-                    // total return given
-                    $opening_stock_product_return_array = array();
-                    $opening_stock_rqsn_return_given_array = array();
-                //Total In & Total Damage
-                foreach ($opening_stock_total_purchased as $row) {
-                    $opening_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
-                    $opening_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
-                }
-                foreach ($opening_stock_total_wastage_qnty as $row) {
-                    $opening_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
-                }
-                foreach ($opening_stock_total_rqsn_transfer_in as $row) {
-                    $opening_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
-                }
-                foreach ($opening_stock_total_phy_count as $row) {
-                    $opening_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
-                }
-                //Total Return Given
-                foreach ($opening_stock_product_return as $row) {
-                    $opening_stock_product_return_array[$row->product_id] = $row->totalReturn;
-                }
-                foreach ($opening_stock_rqsn_return_given as $row) {
-                    $opening_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-                } 
-                //Total Out Related Array
-                foreach ($opening_stock_total_sales as $row) {
-                    $opening_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
-                }
-                foreach ($opening_stock_used_qty as $row) {
-                    $opening_stock_used_qty_array[$row->product_id] = $row->used_qty;
-                }
-                foreach ($opening_stock_total_rqsn_transfer_out as $row) {
-                    $opening_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
-                }
-                foreach ($opening_stock_transfer_item as $row) {
-                    $opening_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
-                }  
-                foreach ($opening_stock_total_rqsn_return as $row) {
-                    $opening_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
-                }
-        } else {
-                //-------------------------------------------------- else Opening Stock Total In -------------------------------------------------------//
-                    //Purchase Details Price
-                    if ($new_opening_from_date) {
-                        $this->db->where('product_purchase.purchase_date >=', $new_opening_from_date);
-                    }
-                    if ($new_opening_to_date) {
-                        $this->db->where('product_purchase.purchase_date <=', $new_opening_to_date);
-                    }
-                    if ($new_outlet_id){
-                        $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                    }
-                    $else_opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
-                        ->from('product_purchase_details')
-                        ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                        ->where_in('product_purchase_details.product_id', $product_ids)
-                        ->where('product_purchase_details.qty >', 0)
-                        ->get()
-                        ->result();
-                    //Rqsn Data
-                    if ($new_opening_from_date) {
-                        $this->db->where('rqsn.date >=', $new_opening_from_date);
-                    }
-                    if ($new_opening_to_date) {
-                        $this->db->where('rqsn.date <=', $new_opening_to_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('rqsn.from_id', $new_outlet_id);
-                    }
-                    $else_opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                        ->from('rqsn_details')
-                        ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                        ->where_in('rqsn_details.product_id', $product_ids)
-                        ->where('rqsn_details.status', 3)
-                        ->where('rqsn_details.isaprv', 1)
-                        ->where('rqsn_details.isrcv', 1)
-                        ->where('rqsn_details.is_return', 0)
-                        ->get()
-                        ->result();
-                    //Physical Quantity
-                    if ($new_opening_from_date) {
-                        $this->db->where('a.create_date >=', $new_opening_from_date);
-                    }
-                    if ($new_opening_to_date) {
-                        $this->db->where('a.create_date <=', $new_opening_to_date);
-                    }
-                    if ($new_outlet_id) {
-                        $this->db->where('b.outlet_id', $new_outlet_id);
-                    }
-                    $else_opening_stock_total_phy_count = $this->db->select('a.product_id,SUM(a.difference) as phy_qty')
-                        ->from('stock_taking_details a')
-                        ->join('stock_taking b', 'b.stid = a.stid')
-                        ->where_in('a.product_id', $product_ids)
-                        ->where('a.status', 1)
-                        ->group_by('a.product_id')
-                        ->order_by('a.id', 'desc')
-                        ->get()
-                        ->result();
-                //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
-                if ($new_opening_from_date) {
-                    $this->db->where('wastage_dec.date >=', $new_opening_from_date);
-                }
-                if ($new_opening_to_date) {
-                    $this->db->where('wastage_dec.date <=', $new_opening_to_date);
-                }
-        
-                if ($new_outlet_id) {
-                    $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
-                }    
-                $else_opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                            ->from('wastage_dec')
-                            ->where_in('wastage_dec.product_id', $product_ids)
-                            ->get()
-                            ->result();
-                //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
-                if ($new_opening_from_date) {
-                    $this->db->where('product_return.date_return >=', $new_opening_from_date);
-                }
-                if ($new_opening_to_date) {
-                    $this->db->where('product_return.date_return <=', $new_opening_to_date);
-                }    
-                $else_opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
-                        ->from('product_return')
-                        ->where('usablity', 2)
-                        ->where_in('product_id', $product_ids)
-                        ->where('product_return.outlet_id', null)
-                        ->where('customer_id', '')
-                        ->get()
-                        ->result();
-                if ($new_opening_from_date) {
-                    $this->db->where('rqsn.date >=', $new_opening_from_date);
-                }
-                if ($new_opening_to_date) {
-                    $this->db->where('rqsn.date <=', $new_opening_to_date);
-                }
-                if ($new_outlet_id) {
-                    $this->db->where('rqsn.to_id', $new_outlet_id);
-                }
-                $else_opening_stock_rqsn_return_given = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                    ->from('rqsn_details')
-                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                    ->where_in('rqsn_details.product_id', $product_ids)
-                    ->where('rqsn_details.isaprv', 1)
-                    ->where('rqsn_details.is_return !=', 0)
-                    ->get()
-                    ->result();
-                // -------------------------------------------------Opening Stock Total Out --------------------------------------------------------//
-            // Sales Quantity of Product
-            if ($new_opening_from_date) {
-                $this->db->where('b.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('b.date <=', $new_opening_to_date);
-            }
-
-            if ($new_outlet_id) {
-                $this->db->where('b.outlet_id', $new_outlet_id);
-            }
-            $else_opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-                ->from('invoice_details a')
-                ->join('invoice b', 'b.invoice_id = a.invoice_id')
-                ->where('a.pre_order', 1)
-                ->where_in('a.product_id', $product_ids)
-                ->get()
-                ->result();
-            // Used Quantity of Product
-            if ($new_opening_from_date) {
-                $this->db->where('production.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('production.date <=', $new_opening_to_date);
-            }
-            $else_opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-                ->from('item_usage')
-                ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-                ->where_in('item_usage.item_id', $product_ids)
-                ->group_by('item_usage.item_id')
-                ->get()
-                ->result();
-                // Out Quantity of Product
-            if ($new_opening_from_date) {
-                $this->db->where('rqsn.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('rqsn.date <=', $new_opening_to_date);
-            }
-            if ($new_outlet_id) {
-                $this->db->where('rqsn.to_id', $new_outlet_id);
-            }
-        // Transfer Quantity of Product
-            $else_opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                ->from('rqsn_details')
-                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                ->where_in('rqsn_details.product_id', $product_ids)
-                ->where('rqsn_details.isaprv', 1)
-                ->where('rqsn_details.is_return', 0)
-                ->get()
-                ->result();
-            if ($new_opening_from_date) {
-                $this->db->where('rqsn.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('rqsn.date <=', $new_opening_to_date);
-            }
-            if ($new_outlet_id) {
-                $this->db->where('rqsn.from_id', $new_outlet_id);
-            }
-            // Return Quantity of Product
-            $else_opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-                ->from('rqsn_details')
-                ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                ->where_in('rqsn_details.product_id', $product_ids)
-                ->where('rqsn_details.status', 3)
-                ->where('rqsn_details.isaprv', 1)
-                ->where('rqsn_details.isrcv', 1)
-                ->where('rqsn_details.is_return', 1)
-                ->get()
-                ->result();
-            // Transfer Item Details
-            if ($new_opening_from_date) {
-                $this->db->where('transfer_items.date >=', $new_opening_from_date);
-            }
-            if ($new_opening_to_date) {
-                $this->db->where('transfer_items.date <=', $new_opening_to_date);
-            }
-            $else_opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
-                    ->from('transfer_item_details')
-                    ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
-                    ->where_in('transfer_item_details.product_id', $product_ids)
-                    ->group_by('transfer_item_details.product_id')
-                    ->get()
-                    ->result();
-            //Opening Stock Array
-                    $else_opening_stock_total_purchased_array = array();
-                    $else_opening_stock_damaged_qty_array = array();  
-                    $else_opening_stock_total_rqsn_transfer_in_array = array();
-                    $else_opening_stock_total_phy_count_array = array();
-
-                    $else_opening_stock_total_wastage_qnty_array = array();
-                    //Total Out
-                    $else_opening_stock_total_sales_array = array();
-                    $else_opening_stock_used_qty_array = array();
-                    $else_opening_stock_total_rqsn_transfer_out_array = array();
-                    $else_opening_stock_transfer_item_array = array();
-                    $else_opening_stock_total_rqsn_return_array = array();
-                    // total return given
-                    $else_opening_stock_product_return_array = array();
-                    $else_opening_stock_rqsn_return_given_array = array();
-                //Total In & Total Damage
-                foreach ($else_opening_stock_total_purchased as $row) {
-                    $else_opening_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
-                    $else_opening_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
-                }
-                foreach ($else_opening_stock_total_wastage_qnty as $row) {
-                    $else_opening_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
-                }
-                foreach ($else_opening_stock_total_rqsn_transfer_in as $row) {
-                    $else_opening_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
-                }
-                foreach ($else_opening_stock_total_phy_count as $row) {
-                    $else_opening_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
-                }
-                //Total Return Given
-                foreach ($else_opening_stock_product_return as $row) {
-                    $else_opening_stock_product_return_array[$row->product_id] = $row->totalReturn;
-                }
-                foreach ($else_opening_stock_rqsn_return_given as $row) {
-                    $else_opening_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-                } 
-                //Total Out Related Array
-                foreach ($else_opening_stock_total_sales as $row) {
-                    $else_opening_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
-                }
-                foreach ($else_opening_stock_used_qty as $row) {
-                    $else_opening_stock_used_qty_array[$row->product_id] = $row->used_qty;
-                }
-                foreach ($else_opening_stock_total_rqsn_transfer_out as $row) {
-                    $else_opening_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
-                }
-                foreach ($else_opening_stock_transfer_item as $row) {
-                    $else_opening_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
-                }  
-                foreach ($else_opening_stock_total_rqsn_return as $row) {
-                    $else_opening_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
-                }
-        }
-    if ($new_to_date) {
-           //Closing STock Data Fetch
-            //-------------------------------------------------- Closing Stock Total In -------------------------------------------------------//
-                //Purchase Details Price
-                if ($new_to_date) {
-                    $this->db->where('product_purchase.purchase_date <=', $new_to_date);
-                }
-                if ($new_outlet_id){
-                    $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                }
-                $closing_stock_total_purchased = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
-                    ->from('product_purchase_details')
-                    ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
-                    ->where_in('product_purchase_details.product_id', $product_ids)
-                    ->where('product_purchase_details.qty >', 0)
-                    ->get()
-                    ->result();
-                //Rqsn Data
-                if ($new_to_date) {
-                    $this->db->where('rqsn.date <=', $new_to_date);
-                }
-                if ($new_outlet_id) {
-                    $this->db->where('rqsn.from_id', $new_outlet_id);
-                }
-                $closing_stock_total_rqsn_transfer_in = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_transfer')
-                    ->from('rqsn_details')
-                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                    ->where_in('rqsn_details.product_id', $product_ids)
-                    ->where('rqsn_details.status', 3)
-                    ->where('rqsn_details.isaprv', 1)
-                    ->where('rqsn_details.isrcv', 1)
-                    ->where('rqsn_details.is_return', 0)
-                    ->get()
-                    ->result();
-                //Physical Quantity
-                if ($new_to_date) {
-                    $this->db->where('a.create_date <=', $new_to_date);
-                }
-                if ($new_outlet_id) {
-                    $this->db->where('b.outlet_id', $new_outlet_id);
-                }
-                $closing_stock_total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
-                    ->from('stock_taking_details a')
-                    ->join('stock_taking b', 'b.stid = a.stid')
-                    ->where_in('a.product_id', $product_ids)
-                    ->where('a.status', 1)
-                    ->group_by('a.product_id')
-                    ->order_by('a.id', 'desc')
-                    ->get()
-                    ->result();
-            //-------------------------------------------------- Closing Stock Total Damages --------------------------------------------------//
-                if ($new_to_date) {
-                    $this->db->where('wastage_dec.date <=', $new_to_date);
-                }
-        
-                if ($new_outlet_id) {
-                    $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
-                }       
-                $closing_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
-                            ->from('wastage_dec')
-                            ->where_in('wastage_dec.product_id', $product_ids)
-                            ->get()
-                            ->result();
-            //-------------------------------------------------- Closing Stock Total Return Given ---------------------------------------------//
-            if ($new_to_date) {
-                $this->db->where('product_return.date_return <=', $new_to_date);
-            } 
-            $closing_stock_product_return = $this->db->select('sum(ret_qty) as totalReturn')
-                    ->from('product_return')
-                    ->where('usablity', 2)
-                    ->where_in('product_id', $product_ids)
-                    ->where('product_return.outlet_id', null)
-                    ->where('customer_id', '')
-                    ->get()
-                    ->result();
-            if ($new_to_date) {
-                $this->db->where('rqsn.date <=', $new_to_date);
-            }
-            if ($new_outlet_id) {
-                $this->db->where('rqsn.to_id', $new_outlet_id);
-            }
-            $closing_stock_rqsn_return_given = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_return')
-                    ->from('rqsn_details')
-                    ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-                    ->where_in('rqsn_details.product_id', $product_ids)
-                    ->where('rqsn_details.isaprv', 1)
-                    ->where('rqsn_details.is_return !=', 0)
-                    ->get()
-                    ->result();
-            // -------------------------------------------------Closing Stock Total Out --------------------------------------------------------//
-        // Sales Quantity of Product
-       
-        if ($new_to_date) {
-            $this->db->where('b.date <=', $new_to_date);
-        }
-
-        if ($new_outlet_id) {
-            $this->db->where('b.outlet_id', $new_outlet_id);
-        }
-        $closing_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
-            ->from('invoice_details a')
-            ->join('invoice b', 'b.invoice_id = a.invoice_id')
-            ->where('a.pre_order', 1)
-            ->where_in('a.product_id', $product_ids)
-            ->get()
-            ->result();
-        // Used Quantity of Product
-        if ($new_to_date) {
-            $this->db->where('production.date <=', $new_to_date);
-        }
-        $closing_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
-            ->from('item_usage')
-            ->join('production', 'item_usage.production_id=production.pro_id', 'left')
-            ->where_in('item_usage.item_id', $product_ids)
-            ->group_by('item_usage.item_id')
-            ->get()
-            ->result();
-             // Out Quantity of Product
-       
-        if ($new_to_date) {
-            $this->db->where('rqsn.date <=', $new_to_date);
-        }
-        if ($new_outlet_id) {
-            $this->db->where('rqsn.to_id', $new_outlet_id);
-        }
-      // Transfer Quantity of Product
-        $closing_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.is_return', 0)
-            ->get()
-            ->result();
-        if ($new_to_date) {
-            $this->db->where('rqsn.date <=', $new_to_date);
-        }
-        if ($new_outlet_id) {
-            $this->db->where('rqsn.from_id', $new_outlet_id);
-        }
-        // Return Quantity of Product
-        $closing_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
-            ->from('rqsn_details')
-            ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
-            ->where_in('rqsn_details.product_id', $product_ids)
-            ->where('rqsn_details.status', 3)
-            ->where('rqsn_details.isaprv', 1)
-            ->where('rqsn_details.isrcv', 1)
-            ->where('rqsn_details.is_return', 1)
-            ->get()
-            ->result();
-        // Transfer Item Details
-        if ($new_to_date) {
-            $this->db->where('transfer_items.date <=', $new_to_date);
-        }
-        $closing_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
-                ->from('transfer_item_details')
-                ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
-                ->where_in('transfer_item_details.product_id', $product_ids)
-                ->group_by('transfer_item_details.product_id')
-                ->get()
-                ->result();
-           //Closing Stock Array
-                $closing_stock_total_purchased_array = array();
-                $closing_stock_damaged_qty_array = array();  
-                $closing_stock_total_rqsn_transfer_in_array = array();
-                $closing_stock_total_phy_count_array = array();
-
-                $closing_stock_total_wastage_qnty_array = array();
-                //Total Out
-                $closing_stock_total_sales_array = array();
-                $closing_stock_used_qty_array = array();
-                $closing_stock_total_rqsn_transfer_out_array = array();
-                $closing_stock_transfer_item_array = array();
-                $closing_stock_total_rqsn_return_array = array();
-                // total return given
-                $closing_stock_product_return_array = array();
-                $closing_stock_rqsn_return_given_array = array();
-            //Total In & Total Damage
-            foreach ($closing_stock_total_purchased as $row) {
-                $closing_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
-                $closing_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
-            }
-            foreach ($closing_stock_total_wastage_qnty as $row) {
-                $closing_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
-            }
-            foreach ($closing_stock_total_rqsn_transfer_in as $row) {
-                $closing_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
-            }
-            foreach ($closing_stock_total_phy_count as $row) {
-                $closing_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
-            }
-            //Total Return Given
-            foreach ($closing_stock_product_return as $row) {
-                $closing_stock_product_return_array[$row->product_id] = $row->totalReturn;
-            }
-            foreach ($closing_stock_rqsn_return_given as $row) {
-                $closing_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-            } 
-            //Total Out Related Array
-            foreach ($closing_stock_total_sales as $row) {
-                $closing_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
-            }
-            foreach ($closing_stock_used_qty as $row) {
-                $closing_stock_used_qty_array[$row->product_id] = $row->used_qty;
-            }
-            foreach ($closing_stock_total_rqsn_transfer_out as $row) {
-                $closing_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
-            }
-            foreach ($closing_stock_transfer_item as $row) {
-                $closing_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
-            }  
-            foreach ($closing_stock_total_rqsn_return as $row) {
-                $closing_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
-            }
-     }  
-                ## Phase 4 ##
-             //Array Declearation
-             // Total In & Damaged Quantity
-                $total_purchased_array = array();
-                $damaged_qty_array = array();
-                $purchaseprice_array = array();
-                $productionprice_array = array();
-                $supplierprice_array = array();
-                
-                $total_rqsn_transfer_in_array = array();
-                $total_phy_count_array = array();
-                $total_wastage_qnty_array = array();
-                //Total Out
-                $total_sales_array = array();
-                $total_used_qty_array = array();
-                $transfer_item_array = array();
-                $total_rqsn_transfer_out_array = array();
-                $total_rqsn_return_array = array();
-                // total return given
-                $product_return_array = array();
-                $rqsn_return_given_array = array();
-        
-        
-        ## Phase 5 ##
-        // Iterate Array and Store Data // ------------------------//---------------------------------------//--------------------------------------
-         foreach ($total_purchased as $row) {
-            $total_purchased[$row->product_id] = $row->totalPurchaseQnty;
-            $damaged_qty_array[$row->product_id] = $row->damaged_qty;
-            $purchaseprice_array[$row->product_id] = $row->purchaseprice;
-        }
-
-        foreach ($production_cost as $row) {
-            $productionprice_array[$row->product_id] = $row->cost;
-        }
-
-        foreach ($supplier_cost as $row) {
-            $supplierprice_array[$row->product_id] = $row->supplier_price;
-        }
-
-        foreach ($total_rqsn_transfer_in as $row) {
-            $total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
-        }
-        foreach ($total_phy_count as $row) {
-            $total_phy_count_array[$row->product_id] = $row->phy_qty;
-        }
-        foreach ($total_wastage_qnty as $row) {
-            $total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
-        }
-
-        //Total Out Related Array
-        foreach ($total_sales as $row) {
-            $total_sales_array[$row->product_id] = $row->totalSalesQnty;
-        }
-        foreach ($used_qty as $row) {
-            $total_used_qty_array[$row->product_id] = $row->used_qty;
-        }
-        foreach ($total_rqsn_transfer_out as $row) {
-            $total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
-        }
-        foreach ($total_rqsn_return as $row) {
-            $total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
-        }
-
-        foreach ($transfer_item as $row) {
-            $transfer_item_array[$row->product_id] = $row->transfer_item;
-        }
-         //Total Return Given Realted Array
-         foreach ($product_return as $row) {
-            $product_return_array[$row->product_id] = $row->totalReturn;
-        }
-        foreach ($rqsn_return_given as $row) {
-            $rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
-        }
-        // echo "<pre>";
-        // print_r($productionprice_array);
-        // exit();
-        $data = array();
-        //Storing Data in Records Array ---------------------//----------------------//----------------------------------//--------------------
-     foreach ($records as $record) {
-            $record->totalPurchaseQnty = isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0;
-            $record->purchase_price = isset($purchaseprice_array[$record->product_id]) ? $purchaseprice_array[$record->product_id] : 0;
-            $record->production_price = isset($productionprice_array[$record->product_id]) ? $productionprice_array[$record->product_id] : 0;
-            $record->supplier_price = isset($supplierprice_array[$record->product_id]) ? $supplierprice_array[$record->product_id] : 0;
-              //Total In
-            $total_in = isset($total_rqsn_transfer_in_array[$record->product_id]) ? $total_rqsn_transfer_in_array[$record->product_id] : 0 +
-            (isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0) + 
-             (!empty($total_phy_count_array[$record->product_id]) ? $total_phy_count_array[$record->product_id] : 0);
-
-             $damaged_quantity = isset($damaged_qty_array[$record->product_id]) ? $damaged_qty_array[$record->product_id] : 0 +
-            (isset($total_wastage_qnty_array[$record->product_id]) ? $total_wastage_qnty_array[$record->product_id] : 0);
-            //Total Out 
-            if($record->finished_raw == 1)
-            {
-                $total_out = ((isset($total_sales_array[$record->product_id]) ? $total_sales_array[$record->product_id] : 0) +
-                (isset($total_used_qty_array[$record->product_id]) ? $total_used_qty_array[$record->product_id] : 0) +
-                (isset($total_rqsn_transfer_out_array[$record->product_id]) ? $total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                (isset($total_rqsn_return_array[$record->product_id]) ? $total_rqsn_return_array[$record->product_id] : 0);
-            }
-            else{
-            $total_out = (isset($transfer_item_array[$record->product_id]) ? $transfer_item_array[$record->product_id] : 0);
-            }
-            //Total Return Given opening_stock_rqsn_return_given_array
-            $total_return_given = (isset($product_return_array[$record->product_id]) ? $product_return_array[$record->product_id] : 0)
-             + (isset($rqsn_return_given_array[$record->product_id]) ? $rqsn_return_given_array[$record->product_id] : 0);
-             $stock =  $total_in -$total_out - $total_return_given - $damaged_quantity;
-
-      if ($new_from_date) {
-                    $total_in_opening = isset($opening_stock_total_purchased_array[$record->product_id]) ? $opening_stock_total_purchased_array[$record->product_id] : 0 +
-                                        (isset($opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) + 
-                                        (!empty($opening_stock_total_phy_count_array[$record->product_id]) ? $opening_stock_total_phy_count_array[$record->product_id] : 0);
-                    $total_damage_opening = (isset($opening_stock_damaged_qty_array[$record->product_id]) ? $opening_stock_damaged_qty_array[$record->product_id] : 0 +
-                                        (isset($opening_stock_total_wastage_qnty_array[$record->product_id]) ? $opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
-                
-                    $total_return_given_opening = (isset($opening_stock_product_return_array[$record->product_id]) ? $opening_stock_product_return_array[$record->product_id] : 0 +
-                                            (isset($opening_stock_rqsn_return_given_array[$record->product_id]) ? $opening_stock_rqsn_return_given_array[$record->product_id] : 0));
-                    if($record->finished_raw == 1)
-                    {
-                        $total_out_opening = ((isset($opening_stock_total_sales_array[$record->product_id]) ? $opening_stock_total_sales_array[$record->product_id] : 0) +
-                        (isset($opening_stock_used_qty_array[$record->product_id]) ? $opening_stock_used_qty_array[$record->product_id] : 0) +
-                        (isset($opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                        (isset($opening_stock_total_rqsn_return_array[$record->product_id]) ? $opening_stock_total_rqsn_return_array[$record->product_id] : 0);
-                    }
-                    else{
-                        $total_out_opening = (isset($opening_stock_transfer_item_array[$record->product_id]) ? $opening_stock_transfer_item_array[$record->product_id] : 0);
-                    }
-                 $opening_stock =  $total_in_opening - $total_out_opening - $total_damage_opening - $total_return_given_opening;    
-        }
-      else{
-            $total_in_else_opening = isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0 +
-                                        (isset($else_opening_stock_total_rqsn_transfer_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_array[$record->product_id] : 0) + 
-                                        (!empty($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
-            $total_damage_else_opening = (isset($else_opening_stock_damaged_qty_array[$record->product_id]) ? $else_opening_stock_damaged_qty_array[$record->product_id] : 0 +
-                                        (isset($else_opening_stock_total_wastage_qnty_array[$record->product_id]) ? $else_opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
-                
-            $total_return_given_else_opening = (isset($else_opening_stock_product_return_array[$record->product_id]) ? $else_opening_stock_product_return_array[$record->product_id] : 0 +
-                                            (isset($else_opening_stock_rqsn_return_given_array[$record->product_id]) ? $else_opening_stock_rqsn_return_given_array[$record->product_id] : 0));
-            if($record->finished_raw == 1)
-            {
-                $total_out_else_opening = ((isset($else_opening_stock_total_sales_array[$record->product_id]) ? $else_opening_stock_total_sales_array[$record->product_id] : 0) +
-                (isset($else_opening_stock_used_qty_array[$record->product_id]) ? $else_opening_stock_used_qty_array[$record->product_id] : 0) +
-                (isset($else_opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                (isset($else_opening_stock_total_rqsn_return_array[$record->product_id]) ? $else_opening_stock_total_rqsn_return_array[$record->product_id] : 0);
-            }
-            else{
-                $total_out_else_opening = (isset($else_opening_stock_transfer_item_array[$record->product_id]) ? $else_opening_stock_transfer_item_array[$record->product_id] : 0);
-            }
-                 $opening_stock =  $total_in_else_opening - $total_out_else_opening - $total_damage_else_opening - $total_return_given_else_opening;
-        }
-      if ($new_to_date) {
-            $total_in_closing = isset($closing_stock_total_purchased_array[$record->product_id]) ? $closing_stock_total_purchased_array[$record->product_id] : 0 +
-                                (isset($closing_stock_total_rqsn_transfer_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_array[$record->product_id] : 0) + 
-                                (!empty($closing_stock_total_phy_count_array[$record->product_id]) ? $closing_stock_total_phy_count_array[$record->product_id] : 0);
-            $total_damage_closing = (isset($closing_stock_damaged_qty_array[$record->product_id]) ? $closing_stock_damaged_qty_array[$record->product_id] : 0 +
-                                (isset($closing_stock_total_wastage_qnty_array[$record->product_id]) ? $closing_stock_total_wastage_qnty_array[$record->product_id] : 0));
-        
-            $total_return_given_closing = (isset($closing_stock_product_return_array[$record->product_id]) ? $closing_stock_product_return_array[$record->product_id] : 0 +
-                                    (isset($closing_stock_rqsn_return_given_array[$record->product_id]) ? $closing_stock_rqsn_return_given_array[$record->product_id] : 0));
-            if($record->finished_raw == 1)
-            {
-                $total_out_closing = ((isset($closing_stock_total_sales_array[$record->product_id]) ? $closing_stock_total_sales_array[$record->product_id] : 0) +
-                (isset($closing_stock_used_qty_array[$record->product_id]) ? $closing_stock_used_qty_array[$record->product_id] : 0) +
-                (isset($closing_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
-                (isset($closing_stock_total_rqsn_return_array[$record->product_id]) ? $closing_stock_total_rqsn_return_array[$record->product_id] : 0);
-            }
-            else{
-                $total_out_closing = (isset($closing_stock_transfer_item_array[$record->product_id]) ? $closing_stock_transfer_item_array[$record->product_id] : 0);
-            }
-            $closing_stock =  $total_in_closing - $total_out_closing - $total_damage_closing - $total_return_given_closing;    
+        if ($product_ids) {
+           //Production Price
+           $production_cost = $this->db->select('product_id,avg(production_cost) as cost')
+           ->from('production_cost')
+           ->where_in('product_id', $product_ids)
+           ->group_by('product_id')
+           ->get()
+           ->result();
+       //Supplier Price
+       $supplier_cost = $this->db->select('product_id,supplier_price')
+           ->from('supplier_product')
+           ->where_in('product_id', $product_ids)
+           ->group_by('product_id')
+           ->get()
+           ->result();
+       // ------------------------------------------------- Total In --------------------------------------------------------//
+       //Purchase Details Price
+       if ($from_date) {
+           $this->db->where('product_purchase.purchase_date >=', $from_date);
        }
-      else{
-            $closing_stock =  $stock;
-          }
-         if ($value == 1 ) {
-            if ($closing_stock > 0) {
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    //'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    'opening_stock'     => $opening_stock,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0)
-                );
-                $sl++;
-        
-            }
-          }
+       if ($to_date) {
+           $this->db->where('product_purchase.purchase_date <=', $to_date);
+       }
+       if ($outlet_id) {
+           $this->db->where('product_purchase.outlet_id', $outlet_id);
+       }
+       $total_purchased = $this->db->select('sum(product_purchase_details.total_amount) as totalAmount,product_id, sum(product_purchase_details.qty) as totalPurchaseQnty,sum(product_purchase_details.damaged_qty) as damaged_qty,Avg(rate) as purchaseprice')
+           ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+           ->from('product_purchase_details')
+           ->where_in('product_purchase_details.product_id', $product_ids)
+           ->group_by('product_id')
+           ->get()
+           ->result();
+       //Rqsn Data
+       if ($from_date) {
+           $this->db->where('rqsn.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('rqsn.date <=', $to_date);
+       }
+       if ($outlet_id) {
+           $this->db->where('rqsn.from_id', $outlet_id);
+       }
+       $total_rqsn_transfer_in = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+           ->from('rqsn_details')
+           ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+           ->where_in('product_id', $product_ids)
+           ->where('rqsn_details.status', 3)
+           ->where('rqsn_details.isaprv', 1)
+           ->where('rqsn_details.isrcv', 1)
+           ->where('rqsn_details.is_return', 0)
+           ->get()
+           ->result();
+       //Physical Quantity
+       if ($from_date) {
+           $this->db->where('a.create_date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('a.create_date <=', $to_date);
+       }
+       if ($outlet_id) {
+           $this->db->where('b.outlet_id', $outlet_id);
+       }
+       $total_phy_count = $this->db->select('product_id,SUM(a.difference) as phy_qty')
+           ->from('stock_taking_details a')
+           ->join('stock_taking b', 'b.stid = a.stid')
+           ->where_in('a.product_id', $product_ids)
+           ->where('a.status', 1)
+           ->group_by('a.product_id')
+           ->order_by('a.id', 'desc')
+           ->get()
+           ->result();
 
-         // All Transaction Items
-         if ($value == 3) {
 
-            if ($closing_stock > 0 || $opening_stock>0 ||$damaged_quantity>0|| $total_return_given>0 || $total_out>0 || $total_in>0) {
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    //'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    'opening_stock'     => $opening_stock,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0)
-                );
-                $sl++;
-        
+       // ------------------------------------------------- Total Out --------------------------------------------------------//
+       // Sales Quantity of Product
+       if ($from_date) {
+           $this->db->where('b.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('b.date <=', $to_date);
+       }
+
+       if ($outlet_id) {
+           $this->db->where('b.outlet_id', $outlet_id);
+       }
+       $total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+           ->from('invoice_details a')
+           ->join('invoice b', 'b.invoice_id = a.invoice_id')
+           ->where('a.pre_order', 1)
+           ->where_in('a.product_id', $product_ids)
+           ->get()
+           ->result();
+       // Used Quantity of Product
+       if ($from_date) {
+           $this->db->where('production.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('production.date <=', $to_date);
+       }
+       $used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+           ->from('item_usage')
+           ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+           ->where_in('item_usage.item_id', $product_ids)
+           ->group_by('item_usage.item_id')
+           ->get()
+           ->result();
+       // Out Quantity of Product
+       if ($from_date) {
+           $this->db->where('rqsn.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('rqsn.date <=', $to_date);
+       }
+       if ($outlet_id) {
+           $this->db->where('rqsn.to_id', $outlet_id);
+       }
+       // Transfer Quantity of Product
+       $total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+           ->from('rqsn_details')
+           ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+           ->where_in('rqsn_details.product_id', $product_ids)
+           ->where('rqsn_details.isaprv', 1)
+           ->where('rqsn_details.is_return', 0)
+           ->get()
+           ->result();
+       if ($from_date) {
+           $this->db->where('rqsn.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('rqsn.date <=', $to_date);
+       }
+       if ($outlet_id) {
+           $this->db->where('rqsn.from_id', $outlet_id);
+       }
+       // Return Quantity of Product
+       $total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+           ->from('rqsn_details')
+           ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+           ->where_in('rqsn_details.product_id', $product_ids)
+           ->where('rqsn_details.status', 3)
+           ->where('rqsn_details.isaprv', 1)
+           ->where('rqsn_details.isrcv', 1)
+           ->where('rqsn_details.is_return', 1)
+           ->get()
+           ->result();
+       // Transfer Item Details
+       if ($from_date) {
+           $this->db->where('transfer_items.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('transfer_items.date <=', $to_date);
+       }
+       $transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+           ->from('transfer_item_details')
+           ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+           ->where_in('transfer_item_details.product_id', $product_ids)
+           ->group_by('transfer_item_details.product_id')
+           ->get()
+           ->result();
+       // ------------------------------------------------- Total Return Given  --------------------------------------------------------//
+       if ($from_date) {
+           $this->db->where('product_return.date_return >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('product_return.date_return <=', $to_date);
+       }
+       $product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
+           ->from('product_return')
+           ->where('usablity', 2)
+           ->where_in('product_id', $product_ids)
+           ->where('product_return.outlet_id', null)
+           ->where('customer_id', '')
+           ->get()
+           ->result();
+       if ($from_date) {
+           $this->db->where('rqsn.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('rqsn.date <=', $to_date);
+       }
+       if ($outlet_id) {
+           $this->db->where('rqsn.to_id', $outlet_id);
+       }
+       $rqsn_return_given = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+           ->from('rqsn_details')
+           ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+           ->where_in('rqsn_details.product_id', $product_ids)
+           ->where('rqsn_details.isaprv', 1)
+           ->where('rqsn_details.is_return !=', 0)
+           ->get()
+           ->result();
+
+       //-------------------------------------------Total Damage ----------------------------------------------------//
+       //Total Wastage Quantity
+       if ($from_date) {
+           $this->db->where('wastage_dec.date >=', $from_date);
+       }
+       if ($to_date) {
+           $this->db->where('wastage_dec.date <=', $to_date);
+       }
+
+       if ($outlet_id) {
+           $this->db->where('wastage_dec.outlet_id', $outlet_id);
+       }
+       $total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
+           ->from('wastage_dec')
+           ->where_in('wastage_dec.product_id', $product_ids)
+           ->get()
+           ->result();
+
+       //---------------------------------------------Opening Stock Data -------------------------------------------  
+       $new_from_date = $this->input->post('from_date');
+       $new_to_date = $this->input->post('to_date');
+       $new_opening_from_date = '';
+       $new_opening_to_date = '';
+       if ($new_from_date == '') {
+           $new_date = date_create("0001-01-01");
+           $new_change_date = date_format($new_date, "Y-m-d");
+           $new_opening_from_date = date('Y-m-d', strtotime($new_change_date . ' -1 day'));
+       } else {
+           $new_opening_from_date = date('Y-m-d', strtotime($new_from_date . ' -1 day'));
+       }
+
+       if ($new_to_date == '') {
+           $date = date('Y-m-d');
+           $new_opening_to_date = date('Y-m-d', strtotime($date . ' -1 day'));
+       } else {
+           $new_opening_to_date = date('Y-m-d', strtotime($new_to_date . ' -1 day'));
+       }
+
+
+       $new_outlet_id = $this->input->post('outlet_id', TRUE);
+       if ($new_outlet_id == '' || $new_outlet_id == null) {
+           $new_outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+       } elseif ($new_outlet_id === 'All' || $new_outlet_id === 'HK7TGDT69VFMXB7') {
+           $new_outlet_id = null;
+       } else {
+           $new_outlet_id = $this->input->post('outlet_id', TRUE);;
+       }
+       if ($new_from_date) {
+
+           //-------------------------------------------------- Opening Stock Total In -------------------------
+           //Purchase Details Price
+           if ($new_opening_from_date) {
+               $this->db->where('product_purchase.purchase_date <=', $new_opening_from_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+           }
+           $opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
+               ->from('product_purchase_details')
+               ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+               ->where_in('product_purchase_details.product_id', $product_ids)
+               ->where('product_purchase_details.qty >', 0)
+               ->get()
+               ->result();
+           //Rqsn Data
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date <=', $new_opening_from_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.from_id', $new_outlet_id);
+           }
+           $opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.status', 3)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.isrcv', 1)
+               ->where('rqsn_details.is_return', 0)
+               ->get()
+               ->result();
+           //Physical Quantity
+           if ($new_opening_from_date) {
+               $this->db->where('a.create_date <=', $new_opening_from_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('b.outlet_id', $new_outlet_id);
+           }
+           $opening_stock_total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+               ->from('stock_taking_details a')
+               ->join('stock_taking b', 'b.stid = a.stid')
+               ->where_in('a.product_id', $product_ids)
+               ->where('a.status', 1)
+               ->group_by('a.product_id')
+               ->order_by('a.id', 'desc')
+               ->get()
+               ->result();
+           //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
+           if ($new_opening_from_date) {
+               $this->db->where('wastage_dec.date <=', $new_opening_from_date);
+           }
+
+           if ($new_outlet_id) {
+               $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
+           }
+           $opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
+               ->from('wastage_dec')
+               ->where_in('wastage_dec.product_id', $product_ids)
+               ->get()
+               ->result();
+           //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
+           if ($new_opening_from_date) {
+               $this->db->where('product_return.date_return <=', $new_opening_from_date);
+           }
+           $opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
+               ->from('product_return')
+               ->where('usablity', 2)
+               ->where_in('product_id', $product_ids)
+               ->where('product_return.outlet_id', null)
+               ->where('customer_id', '')
+               ->get()
+               ->result();
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date <=', $new_opening_from_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.to_id', $new_outlet_id);
+           }
+           $opening_stock_rqsn_return_given = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.is_return !=', 0)
+               ->get()
+               ->result();
+           // -------------------------------------------------Opening Stock Total Out --------------------------------------------------------//
+           // Sales Quantity of Product
+           if ($new_opening_from_date) {
+               $this->db->where('b.date <=', $new_opening_from_date);
+           }
+
+           if ($new_outlet_id) {
+               $this->db->where('b.outlet_id', $new_outlet_id);
+           }
+           $opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+               ->from('invoice_details a')
+               ->join('invoice b', 'b.invoice_id = a.invoice_id')
+               ->where('a.pre_order', 1)
+               ->where_in('a.product_id', $product_ids)
+               ->get()
+               ->result();
+           // Used Quantity of Product
+           if ($new_opening_from_date) {
+               $this->db->where('production.date <=', $new_opening_from_date);
+           }
+           $opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+               ->from('item_usage')
+               ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+               ->where_in('item_usage.item_id', $product_ids)
+               ->group_by('item_usage.item_id')
+               ->get()
+               ->result();
+           // Out Quantity of Product
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date <=', $new_opening_from_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.to_id', $new_outlet_id);
+           }
+           // Transfer Quantity of Product
+           $opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.is_return', 0)
+               ->get()
+               ->result();
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date <=', $new_opening_from_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.from_id', $new_outlet_id);
+           }
+           // Return Quantity of Product
+           $opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.status', 3)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.isrcv', 1)
+               ->where('rqsn_details.is_return', 1)
+               ->get()
+               ->result();
+           // Transfer Item Details        
+           if ($new_opening_from_date) {
+               $this->db->where('transfer_items.date <=', $new_opening_from_date);
+           }
+           $opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+               ->from('transfer_item_details')
+               ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+               ->where_in('transfer_item_details.product_id', $product_ids)
+               ->group_by('transfer_item_details.product_id')
+               ->get()
+               ->result();
+           //Opening Stock Array
+           $opening_stock_total_purchased_array = array();
+           $opening_stock_damaged_qty_array = array();
+           $opening_stock_total_rqsn_transfer_in_array = array();
+           $opening_stock_total_phy_count_array = array();
+
+           $opening_stock_total_wastage_qnty_array = array();
+           //Total Out
+           $opening_stock_total_sales_array = array();
+           $opening_stock_used_qty_array = array();
+           $opening_stock_total_rqsn_transfer_out_array = array();
+           $opening_stock_transfer_item_array = array();
+           $opening_stock_total_rqsn_return_array = array();
+           // total return given
+           $opening_stock_product_return_array = array();
+           $opening_stock_rqsn_return_given_array = array();
+           //Total In & Total Damage
+           foreach ($opening_stock_total_purchased as $row) {
+               $opening_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
+               $opening_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
+           }
+           foreach ($opening_stock_total_rqsn_transfer_in as $row) {
+               $opening_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
+           }
+           foreach ($opening_stock_total_phy_count as $row) {
+               $opening_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
+           }
+           foreach ($opening_stock_total_wastage_qnty as $row) {
+               $opening_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+           }
+
+
+           //Total Return Given
+           foreach ($opening_stock_product_return as $row) {
+               $opening_stock_product_return_array[$row->product_id] = $row->totalReturn;
+           }
+           foreach ($opening_stock_rqsn_return_given as $row) {
+               $opening_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
+           }
+           //Total Out Related Array
+           foreach ($opening_stock_total_sales as $row) {
+               $opening_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
+           }
+           foreach ($opening_stock_used_qty as $row) {
+               $opening_stock_used_qty_array[$row->product_id] = $row->used_qty;
+           }
+           foreach ($opening_stock_total_rqsn_transfer_out as $row) {
+               $opening_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
+           }
+           foreach ($opening_stock_transfer_item as $row) {
+               $opening_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
+           }
+           foreach ($opening_stock_total_rqsn_return as $row) {
+               $opening_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
+           }
+       } else {
+           //-------------------------------------------------- else Opening Stock Total In -------------------------------------------------------//
+           //Purchase Details Price
+           if ($new_opening_from_date) {
+               $this->db->where('product_purchase.purchase_date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('product_purchase.purchase_date <=', $new_opening_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+           }
+           $else_opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
+               ->from('product_purchase_details')
+               ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+               ->where_in('product_purchase_details.product_id', $product_ids)
+               ->where('product_purchase_details.qty >', 0)
+               ->get()
+               ->result();
+           //Rqsn Data
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('rqsn.date <=', $new_opening_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.from_id', $new_outlet_id);
+           }
+           $else_opening_stock_total_rqsn_transfer_in = $this->db->select('product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.status', 3)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.isrcv', 1)
+               ->where('rqsn_details.is_return', 0)
+               ->get()
+               ->result();
+           //Physical Quantity
+           if ($new_opening_from_date) {
+               $this->db->where('a.create_date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('a.create_date <=', $new_opening_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('b.outlet_id', $new_outlet_id);
+           }
+           $else_opening_stock_total_phy_count = $this->db->select('a.product_id,SUM(a.difference) as phy_qty')
+               ->from('stock_taking_details a')
+               ->join('stock_taking b', 'b.stid = a.stid')
+               ->where_in('a.product_id', $product_ids)
+               ->where('a.status', 1)
+               ->group_by('a.product_id')
+               ->order_by('a.id', 'desc')
+               ->get()
+               ->result();
+           //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
+           if ($new_opening_from_date) {
+               $this->db->where('wastage_dec.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('wastage_dec.date <=', $new_opening_to_date);
+           }
+
+           if ($new_outlet_id) {
+               $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
+           }
+           $else_opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
+               ->from('wastage_dec')
+               ->where_in('wastage_dec.product_id', $product_ids)
+               ->get()
+               ->result();
+           //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
+           if ($new_opening_from_date) {
+               $this->db->where('product_return.date_return >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('product_return.date_return <=', $new_opening_to_date);
+           }
+           $else_opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
+               ->from('product_return')
+               ->where('usablity', 2)
+               ->where_in('product_id', $product_ids)
+               ->where('product_return.outlet_id', null)
+               ->where('customer_id', '')
+               ->get()
+               ->result();
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('rqsn.date <=', $new_opening_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.to_id', $new_outlet_id);
+           }
+           $else_opening_stock_rqsn_return_given = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.is_return !=', 0)
+               ->get()
+               ->result();
+           // -------------------------------------------------Opening Stock Total Out --------------------------------------------------------//
+           // Sales Quantity of Product
+           if ($new_opening_from_date) {
+               $this->db->where('b.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('b.date <=', $new_opening_to_date);
+           }
+
+           if ($new_outlet_id) {
+               $this->db->where('b.outlet_id', $new_outlet_id);
+           }
+           $else_opening_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+               ->from('invoice_details a')
+               ->join('invoice b', 'b.invoice_id = a.invoice_id')
+               ->where('a.pre_order', 1)
+               ->where_in('a.product_id', $product_ids)
+               ->get()
+               ->result();
+           // Used Quantity of Product
+           if ($new_opening_from_date) {
+               $this->db->where('production.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('production.date <=', $new_opening_to_date);
+           }
+           $else_opening_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+               ->from('item_usage')
+               ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+               ->where_in('item_usage.item_id', $product_ids)
+               ->group_by('item_usage.item_id')
+               ->get()
+               ->result();
+           // Out Quantity of Product
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('rqsn.date <=', $new_opening_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.to_id', $new_outlet_id);
+           }
+           // Transfer Quantity of Product
+           $else_opening_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.is_return', 0)
+               ->get()
+               ->result();
+           if ($new_opening_from_date) {
+               $this->db->where('rqsn.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('rqsn.date <=', $new_opening_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.from_id', $new_outlet_id);
+           }
+           // Return Quantity of Product
+           $else_opening_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.status', 3)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.isrcv', 1)
+               ->where('rqsn_details.is_return', 1)
+               ->get()
+               ->result();
+           // Transfer Item Details
+           if ($new_opening_from_date) {
+               $this->db->where('transfer_items.date >=', $new_opening_from_date);
+           }
+           if ($new_opening_to_date) {
+               $this->db->where('transfer_items.date <=', $new_opening_to_date);
+           }
+           $else_opening_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+               ->from('transfer_item_details')
+               ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+               ->where_in('transfer_item_details.product_id', $product_ids)
+               ->group_by('transfer_item_details.product_id')
+               ->get()
+               ->result();
+           //Opening Stock Array
+           $else_opening_stock_total_purchased_array = array();
+           $else_opening_stock_damaged_qty_array = array();
+           $else_opening_stock_total_rqsn_transfer_in_array = array();
+           $else_opening_stock_total_phy_count_array = array();
+
+           $else_opening_stock_total_wastage_qnty_array = array();
+           //Total Out
+           $else_opening_stock_total_sales_array = array();
+           $else_opening_stock_used_qty_array = array();
+           $else_opening_stock_total_rqsn_transfer_out_array = array();
+           $else_opening_stock_transfer_item_array = array();
+           $else_opening_stock_total_rqsn_return_array = array();
+           // total return given
+           $else_opening_stock_product_return_array = array();
+           $else_opening_stock_rqsn_return_given_array = array();
+           //Total In & Total Damage
+           foreach ($else_opening_stock_total_purchased as $row) {
+               $else_opening_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
+               $else_opening_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
+           }
+           foreach ($else_opening_stock_total_wastage_qnty as $row) {
+               $else_opening_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+           }
+           foreach ($else_opening_stock_total_rqsn_transfer_in as $row) {
+               $else_opening_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
+           }
+           foreach ($else_opening_stock_total_phy_count as $row) {
+               $else_opening_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
+           }
+           //Total Return Given
+           foreach ($else_opening_stock_product_return as $row) {
+               $else_opening_stock_product_return_array[$row->product_id] = $row->totalReturn;
+           }
+           foreach ($else_opening_stock_rqsn_return_given as $row) {
+               $else_opening_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
+           }
+           //Total Out Related Array
+           foreach ($else_opening_stock_total_sales as $row) {
+               $else_opening_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
+           }
+           foreach ($else_opening_stock_used_qty as $row) {
+               $else_opening_stock_used_qty_array[$row->product_id] = $row->used_qty;
+           }
+           foreach ($else_opening_stock_total_rqsn_transfer_out as $row) {
+               $else_opening_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
+           }
+           foreach ($else_opening_stock_transfer_item as $row) {
+               $else_opening_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
+           }
+           foreach ($else_opening_stock_total_rqsn_return as $row) {
+               $else_opening_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
+           }
+       }
+       if ($new_to_date) {
+           //Closing STock Data Fetch
+           //-------------------------------------------------- Closing Stock Total In -------------------------------------------------------//
+           //Purchase Details Price
+           // if ($new_opening_from_date) {
+           //     $this->db->where('product_purchase.purchase_date >=', $new_opening_from_date);
+           // }
+           if ($new_to_date) {
+               $this->db->where('product_purchase.purchase_date <=', $new_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+           }
+           $closing_stock_total_purchased = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
+               ->from('product_purchase_details')
+               ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+               ->where_in('product_purchase_details.product_id', $product_ids)
+               ->where('product_purchase_details.qty >', 0)
+               ->get()
+               ->result();
+           //Rqsn Data
+           if ($new_to_date) {
+               $this->db->where('rqsn.date <=', $new_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.from_id', $new_outlet_id);
+           }
+           $closing_stock_total_rqsn_transfer_in = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_transfer')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.status', 3)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.isrcv', 1)
+               ->where('rqsn_details.is_return', 0)
+               ->get()
+               ->result();
+           //Physical Quantity
+           if ($new_to_date) {
+               $this->db->where('a.create_date <=', $new_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('b.outlet_id', $new_outlet_id);
+           }
+           $closing_stock_total_phy_count = $this->db->select('SUM(a.difference) as phy_qty')
+               ->from('stock_taking_details a')
+               ->join('stock_taking b', 'b.stid = a.stid')
+               ->where_in('a.product_id', $product_ids)
+               ->where('a.status', 1)
+               ->group_by('a.product_id')
+               ->order_by('a.id', 'desc')
+               ->get()
+               ->result();
+           //-------------------------------------------------- Closing Stock Total Damages --------------------------------------------------//
+           if ($new_to_date) {
+               $this->db->where('wastage_dec.date <=', $new_to_date);
+           }
+
+           if ($new_outlet_id) {
+               $this->db->where('wastage_dec.outlet_id', $new_outlet_id);
+           }
+           $closing_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
+               ->from('wastage_dec')
+               ->where_in('wastage_dec.product_id', $product_ids)
+               ->get()
+               ->result();
+           //-------------------------------------------------- Closing Stock Total Return Given ---------------------------------------------//
+           if ($new_to_date) {
+               $this->db->where('product_return.date_return <=', $new_to_date);
+           }
+           $closing_stock_product_return = $this->db->select('sum(ret_qty) as totalReturn')
+               ->from('product_return')
+               ->where('usablity', 2)
+               ->where_in('product_id', $product_ids)
+               ->where('product_return.outlet_id', null)
+               ->where('customer_id', '')
+               ->get()
+               ->result();
+           if ($new_to_date) {
+               $this->db->where('rqsn.date <=', $new_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.to_id', $new_outlet_id);
+           }
+           $closing_stock_rqsn_return_given = $this->db->select('sum(rqsn_details.a_qty) as total_rqsn_return')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.is_return !=', 0)
+               ->get()
+               ->result();
+           // -------------------------------------------------Closing Stock Total Out --------------------------------------------------------//
+           // Sales Quantity of Product
+
+           if ($new_to_date) {
+               $this->db->where('b.date <=', $new_to_date);
+           }
+
+           if ($new_outlet_id) {
+               $this->db->where('b.outlet_id', $new_outlet_id);
+           }
+           $closing_stock_total_sales = $this->db->select('a.product_id,sum(a.quantity) as totalSalesQnty')
+               ->from('invoice_details a')
+               ->join('invoice b', 'b.invoice_id = a.invoice_id')
+               ->where('a.pre_order', 1)
+               ->where_in('a.product_id', $product_ids)
+               ->get()
+               ->result();
+           // Used Quantity of Product
+           if ($new_to_date) {
+               $this->db->where('production.date <=', $new_to_date);
+           }
+           $closing_stock_used_qty = $this->db->select('SUM(usage_qty) as used_qty')
+               ->from('item_usage')
+               ->join('production', 'item_usage.production_id=production.pro_id', 'left')
+               ->where_in('item_usage.item_id', $product_ids)
+               ->group_by('item_usage.item_id')
+               ->get()
+               ->result();
+           // Out Quantity of Product
+
+           if ($new_to_date) {
+               $this->db->where('rqsn.date <=', $new_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.to_id', $new_outlet_id);
+           }
+           // Transfer Quantity of Product
+           $closing_stock_total_rqsn_transfer_out = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_transfer')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.is_return', 0)
+               ->get()
+               ->result();
+           if ($new_to_date) {
+               $this->db->where('rqsn.date <=', $new_to_date);
+           }
+           if ($new_outlet_id) {
+               $this->db->where('rqsn.from_id', $new_outlet_id);
+           }
+           // Return Quantity of Product
+           $closing_stock_total_rqsn_return = $this->db->select('rqsn_details.product_id,sum(rqsn_details.a_qty) as total_rqsn_return')
+               ->from('rqsn_details')
+               ->join('rqsn', 'rqsn.rqsn_id = rqsn_details.rqsn_id')
+               ->where_in('rqsn_details.product_id', $product_ids)
+               ->where('rqsn_details.status', 3)
+               ->where('rqsn_details.isaprv', 1)
+               ->where('rqsn_details.isrcv', 1)
+               ->where('rqsn_details.is_return', 1)
+               ->get()
+               ->result();
+           // Transfer Item Details
+           if ($new_to_date) {
+               $this->db->where('transfer_items.date <=', $new_to_date);
+           }
+           $closing_stock_transfer_item = $this->db->select('SUM(transfer_item_details.quantity) as transfer_item')
+               ->from('transfer_item_details')
+               ->join('transfer_items', 'transfer_item_details.pro_id=transfer_items.pro_id', 'left')
+               ->where_in('transfer_item_details.product_id', $product_ids)
+               ->group_by('transfer_item_details.product_id')
+               ->get()
+               ->result();
+           //Closing Stock Array
+           $closing_stock_total_purchased_array = array();
+           $closing_stock_damaged_qty_array = array();
+           $closing_stock_total_rqsn_transfer_in_array = array();
+           $closing_stock_total_phy_count_array = array();
+
+           $closing_stock_total_wastage_qnty_array = array();
+           //Total Out
+           $closing_stock_total_sales_array = array();
+           $closing_stock_used_qty_array = array();
+           $closing_stock_total_rqsn_transfer_out_array = array();
+           $closing_stock_transfer_item_array = array();
+           $closing_stock_total_rqsn_return_array = array();
+           // total return given
+           $closing_stock_product_return_array = array();
+           $closing_stock_rqsn_return_given_array = array();
+           //Total In & Total Damage
+           foreach ($closing_stock_total_purchased as $row) {
+               $closing_stock_total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
+               $closing_stock_damaged_qty_array[$row->product_id] = $row->totalDamagedQnty;
+           }
+           foreach ($closing_stock_total_wastage_qnty as $row) {
+               $closing_stock_total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+           }
+           foreach ($closing_stock_total_rqsn_transfer_in as $row) {
+               $closing_stock_total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
+           }
+           foreach ($closing_stock_total_phy_count as $row) {
+               $closing_stock_total_phy_count_array[$row->product_id] = $row->phy_qty;
+           }
+           //Total Return Given
+           foreach ($closing_stock_product_return as $row) {
+               $closing_stock_product_return_array[$row->product_id] = $row->totalReturn;
+           }
+           foreach ($closing_stock_rqsn_return_given as $row) {
+               $closing_stock_rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
+           }
+           //Total Out Related Array
+           foreach ($closing_stock_total_sales as $row) {
+               $closing_stock_total_sales_array[$row->product_id] = $row->totalSalesQnty;
+           }
+           foreach ($closing_stock_used_qty as $row) {
+               $closing_stock_used_qty_array[$row->product_id] = $row->used_qty;
+           }
+           foreach ($closing_stock_total_rqsn_transfer_out as $row) {
+               $closing_stock_total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
+           }
+           foreach ($closing_stock_transfer_item as $row) {
+               $closing_stock_transfer_item_array[$row->product_id] = $row->transfer_item;
+           }
+           foreach ($closing_stock_total_rqsn_return as $row) {
+               $closing_stock_total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
+           }
+       }
+       ## Phase 4 ##
+       //Array Declearation
+       // Total In & Damaged Quantity
+       $total_purchased_array = array();
+       $damaged_qty_array = array();
+       $purchaseprice_array = array();
+       $productionprice_array = array();
+       $supplierprice_array = array();
+
+       $total_rqsn_transfer_in_array = array();
+       $total_phy_count_array = array();
+       $total_wastage_qnty_array = array();
+       //Total Out
+       $total_sales_array = array();
+       $total_used_qty_array = array();
+       $transfer_item_array = array();
+       $total_rqsn_transfer_out_array = array();
+       $total_rqsn_return_array = array();
+       // total return given
+       $product_return_array = array();
+       $rqsn_return_given_array = array();
+
+
+       ## Phase 5 ##
+       // Iterate Array and Store Data // ------------------------//---------------------------------------//--------------------------------------
+       foreach ($total_purchased as $row) {
+           $total_purchased_array[$row->product_id] = $row->totalPurchaseQnty;
+           $damaged_qty_array[$row->product_id] = $row->damaged_qty;
+           $purchaseprice_array[$row->product_id] = $row->purchaseprice;
+       }
+
+       foreach ($production_cost as $row) {
+           $productionprice_array[$row->product_id] = $row->cost;
+       }
+
+       foreach ($supplier_cost as $row) {
+           $supplierprice_array[$row->product_id] = $row->supplier_price;
+       }
+
+       foreach ($total_rqsn_transfer_in as $row) {
+           $total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
+       }
+       foreach ($total_phy_count as $row) {
+           $total_phy_count_array[$row->product_id] = $row->phy_qty;
+       }
+       foreach ($total_wastage_qnty as $row) {
+           $total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
+       }
+
+       //Total Out Related Array
+       foreach ($total_sales as $row) {
+           $total_sales_array[$row->product_id] = $row->totalSalesQnty;
+       }
+       foreach ($used_qty as $row) {
+           $total_used_qty_array[$row->product_id] = $row->used_qty;
+       }
+       foreach ($total_rqsn_transfer_out as $row) {
+           $total_rqsn_transfer_out_array[$row->product_id] = $row->total_rqsn_transfer;
+       }
+       foreach ($total_rqsn_return as $row) {
+           $total_rqsn_return_array[$row->product_id] = $row->total_rqsn_return;
+       }
+
+       foreach ($transfer_item as $row) {
+           $transfer_item_array[$row->product_id] = $row->transfer_item;
+       }
+       //Total Return Given Realted Array
+       foreach ($product_return as $row) {
+           $product_return_array[$row->product_id] = $row->totalReturn;
+       }
+       foreach ($rqsn_return_given as $row) {
+           $rqsn_return_given_array[$row->product_id] = $row->total_rqsn_return;
+       }
+
+       $data = array();
+       //Storing Data in Records Array ---------------------//----------------------//----------------------------------//--------------------
+       foreach ($records as $record) {
+           $record->totalPurchaseQnty = isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0;
+           $record->purchase_price = isset($purchaseprice_array[$record->product_id]) ? $purchaseprice_array[$record->product_id] : 0;
+           $record->production_price = isset($productionprice_array[$record->product_id]) ? $productionprice_array[$record->product_id] : 0;
+           $record->supplier_price = isset($supplierprice_array[$record->product_id]) ? $supplierprice_array[$record->product_id] : 0;
+           //Total In
+           $total_in = isset($total_rqsn_transfer_in_array[$record->product_id]) ? $total_rqsn_transfer_in_array[$record->product_id] : 0 +
+               (isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0) +
+               (!empty($total_phy_count_array[$record->product_id]) ? $total_phy_count_array[$record->product_id] : 0);
+
+           $damaged_quantity = isset($damaged_qty_array[$record->product_id]) ? $damaged_qty_array[$record->product_id] : 0 +
+               (isset($total_wastage_qnty_array[$record->product_id]) ? $total_wastage_qnty_array[$record->product_id] : 0);
+           //Total Out 
+           if ($record->finished_raw == 1) {
+               $total_out = ((isset($total_sales_array[$record->product_id]) ? $total_sales_array[$record->product_id] : 0) +
+                   (isset($total_used_qty_array[$record->product_id]) ? $total_used_qty_array[$record->product_id] : 0) +
+                   (isset($total_rqsn_transfer_out_array[$record->product_id]) ? $total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                   (isset($total_rqsn_return_array[$record->product_id]) ? $total_rqsn_return_array[$record->product_id] : 0);
+           } else {
+               $total_out = (isset($transfer_item_array[$record->product_id]) ? $transfer_item_array[$record->product_id] : 0);
+           }
+           //Total Return Given opening_stock_rqsn_return_given_array
+           $total_return_given = (isset($product_return_array[$record->product_id]) ? $product_return_array[$record->product_id] : 0)
+               + (isset($rqsn_return_given_array[$record->product_id]) ? $rqsn_return_given_array[$record->product_id] : 0);
+           $stock =  $total_in - $total_out - $total_return_given - $damaged_quantity;
+
+           if ($new_from_date) {
+               $total_in_opening = isset($opening_stock_total_purchased_array[$record->product_id]) ? $opening_stock_total_purchased_array[$record->product_id] : 0 +
+                   (isset($opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) +
+                   (!empty($opening_stock_total_phy_count_array[$record->product_id]) ? $opening_stock_total_phy_count_array[$record->product_id] : 0);
+               $total_damage_opening = (isset($opening_stock_damaged_qty_array[$record->product_id]) ? $opening_stock_damaged_qty_array[$record->product_id] : 0 +
+                   (isset($opening_stock_total_wastage_qnty_array[$record->product_id]) ? $opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
+
+               $total_return_given_opening = (isset($opening_stock_product_return_array[$record->product_id]) ? $opening_stock_product_return_array[$record->product_id] : 0 +
+                   (isset($opening_stock_rqsn_return_given_array[$record->product_id]) ? $opening_stock_rqsn_return_given_array[$record->product_id] : 0));
+               if ($record->finished_raw == 1) {
+                   $total_out_opening = ((isset($opening_stock_total_sales_array[$record->product_id]) ? $opening_stock_total_sales_array[$record->product_id] : 0) +
+                       (isset($opening_stock_used_qty_array[$record->product_id]) ? $opening_stock_used_qty_array[$record->product_id] : 0) +
+                       (isset($opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                       (isset($opening_stock_total_rqsn_return_array[$record->product_id]) ? $opening_stock_total_rqsn_return_array[$record->product_id] : 0);
+               } else {
+                   $total_out_opening = (isset($opening_stock_transfer_item_array[$record->product_id]) ? $opening_stock_transfer_item_array[$record->product_id] : 0);
+               }
+               $opening_stock =  $total_in_opening - $total_out_opening - $total_damage_opening - $total_return_given_opening;
+           } else {
+               $total_in_else_opening = isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0 +
+                   (isset($else_opening_stock_total_rqsn_transfer_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_array[$record->product_id] : 0) +
+                   (!empty($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
+               $total_damage_else_opening = (isset($else_opening_stock_damaged_qty_array[$record->product_id]) ? $else_opening_stock_damaged_qty_array[$record->product_id] : 0 +
+                   (isset($else_opening_stock_total_wastage_qnty_array[$record->product_id]) ? $else_opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
+
+               $total_return_given_else_opening = (isset($else_opening_stock_product_return_array[$record->product_id]) ? $else_opening_stock_product_return_array[$record->product_id] : 0 +
+                   (isset($else_opening_stock_rqsn_return_given_array[$record->product_id]) ? $else_opening_stock_rqsn_return_given_array[$record->product_id] : 0));
+               if ($record->finished_raw == 1) {
+                   $total_out_else_opening = ((isset($else_opening_stock_total_sales_array[$record->product_id]) ? $else_opening_stock_total_sales_array[$record->product_id] : 0) +
+                       (isset($else_opening_stock_used_qty_array[$record->product_id]) ? $else_opening_stock_used_qty_array[$record->product_id] : 0) +
+                       (isset($else_opening_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                       (isset($else_opening_stock_total_rqsn_return_array[$record->product_id]) ? $else_opening_stock_total_rqsn_return_array[$record->product_id] : 0);
+               } else {
+                   $total_out_else_opening = (isset($else_opening_stock_transfer_item_array[$record->product_id]) ? $else_opening_stock_transfer_item_array[$record->product_id] : 0);
+               }
+               $opening_stock =  $total_in_else_opening - $total_out_else_opening - $total_damage_else_opening - $total_return_given_else_opening;
+           }
+           if ($new_to_date) {
+               $total_in_closing = isset($closing_stock_total_purchased_array[$record->product_id]) ? $closing_stock_total_purchased_array[$record->product_id] : 0 +
+                   (isset($closing_stock_total_rqsn_transfer_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_array[$record->product_id] : 0) +
+                   (!empty($closing_stock_total_phy_count_array[$record->product_id]) ? $closing_stock_total_phy_count_array[$record->product_id] : 0);
+               $total_damage_closing = (isset($closing_stock_damaged_qty_array[$record->product_id]) ? $closing_stock_damaged_qty_array[$record->product_id] : 0 +
+                   (isset($closing_stock_total_wastage_qnty_array[$record->product_id]) ? $closing_stock_total_wastage_qnty_array[$record->product_id] : 0));
+
+               $total_return_given_closing = (isset($closing_stock_product_return_array[$record->product_id]) ? $closing_stock_product_return_array[$record->product_id] : 0 +
+                   (isset($closing_stock_rqsn_return_given_array[$record->product_id]) ? $closing_stock_rqsn_return_given_array[$record->product_id] : 0));
+               if ($record->finished_raw == 1) {
+                   $total_out_closing = ((isset($closing_stock_total_sales_array[$record->product_id]) ? $closing_stock_total_sales_array[$record->product_id] : 0) +
+                       (isset($closing_stock_used_qty_array[$record->product_id]) ? $closing_stock_used_qty_array[$record->product_id] : 0) +
+                       (isset($closing_stock_total_rqsn_transfer_out_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_out_array[$record->product_id] : 0)) -
+                       (isset($closing_stock_total_rqsn_return_array[$record->product_id]) ? $closing_stock_total_rqsn_return_array[$record->product_id] : 0);
+               } else {
+                   $total_out_closing = (isset($closing_stock_transfer_item_array[$record->product_id]) ? $closing_stock_transfer_item_array[$record->product_id] : 0);
+               }
+               $closing_stock =  $total_in_closing - $total_out_closing - $total_damage_closing - $total_return_given_closing;
+           } else {
+               $closing_stock =  $stock;
+           }
+                if ($value == 1) {
+                    if ($closing_stock > 0) {
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            //'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            'opening_stock'     => $opening_stock,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0)
+                        );
+                        $sl++;
+                    }
+                }
+
+                // All Transaction Items
+                if ($value == 3) {
+                    if ($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) {
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            //'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            'opening_stock'     => $opening_stock,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0)
+                        );
+                        $sl++;
+                    }
+                }
+
+                // Positive Transaction Items
+                if ($value == 4) {
+
+                    if (($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock > 0) {
+
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            //'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            'opening_stock'     => $opening_stock,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0)
+                        );
+                        $sl++;
+                    }
+                }
+
+                // Zero Transaction Items
+                if ($value == 5) {
+                    if (($closing_stock > 0 || $opening_stock > 0 || $damaged_quantity > 0 || $total_return_given > 0 || $total_out > 0 || $total_in > 0) && $closing_stock <= 0) {
+
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            //'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            'opening_stock'     => $opening_stock,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0)
+                        );
+                        $sl++;
+                    }
+                }
+
+                if ($value == 0) {
+                    if ($closing_stock < 1) {
+                        $data[] = array(
+                            'sl'            =>   $sl,
+                            'product_name'  =>  $record->product_name,
+                            'category' => ($record->name ? $record->name : ''),
+                            'sku' => ($record->sku ? $record->sku : ''),
+                            'product_model' => ($record->product_model ? $record->product_model : ''),
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                            'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                            //'product_type'  =>  $record->finished_raw,
+                            'totalPurchaseQnty' => $total_in,
+                            'damagedQnty'   => $damaged_quantity,
+                            'returnQnty' => $total_return_given,
+                            'totalSalesQnty' =>  $total_out,
+                            'opening_stock'     => $opening_stock,
+                            'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                                ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                                : ($record->production_price
+                                    ? $record->production_price * $closing_stock
+                                    : 0)
+                        );
+                        $sl++;
+                    }
+                }
+                if ($value == 2) {
+                    $data[] = array(
+                        'sl'            =>   $sl,
+                        'product_name'  =>  $record->product_name,
+                        'category' => ($record->name ? $record->name : ''),
+                        'sku' => ($record->sku ? $record->sku : ''),
+                        'product_model' => ($record->product_model ? $record->product_model : ''),
+                        'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                        'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
+                        'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
+                        //'product_type'  =>  $record->finished_raw,
+                        'totalPurchaseQnty' => $total_in,
+                        'damagedQnty'   => $damaged_quantity,
+                        'returnQnty' => $total_return_given,
+                        'totalSalesQnty' =>  $total_out,
+                        'opening_stock'     => $opening_stock,
+                        'stok_quantity' => sprintf('%0.2f', $closing_stock),
+                        'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                        'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
+                            ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
+                            : ($record->production_price
+                                ? $record->production_price * $closing_stock
+                                : 0)
+                    );
+                    $sl++;
+                }
             }
+        } else {
+            $data = array();
         }
 
-         // Positive Transaction Items
-         if ($value == 4) {
 
-            if (($closing_stock > 0 || $opening_stock>0 ||$damaged_quantity>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock > 0) {
-
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    //'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    'opening_stock'     => $opening_stock,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0)
-                );
-                $sl++;
-        
-            }
-        }
-
-        // Zero Transaction Items
-        if ($value == 5) {
-            if (($closing_stock> 0 || $opening_stock>0 ||$damaged_quantity>0|| $total_return_given>0 || $total_out>0 || $total_in>0) && $closing_stock <= 0) {
-
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    //'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    'opening_stock'     => $opening_stock,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0)
-                );
-                $sl++;
-        
-            }
-        }
-
-
-
-        if ($value == 0) {
-            if ($closing_stock < 1) {
-                $data[] = array(
-                    'sl'            =>   $sl,
-                    'product_name'  =>  $record->product_name,
-                    'category' => ($record->name ? $record->name : ''),
-                    'sku' => ($record->sku ? $record->sku : ''),
-                    'product_model' => ($record->product_model ? $record->product_model : ''),
-                    'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                    'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                    'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                    //'product_type'  =>  $record->finished_raw,
-                    'totalPurchaseQnty' => $total_in,
-                    'damagedQnty'   => $damaged_quantity,
-                    'returnQnty' => $total_return_given,
-                    'totalSalesQnty' =>  $total_out,
-                    'opening_stock'     => $opening_stock,
-                    'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                    'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                    'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                        ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                        : ($record->production_price
-                            ? $record->production_price * $closing_stock
-                            : 0)
-                );
-                $sl++;
-        
-            }
-        }
-        if ($value == 2) {
-            $data[] = array(
-                'sl'            =>   $sl,
-                'product_name'  =>  $record->product_name,
-                'category' => ($record->name ? $record->name : ''),
-                'sku' => ($record->sku ? $record->sku : ''),
-                'product_model' => ($record->product_model ? $record->product_model : ''),
-                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
-                'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
-                'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
-                //'product_type'  =>  $record->finished_raw,
-                'totalPurchaseQnty' => $total_in,
-                'damagedQnty'   => $damaged_quantity,
-                'returnQnty' => $total_return_given,
-                'totalSalesQnty' =>  $total_out,
-                'opening_stock'     => $opening_stock,
-                'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
-                'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
-                    ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
-                    : ($record->production_price
-                        ? $record->production_price * $closing_stock
-                        : 0)
-            );
-            $sl++;
-    
-        }
-             
-}
-      
-                return $data;    
+        return $data;
     }
 }
