@@ -3456,7 +3456,7 @@ class Invoices extends CI_Model
 
         $product_information = $this->db->get()->row();
 
-        $stock = $CI->Reports->getCheckList(null, $product_id, '', '')['central_stock'];
+        $stock = $CI->Reports->getCheckList(null, $product_id, '', '',null,null)['central_stock'];
 
         // $available_quantity=$CI->Reports->current_stock($product_id,$product_status=null);
 
