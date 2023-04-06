@@ -1195,7 +1195,7 @@ class reports extends CI_Model
         $closing_stock = 0;
         $opening_stock = 0;
 
-        $outlet_id  = 'HK7TGDT69VFMXB7';
+        //$outlet_id  = 'HK7TGDT69VFMXB7';
         $type = 1;
 
 
@@ -5742,15 +5742,12 @@ class reports extends CI_Model
         $product_sku = $this->input->post('product_sku', TRUE);
         $outlet_id = $this->input->post('outlet_id', TRUE);
         $temp_value = $value;
-        if ($this->input->post('outlet_id')) {
-            $outlet_id = $this->input->post('outlet_id');
-            if ($outlet_id === 'All') {
-                $outlet_id = null;
-            } else {
-                $outlet_id = $this->input->post('outlet_id');
-            }
+        if (!($outlet_id)) {
+            $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+        } elseif ($outlet_id === 'All') {
+            $outlet_id = null;
         } else {
-            $outlet_id = $this->session->userdata('outlet_id');
+            $outlet_id = $this->input->post('outlet_id', TRUE);;
         }
         if ($from_date == null) {
             $date = date('Y-m-d');
@@ -5758,6 +5755,9 @@ class reports extends CI_Model
         } else {
             $op_date = date('Y-m-d', strtotime($from_date . ' -1 day'));
         }
+        // echo "<pre>";
+        // print_r($outlet_id);
+        // exit();
 
 
 
@@ -5856,12 +5856,10 @@ class reports extends CI_Model
         if ($export != 'export') {
             $this->db->limit($rowperpage, $start);
         }
-        // $this->db->where('a.product_id',"67305");
+        // $this->db->where('a.product_id',"67302");
         $this->db->group_by('a.product_id');
         $records =  $this->db->get()->result();
-        // echo "<pre>";
-        // print_r($records);
-        // exit();
+       
         ## Phase 2 ##
         $sl = 1;
         $stock = 0;
@@ -5873,9 +5871,7 @@ class reports extends CI_Model
         ## Phase 3 ##
         // Array Column IDS and Fetch data in Array //---------------------------------//------------------------------//-------------------------------//-------------------------------
         $product_ids = array_column($records, 'product_id');
-        // echo "<pre>";
-        // print_r($product_ids);
-        // exit();
+       
         if ($product_ids) {
             //Production Price
             $production_cost = $this->db->select('product_id,avg(production_cost) as cost')
@@ -5888,6 +5884,16 @@ class reports extends CI_Model
             $supplier_cost = $this->db->select('product_id,supplier_price')
                 ->from('supplier_product')
                 ->where_in('product_id', $product_ids)
+                ->group_by('product_id')
+                ->get()
+                ->result();
+            
+            //Purchase Price
+            $purchased_price = $this->db->select('product_id,Avg(rate) as purchaseprice')
+                ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
+                ->from('product_purchase_details')
+                ->where('product_purchase_details.qty >', 0)
+                ->where_in('product_purchase_details.product_id', $product_ids)
                 ->group_by('product_id')
                 ->get()
                 ->result();
@@ -5912,12 +5918,9 @@ class reports extends CI_Model
                 ->group_by('product_id')
                 ->get()
                 ->result();
-            // echo "<pre>";
-            // // print_r($total_in);
-            // print_r($total_purchased);
-
-            // exit();
-            //Rqsn Data
+                
+               
+                //Rqsn Data
             if ($from_date) {
                 $this->db->where('rqsn.date >=', $from_date);
             }
@@ -5935,13 +5938,11 @@ class reports extends CI_Model
                 ->where('rqsn_details.isaprv', 1)
                 ->where('rqsn_details.isrcv', 1)
                 ->where('rqsn_details.is_return', 0)
+                ->group_by('product_id')
                 ->get()
                 ->result();
-            // echo "<pre>";
-            // // print_r($total_in);
-            // print_r($total_rqsn_transfer_in);
-
-            // exit();
+               
+            
             //Physical Quantity
             if ($from_date) {
                 $this->db->where('a.create_date >=', $from_date);
@@ -5961,6 +5962,7 @@ class reports extends CI_Model
                 ->order_by('a.id', 'desc')
                 ->get()
                 ->result();
+              
 
 
             // ------------------------------------------------- Total Out --------------------------------------------------------//
@@ -5979,10 +5981,12 @@ class reports extends CI_Model
                 ->from('invoice_details a')
                 ->join('invoice b', 'b.invoice_id = a.invoice_id')
                 ->where('a.pre_order', 1)
-                ->group_by('a.product_id')
+                
                 ->where_in('a.product_id', $product_ids)
+                ->group_by('a.product_id')
                 ->get()
                 ->result();
+              
             // Used Quantity of Product
             if ($from_date) {
                 $this->db->where('production.date >=', $from_date);
@@ -5997,6 +6001,7 @@ class reports extends CI_Model
                 ->group_by('item_usage.item_id')
                 ->get()
                 ->result();
+                
             // Out Quantity of Product
             if ($from_date) {
                 $this->db->where('rqsn.date >=', $from_date);
@@ -6017,6 +6022,7 @@ class reports extends CI_Model
                 ->group_by('rqsn_details.product_id')
                 ->get()
                 ->result();
+             
             if ($from_date) {
                 $this->db->where('rqsn.date >=', $from_date);
             }
@@ -6038,6 +6044,7 @@ class reports extends CI_Model
                 ->group_by('rqsn_details.product_id')
                 ->get()
                 ->result();
+               
             // Transfer Item Details
             if ($from_date) {
                 $this->db->where('transfer_items.date >=', $from_date);
@@ -6059,12 +6066,15 @@ class reports extends CI_Model
             if ($to_date) {
                 $this->db->where('product_return.date_return <=', $to_date);
             }
+            if ($outlet_id) {
+                $this->db->where('product_return.outlet_id', $outlet_id);
+            }
             $product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
                 ->from('product_return')
                 ->where('usablity', 2)
                 ->where_in('product_id', $product_ids)
                 ->group_by('product_id')
-                ->where('product_return.outlet_id', null)
+                // ->where('product_return.outlet_id', null)
                 ->where('customer_id', '')
                 ->get()
                 ->result();
@@ -6083,6 +6093,7 @@ class reports extends CI_Model
                 ->where_in('rqsn_details.product_id', $product_ids)
                 ->where('rqsn_details.isaprv', 1)
                 ->where('rqsn_details.is_return !=', 0)
+                ->group_by('rqsn_details.product_id')
                 ->get()
                 ->result();
 
@@ -6126,9 +6137,9 @@ class reports extends CI_Model
 
 
             $new_outlet_id = $this->input->post('outlet_id', TRUE);
-            if ($new_outlet_id == '' || $new_outlet_id == null) {
+            if (!($new_outlet_id)) {
                 $new_outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
-            } elseif ($new_outlet_id === 'All' || $new_outlet_id === 'HK7TGDT69VFMXB7') {
+            } elseif ($new_outlet_id === 'All') {
                 $new_outlet_id = null;
             } else {
                 $new_outlet_id = $this->input->post('outlet_id', TRUE);;
@@ -6140,14 +6151,15 @@ class reports extends CI_Model
                 if ($new_opening_from_date) {
                     $this->db->where('product_purchase.purchase_date <=', $new_opening_from_date);
                 }
-                // if ($new_outlet_id) {
-                //     $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                // }
+                if ($new_outlet_id != "HK7TGDT69VFMXB7") {
+                    $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+                }
                 $opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
                     ->from('product_purchase_details')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
                     ->where_in('product_purchase_details.product_id', $product_ids)
                     ->where('product_purchase_details.qty >', 0)
+                    ->group_by('product_purchase_details.product_id')
                     ->get()
                     ->result();
                 //Rqsn Data
@@ -6165,6 +6177,7 @@ class reports extends CI_Model
                     ->where('rqsn_details.isaprv', 1)
                     ->where('rqsn_details.isrcv', 1)
                     ->where('rqsn_details.is_return', 0)
+                    ->group_by('rqsn_details.product_id')
                     ->get()
                     ->result();
                 //Physical Quantity
@@ -6194,17 +6207,21 @@ class reports extends CI_Model
                 $opening_stock_total_wastage_qnty = $this->db->select('wastage_dec.product_id,sum(wastage_dec.wastage_quantity) as total_wastage_qnty')
                     ->from('wastage_dec')
                     ->where_in('wastage_dec.product_id', $product_ids)
+                    ->group_by('wastage_dec.product_id')
                     ->get()
                     ->result();
                 //-------------------------------------------------- Opening Stock Total Return Given ---------------------------------------------//
                 if ($new_opening_from_date) {
                     $this->db->where('product_return.date_return <=', $new_opening_from_date);
                 }
+                if ($outlet_id) {
+                    $this->db->where('product_return.outlet_id', $outlet_id);
+                }
                 $opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
                     ->from('product_return')
                     ->where('usablity', 2)
                     ->where_in('product_id', $product_ids)
-                    ->where('product_return.outlet_id', null)
+                    // ->where('product_return.outlet_id', null)
                     ->group_by('product_id')
                     ->where('customer_id', '')
                     ->get()
@@ -6362,9 +6379,9 @@ class reports extends CI_Model
                 if ($new_opening_to_date) {
                     $this->db->where('product_purchase.purchase_date <=', $new_opening_to_date);
                 }
-                // if ($new_outlet_id) {
-                //     $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                // }
+                if ($new_outlet_id != "HK7TGDT69VFMXB7") {
+                    $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+                }
                 $else_opening_stock_total_purchased = $this->db->select('product_id,sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
                     ->from('product_purchase_details')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
@@ -6373,6 +6390,7 @@ class reports extends CI_Model
                     ->group_by('product_purchase_details.product_id')
                     ->get()
                     ->result();
+                    
                 //Rqsn Data
                 if ($new_opening_from_date) {
                     $this->db->where('rqsn.date >=', $new_opening_from_date);
@@ -6394,6 +6412,7 @@ class reports extends CI_Model
                     ->group_by('rqsn_details.product_id')
                     ->get()
                     ->result();
+                    
                 //Physical Quantity
                 if ($new_opening_from_date) {
                     $this->db->where('a.create_date >=', $new_opening_from_date);
@@ -6413,6 +6432,9 @@ class reports extends CI_Model
                     ->order_by('a.id', 'desc')
                     ->get()
                     ->result();
+        //             echo "<pre>";
+        // print_r($else_opening_stock_total_phy_count);
+        // exit();
                 //-------------------------------------------------- Opening Stock Total Damages --------------------------------------------------//
                 if ($new_opening_from_date) {
                     $this->db->where('wastage_dec.date >=', $new_opening_from_date);
@@ -6437,11 +6459,14 @@ class reports extends CI_Model
                 if ($new_opening_to_date) {
                     $this->db->where('product_return.date_return <=', $new_opening_to_date);
                 }
+                if ($outlet_id) {
+                    $this->db->where('product_return.outlet_id', $outlet_id);
+                }
                 $else_opening_stock_product_return = $this->db->select('product_id,sum(ret_qty) as totalReturn')
                     ->from('product_return')
                     ->where('usablity', 2)
                     ->where_in('product_id', $product_ids)
-                    ->where('product_return.outlet_id', null)
+                    // ->where('product_return.outlet_id', null)
                     ->group_by('product_id')
                     ->where('customer_id', '')
                     ->get()
@@ -6480,8 +6505,9 @@ class reports extends CI_Model
                     ->from('invoice_details a')
                     ->join('invoice b', 'b.invoice_id = a.invoice_id')
                     ->where('a.pre_order', 1)
-                    ->group_by('a.product_id')
+                   
                     ->where_in('a.product_id', $product_ids)
+                    ->group_by('a.product_id')
                     ->get()
                     ->result();
                 // Used Quantity of Product
@@ -6617,9 +6643,9 @@ class reports extends CI_Model
                 if ($new_to_date) {
                     $this->db->where('product_purchase.purchase_date <=', $new_to_date);
                 }
-                // if ($new_outlet_id) {
-                //     $this->db->where('product_purchase.outlet_id', $new_outlet_id);
-                // }
+                if ($new_outlet_id != "HK7TGDT69VFMXB7") {
+                    $this->db->where('product_purchase.outlet_id', $new_outlet_id);
+                }
                 $closing_stock_total_purchased = $this->db->select('sum(product_purchase_details.qty) as totalPurchaseQnty, sum(product_purchase_details.damaged_qty) as totalDamagedQnty, sum(product_purchase_details.total_amount) as totalAmount')
                     ->from('product_purchase_details')
                     ->join('product_purchase', 'product_purchase.purchase_id = product_purchase_details.purchase_id')
@@ -6684,7 +6710,7 @@ class reports extends CI_Model
                     ->from('product_return')
                     ->where('usablity', 2)
                     ->where_in('product_id', $product_ids)
-                    ->where('product_return.outlet_id', null)
+                    // ->where('product_return.outlet_id', null)
                     ->group_by('product_id')
                     ->where('customer_id', '')
                     ->get()
@@ -6838,6 +6864,7 @@ class reports extends CI_Model
             //Array Declearation
             // Total In & Damaged Quantity
             $total_purchased_array = array();
+            $purchased_price_array = array();
             $damaged_qty_array = array();
             $purchaseprice_array = array();
             $productionprice_array = array();
@@ -6864,6 +6891,10 @@ class reports extends CI_Model
                 $damaged_qty_array[$row->product_id] = $row->damaged_qty;
                 $purchaseprice_array[$row->product_id] = $row->purchaseprice;
             }
+            foreach ($purchased_price as $row) {
+                $purchased_price_array[$row->product_id] = $row->purchaseprice;
+            }
+
 
             foreach ($production_cost as $row) {
                 $productionprice_array[$row->product_id] = $row->cost;
@@ -6912,7 +6943,7 @@ class reports extends CI_Model
             //Storing Data in Records Array ---------------------//----------------------//----------------------------------//--------------------
             foreach ($records as $record) {
                 $record->totalPurchaseQnty = isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0;
-                $record->purchase_price = isset($purchaseprice_array[$record->product_id]) ? $purchaseprice_array[$record->product_id] : 0;
+                $record->purchase_price = isset($purchased_price_array[$record->product_id]) ? $purchased_price_array[$record->product_id] : 0;
                 $record->production_price = isset($productionprice_array[$record->product_id]) ? $productionprice_array[$record->product_id] : 0;
                 $record->supplier_price = isset($supplierprice_array[$record->product_id]) ? $supplierprice_array[$record->product_id] : 0;
                 //Total In
@@ -6962,7 +6993,7 @@ class reports extends CI_Model
                     $opening_stock =  $total_in_opening - $total_out_opening - $total_damage_opening - $total_return_given_opening;
                 } else {
                     $total_in_else_opening = isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0 +
-                        (isset($else_opening_stock_total_rqsn_transfer_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_array[$record->product_id] : 0) +
+                        (isset($else_opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) +
                         (!empty($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
                     $total_damage_else_opening = (isset($else_opening_stock_damaged_qty_array[$record->product_id]) ? $else_opening_stock_damaged_qty_array[$record->product_id] : 0 +
                         (isset($else_opening_stock_total_wastage_qnty_array[$record->product_id]) ? $else_opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
@@ -6977,6 +7008,9 @@ class reports extends CI_Model
                     } else {
                         $total_out_else_opening = (isset($else_opening_stock_transfer_item_array[$record->product_id]) ? $else_opening_stock_transfer_item_array[$record->product_id] : 0);
                     }
+                    // echo "<pre>";
+                    // print_r($else_opening_stock_total_rqsn_transfer_in_array);
+                    // exit();
                     $opening_stock =  $total_in_else_opening - $total_out_else_opening - $total_damage_else_opening - $total_return_given_else_opening;
                 }
                 if ($new_to_date) {
