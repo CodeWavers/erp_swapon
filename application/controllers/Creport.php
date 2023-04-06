@@ -1062,7 +1062,7 @@ class Creport extends CI_Controller
         header("Content-Type: application/csv; ");
         $postData = $this->input->post();
 
-        $invoicedata = $this->Reports->ExportStockData($postData,null,1,$_POST['from_date'],$_POST['to_date'],$_POST['value'],'export');
+        $invoicedata = $this->Reports->getCheckList3($postData,null,1,$_POST['from_date'],$_POST['to_date'],$_POST['value'],'export');
         // file creation
         $file = fopen('php://output', 'w');
 
