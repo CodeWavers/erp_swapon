@@ -809,8 +809,30 @@ class Crqsn extends CI_Controller
         $to_date = $this->input->post('to_date');
         $value = $this->input->post('value');
         $postData = $this->input->post();
-        $data = $this->Rqsn->outlet_stock2($postData, null, $from_date, $to_date, $value);
+        $data = $this->Rqsn->outlet_stock3($postData, null, $from_date, $to_date, $value,null);
         echo json_encode($data);
+    }
+    public function exportintocsv()
+    {
+        $this->load->model('Rqsn');
+        $filename = 'sale_' . date('Ymd') . '.csv';
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$filename");
+        header("Content-Type: application/csv; ");
+        $postData = $this->input->post();
+
+        $invoicedata = $this->Rqsn->outlet_stock3($postData, null, $from_date, $to_date, $value,'export');
+        // file creation
+        $file = fopen('php://output', 'w');
+
+        $header = array('Sl No', 'Product Name','Category', 'SKU', 'Product Model', 'Sale Price','Purchase Price', 
+        'Production Cost', 'In Qnty', 'Damaged Quantity', 'Return Given','Out Qnty', 'Opening Stock', 'Closing Stock', 'Stock Sale Price', 'Stock Value');
+        fputcsv($file, $header);
+        foreach ($invoicedata as $line) {
+            fputcsv($file, $line);
+        }
+        fclose($file);
+        exit;
     }
 
     public function rqsn_report()

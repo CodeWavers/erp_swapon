@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-
+                    <?php echo form_open_multipart('Crqsn/exportintocsv', array('class' => 'form-vertical', 'id' => 'insert_category')) ?>
                     <div class="panel-body">
                         <?php if ($outlet_list) { ?>
 
@@ -85,7 +85,7 @@
                             <div class="col-md-6" style="margin-bottom: 10px;">
                                 <label for="cat_list" class="col-form-label">Category : </label>
                                 <div class="form-group">
-                                    <select id="cat_list" class="form-control" name="cat_list">
+                                    <select id="cat_list" class="form-control" name="cat_id">
                                         <option value="">Select One</option>
                                         {cat_list}
                                         <option value="{id}">{name}</option>
@@ -121,6 +121,17 @@
                                 </select>
 
                             </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                              <div class="col-md-2" style="margin-bottom: 10px;">
+                                
+                                <button class="btn btn-info" id="submit-buttons" type="submit"​​​​​>Export</button>
+                               
+                               </div>
+                               <!-- <div class="col-md-3" style="margin-bottom: 10px;"> 
+                                  <input name="range" type="number" id="typeNumber" class="form-control" />
+                               </div> -->
+                            </div>
+                            <?php echo form_close() ?>
                         </div>
                         <div>
 
