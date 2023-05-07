@@ -5848,7 +5848,7 @@ class reports extends CI_Model
         if (isset($p_s) && $p_s != '') {
             $this->db->where('a.finished_raw', $p_s);
         }
-        $this->db->select("a.finished_raw,a.product_model,a.product_name,a.product_id,a.price,a.sku,a.purchase_price,
+        $this->db->select("a.finished_raw,a.product_model,a.product_name,a.product_id,a.price,a.sku,a.purchase_price as purchase_sale_price,
             b.name
             ");
         $this->db->from('product_information a');
@@ -7043,7 +7043,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 //'product_type'  =>  $record->finished_raw,
@@ -7053,7 +7053,7 @@ class reports extends CI_Model
                                 'totalSalesQnty' =>  $total_out,
                                 'opening_stock'     => $opening_stock,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7073,7 +7073,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 //'product_type'  =>  $record->finished_raw,
@@ -7083,7 +7083,7 @@ class reports extends CI_Model
                                 'totalSalesQnty' =>  $total_out,
                                 'opening_stock'     => $opening_stock,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7105,7 +7105,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 //'product_type'  =>  $record->finished_raw,
@@ -7115,7 +7115,7 @@ class reports extends CI_Model
                                 'totalSalesQnty' =>  $total_out,
                                 'opening_stock'     => $opening_stock,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7136,7 +7136,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 //'product_type'  =>  $record->finished_raw,
@@ -7146,7 +7146,7 @@ class reports extends CI_Model
                                 'totalSalesQnty' =>  $total_out,
                                 'opening_stock'     => $opening_stock,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7165,7 +7165,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 //'product_type'  =>  $record->finished_raw,
@@ -7175,7 +7175,7 @@ class reports extends CI_Model
                                 'totalSalesQnty' =>  $total_out,
                                 'opening_stock'     => $opening_stock,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7192,7 +7192,7 @@ class reports extends CI_Model
                             'category' => ($record->name ? $record->name : ''),
                             'sku' => ($record->sku ? $record->sku : ''),
                             'product_model' => ($record->product_model ? $record->product_model : ''),
-                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                             'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                             'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                             //'product_type'  =>  $record->finished_raw,
@@ -7202,7 +7202,7 @@ class reports extends CI_Model
                             'totalSalesQnty' =>  $total_out,
                             'opening_stock'     => $opening_stock,
                             'stok_quantity' => sprintf('%0.2f', $closing_stock),
-                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                             'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                 ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                 : ($record->production_price
@@ -7220,7 +7220,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 'product_type'  =>  $record->finished_raw,
@@ -7233,7 +7233,7 @@ class reports extends CI_Model
                                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock'     => $opening_stock,
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7260,7 +7260,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 'product_type'  =>  $record->finished_raw,
@@ -7273,7 +7273,7 @@ class reports extends CI_Model
                                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock'     => $opening_stock,
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7301,7 +7301,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 'product_type'  =>  $record->finished_raw,
@@ -7314,7 +7314,7 @@ class reports extends CI_Model
                                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock'     => $opening_stock,
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7341,7 +7341,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 'product_type'  =>  $record->finished_raw,
@@ -7354,7 +7354,7 @@ class reports extends CI_Model
                                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock'     => $opening_stock,
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7381,7 +7381,7 @@ class reports extends CI_Model
                                 'category' => ($record->name ? $record->name : ''),
                                 'sku' => ($record->sku ? $record->sku : ''),
                                 'product_model' => ($record->product_model ? $record->product_model : ''),
-                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                                'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                                 'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                                 'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                                 'product_type'  =>  $record->finished_raw,
@@ -7394,7 +7394,7 @@ class reports extends CI_Model
                                 //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock'     => $opening_stock,
-                                'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                                'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                                 'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                     ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                     : ($record->production_price
@@ -7417,7 +7417,7 @@ class reports extends CI_Model
                             'category' => ($record->name ? $record->name : ''),
                             'sku' => ($record->sku ? $record->sku : ''),
                             'product_model' => ($record->product_model ? $record->product_model : ''),
-                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->price) : 0,
+                            'sales_price'   =>  $record->price ? sprintf('%0.2f', $record->purchase_sale_price) : 0,
                             'purchase_p'    =>  $record->purchase_price ? $record->purchase_price : 0,
                             'production_cost'  => (!empty($record->production_price) ? sprintf('%0.2f', $record->production_price) : 0),
                             'product_type'  =>  $record->finished_raw,
@@ -7430,7 +7430,7 @@ class reports extends CI_Model
                             //'wastage_stock'=>  $wastage_stock->totalWastageQnty,
                             'stok_quantity' => sprintf('%0.2f', $closing_stock),
                             'opening_stock'     => $opening_stock,
-                            'total_sale_price' => $closing_stock * ($record->price ? $record->price : 0),
+                            'total_sale_price' => $closing_stock * ($record->purchase_sale_price ? $record->purchase_sale_price : 0),
                             'purchase_total' => (($closing_stock * ($record->purchase_price ? $record->purchase_price : 0)) != 0)
                                 ? ($closing_stock * ($record->purchase_price ? $record->purchase_price : 0))
                                 : ($record->production_price

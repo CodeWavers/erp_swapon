@@ -1052,8 +1052,7 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(currency +
-            " " +sum.toLocaleString());
+          $(this.footer()).html(sum.toLocaleString());
         });
         api
         .columns(".damagedQnty", {
@@ -1065,8 +1064,7 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(currency +
-            " " +sum.toLocaleString());
+          $(this.footer()).html(sum.toLocaleString());
         });
         api
         .columns(".return_given", {
@@ -1078,8 +1076,7 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(currency +
-            " " +sum.toLocaleString());
+          $(this.footer()).html(sum.toLocaleString());
         });
         api
         .columns(".totalSalesQnty", {
@@ -1091,8 +1088,7 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(currency +
-            " " +sum.toLocaleString());
+          $(this.footer()).html(sum.toLocaleString());
         });
         api
         .columns(".opening_stock", {
@@ -1104,8 +1100,7 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(currency +
-            " " +sum.toLocaleString());
+          $(this.footer()).html(sum.toLocaleString());
         });
 
       api
@@ -1119,8 +1114,6 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-            " " +
             sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -1139,8 +1132,6 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-              " " +
               sum.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -1498,8 +1489,7 @@ $(document).ready(function () {
           var y = parseFloat(b) || 0;
           return x + y;
         }, 0);
-        $(this.footer()).html(currency +
-          " " +sum.toLocaleString());
+        $(this.footer()).html(sum.toLocaleString());
       });
       var api = this.api();
       api
@@ -1512,8 +1502,7 @@ $(document).ready(function () {
           var y = parseFloat(b) || 0;
           return x + y;
         }, 0);
-        $(this.footer()).html(currency +
-          " " +sum.toLocaleString());
+        $(this.footer()).html(sum.toLocaleString());
       });
       
       var api = this.api();
@@ -1527,8 +1516,7 @@ $(document).ready(function () {
           var y = parseFloat(b) || 0;
           return x + y;
         }, 0);
-        $(this.footer()).html(currency +
-          " " +sum.toLocaleString());
+        $(this.footer()).html(sum.toLocaleString());
       });
       var api = this.api();
       api
@@ -1541,8 +1529,7 @@ $(document).ready(function () {
           var y = parseFloat(b) || 0;
           return x + y;
         }, 0);
-        $(this.footer()).html(currency +
-          " " +sum.toLocaleString());
+        $(this.footer()).html(sum.toLocaleString());
       });
       api
       .columns(".returnQnty", {
@@ -1554,8 +1541,7 @@ $(document).ready(function () {
           var y = parseFloat(b) || 0;
           return x + y;
         }, 0);
-        $(this.footer()).html(currency +
-          " " +sum.toLocaleString());
+        $(this.footer()).html(sum.toLocaleString());
       });
       api
       .columns(".totalSalesQnty", {
@@ -1567,8 +1553,7 @@ $(document).ready(function () {
           var y = parseFloat(b) || 0;
           return x + y;
         }, 0);
-        $(this.footer()).html(currency +
-          " " +sum.toLocaleString());
+        $(this.footer()).html(sum.toLocaleString());
       });
       api
         .columns(".stock", {
@@ -1580,8 +1565,7 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(currency +
-            " " +sum.toLocaleString());
+          $(this.footer()).html(sum.toLocaleString());
         });
 
       api
@@ -1595,8 +1579,6 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-            " " +
             sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -1615,8 +1597,6 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-            " " +
             sum.toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,

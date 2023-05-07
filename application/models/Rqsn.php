@@ -4003,7 +4003,7 @@ class Rqsn extends CI_Model
             $totalRecordwithFilter = $records;
         }
         ## Fetch records
-        $this->db->select("d.finished_raw,d.product_model,d.product_name,d.product_id,d.price,d.sku,d.purchase_price,
+        $this->db->select("d.finished_raw,d.product_model,d.product_name,d.product_id,d.price,d.sku,d.purchase_price as purchase_sale_price,
         b.name");
         $this->db->from('product_information d');
         $this->db->join('cats b', 'd.category_id=b.id', 'left');
@@ -5206,7 +5206,7 @@ class Rqsn extends CI_Model
                         'sl'            =>   $sl,
                         'product_name'  =>  $record->product_name,
                         'product_model' =>  $record->product_model,
-                        'sales_price'   =>  sprintf('%0.2f', $record->sprice),
+                        'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                         'sku'          => $record->sku,
                         'category'  => (!empty($record->name) ? $record->name : ''),
                         'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
@@ -5216,7 +5216,7 @@ class Rqsn extends CI_Model
                         'stok_quantity' => sprintf('%0.2f', $closing_stock),
                         'opening_stock' => $opening_stock,
                         'closing_stock' => $closing_stock,
-                        'total_sale_price' => ($closing_stock) * $record->supplier_price,
+                        'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                         'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                             ? ($closing_stock * $record->purchase_price)
                             : ($record->production_price
@@ -5235,7 +5235,7 @@ class Rqsn extends CI_Model
                                 'sl'            =>   $sl,
                                 'product_name'  =>  $record->product_name,
                                 'product_model' =>  $record->product_model,
-                                'sales_price'   =>  sprintf('%0.2f', $record->sprice),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
                                 'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
@@ -5245,7 +5245,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->supplier_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5265,7 +5265,7 @@ class Rqsn extends CI_Model
                                 'sl'            =>   $sl,
                                 'product_name'  =>  $record->product_name,
                                 'product_model' =>  $record->product_model,
-                                'sales_price'   =>  sprintf('%0.2f', $record->sprice),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
                                 'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
@@ -5275,7 +5275,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->supplier_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5294,7 +5294,7 @@ class Rqsn extends CI_Model
                                 'sl'            =>   $sl,
                                 'product_name'  =>  $record->product_name,
                                 'product_model' =>  $record->product_model,
-                                'sales_price'   =>  sprintf('%0.2f', $record->sprice),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
                                 'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
@@ -5304,7 +5304,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->supplier_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5321,7 +5321,7 @@ class Rqsn extends CI_Model
                                 'sl'            =>   $sl,
                                 'product_name'  =>  $record->product_name,
                                 'product_model' =>  $record->product_model,
-                                'sales_price'   =>  sprintf('%0.2f', $record->sprice),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
                                 'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
@@ -5331,7 +5331,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->supplier_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5346,7 +5346,7 @@ class Rqsn extends CI_Model
                             'sl'            =>   $sl,
                                 'product_name'  =>  $record->product_name,
                                 'product_model' =>  $record->product_model,
-                                'sales_price'   =>  sprintf('%0.2f', $record->sprice),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
                                 'totalPurchaseQnty' => sprintf('%0.2f', $total_in),
@@ -5356,7 +5356,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->supplier_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5374,7 +5374,7 @@ class Rqsn extends CI_Model
                                 'product_model' =>  $record->product_model,
                                 // 'production_cost'  => $production_price,
                                 'product_type'  =>  $record->finished_raw,
-                                'sales_price'   =>  sprintf('%0.2f', $record->price),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 // 'purchase_p'    =>  $pprice,
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
@@ -5386,7 +5386,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->purchase_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5414,7 +5414,7 @@ class Rqsn extends CI_Model
                                 'product_model' =>  $record->product_model,
                                 // 'production_cost'  => $production_price,
                                 'product_type'  =>  $record->finished_raw,
-                                'sales_price'   =>  sprintf('%0.2f', $record->price),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 // 'purchase_p'    =>  $pprice,
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
@@ -5426,7 +5426,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->purchase_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5455,7 +5455,7 @@ class Rqsn extends CI_Model
                                 'product_model' =>  $record->product_model,
                                 // 'production_cost'  => $production_price,
                                 'product_type'  =>  $record->finished_raw,
-                                'sales_price'   =>  sprintf('%0.2f', $record->price),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 // 'purchase_p'    =>  $pprice,
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
@@ -5467,7 +5467,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->purchase_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5495,7 +5495,7 @@ class Rqsn extends CI_Model
                                 'product_model' =>  $record->product_model,
                                 // 'production_cost'  => $production_price,
                                 'product_type'  =>  $record->finished_raw,
-                                'sales_price'   =>  sprintf('%0.2f', $record->price),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 // 'purchase_p'    =>  $pprice,
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
@@ -5507,7 +5507,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->purchase_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5535,7 +5535,7 @@ class Rqsn extends CI_Model
                                 'product_model' =>  $record->product_model,
                                 // 'production_cost'  => $production_price,
                                 'product_type'  =>  $record->finished_raw,
-                                'sales_price'   =>  sprintf('%0.2f', $record->price),
+                                'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                                 // 'purchase_p'    =>  $pprice,
                                 'sku'          => $record->sku,
                                 'category'  => (!empty($record->name) ? $record->name : ''),
@@ -5547,7 +5547,7 @@ class Rqsn extends CI_Model
                                 'stok_quantity' => sprintf('%0.2f', $closing_stock),
                                 'opening_stock' => $opening_stock,
                                 'closing_stock' => $closing_stock,
-                                'total_sale_price' => ($closing_stock) * $record->purchase_price,
+                                'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                                 'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                     ? ($closing_stock * $record->purchase_price)
                                     : ($record->production_price
@@ -5571,7 +5571,7 @@ class Rqsn extends CI_Model
                             'product_model' =>  $record->product_model,
                             // 'production_cost'  => $production_price,
                             'product_type'  =>  $record->finished_raw,
-                            'sales_price'   =>  sprintf('%0.2f', $record->price),
+                            'sales_price'   =>  sprintf('%0.2f', $record->purchase_sale_price),
                             // 'purchase_p'    =>  $pprice,
                             'sku'          => $record->sku,
                             'category'  => (!empty($record->name) ? $record->name : ''),
@@ -5583,7 +5583,7 @@ class Rqsn extends CI_Model
                             'stok_quantity' => sprintf('%0.2f', $closing_stock),
                             'opening_stock' => $opening_stock,
                             'closing_stock' => $closing_stock,
-                            'total_sale_price' => ($closing_stock) * $record->purchase_price,
+                            'total_sale_price' => ($closing_stock) * $record->purchase_sale_price,
                             'purchase_total' => (($closing_stock * $record->purchase_price) != 0)
                                 ? ($closing_stock * $record->purchase_price)
                                 : ($record->production_price
