@@ -129,9 +129,9 @@ class Products extends CI_Model
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
         $records = $this->db->get()->result();
-        echo "<pre>";
-        print_r($records);
-        exit();
+        // echo "<pre>";
+        // print_r($records);
+        // exit();
         $data = array();
         $sl = 1;
 

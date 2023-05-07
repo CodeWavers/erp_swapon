@@ -1062,7 +1062,7 @@ class Cinvoice extends CI_Controller
             if ($product_details->total_product > 0) {
                 $qty = 1;
             } else {
-                $qty = 1;
+                $qty = '';
             }
 
             $html = "";
