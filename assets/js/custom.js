@@ -1019,19 +1019,19 @@ $(document).ready(function () {
       //   class: "text-right",
       //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
       // },
-      { data: "totalPurchaseQnty", class: "text-right" },
-      { data: "damagedQnty", class: "text-right" },
-      { data: "return_given", class: " stock text-right" },
-      { data: "totalSalesQnty", class: "text-right" },
+      { data: "totalPurchaseQnty", class: "totalPurchaseQnty text-right" },
+      { data: "damagedQnty", class: "damagedQnty text-right" },
+      { data: "return_given", class: "return_given text-right" },
+      { data: "totalSalesQnty", class: "totalSalesQnty text-right" },
 
       //   { data: 'warrenty_stock' ,class:"stock text-right" },
-      { data: "opening_stock", class: "stock text-right" },
-      { data: "stok_quantity", class: "stock text-right" },
+      { data: "opening_stock", class: "opening_stock text-right" },
+      { data: "stok_quantity", class: "stok_quantity text-right" },
 
       {
         data: "total_sale_price",
         class: "total_sale text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+        render: $.fn.dataTable.render.number(",", ".", 2),
       },
       // {
       //   data: "purchase_total",
@@ -1043,7 +1043,7 @@ $(document).ready(function () {
     footerCallback: function (row, data, start, end, display) {
       var api = this.api();
       api
-        .columns(".stock", {
+        .columns(".totalPurchaseQnty", {
           page: "current",
         })
         .every(function () {
@@ -1052,7 +1052,60 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(sum.toLocaleString());
+          $(this.footer()).html(currency +
+            " " +sum.toLocaleString());
+        });
+        api
+        .columns(".damagedQnty", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(currency +
+            " " +sum.toLocaleString());
+        });
+        api
+        .columns(".return_given", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(currency +
+            " " +sum.toLocaleString());
+        });
+        api
+        .columns(".totalSalesQnty", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(currency +
+            " " +sum.toLocaleString());
+        });
+        api
+        .columns(".opening_stock", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(currency +
+            " " +sum.toLocaleString());
         });
 
       api
@@ -1075,25 +1128,25 @@ $(document).ready(function () {
           );
         });
 
-      // api
-      //   .columns(".total_purchase", {
-      //     page: "current",
-      //   })
-      //   .every(function () {
-      //     var sum = this.data().reduce(function (a, b) {
-      //       var x = parseFloat(a) || 0;
-      //       var y = parseFloat(b) || 0;
-      //       return x + y;
-      //     }, 0);
-      //     $(this.footer()).html(
-      //       currency +
-      //         " " +
-      //         sum.toLocaleString(undefined, {
-      //           minimumFractionDigits: 2,
-      //           maximumFractionDigits: 2,
-      //         })
-      //     );
-      //   });
+      api
+        .columns(".stok_quantity", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
     },
   });
 });
@@ -1415,16 +1468,16 @@ $(document).ready(function () {
       },
 
       
-      { data: "totalPurchaseQnty", class: "text-right" },
-      { data: "damagedQnty", class: "text-right" },
-      { data: "returnQnty", class: "text-right" },
-      { data: "totalSalesQnty", class: "text-right" },
-      { data: "opening_stock", class: "stock text-right" },
-      { data: "stok_quantity", class: "stock text-right" },
+      { data: "totalPurchaseQnty", class: "totalPurchaseQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "damagedQnty", class: "damagedQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "returnQnty", class: "returnQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "totalSalesQnty", class: "totalSalesQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "opening_stock", class: "opening_stock text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "stok_quantity", class: "stock text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
       {
         data: "total_sale_price",
         class: "total_sale text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+        render: $.fn.dataTable.render.number(",", ".", 2),
       },
       {
         data: "purchase_total",
@@ -1436,6 +1489,88 @@ $(document).ready(function () {
     footerCallback: function (row, data, start, end, display) {
       var api = this.api();
       api
+      .columns(".opening_stock", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(currency +
+          " " +sum.toLocaleString());
+      });
+      var api = this.api();
+      api
+      .columns(".totalPurchaseQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(currency +
+          " " +sum.toLocaleString());
+      });
+      
+      var api = this.api();
+      api
+      .columns(".totalSalesQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(currency +
+          " " +sum.toLocaleString());
+      });
+      var api = this.api();
+      api
+      .columns(".damagedQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(currency +
+          " " +sum.toLocaleString());
+      });
+      api
+      .columns(".returnQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(currency +
+          " " +sum.toLocaleString());
+      });
+      api
+      .columns(".totalSalesQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(currency +
+          " " +sum.toLocaleString());
+      });
+      api
         .columns(".stock", {
           page: "current",
         })
@@ -1445,7 +1580,8 @@ $(document).ready(function () {
             var y = parseFloat(b) || 0;
             return x + y;
           }, 0);
-          $(this.footer()).html(sum.toLocaleString());
+          $(this.footer()).html(currency +
+            " " +sum.toLocaleString());
         });
 
       api

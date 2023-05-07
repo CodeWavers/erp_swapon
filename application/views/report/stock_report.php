@@ -183,7 +183,11 @@
                                     <tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="12" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th colspan="8" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>
