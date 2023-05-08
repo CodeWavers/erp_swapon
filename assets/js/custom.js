@@ -908,7 +908,7 @@ $(document).ready(function () {
   "use strict";
   var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
   var base_url = $("#base_url").val();
-  var currency = $("#currency").val();
+  var currency = '';
   var total_stock = $("#total_stock").val();
   var cat_id = $("#cat_list").val();
   var outlet_id = $("#outlet").val();
@@ -1321,7 +1321,7 @@ $(document).ready(function () {
   "use strict";
   var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
   var base_url = $("#base_url").val();
-  var currency = $("#currency").val();
+  var currency = '';
   var total_stock = $("#total_stock").val();
   var product_status = $("#product_status").val();
   var product_sku = $("#product_sku").val();
@@ -1360,8 +1360,8 @@ $(document).ready(function () {
     serverSide: true,
 
     lengthMenu: [
-      [10, 25, 50, 100, 250, 500, 1000],
-      [10, 25, 50, 100, 250, 500, 1000],
+      [10, 25, 50, 100, 250, 500,6000, total_stock],
+      [10, 25, 50, 100, 250, 500,6000, "All"],
     ],
 
     dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
