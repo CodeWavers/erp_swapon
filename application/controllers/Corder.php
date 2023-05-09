@@ -143,12 +143,12 @@ class Corder extends CI_Controller
 
             $datainv = array(
                 'invoice_id' => $invoice_id,
+                'ecom_order_id'=> $this->input->post('ecom_invoice_id'),
                 'date' => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
                 'total_amount' => $this->input->post('grand_total', TRUE),
                 'customer_id' => (!empty($this->input->post('customer_id', TRUE)) ? $this->input->post('customer_id', TRUE) :1),
                 'invoice' => $invoice_no_generated,
                 'total_discount' => $this->input->post('discount', TRUE),
-                'ecom_invoice_id' => $this->input->post('ecom_invoice_id', TRUE),
                 'paid_amount' => $this->input->post('paid_amount', TRUE),
                 'due_amount' => $this->input->post('due_amount', TRUE),
                 'shipping_cost' => $this->input->post('shipping_cost', TRUE),
@@ -347,6 +347,7 @@ class Corder extends CI_Controller
                     // 'tax'                => $tax,
                     'supplier_rate' => $supplier_rate,
                     'total_price' => $total_price,
+                    'total_price_wd' => $total_price,
                     'status' => 2
                 );
 

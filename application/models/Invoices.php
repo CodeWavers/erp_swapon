@@ -177,7 +177,7 @@ class Invoices extends CI_Model
 
             $details = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
             $details_i = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
-            $ecom_order_id = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->ecom_invoice_id . '</a>';
+            $ecom_order_id = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->ecom_order_id . '</a>';
 
             if ($record->outlt == 'HK7TGDT69VFMXB7') {
                 $out = $cw_name;

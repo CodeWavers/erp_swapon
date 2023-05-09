@@ -923,158 +923,158 @@
         var address_update = $("#address_update");
 
 
-        payment_form.on('submit', function(e) {
-            e.preventDefault();
+        // payment_form.on('submit', function(e) {
+        //     e.preventDefault();
 
 
 
 
-            //    var formData = new FormData(this);
-            $.ajax({
-                url: '<?= api_url() ?>' + "order/paymentSave/"+'<?= $order_id ?>',
-                method : $(this).attr('method'),
-                // dataType : 'json',
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                success: function(d)
-                {
-                    toastr.success('Payment Added')
-                    location.reload();
+        //     //    var formData = new FormData(this);
+        //     $.ajax({
+        //         url: '<?= api_url() ?>' + "order/paymentSave/"+'<?= $order_id ?>',
+        //         method : $(this).attr('method'),
+        //         // dataType : 'json',
+        //         data: new FormData(this),
+        //         processData: false,
+        //         contentType: false,
+        //         success: function(d)
+        //         {
+        //             toastr.success('Payment Added')
+        //             location.reload();
 
 
-                },
-                error: function(xhr)
-                {
+        //         },
+        //         error: function(xhr)
+        //         {
 
 
-                    alert('failed!');
-                }
-            });
-        });
-        address_update.on('submit', function(e) {
-            e.preventDefault();
+        //             alert('failed!');
+        //         }
+        //     });
+        // });
+        // address_update.on('submit', function(e) {
+        //     e.preventDefault();
 
 
 
 
-            //    var formData = new FormData(this);
-            $.ajax({
-                url: '<?= api_url() ?>' + "order/address_update/"+'<?= $order_id ?>',
-                method : $(this).attr('method'),
-                 // dataType : 'json',
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                success: function(d)
-                {
-                    toastr.success('Address Updated')
-                    location.reload();
+        //     //    var formData = new FormData(this);
+        //     $.ajax({
+        //         url: '<?= api_url() ?>' + "order/address_update/"+'<?= $order_id ?>',
+        //         method : $(this).attr('method'),
+        //          // dataType : 'json',
+        //         data: new FormData(this),
+        //         processData: false,
+        //         contentType: false,
+        //         success: function(d)
+        //         {
+        //             toastr.success('Address Updated')
+        //             location.reload();
 
 
-                },
-                error: function(xhr)
-                {
+        //         },
+        //         error: function(xhr)
+        //         {
 
 
-                    alert('failed!');
-                }
-            });
-        });
+        //             alert('failed!');
+        //         }
+        //     });
+        // });
     });
-    function qtyUpdate(id){
+    // function qtyUpdate(id){
 
 
 
-        var qty=$('#order'+id).val();
-        var price=$('#price'+id).val();
-        var order_id=$('#order_id').val();
+    //     var qty=$('#order'+id).val();
+    //     var price=$('#price'+id).val();
+    //     var order_id=$('#order_id').val();
 
-        var csrf_test_name = $('[name="csrf_test_name"]').val();
+    //     var csrf_test_name = $('[name="csrf_test_name"]').val();
 
-        $.ajax({
-            url: '<?= api_url() ?>' + "order/qty_update",
-            method: 'post',
+    //     $.ajax({
+    //         url: '<?= api_url() ?>' + "order/qty_update",
+    //         method: 'post',
 
-            data: {
-                id: id,
-                order_id: order_id,
-                qty: qty,
-                csrf_test_name: csrf_test_name
-            },
-            success: function(data) {
-                toastr.success(
-                    'Success!',
-                    'QTY has been updated',
-                    {
-                        timeOut: 1000,
-                        fadeOut: 1000,
-                        onHidden: function () {
-                            location.reload();
-                        }
-                    }
-                );
-            }
+    //         data: {
+    //             id: id,
+    //             order_id: order_id,
+    //             qty: qty,
+    //             csrf_test_name: csrf_test_name
+    //         },
+    //         success: function(data) {
+    //             toastr.success(
+    //                 'Success!',
+    //                 'QTY has been updated',
+    //                 {
+    //                     timeOut: 1000,
+    //                     fadeOut: 1000,
+    //                     onHidden: function () {
+    //                         location.reload();
+    //                     }
+    //                 }
+    //             );
+    //         }
 
-        });
-
-
-
-    }
-    function paymentDelete(id){
-        var z = confirm("Are you sure to delete this payment?");
-
-        if (z== true){
-
-            $.ajax({
-                url: '<?= api_url() ?>' + "order/paymentDelete/"+id,
-                method: 'get',
-                success: function(data) {
-                    toastr.error(
-                        'Payment has been deleted',
-                        {
-                            timeOut: 1000,
-                            fadeOut: 1000,
-                            onHidden: function () {
-                                location.reload();
-                            }
-                        }
-                    );
-                }
-
-            });
-        }
+    //     });
 
 
 
+    // }
+    // function paymentDelete(id){
+    //     var z = confirm("Are you sure to delete this payment?");
 
-    }
+    //     if (z== true){
 
-    function item_remove(id){
+    //         $.ajax({
+    //             url: '<?= api_url() ?>' + "order/paymentDelete/"+id,
+    //             method: 'get',
+    //             success: function(data) {
+    //                 toastr.error(
+    //                     'Payment has been deleted',
+    //                     {
+    //                         timeOut: 1000,
+    //                         fadeOut: 1000,
+    //                         onHidden: function () {
+    //                             location.reload();
+    //                         }
+    //                     }
+    //                 );
+    //             }
 
-        // var item = $(this).attr("data-id");
-
-
-        var order_id=$('#order_id').val();
-
-
-        var z = confirm("Are you sure to remove this item?");
-
-        if (z== true){
-
-            $.ajax({
-                url: '<?= api_url() ?>' + "order/OrderRemoveItem/"+id+'/'+order_id,
-                method: 'get',
-                success: function(data) {
-                    toastr.success('Item has been removed!');
-                    location.reload();
-                }
-
-            });
-        }
+    //         });
+    //     }
 
 
-    }
+
+
+    // }
+
+    // function item_remove(id){
+
+    //     // var item = $(this).attr("data-id");
+
+
+    //     var order_id=$('#order_id').val();
+
+
+    //     var z = confirm("Are you sure to remove this item?");
+
+    //     if (z== true){
+
+    //         $.ajax({
+    //             url: '<?= api_url() ?>' + "order/OrderRemoveItem/"+id+'/'+order_id,
+    //             method: 'get',
+    //             success: function(data) {
+    //                 toastr.success('Item has been removed!');
+    //                 location.reload();
+    //             }
+
+    //         });
+    //     }
+
+
+    // }
 
     function shipped_status(val) {
 
