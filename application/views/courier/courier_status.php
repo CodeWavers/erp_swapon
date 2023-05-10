@@ -59,6 +59,7 @@
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
                                         <th>Invoice No</th>
+                                        <th>Ecom Order No</th>
                                         <th>Customer Name</th>
                                         <th>Date</th>
                                         <th>Courier Name</th>
@@ -127,7 +128,15 @@
 
 
                                         <td>
-                                            <?php echo $row['invoice']?>
+                                            <?php echo $row['invoice'];
+                                            $ecom_invoice_id = $row['invoice_id'];
+                                            ?>
+                                        </td>
+                                        <td>
+                                           
+                                           <a href="<?php echo base_url("Cinvoice/invoice_inserted_data/$ecom_invoice_id") ?>" data-toggle="tooltip" data-placement="left" title="Invoice Downnload"><?php echo $row['ecom_order_id'] ?></a>
+
+                                            
                                         </td>
 
                                         <td><?php echo $row['customer_name']?></td>
@@ -135,7 +144,7 @@
                                         <td><?php echo $row['courier_name']?></td>
                                         <td><?php echo $row['branch_name']?></td>
                                         <td><?php echo $courier_condition?></td>
-                                        <td><?php echo $adc=$row['delivery_ac']?></td>
+                                        <td><?php echo $adc=$row['shipping_cost']?></td>
                                         <td><?php echo $row['condition_cost']?></td>
                                         <td class="col-sm-2">
 
