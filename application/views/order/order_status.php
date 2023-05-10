@@ -228,9 +228,9 @@
                                         <?php foreach ($order as $od) {
                                             $CI = &get_instance();
                                             $CI->load->model('Reports');
-                                            $current_stock = $CI->Reports->current_stock($od->id,1);
+                                            $current_stock = $CI->Reports->current_stock($od->variationId,1);
 
-//                                            echo '<pre>';print_r($current_stock);exit();
+                                           //echo '<pre>';print_r($order);exit();
                                             ?>
                                         <tr>
                                             <td><?php echo $sl++ ?></td>
