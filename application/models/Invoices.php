@@ -155,17 +155,33 @@ class Invoices extends CI_Model
 
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
-        // echo '<pre>'; print_r($this->db->get()->result_array());exit();
+         
         $records = $this->db->get()->result();
+       // echo '<pre>'; print_r($records);exit();
         $data = array();
         $sl = 1;
 
         foreach ($records as $record) {
+            $url = api_url()."order/show/$record->invoice_id";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+      //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $response=json_decode($resp);
+        $shipping_address=json_decode($response[0]->shipping_address);
             $button = '';
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
-            $button .= '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
+            $button .= '  <a href="' . $base_url . ($record->is_ecom ? 'Corder/invoice_inserted_data/' : 'Cinvoice/invoice_inserted_data/') . $record->invoice_id . '" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('invoice') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
 
             if ($this->permission1->method('manage_invoice', 'update')->access()) {
                 $button .= ' <a href="' . $base_url . 'Cinvoice/invoice_update_form/' . $record->invoice_id . '" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
@@ -175,9 +191,9 @@ class Invoices extends CI_Model
 
 
 
-            $details = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
-            $details_i = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
-            $ecom_order_id = '  <a href="' . $base_url . 'Cinvoice/invoice_inserted_data/' . $record->invoice_id . '" class="" >' . $record->ecom_order_id . '</a>';
+            $details = '  <a href="' . $base_url . ($record->is_ecom ? 'Corder/invoice_inserted_data/' : 'Cinvoice/invoice_inserted_data/') . $record->invoice_id . '" class="" >' . $record->invoice . '</a>';
+            $details_i = '  <a href="' . $base_url . ($record->is_ecom ? 'Corder/invoice_inserted_data/' : 'Cinvoice/invoice_inserted_data/') . $record->invoice_id . '" class="" >' . $record->invoice_id . '</a>';
+            $ecom_order_id = '  <a href="' . $base_url . ($record->is_ecom ? 'Corder/invoice_inserted_data/' : 'Cinvoice/invoice_inserted_data/') . $record->invoice_id . '" class="" >' . $record->ecom_order_id . '</a>';
 
             if ($record->outlt == 'HK7TGDT69VFMXB7') {
                 $out = $cw_name;
@@ -268,6 +284,7 @@ class Invoices extends CI_Model
                 'sale_type'      => $st,
                 'salesman'         => $record->first_name . ' ' . $record->last_name,
                 'customer_name'    => $customer_name,
+                'customer_name'    => $shipping_address->name,
                 'final_date'       => $this->occational->dateConvert($record->date) . " " . $record->time,
                 'total_amount'     => $record->total_amount,
                 'button'           => $button,
