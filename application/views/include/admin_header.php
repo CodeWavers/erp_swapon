@@ -2983,15 +2983,15 @@ $birthday = $CI->Reports->birthday_noti();
               <?php if (
               $this->permission1->method('add_branch', 'read')->access()
               ) { ?>
-<!--                  <li class="treeview --><?php //if (
-//                      $this->uri->segment('2') == "courier_ledger_report"
-//                  ) {
-//                      echo "active";
-//                  } else {
-//                      echo " ";
-//                  } ?><!--"><a href="--><?php //echo base_url(
-//                          'Ccourier/courier_ledger_report'
-//                      ); ?><!--">Courier Ledger</a></li>-->
+               <li class="treeview <?php if (
+                     $this->uri->segment('2') == "courier_ledger_report"
+                 ) {
+                     echo "active";
+                 } else {
+                     echo " ";
+                  } ?>"><a href="<?php echo base_url(
+                         'Ccourier/courier_ledger_report'
+                      ); ?>">Courier Ledger</a></li>
 
                   <li class="treeview <?php if (
                       $this->uri->segment('2') == "courier_status"
