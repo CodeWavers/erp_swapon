@@ -5073,7 +5073,7 @@ class Rqsn extends CI_Model
                 $total_rqsn_transfer_in_array[$row->product_id] = $row->total_rqsn_transfer;
             }
             foreach ($total_phy_count as $row) {
-                $total_phy_count_array[$row->product_id] = $row->phy_qty;
+                $total_phy_count_array[$row->product_id] = (int)$row->phy_qty;
             }
             foreach ($total_wastage_qnty as $row) {
                 $total_wastage_qnty_array[$row->product_id] = $row->total_wastage_qnty;
@@ -5112,9 +5112,9 @@ class Rqsn extends CI_Model
                 $record->production_price = isset($productionprice_array[$record->product_id]) ? $productionprice_array[$record->product_id] : 0;
                 $record->supplier_price = isset($supplierprice_array[$record->product_id]) ? $supplierprice_array[$record->product_id] : 0;
                 //Total In
-                $total_in = isset($total_rqsn_transfer_in_array[$record->product_id]) ? $total_rqsn_transfer_in_array[$record->product_id] : 0 +
+                $total_in = (isset($total_rqsn_transfer_in_array[$record->product_id]) ? $total_rqsn_transfer_in_array[$record->product_id] : 0) +
                     (isset($total_purchased_array[$record->product_id]) ? $total_purchased_array[$record->product_id] : 0) +
-                    (!empty($total_phy_count_array[$record->product_id]) ? $total_phy_count_array[$record->product_id] : 0);
+                    (isset($total_phy_count_array[$record->product_id]) ? $total_phy_count_array[$record->product_id] : 0);
                 // echo "<pre>";
                 // // print_r($total_in);
                 // print_r($total_purchased_array);
@@ -5139,9 +5139,9 @@ class Rqsn extends CI_Model
                 $stock =  $total_in - $total_out - $total_return_given - $damaged_quantity;
 
                 if ($new_from_date) {
-                    $total_in_opening = isset($opening_stock_total_purchased_array[$record->product_id]) ? $opening_stock_total_purchased_array[$record->product_id] : 0 +
+                    $total_in_opening = (isset($opening_stock_total_purchased_array[$record->product_id]) ? $opening_stock_total_purchased_array[$record->product_id] : 0) +
                         (isset($opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) +
-                        (!empty($opening_stock_total_phy_count_array[$record->product_id]) ? $opening_stock_total_phy_count_array[$record->product_id] : 0);
+                        (isset($opening_stock_total_phy_count_array[$record->product_id]) ? $opening_stock_total_phy_count_array[$record->product_id] : 0);
                     $total_damage_opening = (isset($opening_stock_damaged_qty_array[$record->product_id]) ? $opening_stock_damaged_qty_array[$record->product_id] : 0 +
                         (isset($opening_stock_total_wastage_qnty_array[$record->product_id]) ? $opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
 
@@ -5157,9 +5157,9 @@ class Rqsn extends CI_Model
                     }
                     $opening_stock =  $total_in_opening - $total_out_opening - $total_damage_opening - $total_return_given_opening;
                 } else {
-                    $total_in_else_opening = isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0 +
+                    $total_in_else_opening = (isset($else_opening_stock_total_purchased_array[$record->product_id]) ? $else_opening_stock_total_purchased_array[$record->product_id] : 0) +
                         (isset($else_opening_stock_total_rqsn_transfer_in_array[$record->product_id]) ? $else_opening_stock_total_rqsn_transfer_in_array[$record->product_id] : 0) +
-                        (!empty($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
+                        (isset($else_opening_stock_total_phy_count_array[$record->product_id]) ? $else_opening_stock_total_phy_count_array[$record->product_id] : 0);
                     $total_damage_else_opening = (isset($else_opening_stock_damaged_qty_array[$record->product_id]) ? $else_opening_stock_damaged_qty_array[$record->product_id] : 0 +
                         (isset($else_opening_stock_total_wastage_qnty_array[$record->product_id]) ? $else_opening_stock_total_wastage_qnty_array[$record->product_id] : 0));
 
@@ -5179,9 +5179,9 @@ class Rqsn extends CI_Model
                     $opening_stock =  $total_in_else_opening - $total_out_else_opening - $total_damage_else_opening - $total_return_given_else_opening;
                 }
                 if ($new_to_date) {
-                    $total_in_closing = isset($closing_stock_total_purchased_array[$record->product_id]) ? $closing_stock_total_purchased_array[$record->product_id] : 0 +
+                    $total_in_closing = (isset($closing_stock_total_purchased_array[$record->product_id]) ? $closing_stock_total_purchased_array[$record->product_id] : 0) +
                         (isset($closing_stock_total_rqsn_transfer_array[$record->product_id]) ? $closing_stock_total_rqsn_transfer_array[$record->product_id] : 0) +
-                        (!empty($closing_stock_total_phy_count_array[$record->product_id]) ? $closing_stock_total_phy_count_array[$record->product_id] : 0);
+                        (isset($closing_stock_total_phy_count_array[$record->product_id]) ? $closing_stock_total_phy_count_array[$record->product_id] : 0);
                     $total_damage_closing = (isset($closing_stock_damaged_qty_array[$record->product_id]) ? $closing_stock_damaged_qty_array[$record->product_id] : 0 +
                         (isset($closing_stock_total_wastage_qnty_array[$record->product_id]) ? $closing_stock_total_wastage_qnty_array[$record->product_id] : 0));
 
