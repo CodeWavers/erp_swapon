@@ -290,33 +290,58 @@ class Lproduction
     {
         $CI = &get_instance();
         $CI->load->model('Production');
+        $CI->load->model('Reports');
         $CI->load->model('Accounts');
         $CI->load->model('Web_settings');
 
         $bank_list          = $CI->Web_settings->bank_list();
+        $product_list = $CI->Production->get_receive_product();
 
         $pro_expenses = $CI->Accounts->get_data_by_headcode(40105);
 
         $base_no = 'PR-' . date('YmdHis');
 
-        //  $outlet_list    = $CI->Production->outlet_list();
-        //  $outlet_list_to    = $CI->Production->outlet_list_to();
-        //  $cw_list    = $CI->Production->cw_list();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $taxfield = $CI->db->select('tax_name,default_value')
             ->from('tax_settings')
             ->get()
             ->result_array();
-        $data = array(
+
+
+
+        if (!empty($product_list)) {
+            foreach ($product_list as $k => $v) {
+                $product_id=$product_list[$k]['product_id'];
+
+                $product_list[$k]['stock'] = $CI->Reports->current_stock($product_id,1);
+
+                $rqsn_quantity=$CI->db->select('*')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row();
+                $rcv_qty=$CI->db->select('SUM(rcv_qty) as rc_qty')->from('production_goods')->where('product_id',$product_id)->get()->row();
+
+                if (!empty($rqsn_quantity)){
+                    $product_list[$k]['rc_qty']=$rqsn_quantity->finished_qty-$rcv_qty->rc_qty;
+                    //$product_list[$k]['rc_qty']=$rcv_qty->rc_qty;
+                    $product_list[$k]['row_total']=$product_list[$k]['rc_qty']*$product_list[$k]['production_cost'];
+
+                }
+
+            }
+
+        }
+
+
+            $data = array(
             'title'         => "Receive Production",
             'discount_type' => $currency_details[0]['discount_type'],
             'taxes'         => $taxfield,
             'pro_expenses'  => $pro_expenses,
             'base_no'       => $base_no,
             'bank_list'     => $bank_list,
+            'product_list'     => $product_list,
+            'grand_total'     => number_format(array_sum(array_column($product_list,'row_total')),2),
         );
 
-        // echo '<pre'; print_r($cw_list);exit();
+       //echo '<pre>'; print_r($product_list);exit();
         //    die();
         $invoiceForm = $CI->parser->parse('production/rcv_production_form', $data, true);
         return $invoiceForm;

@@ -283,7 +283,7 @@ class Warrenty extends CI_Model {
         $this->db->join('invoice_details c', 'c.invoice_details_id  = a.invoice_details_id ');
 
         $this->db->where('usablity', 1);
-        $this->db->group_by('a.invoice_id', 'desc');
+        $this->db->group_by('a.invoice_id');
         $this->db->limit('500');
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
@@ -302,6 +302,7 @@ class Warrenty extends CI_Model {
 
         $this->db->where('usablity', 1);
         $this->db->group_by('a.invoice_id', 'desc');
+        $this->db->order_by('a.invoice_id');
         $this->db->limit($perpage, $page);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {

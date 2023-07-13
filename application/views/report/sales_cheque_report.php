@@ -215,12 +215,12 @@
                                     <div class="column1">
                                         <label for="cheque_date" class="col-sm-3 col-form-label">Due Date</label>
 
-                                        <input style="width: auto;" type="text" id="cheque_date" class="form-control datepicker" name="cheque_date" value="{cheque_date}" />
+                                        <input style="width: auto;" type="date" id="cheque_date" class="form-control " name="cheque_date" value="{cheque_date}" />
                                     </div>
                                     <div class="column1">
                                         <label for="payment_date" class="col-sm-3 col-form-label m-r">Payment Date</label>
 
-                                        <input style="width: auto;" type="text" id="payment_date" class="form-control datepicker" name="payment_date" value="" autocomplete="off" />
+                                        <input style="width: auto;" type="date" id="payment_date" class="form-control " name="payment_date" value="" autocomplete="off" />
                                     </div>
                                     <div class="column1">
                                         <label for="cheque_no" class="col-md-3 col-form-label">Cheque No.</label>
@@ -404,6 +404,7 @@
                                     <table id="editable_table" class="table table-bordered table-striped table-hover">
                                         <thead>
                                             <tr>
+                                                <th>#</th>
                                                 <th>Invoice ID</th>
 
                                                 <th><?php echo display('customer_name') ?></th>
@@ -540,7 +541,11 @@
                 }
             },
 
-            "columns": [{
+            "columns": [
+                {
+                    data: "sl"
+                },
+                {
                     data: "invoice_id"
                 },
                 {

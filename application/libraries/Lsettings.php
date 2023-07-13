@@ -444,6 +444,37 @@ class Lsettings
     $bankList = $CI->parser->parse('settings/bkash', $data, true);
     return $bankList;
   }
+  public function rocket_list()
+  {
+    $CI = &get_instance();
+    $CI->load->model('Settings');
+    $CI->load->model('Web_settings');
+    $rocket_list = $CI->Settings->get_rocket_list();
+
+    if (!empty($rocket_list)) {
+      foreach ($rocket_list as $index => $value) {
+        $bb = $CI->Settings->bkash_balance($value['rocket_no']);
+          $rocket_list[$index]['balance'] = !empty($bb[0]['balance']) ? $bb[0]['balance'] : 0;
+      }
+    }
+
+    $i = 0;
+    if (!empty($rocket_list)) {
+      foreach ($rocket_list as $k => $v) {
+        $i++;
+          $rocket_list[$k]['sl'] = $i;
+      }
+    }
+    $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+    $data = [
+      'title' => 'Rocket List',
+      'rocket_list' => $rocket_list,
+      'currency' => $currency_details[0]['currency'],
+      'position' => $currency_details[0]['currency_position'],
+    ];
+    $bankList = $CI->parser->parse('settings/rocket', $data, true);
+    return $bankList;
+  }
 
   public function nagad_list()
   {
@@ -526,6 +557,32 @@ class Lsettings
     $bankList = $CI->parser->parse('settings/edit_bkash', $data, true);
     return $bankList;
   }
+  public function rocket_show_by_id($rocket_id)
+  {
+    $CI = &get_instance();
+    $CI->load->model('Settings');
+    $CI->load->model('Warehouse');
+
+    $outlet_list = $CI->Warehouse->cw_and_outlet_merged();
+    $signed_outlet = $CI->Warehouse->get_outlet_user();
+    $signed_outlet_id = '';
+    if ($signed_outlet) {
+      $signed_outlet_id = $signed_outlet[0]['outlet_id'];
+    }
+
+      $rocket_list = $CI->Settings->get_rocket_by_id($rocket_id);
+
+   // echo '<pre>';print_r($rocket_list);exit();
+
+    $data = [
+      'title' => 'Rocket Edit',
+      'rocket_list' => $rocket_list,
+      'outlet_list' => $outlet_list,
+      'signed_outlet_id'  => $signed_outlet_id
+    ];
+    $bankList = $CI->parser->parse('settings/edit_rocket', $data, true);
+    return $bankList;
+  }
   public function nagad_show_by_id($nagad_id)
   {
     $CI = &get_instance();
@@ -564,6 +621,13 @@ class Lsettings
     $CI = &get_instance();
     $CI->load->model('Settings');
     $bkash_list = $CI->Settings->bkash_update_by_id($bkash_id);
+    return true;
+  }
+  public function rocket_update_by_id($rocket_id)
+  {
+    $CI = &get_instance();
+    $CI->load->model('Settings');
+    $bkash_list = $CI->Settings->rocket_update_by_id($rocket_id);
     return true;
   }
   public function nagad_update_by_id($nagad_id)
@@ -708,6 +772,74 @@ class Lsettings
     $bkash_ledger = $CI->parser->parse('settings/bkash_ledger', $data, true);
     return $bkash_ledger;
   }
+  public function rocket_ledger($rocket_id = null, $from = null, $to = null)
+  {
+    $CI = &get_instance();
+    $CI->load->model('Settings');
+    $CI->load->model('Reports');
+    $CI->load->model('Web_settings');
+    $CI->load->model('Warehouse');
+    $outlet_id = $_POST['outlet'];
+
+    $outlet_user = $CI->Warehouse->get_outlet_user();
+    $cw = $CI->Warehouse->central_warehouse();
+    $outlet_list = $CI->Warehouse->branch_list_product();
+
+    if (!$outlet_id) {
+      $outlet_id = $outlet_user[0]['outlet_id'];
+    }
+
+    $outlet_user        = $CI->Warehouse->get_outlet_user();
+    $rocket_list = $CI->Settings->get_rocket_list();
+    $from_date = !empty($from) ? $from : date('Y-m-d');
+    $to_date = !empty($to) ? $to : date('Y-m-d');
+    $rocket_info = $CI->Settings->rocket_info($rocket_id);
+    $rocket_no = $rocket_info[0]['rocket_no'];
+    $ledger = $CI->Settings->rocket_ledger($rocket_no, $from_date, $to_date, $outlet_id);
+    $total_ammount = 0;
+    $total_credit = 0;
+    $total_debit = 0;
+    $balance = 0;
+    $total_debit = 0;
+    $total_credit = 0;
+
+    if (!empty($ledger)) {
+      foreach ($ledger as $index => $value) {
+        $ledger[$index]['debit'] = $ledger[$index]['Debit'];
+        $total_debit += $ledger[$index]['debit'];
+
+        $ledger[$index]['balance'] =
+          $balance + ($ledger[$index]['Debit'] - $ledger[$index]['Credit']);
+        $ledger[$index]['credit'] = $ledger[$index]['Credit'];
+        $total_credit += $ledger[$index]['credit'];
+        $balance = $ledger[$index]['balance'];
+      }
+    }
+
+    $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+    $company_info = $CI->Reports->retrieve_company();
+    $data = [
+      'title' => "Rocket Ledger",
+      'ledger' => $ledger,
+      'outlet' => $outlet_user,
+      'cw' => $cw,
+      'outlet_list' => $outlet_list,
+      'rocket_info' => $rocket_info,
+      'rocket_list' => $rocket_list,
+      'total_credit' => number_format($total_credit, 2, '.', ','),
+      'total_debit' => number_format($total_debit, 2, '.', ','),
+      'balance' => number_format($balance, 2, '.', ','),
+      'currency' => $currency_details[0]['currency'],
+      'position' => $currency_details[0]['currency_position'],
+      'software_info' => $currency_details,
+      'company' => $company_info,
+      'first_outlet' => $outlet_user,
+    ];
+
+    //echo '<pre>';print_r($data);exit();
+    $bkash_ledger = $CI->parser->parse('settings/rocket_ledger', $data, true);
+    return $bkash_ledger;
+  }
   public function nagad_ledger($nagad_id = null, $from = null, $to = null)
   {
     $CI = &get_instance();
@@ -784,6 +916,8 @@ class Lsettings
     $CI->load->model('Settings');
 
     $card_list = $CI->Settings->read_all_card();
+
+   // echo '<pre>';print_r($card_list);exit();
 
     $i = 0;
     foreach ($card_list as $k => $v) {

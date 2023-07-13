@@ -24,6 +24,216 @@ class Api extends CI_Controller {
             echo json_encode($json,JSON_UNESCAPED_UNICODE);
         
     }
+
+//      public function cron(){
+//          echo file_put_contents("test.txt","Hello World. Testing!/n");
+//      }
+
+    public function insert_cats_ecom()
+    {
+
+        $url = api_url()."categories/cats";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+        $data=array();
+        foreach ($records as $r){
+
+            $data=array(
+
+                'id'   => $r->id,
+                'name'   => $r->name,
+                'parent_id'   => $r->parent_id,
+                'commision_rate'   => $r->commision_rate,
+                'banner'   => $r->banner,
+                'icon'  => $r->icon,
+                'details' => $r->details,
+                'featured' => $r->featured,
+                'top' => $r->top,
+                'digital' => $r->digital,
+                'slug' => $r->slug,
+                'meta_title' => $r->meta_title,
+                'meta_description' => $r->meta_description,
+                'creator' => $r->creator,
+                'status' => $r->status,
+                'created_at' => $r->created_at,
+                'updated_at' => $r->updated_at,
+
+            );
+
+            $check_cats = $this->db->select('id')->from('cats')->where(array('id' =>$r->id))->get()->row();
+            if (!empty($check_cats)) {
+                $this->db->where(array('id' =>$r->id));
+                $result = $this->db->update('cats', $data);
+
+            }else{
+                $result = $this->db->insert('cats', $data);
+
+            }
+
+
+
+
+        }
+
+    }
+    public function insert_customer_ecom()
+    {
+
+        $url = api_url()."order/all_customer";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+        $data=array();
+        foreach ($records as $r){
+
+            $data=array(
+
+                'customer_name'   => $r->name,
+                'customer_mobile'   => $r->phone,
+                'zip'   => $r->postal_code,
+                'country'   => $r->country,
+                'customer_email'  => $r->email,
+                'city' => $r->city,
+                'customer_address' => $r->address,
+                'cus_type' => 2,
+            );
+
+            $check_customer = $this->db->select('customer_id')->from('customer_information')->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone))->get()->row();
+            if (!empty($check_customer)) {
+                $this->db->where(array('customer_name' =>$r->name,'customer_mobile'=> $r->phone));
+                $result = $this->db->update('customer_information', $data);
+                $customer_id = $check_customer->customer_id;
+
+
+            }else{
+                $result = $this->db->insert('customer_information', $data);
+                $customer_id = $this->db->insert_id();
+            }
+
+
+            $coa = $this->Customers->headcode();
+            if ($coa->HeadCode != NULL) {
+                $headcode = $coa->HeadCode + 1;
+            } else {
+                $headcode = "102030100001";
+            }
+            $c_acc = $customer_id . '-' . $r->name;
+            $createby = $this->session->userdata('user_id');
+            $createdate = date('Y-m-d H:i:s');
+
+            $customer_coa = [
+                'HeadCode'         => $headcode,
+                'HeadName'         => $c_acc,
+                'PHeadName'        => 'Customer Receivable',
+                'HeadLevel'        => '4',
+                'IsActive'         => '1',
+                'IsTransaction'    => '0',
+                'IsGL'             => '0',
+                'HeadType'         => 'A',
+                'IsBudget'         => '0',
+                'IsDepreciation'   => '0',
+                'customer_id'      => $customer_id,
+                'DepreciationRate' => '0',
+                'CreateBy'         => $createby,
+                'CreateDate'       => $createdate,
+            ];
+
+
+            $check_headCode = $this->db->select('HeadName')->from('acc_coa')->where('HeadName', $c_acc)->get()->row();
+            if (!empty($check_headCode)) {
+                $this->db->where('HeadName',$c_acc);
+                $this->db->update('acc_coa', $customer_coa);
+            }else{
+                $this->db->insert('acc_coa', $customer_coa);
+
+            }
+
+
+
+        }
+
+    }
+    public function insert_finished_product_ecom()
+    {
+        $this->db->where('finished_raw',1)->delete('product_information');
+
+        $url = api_url()."products/get_products_all";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+        //  echo '<pre>';print_r($records->data);exit();
+
+        $data2=array();
+        foreach ($records->data as $r){
+            $image_url = ecom_url() . 'public/'.$r->thumbnail_image;
+            $data2['product_id']   = $r->sku;
+            $data2['category_id']  = $r->cats;
+            $data2['brand_id']  = '';
+            $data2['product_name'] = $r->name;
+            $data2['finished_raw']  = 1;
+            $data2['price']        = $r->unit_price;
+            $data2['purchase_price']        = $r->purchase_price;
+            $data2['unit']         = $r->unit;
+            $data2['sku']  = $r->sku;
+            $data2['tax']          = 0;
+            $data2['product_details'] = '';
+            $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
+            $data2['status']       = 1;
+            $data2['created_date']       =  $r->created_at;
+            $result=  $this->db->insert('product_information', $data2);
+
+//            $check_product = $this->db->select('product_id')->from('product_information')->where('product_id', $r->sku)->get()->row();
+//            if (!empty($check_product)) {
+//                $this->db->where('product_id', $r->sku);
+//                $result= $this->db->update('product_information', $data2);
+//            }else{
+//                $result=  $this->db->insert('product_information', $data2);
+//
+//            }
+
+
+
+        }
+
+
+
+
+    }
+
     public function auto_sms(){
         $customer_mobile= $this->db->select('customer_mobile')->from('customer_information')->get()->result_array();
         $present_day=date('Y-m-d');
@@ -867,14 +1077,18 @@ if($start == 0){
     |_____________________________________________________
     */
     public function insert_customer(){
-       
+
+
+
         $data = array(
-            'customer_name'    => $this->input->get('customer_name'),
-            'customer_address' => $this->input->get('address'),
-            'customer_mobile'  => $this->input->get('mobile'),
-            'customer_email'   => $this->input->get('email'),
-            'status'           => 2
+            'customer_name'    => $this->input->post('name'),
+            'customer_id_two'    => '',
+            'customer_mobile'  => (!empty($this->input->post('phone')) ?$this->input->post('phone') : ''),
+            'customer_email'   => (!empty($this->input->post('email')) ?$this->input->post('email') : ''),
+            'cus_type'           => 2
         );
+
+  // echo '<pre>';print_r($data);exit();
 
 
     if ($this->Api_model->customer_create($data)) { 
@@ -887,7 +1101,7 @@ if($start == 0){
            }else{
                 $headcode="102030000001";
             }
-    $c_acc=$customer_id.'-'.$this->input->get('customer_name');
+    $c_acc=$customer_id.'-'.$this->input->post('name');
    $createby=1;
   $createdate=date('Y-m-d H:i:s');
 
@@ -907,7 +1121,6 @@ if($start == 0){
              'CreateDate'       => $createdate,
         ];
         $this->db->insert('acc_coa',$customer_coa);
-        $this->Customers->previous_balance_add($this->input->get('previous_balance'), $customer_id);
         $json['response'] = [
                      'status'     => 'ok',
                      'message'    => 'Successfully Added',
@@ -917,8 +1130,9 @@ if($start == 0){
   $json['response'] = [
                     'status'     => 'error',
                     'message'    => 'Please try again',
-                    'permission' => 'read'
-                ]; 
+                    'permission' => 'read',
+
+                ];
             }
 
      echo json_encode($json,JSON_UNESCAPED_UNICODE);

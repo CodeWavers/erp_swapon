@@ -126,6 +126,9 @@ class Lcourier {
             'title'         =>'Branch Name Edit',
             'branch_id'   => $category_detail[0]['branch_id'],
             'branch_name' => $category_detail[0]['branch_name'],
+            'inside' => $category_detail[0]['inside'],
+            'outside' => $category_detail[0]['outside'],
+            'sub' => $category_detail[0]['sub'],
            // 'courier_name' => $category_detail[0]['courier_name'],
             //'courier_list'=>$courier_list,
             'status'        => $category_detail[0]['status']
@@ -193,6 +196,10 @@ class Lcourier {
 
 
 
+        //echo '<pre>';print_r($ledger);exit();
+
+
+
         $singlecustomerdetails = $CI->parser->parse('courier/courier_ledger_report', $data, true);
         return $singlecustomerdetails;
     }
@@ -201,9 +208,9 @@ class Lcourier {
     {
         $CI = & get_instance();
         $CI->load->model('Courier');
+        $CI->load->model('Web_settings');
 
         $rqsn_list = $CI->Courier->get_invoice_data();
-
 
         $i = 0;
         foreach ($rqsn_list as $k => $v) {
@@ -213,9 +220,12 @@ class Lcourier {
 
         $data = array(
             'title'     => 'Courier Status',
-            'pur_list'  => $rqsn_list
+            'pur_list'  => $rqsn_list,
+            'bank_list'        => $CI->Web_settings->bank_list(),
+            'bkash_list'        =>$CI->Web_settings->bkash_list(),
+            'nagad_list'        =>  $CI->Web_settings->nagad_list(),
         );
-        // echo '<pre>'; print_r($data); die();
+//         echo '<pre>'; print_r($rqsn_list); die();
 
         return $CI->parser->parse('courier/courier_status', $data, true);
 

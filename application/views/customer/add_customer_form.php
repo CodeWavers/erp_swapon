@@ -72,12 +72,7 @@
                     <?php echo form_open('Ccustomer/insert_customer', array('class' => 'form-vertical', 'id' => 'insert_customer')) ?>
                     <div class="panel-body">
                      <div class="col-sm-6">
-                        <div class="form-group row">
-                            <label for="customer_id_two" class="col-sm-4 col-form-label">Customer ID: <i class="text-danger">*</i></label>
-                            <div class="col-sm-8">
-                                <input class="form-control" name ="customer_id_two" id="customer_name" type="text" placeholder="Customer ID"  required="" tabindex="1">
-                            </div>
-                        </div>
+
 
                          <div class="form-group row">
                             <label for="customer_name" class="col-sm-4 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger">*</i></label>
@@ -85,6 +80,13 @@
                                 <input class="form-control" name ="customer_name" id="customer_name" type="text" placeholder="<?php echo display('customer_name') ?>"  required="" tabindex="1">
                             </div>
                         </div>
+
+                         <div class="form-group row">
+                             <label for="customer_name" class="col-sm-4 col-form-label">Shop Name </label>
+                             <div class="col-sm-8">
+                                 <input class="form-control" name="shop_name" id="shop_name" type="text" placeholder="Shop Name" required="" tabindex="1">
+                             </div>
+                         </div>
 
                        	<div class="form-group row">
                             <label for="email" class="col-sm-4 col-form-label"><?php echo display('customer_email') ?></label>
@@ -185,7 +187,7 @@
                         <div class="form-group row">
                             <label for="address " class="col-sm-4 col-form-label"><?php echo display('customer_address') ?></label>
                             <div class="col-sm-8">
-                                <textarea class="form-control" name="address" id="address " rows="2" placeholder="<?php echo display('customer_address') ?>"></textarea>
+                                <textarea class="form-control" name="address" id="address" rows="2" placeholder="<?php echo display('customer_address') ?>"></textarea>
                             </div>
                         </div>
                           <div class="form-group row">
@@ -280,6 +282,67 @@
     </section>
 </div>
 <!-- Add new customer end -->
+
+<script type="text/javascript">
+
+
+    $( "#add-customer" ).on("click", function(  ) {
+
+        var name=$('#customer_name').val();
+        var email=$('#email').val();
+        var country=$('#country').val();
+        var city=$('#city').val();
+        var postal_code=$('#zip').val();
+        var phone=$('#mobile').val();
+        var address=$('#address').val();
+
+
+
+
+            var form = new FormData();
+
+
+            form.append("name", name);
+            form.append("email", email);
+            form.append("country", country)
+            form.append("city", city);
+            form.append("postal_code", postal_code);
+            form.append("phone", phone);
+            form.append("address", address);
+
+
+            // form.append("logo", fileInput.files[0], logo);
+
+        $.ajax({
+            url: '<?= api_url() ?>' + "customers/store",
+            method :'POST',
+            // dataType : 'json',
+            data: form,
+            processData: false,
+            contentType: false,
+            success: function(d)
+            {
+                toastr.success('Customer Added')
+               // location.reload();
+
+
+            },
+            error: function(xhr)
+            {
+
+
+                alert('failed!');
+            }
+        });
+
+
+
+
+
+    });
+
+
+</script>
 
 
 

@@ -67,6 +67,7 @@
 
      <link href="<?php echo base_url('assets/js/sweetalert/sweetalert.css') ?>" rel="stylesheet" type="text/css" />
      <link href="<?php echo base_url('assets/css/bootstrap-tagsinput.css') ?>" rel="stylesheet" type="text/css" />
+     <link href="<?php echo base_url('assets/css/daterangepicker.css') ?>" rel="stylesheet" type="text/css" />
      <!-- summernote css -->
 
      <?php if (!empty($Web_settings[0]['rtr']) && $Web_settings[0]['rtr'] == 1) {  ?>
@@ -151,8 +152,8 @@
      <script src="<?php echo base_url() ?>assets/js/custom.js" type="text/javascript"></script>
      <script src="<?php echo base_url() ?>assets/js/bootstrap-tagsinput.min.js" type="text/javascript"></script>
      <!-- summernote js -->
-
      <script src="<?php echo base_url() ?>assets/js/jstree.min.js"></script>
+     <script src="<?php echo base_url() ?>assets/js/dateRanger.js"></script>
      <script src="<?php echo base_url() ?>assets/js/spartan-multi-image-picker-min.js"></script>
      <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>
 

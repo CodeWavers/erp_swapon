@@ -131,8 +131,10 @@
                                             <th>Cash</th>
                                             <th>bKash</th>
                                             <th>Nagad</th>
+                                            <th>Rocket</th>
                                             <th>Bank</th>
                                             <th>Card</th>
+                                            <th>Total Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -174,11 +176,24 @@
                                                 </td>
 
                                                 <td class="text-right">
+                                                    <?= number_format($v['pay_type_rocket'], 2); ?>
+                                                </td>
+
+                                                <td class="text-right">
                                                     <?= number_format($v['pay_type_bank'], 2); ?>
                                                 </td>
 
                                                 <td class="text-right">
                                                     <?= number_format($v['pay_type_card'], 2); ?>
+                                                </td>
+
+                                                <td class="text-right">
+                                                    <?php 
+                                                            $total_amount = $v['total_due'] + $v['pay_type_cash'] + $v['pay_type_bkash'] + $v['pay_type_nagad']
+                                                            + $v['pay_type_rocket'] + $v['pay_type_bank'] + $v['pay_type_card'];
+                                                            
+                                                    ?>
+                                                    <?= number_format($total_amount, 2); ?>
                                                 </td>
 
                                             </tr>
@@ -207,11 +222,18 @@
                                             </td>
 
                                             <td class="text-right">
+                                                <?= number_format($day_total_rocket, 2); ?>
+                                            </td>
+
+                                            <td class="text-right">
                                                 <?= number_format($day_total_bank, 2); ?>
                                             </td>
 
                                             <td class="text-right">
                                                 <?= number_format($day_total_card, 2); ?>
+                                            </td>
+                                            <td class="text-right">
+                                                <?= number_format($total, 2); ?>
                                             </td>
 
                                         </tr>
@@ -231,16 +253,16 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#pywiseSaleReportTable').DataTable({
-            dom: "Bfrltip",
+            dom: "Bflrtip",//Bfrltip
             select: true,
             responsive: true,
             // processing: true,
             lengthMenu: [
-                [5, 10, 25, 50, 100, -1],
-                [5, 10, 25, 50, 100, "All"]
+                [50, 100, -1],//[5, 10, 25, 50, 100, -1],
+                [50, 100, "All"]// [5, 10, 25, 50, 100, "All"]
             ],
             "order": [],
-            pageLength: 10,
+            pageLength: 10000,
             buttons: [
                 // 'pageLength',
                 {

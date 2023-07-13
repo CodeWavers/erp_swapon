@@ -43,10 +43,10 @@
             <div class="col-sm-12">
                
                 <?php if($this->permission1->method('add_bank','create')->access()){ ?>
-                  <a href="<?php echo base_url('Csettings/bkash')?>" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo display('add_new_bank')?> </a>
+                  <a href="<?php echo base_url('Csettings/bkash')?>" class="btn btn-info m-b-5 m-r-2"><i class="ti-align-justify"> </i>Add New Bkash</a>
               <?php }?>
              <?php if($this->permission1->method('bank_list','read')->access()){ ?>
-                  <a href="<?php echo base_url('Csettings/bkash_list')?>" class="btn btn-success m-b-5 m-r-2"><i class="ti-align-justify"> </i>  <?php echo display('manage_bank')?> </a>
+                  <a href="<?php echo base_url('Csettings/bkash_list')?>" class="btn btn-success m-b-5 m-r-2"><i class="ti-align-justify"> </i>  Manage Bkash</a>
                    <?php }?>
                
             </div>

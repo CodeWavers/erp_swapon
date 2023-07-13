@@ -125,7 +125,7 @@ class Warehouse extends CI_Model
     //customer List
     public function branch_list()
     {
-        $this->db->select('a.*,b.*, d.*');
+        $this->db->select('a.*,b.*, d.first_name,d.last_name,a.outlet_id as out_id');
         $this->db->from('outlet_warehouse a');
         $this->db->join('central_warehouse b ', 'b.warehouse_id = a.warehouse_id', 'left');
         $this->db->join('users d', 'd.user_id = a.user_id');
@@ -201,10 +201,10 @@ class Warehouse extends CI_Model
     //Retrieve customer Edit Data
     public function retrieve_branch_editdata($courier_id)
     {
-        $this->db->select('a.*,b.*');
+        $this->db->select('a.*,b.first_name,b.last_name');
         $this->db->from('outlet_warehouse a');
         // $this->db->join('courier_name b','b.courier_id=a.courier_id');
-        $this->db->join('users b', 'b.user_id=a.user_id');
+       $this->db->join('users b', 'b.user_id=a.user_id','left');
         $this->db->where('a.outlet_id', $courier_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {

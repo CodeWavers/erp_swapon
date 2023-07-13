@@ -143,7 +143,9 @@ class Cpurchase extends CI_Controller
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->library('lpurchase');
+
         $content = $CI->lpurchase->purchase_edit_data($purchase_id);
+
         $this->template->full_admin_html_view($content);
     }
 
@@ -187,7 +189,7 @@ class Cpurchase extends CI_Controller
         if (!empty($product_info)) {
             $list[''] = '';
             foreach ($product_info as $value) {
-                $json_product[] = array('label' => $value['product_name'] . '(' . $value['product_model'] . ')' . '(' . $value['color_name'] . ')' . '(' . $value['size_name'] . ')', 'value' => $value['product_id']);
+                $json_product[] = array('label' => $value['sku'] . '-(' . $value['product_name'] . ')', 'value' => $value['product_id']);
             }
         } else {
             $json_product[] = 'No Product Found';

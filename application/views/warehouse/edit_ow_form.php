@@ -79,6 +79,19 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="category_name" class="col-sm-3 col-form-label">Outlet Address</label>
+                            <div class="col-sm-6">
+
+                                <textarea name="address" class="form-control"  placeholder="Address">{address}</textarea>
+
+                            </div>
+
+                            <div class="col-sm-3">
+                                <input type="submit" id="add-category" class="btn btn-success btn-large" name="add-category" value="<?php echo display('add') ?>" />
+                            </div>
+                        </div>
+
                         <input type="hidden" value="{outlet_id}" name="courier_id">
 
                         <div class="form-group row">

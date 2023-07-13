@@ -10,6 +10,7 @@
                 <li><a href="#"><i class="pe-7s-home"></i> <?php echo display('home') ?></a></li>
                 <li><a href="#">Outlet Received </a></li>
                 <li class="active">Outlet Received </li>
+                <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
             </ol>
         </div>
     </section>
@@ -48,13 +49,19 @@
                         </div>
                     </div>
 
-
+                   
+                                            <div class="col-sm-6">
+                                            <button class="btn btn-success" onclick="myFunction()">Approve</button>
+                                                <!-- <input type="submit"  class="btn btn-success" name="" value="<?php echo display('submit') ?>" tabindex="17"/> -->
+                                            </div>
+                                            
                     <div class="panel-body">
 
                         <div class="">
                             <table class="datatable table table-bordered table-hover">
                                 <thead>
                                     <tr>
+                                    <th class="table-checkbox"><input id="selectAll" type="checkbox" class="group-checkable"></th>
                                         <th><?php echo display('sl_no') ?></th>
                                         <th>From</th>
                                         <th>To</th>
@@ -72,6 +79,12 @@
                                     <?php $sl = 1; ?>
                                     <?php foreach ($t as $approve) { ?>
                                         <tr>
+                                        <?php $id = $approve['rqsn_detail_id'] ?>
+                                            <input type="hidden" name="rqsn_id" id="rqsn_id" value="<?php echo $id ?>">
+                                            <td><input type="checkbox" class="data-check flat-green"></td>
+                                            
+                                            
+                                            
                                             <td><?php echo $sl++; ?></td>
 
 
@@ -113,6 +126,46 @@
 
 
 <script type="text/javascript">
+    $("#selectAll").click(function(){
+        $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
+
+     });
+     function myFunction(e)
+     {
+        var rqsn_ids = [];
+        $(".data-check:checked").each(function () {
+        var rqsn_id = $(this).parents('tr').find('input[name=rqsn_id]').val();
+        rqsn_ids.push(rqsn_id);
+       
+
+        });
+        if(rqsn_ids.length >0)
+        {
+            console.log(rqsn_ids);
+            var csrf_test_name = $('[name="csrf_test_name"]').val();
+        console.log(rqsn_ids);
+        $.ajax({
+            url: '<?= base_url() ?>' + 'Crqsn/isreceiveall',
+            type: 'POST',
+            data: {
+                rqsn_ids: rqsn_ids,
+                 csrf_test_name: csrf_test_name,
+            },
+            success: function(data) {
+                if(data)
+                {
+                    location.reload();
+                }
+                
+            }
+        });
+        }
+        else{
+            alert("At least select One !");
+        }
+        
+     }
+
     $(document).ready(function() {
         var x = $('#a_qty').val();
         var y = $('#r_qty').html();

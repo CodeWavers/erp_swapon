@@ -47,19 +47,24 @@
 
         <!-- New customer -->
         <div class="row">
+
             <div class="col-sm-12">
                 <div class="panel panel-bd lobidrag">
+
                     <div class="panel-heading">
                         <div class="panel-title">
                             <h4><?php echo display('category') ?> </h4>
+
                         </div>
                     </div>
 
+
                     <div class="panel-body category">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#categoryList"><i class="ti-align-justify"> </i> <?php echo display('manage_category') ?></a></li>
+                            <li class="active"><a data-toggle="tab" href="#categoryList"><i class="ti-align-justify"> </i> Categories</a></li>
                             <li><a data-toggle="tab" href="#add_category"><i class="fa fa-plus"> </i> <?php echo display('add_category') ?></a></li>
-<!--                            <li><a data-toggle="tab" href="#csvupload"><i class="fa fa-file"> </i> --><?php //echo display('category_csv_upload') ?><!--</a></li>-->
+                            <li  class="" style="float: right !important;"> <a href="<?php echo base_url('Ccategory/insert_cats_ecom') ?>"  style="background-color: #E5343D;color: white !important;" class=" m-b-5 m-r-2 "><i class="fa fa-refresh"> </i>  Sync Categories</a>
+                            </li>
                         </ul>
 
                         <div class="tab-content">
@@ -246,7 +251,8 @@
                     // form.append("logo", fileInput.files[0], logo);
 
                     var settings = {
-                        // "url": "https://swaponsworld.com/api/v1/categories/store",
+                        "url": '<?= api_url() ?>' + "categories/store",
+
                         "method": "POST",
                         "timeout": 0,
                         "processData": false,

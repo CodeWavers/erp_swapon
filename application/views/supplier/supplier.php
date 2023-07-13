@@ -68,8 +68,8 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-bordered" cellspacing="0"  id="supplierList"> 
+                        <div class="">
+                            <table class="table table-responsive table-bordered table-striped" cellspacing="0" width="100%"  id="supplierList">
                           <thead>
                               <tr>
                                   <th><?php echo display('supplier_name') ?></th>
@@ -79,7 +79,7 @@
                                   <th><?php echo display('email'); ?></th>
                                   <th><?php echo display('city'); ?></th>
                                   <th><?php echo display('country'); ?></th>
-                                  <th width="150px"><?php echo display('balance'); ?></th>
+                                  <th><?php echo display('balance'); ?></th>
                                   <th><?php echo display('action'); ?> 
                                   </th>
                               </tr>

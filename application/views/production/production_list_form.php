@@ -60,7 +60,9 @@
                                         <th><?php echo display('sl') ?></th>
                                         <th><?php echo display('image') ?></th>
                                         <th class="col-md-2"><?php echo display('product_name') ?></th>
+                                        <th>SKU</th>
                                         <th>Quantity</th>
+                                        <th>Due Quantity</th>
                                         <th>Cutting</th>
                                         <th>Printing</th>
                                         <th>Sewing</th>
@@ -77,7 +79,15 @@
 
 //                                    $cutting=$row['quantity']-$row['cutting'];
 
+                                    if (!empty($row['cutting'])){
 
+                                        $ct=$row['cutting']-$row['printing'];
+
+
+                                    }else{
+
+                                        $ct=0;
+                                    }
                                     $printing=$row['printing']-$row['sewing'];
                                     $sewing=$row['sewing']-$row['finishing'];
                                     $finishing=$row['finishing'];
@@ -97,18 +107,13 @@
 
 
 
-                                    if (!empty($row['cutting'])){
 
-                                        $ct=$row['quantity']-$row['cutting'];
-
-
-                                    }else{
-
-                                        $ct=0;
-                                    }
 
 
                                     ?>
+
+
+                                        <?php if ($row['quantity'] !=  $row['finished_qty']) { ?>
                                     <tr class="text-center">
                                         <td><?php echo $row['sl']?> </td>
                                         <td class="text-center"><img src="<?php echo $row['image']?>" class="img-zoom" alt="Product Photo"></td>
@@ -117,6 +122,14 @@
 
                                         <td>
                                             <?php echo $row['product_name']?>
+                                        </td>
+
+                                        <td>
+                                            <?php echo $row['sku']?>
+                                        </td>
+
+                                        <td>
+                                            <input  size="10" type="text" class="form-control " value="<?php echo $row['quantity'] > 0 ? $row['quantity'] : 0;?>" style="width:100%;" name="quantity" id="quantity_<?php echo $row['product_id']?>" readonly>
                                         </td>
                                         <td>
                                             <input  size="10" type="text" class="form-control quantity" value="<?php echo $quantity > 0 ? $quantity : 0;?>" style="width:100%;" name="quantity" id="quantity_<?php echo $row['product_id']?>" readonly>
@@ -139,23 +152,58 @@
 
 
                                         <td>
-                                            <button type="button" id="add_btn<?=$row['sl']?>" name="add_cart" title="Add"
-                                                class="btn btn-success add_cart"
-                                                style="border:none; outline:none"
-                                                data-sl="<?php echo $row['sl']?>"
-                                                data-productname="<?php echo $row['product_name']?>"
-                                                data-productid="<?php echo $row['product_id']?>"
-                                                data-pr_rqsndetail="<?php echo $row['pr_rqsn_detail_id']?>"
-                                                data-pr_rqsn_id="<?php echo $row['pr_rqsn_id']?>"
 
-                                                onclick="add_and_delete(this)"
-                                                >
-                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                            <button type="button" id="add_btn<?=$row['sl']?>" name="add_cart" title="Add"
+                                                    class="btn btn-danger add_cart"
+                                                    style="border:none; outline:none"
+                                                    data-sl="<?php echo $row['sl']?>"
+                                                    data-productname="<?php echo $row['product_name']?>"
+                                                    data-productid="<?php echo $row['product_id']?>"
+                                                    data-pr_rqsndetail="<?php echo $row['pr_rqsn_detail_id']?>"
+                                                    data-pr_rqsn_id="<?php echo $row['pr_rqsn_id']?>"
+
+                                                    onclick="add_and_delete(this)"
+                                            >
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
                                             </button>
+
+<!--                                        --><?php
+//
+//                                        if ($quantity > 0 ) { ?>
+<!--                                            <button type="button" id="add_btn--><?//=$row['sl']?><!--" name="add_cart" title="Add"-->
+<!--                                                    class="btn btn-success add_cart"-->
+<!--                                                    style="border:none; outline:none"-->
+<!--                                                    data-sl="--><?php //echo $row['sl']?><!--"-->
+<!--                                                    data-productname="--><?php //echo $row['product_name']?><!--"-->
+<!--                                                    data-productid="--><?php //echo $row['product_id']?><!--"-->
+<!--                                                    data-pr_rqsndetail="--><?php //echo $row['pr_rqsn_detail_id']?><!--"-->
+<!--                                                    data-pr_rqsn_id="--><?php //echo $row['pr_rqsn_id']?><!--"-->
+<!---->
+<!--                                                    onclick="add_and_delete(this)"-->
+<!--                                            >-->
+<!--                                                <i class="fa fa-plus" aria-hidden="true"></i>-->
+<!--                                            </button>-->
+<!---->
+<!--                                        --><?php //} else{ ?>
+<!---->
+<!--                                            <button type="button" id="add_btn--><?//=$row['sl']?><!--" name="add_cart" title="Add"-->
+<!--                                                    class="btn btn-danger add_cart"-->
+<!--                                                    style="border:none; outline:none" disabled-->
+<!---->
+<!--                                            >-->
+<!--                                                <i class="fa fa-check" aria-hidden="true"></i>-->
+<!--                                            </button>-->
+<!---->
+<!--                                        --><?php //}?>
+
+
+
+
+
                                         </td>
                                     </tr>
                                     <input type ="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash();?>">
-                                <?php } ?>
+                                <?php } }?>
                                 </tbody>
                             </table>
 

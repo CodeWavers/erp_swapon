@@ -53,6 +53,7 @@
                     <a href="<?php echo base_url('Ccustomer/paid_customer') ?>" class="btn btn-warning m-b-5 m-r-2"><i class="ti-align-justify"> </i> <?php echo display('paid_customer') ?> </a>
                 <?php } ?>
 
+                <a href="<?php echo base_url('Ccustomer/insert_customer_ecom') ?>" class="sync btn btn-danger m-b-5 m-r-2 "><i class="fa fa-refresh"> </i>  Sync Customer</a>
 
             </div>
         </div>
@@ -78,8 +79,9 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl') ?></th>
-                                        <th>Organization ID</th>
+<!--                                        <th>Customer ID</th>-->
                                         <th><?php echo display('customer_name') ?></th>
+                                        <th>Shop Name</th>
                                         <th>Address</th>
                                         <th>District</th>
                                         <th><?php echo display('mobile') ?></th>

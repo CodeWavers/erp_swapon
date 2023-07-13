@@ -49,6 +49,24 @@ class Settings extends CI_Model
     return false;
   }
 
+  public function get_rocket_list()
+  {
+    $CI = &get_instance();
+    $CI->load->model('Warehouse');
+    $outlet_id = $CI->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
+
+    $this->db->select('*');
+    $this->db->from('rocket_add');
+    $this->db->order_by('ac_name', 'asc');
+    // $this->db->where('outlet_id', $outlet_id);
+    $this->db->where('status', 1);
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+      return $query->result_array();
+    }
+    return false;
+  }
+
   public function get_nagad_list()
   {
     $CI = &get_instance();
@@ -425,6 +443,21 @@ class Settings extends CI_Model
     }
     return false;
   }
+  public function get_rocket_by_id($rocket_id)
+  {
+    // $CI = &get_instance();
+    // $signed_outlet = $CI->Warehouse->get_outlet_user();
+
+    $this->db->select('*');
+    $this->db->from('rocket_add');
+    $this->db->where('rocket_id', $rocket_id);
+    $this->db->where('status', 1);
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+      return $query->result_array();
+    }
+    return false;
+  }
 
   public function get_nagad_by_id($nagad_id)
   {
@@ -476,7 +509,7 @@ class Settings extends CI_Model
       'HeadName' => $this->input->post('bank_name', true),
     ];
 
-    $data['bank_name'] = $this->input->post('bank_name', true);
+//    $data['bank_name'] = $this->input->post('bank_name', true);
     $this->db->where('bank_id', $bank_id);
     $this->db->update('bank_add', $data);
     $this->db->where('HeadName', $this->input->post('oldname', true));
@@ -494,13 +527,40 @@ class Settings extends CI_Model
       'status' => 1,
     ];
     $bank_coaupdate = [
-      'HeadName' => 'BK - ' . $this->input->post('bkash_no', true),
+      'HeadName' => 'BK-' . $this->input->post('bkash_no', true),
     ];
+      $old_name= 'BK-' . $this->input->post('oldname', true);
 
     $data['ac_name'] = $this->input->post('ac_name', true);
     $this->db->where('bkash_id', $bkash_id);
     $this->db->update('bkash_add', $data);
-    $this->db->where('HeadName', $this->input->post('oldname', true));
+    $this->db->where('HeadName', $old_name);
+    $this->db->update('acc_coa', $bank_coaupdate);
+    return true;
+  }
+  public function rocket_update_by_id($rocket_id)
+  {
+    $data = [
+      'ac_name' => $this->input->post('ac_name', true),
+      'rocket_no' => $this->input->post('rocket_no', true),
+      'rocket_type' => $this->input->post('rocket_type', true),
+      // 'outlet_id' => $this->input->post('outlet', true),
+      'status' => 1,
+    ];
+    $bank_coaupdate = [
+      'HeadName' => 'RK-' . $this->input->post('rocket_no', true),
+    ];
+
+    $old_name= 'RK-' . $this->input->post('oldname', true);
+
+//    echo $old_name;
+//    echo print_r($bank_coaupdate);exit();
+//    exit();
+
+//    $data['ac_name'] = $this->input->post('ac_name', true);
+    $this->db->where('rocket_id', $rocket_id);
+    $this->db->update('rocket_add', $data);
+    $this->db->where('HeadName', $old_name);
     $this->db->update('acc_coa', $bank_coaupdate);
     return true;
   }
@@ -515,13 +575,14 @@ class Settings extends CI_Model
       // 'outlet_id' => $this->input->post('outlet', true),
     ];
     $bank_coaupdate = [
-      'HeadName' => 'NG - ' . $this->input->post('nagad_no', true),
+      'HeadName' => 'NG-' . $this->input->post('nagad_no', true),
     ];
+      $old_name= 'NG-' . $this->input->post('oldname', true);
 
-    $data['ac_name'] = $this->input->post('ac_name', true);
+//    $data['ac_name'] = $this->input->post('ac_name', true);
     $this->db->where('nagad_id', $nagad_id);
     $this->db->update('nagad_add', $data);
-    $this->db->where('HeadName', $this->input->post('oldname', true));
+    $this->db->where('HeadName', $old_name);
     $this->db->update('acc_coa', $bank_coaupdate);
     return true;
   }
@@ -627,6 +688,58 @@ class Settings extends CI_Model
     }
     return false;
   }
+  public function rocket_ledger($rocket_no, $from, $to, $outlet_id = null)
+  {
+    if ($outlet_id != 1) {
+      if ($outlet_id == 'HK7TGDT69VFMXB7') {
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->join('outlet_warehouse x', 'a.CreateBy = x.user_id', 'left');
+        $this->db->where('b.PHeadName', 'Cash At Rocket');
+        if (!empty($rocket_no)) {
+          $this->db->where('b.HeadName', 'RK - ' . $rocket_no);
+        }
+        $this->db->where('a.VDate >=', $from);
+        $this->db->where('a.VDate <=', $to);
+        $this->db->where('a.IsAppove', 1);
+        $this->db->where('x.id is NULL');
+        $this->db->order_by('a.VDate', 'desc');
+      } else {
+        $this->db->select('a.*,b.HeadName');
+        $this->db->from('acc_transaction a');
+        $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+        $this->db->join('outlet_warehouse x', 'a.CreateBy = x.user_id', 'left');
+        $this->db->where('b.PHeadName', 'Cash At Rocket');
+        if (!empty($bkash_no)) {
+          $this->db->where('b.HeadName', 'RK - ' . $rocket_no);
+        }
+        $this->db->where('a.VDate >=', $from);
+        $this->db->where('a.VDate <=', $to);
+        $this->db->where('a.IsAppove', 1);
+        $this->db->where('x.outlet_id', $outlet_id);
+        $this->db->order_by('a.VDate', 'desc');
+      }
+    } else {
+      $this->db->select('a.*,b.HeadName');
+      $this->db->from('acc_transaction a');
+      $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
+      $this->db->where('b.PHeadName', 'Cash At Rocket');
+      if (!empty($rocket_no)) {
+        $this->db->where('b.HeadName', 'BK - ' . $rocket_no);
+      }
+      $this->db->where('a.VDate >=', $from);
+      $this->db->where('a.VDate <=', $to);
+      $this->db->where('a.IsAppove', 1);
+      $this->db->order_by('a.VDate', 'desc');
+    }
+
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+      return $query->result_array();
+    }
+    return false;
+  }
   public function nagad_ledger($nagad_no, $from, $to, $outlet_id = null)
   {
     if ($outlet_id != 1) {
@@ -703,6 +816,17 @@ class Settings extends CI_Model
     }
     return false;
   }
+  public function rocket_info($rocket_id)
+  {
+    $this->db->select('*');
+    $this->db->from('rocket_add');
+    $this->db->where('rocket_id', $rocket_id);
+    $query = $this->db->get();
+    if ($query->num_rows() > 0) {
+      return $query->result_array();
+    }
+    return false;
+  }
 
   public function nagad_info($nagad_id)
   {
@@ -725,6 +849,11 @@ class Settings extends CI_Model
   public function bkash_entry($data)
   {
     $this->db->insert('bkash_add', $data);
+  }
+
+  public function rocket_entry($data)
+  {
+    $this->db->insert('rocket_add', $data);
   }
   public function nagad_entry($data)
   {
@@ -942,6 +1071,14 @@ class Settings extends CI_Model
     );
     return $query->row();
   }
+
+    public function headcode_rocket()
+    {
+        $query = $this->db->query(
+            "SELECT MAX(HeadCode) as HeadCode FROM acc_coa WHERE HeadLevel='4' And HeadCode LIKE '1020105%'"
+        );
+        return $query->row();
+    }
   public function headcode_nagad()
   {
     $query = $this->db->query(
@@ -1063,8 +1200,9 @@ class Settings extends CI_Model
 
   public function read_all_card()
   {
-    $this->db->select('*');
-    $this->db->from('card');
+    $this->db->select('a.card_id,a.card_name,b.card_no_id,b.card_no_id,b.card_no_id');
+    $this->db->from('card a');
+    $this->db->join('card_list b','a.card_id=b.card_id','left');
     $query = $this->db->get();
     if ($query->num_rows() > 0) {
       return $query->result_array();
@@ -1106,7 +1244,8 @@ class Settings extends CI_Model
     $loggedInOutlet = $CI->warehouse->outlet_or_cw_logged_in();
 
     $this->db->select('*')
-      ->from('card_list a');
+      ->from('card_list a')
+      ->join('bank_add c','a.bank_id=c.bank_id','left');
     // ->where('a.outlet_id', $loggedInOutlet[0]['outlet_id']);
 
     if ($card_no_id) {

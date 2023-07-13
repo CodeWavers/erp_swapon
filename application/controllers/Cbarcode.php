@@ -33,6 +33,7 @@ class Cbarcode extends CI_Controller {
 				'product_name'    => $product_info[0]['product_name'],
 				'product_model'   => $product_info[0]['product_model'],
 				'price'           => $product_info[0]['price'],
+				'purchase_price'           => $product_info[0]['purchase_price'],
 				'product_details' => $product_info[0]['product_details'],
 				'currency'		  => $setting_detail[0]['currency'],
 			    'position'	      => $setting_detail[0]['currency_position'],
@@ -46,6 +47,7 @@ class Cbarcode extends CI_Controller {
 	//Barcode Generator
 	public function barcode_generator($product_id){
 
+	    $sku=$this->db->select('sku')->from('product_information')->where('product_id',$product_id)->get()->row()->sku;
 		$code_type 	= "code128";
 		$size 		= "25";
 		$print 		= TRUE;
@@ -54,7 +56,7 @@ class Cbarcode extends CI_Controller {
 		$sizefactor = "1";
 
 		// This function call can be copied into your project and can be made from anywhere in your code
-		$this->barcode_create( $filepath, $product_id, $size, $orientation, $code_type, $print, $sizefactor );
+		$this->barcode_create( $filepath, $sku, $size, $orientation, $code_type, $print, $sizefactor );
 	}
 
 	//Barcode create

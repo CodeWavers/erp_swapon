@@ -946,6 +946,55 @@ class Admin_dashboard extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    //    ============== Varience Report =================
+    public function variance_report()
+    {
+        $CI = &get_instance();
+        $CI->load->library('lreport');
+        $this->auth->check_admin_auth();
+
+        $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
+        $product_id = $this->input->post('product_id');
+        $category = $this->input->post('category');
+
+        //echo $from_date;exit();
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/variance_report/');
+        $config["total_rows"] = $this->Reports->sales_report_category_wise_count();
+        $config["per_page"] = 50;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+
+        #
+        #pagination ends
+        #
+
+        $content = $CI->lreport->variance_report($links, $config["per_page"], $page, $category, $product_id, $from_date, $to_date);
+        $this->template->full_admin_html_view($content);
+    }
+
     //    ========= its for filter_sales_report_category_wise ==============
     public function filter_sales_report_category_wise()
     {
@@ -958,6 +1007,7 @@ class Admin_dashboard extends CI_Controller
         $content = $this->lreport->filter_sales_report_category_wise($outlet_id, $category, $from_date, $to_date);
         $this->template->full_admin_html_view($content);
     }
+
 
 
     #=============Total profit report===================#
@@ -1328,6 +1378,129 @@ class Admin_dashboard extends CI_Controller
         #pagination ends
         #
         $content = $this->lreport->get_products_report_sales_view($links, $config["per_page"], $page);
+
+        $this->template->full_admin_html_view($content);
+    }
+    public function product_pre_sales_reports_date_wise()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+
+        $CI->load->library('lreport');
+        $CI->load->model('Reports');
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/product_sales_reports_date_wise/');
+        $config["total_rows"] = $this->Reports->retrieve_product_sales_report_count();
+        $config["per_page"] = 25;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        #
+        #pagination ends
+        #
+        $content = $this->lreport->get_products_report_pre_sales_view($links, $config["per_page"], $page);
+
+        $this->template->full_admin_html_view($content);
+    }
+    public function product_purchase_reports_date_wise()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+
+        $CI->load->library('lreport');
+        $CI->load->model('Reports');
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/product_purchase_reports_date_wise/');
+        $config["total_rows"] = $this->Reports->retrieve_product_sales_report_count();
+        $config["per_page"] = 25;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        #
+        #pagination ends
+        #
+        $content = $this->lreport->get_products_report_purchase_view($links, $config["per_page"], $page);
+
+        $this->template->full_admin_html_view($content);
+    }
+    public function product_produce_reports_date_wise()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+
+        $CI->load->library('lreport');
+        $CI->load->model('Reports');
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/product_produce_reports_date_wise/');
+        $config["total_rows"] = $this->Reports->retrieve_product_sales_report_count();
+        $config["per_page"] = 25;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        #
+        #pagination ends
+        #
+        $content = $this->lreport->get_products_report_produce_view($links, $config["per_page"], $page);
 
         $this->template->full_admin_html_view($content);
     }
@@ -1803,6 +1976,7 @@ class Admin_dashboard extends CI_Controller
         $to_date = $this->input->get('to_date');
         $product_id = $this->input->get('product_id');
         $outlet_id = $this->input->get('outlet_id');
+        $cat_id = $this->input->get('cat_id');
         #
         #pagination starts
         #
@@ -1835,7 +2009,160 @@ class Admin_dashboard extends CI_Controller
         #
         #pagination ends
         #
-        $content = $this->lreport->get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $config["per_page"], $page);
+        $content = $this->lreport->get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $cat_id, $links, $config["per_page"], $page);
+
+        $this->template->full_admin_html_view($content);
+    }
+
+    //Get Daily Invoice 
+    public function invoice_inserted_data()
+    {
+        
+        $from_date = $this->input->post('from_date');
+        $outlet_id = $this->input->post('outlet_id');
+
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $content = $CI->lreport->invoice_html_data_manual($from_date, $outlet_id);
+        $this->template->full_admin_html_view($content);
+    }
+    public function product_pre_sales_search_reports()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $CI->load->model('Reports');
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        $product_id = $this->input->get('product_id');
+        $outlet_id = $this->input->get('outlet_id');
+        $cat_id = $this->input->get('cat_id');
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/product_pre_sales_search_reports/');
+        $config["total_rows"] = $this->Reports->retrieve_product_search_sales_report_count($from_date, $to_date, $product_id);
+        $config["per_page"] = 25;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        $config['suffix'] = '?' . http_build_query($_GET, '', '&');
+        $config['first_url'] = $config["base_url"] . $config['suffix'];
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        #
+        #pagination ends
+        #
+        $content = $this->lreport->get_products_pre_sale_search_report($outlet_id, $from_date, $to_date, $product_id, $cat_id, $links, $config["per_page"], $page);
+
+        $this->template->full_admin_html_view($content);
+    }
+    public function product_purchase_search_reports()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $CI->load->model('Reports');
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        $product_id = $this->input->get('product_id');
+        $outlet_id = $this->input->get('outlet_id');
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/product_purchase_search_reports/');
+        $config["total_rows"] = $this->Reports->retrieve_product_search_purchase_report_count($from_date, $to_date, $product_id);
+        $config["per_page"] = 25;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        $config['suffix'] = '?' . http_build_query($_GET, '', '&');
+        $config['first_url'] = $config["base_url"] . $config['suffix'];
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        #
+        #pagination ends
+        #
+        $content = $this->lreport->get_products_purchase_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $config["per_page"], $page);
+
+        $this->template->full_admin_html_view($content);
+    }
+    public function product_produce_search_reports()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $CI->load->model('Reports');
+        $from_date = $this->input->get('from_date');
+        $to_date = $this->input->get('to_date');
+        $product_id = $this->input->get('product_id');
+        $outlet_id = $this->input->get('outlet_id');
+        #
+        #pagination starts
+        #
+        $config["base_url"] = base_url('Admin_dashboard/product_produce_search_reports/');
+        $config["total_rows"] = $this->Reports->retrieve_product_search_purchase_report_count($from_date, $to_date, $product_id);
+        $config["per_page"] = 25;
+        $config["uri_segment"] = 3;
+        $config["num_links"] = 5;
+        $config['suffix'] = '?' . http_build_query($_GET, '', '&');
+        $config['first_url'] = $config["base_url"] . $config['suffix'];
+        /* This Application Must Be Used With BootStrap 3 * */
+        $config['full_tag_open'] = "<ul class='pagination'>";
+        $config['full_tag_close'] = "</ul>";
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = "<li class='disabled'><li class='active'><a href='#'>";
+        $config['cur_tag_close'] = "<span class='sr-only'></span></a></li>";
+        $config['next_tag_open'] = "<li>";
+        $config['next_tag_close'] = "</li>";
+        $config['prev_tag_open'] = "<li>";
+        $config['prev_tagl_close'] = "</li>";
+        $config['first_tag_open'] = "<li>";
+        $config['first_tagl_close'] = "</li>";
+        $config['last_tag_open'] = "<li>";
+        $config['last_tagl_close'] = "</li>";
+        /* ends of bootstrap */
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $links = $this->pagination->create_links();
+        #
+        #pagination ends
+        #
+        $content = $this->lreport->get_products_produce_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $config["per_page"], $page);
 
         $this->template->full_admin_html_view($content);
     }
@@ -2515,6 +2842,26 @@ class Admin_dashboard extends CI_Controller
         $content = $CI->lreport->retrieve_dateWise_shippingcost($from_date, $to_date, $links, $config["per_page"], $page);
         $this->template->full_admin_html_view($content);
     }
+    // Shipping cost report
+    public function daily_summary_report()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $search = $this->input->get('search');
+        $print = $this->input->get('print');
+        $outlet_id = $this->input->get('outlet_id');
+        $from_date = (!empty($this->input->get('from_date')) ? $this->input->get('from_date') : date('Y-m-d'));
+        if($print == "Print")
+        {
+            $content = $CI->lreport->invoice_html_data_manual($from_date, $outlet_id);
+ 
+        }
+        else{
+            $content = $CI->lreport->daily_summary_report($from_date, $outlet_id);
+        }
+        $this->template->full_admin_html_view($content);
+    }
 
     //sales return list
     public function sales_return()
@@ -2733,8 +3080,11 @@ class Admin_dashboard extends CI_Controller
         $day_total_cash = array_sum(array_column($sales_data, 'pay_type_cash'));
         $day_total_bkash = array_sum(array_column($sales_data, 'pay_type_bkash'));
         $day_total_nagad = array_sum(array_column($sales_data, 'pay_type_nagad'));
+        $day_total_rocket = array_sum(array_column($sales_data, 'pay_type_rocket'));
         $day_total_bank = array_sum(array_column($sales_data, 'pay_type_bank'));
         $day_total_card = array_sum(array_column($sales_data, 'pay_type_card'));
+        $total = $day_total_due + $day_total_cash + $day_total_bkash + $day_total_nagad + $day_total_rocket + $day_total_bank + $day_total_card;
+
 
 
         $data = array(
@@ -2746,12 +3096,37 @@ class Admin_dashboard extends CI_Controller
             'day_total_cash'     => $day_total_cash,
             'day_total_bkash'     => $day_total_bkash,
             'day_total_nagad'     => $day_total_nagad,
+            'day_total_rocket'     => $day_total_rocket,
             'day_total_bank'     => $day_total_bank,
             'day_total_card'     => $day_total_card,
+            'total'     => $total,
 
         );
 
         $view = $CI->parser->parse('report/paytype_wise_sales_report', $data, true);
         $this->template->full_admin_html_view($view);
+    }
+
+    public function data_clean()
+    {
+        $this->db->truncate('acc_transaction');
+        $this->db->truncate('invoice');
+        $this->db->truncate('invoice_details');
+        $this->db->truncate('product_purchase');
+        $this->db->truncate('product_purchase_details');
+        $this->db->truncate('production_goods');
+        $this->db->truncate('production_mix');
+        $this->db->truncate('production_mix_details');
+        $this->db->truncate('pr_rqsn');
+        $this->db->truncate('pr_rqsn_details');
+        $this->db->truncate('production_mix_details');
+        $this->db->truncate('rqsn');
+        $this->db->truncate('rqsn_details');
+        $this->db->truncate('rqsn_return');
+        $this->db->truncate('transfer_items');
+        $this->db->truncate('transfer_item_details');
+        $this->db->truncate('opening_inventory');
+
+        echo 'Data has been cleaned';
     }
 }

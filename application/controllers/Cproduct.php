@@ -26,21 +26,271 @@ class Cproduct extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    //Barcode Print
+
+    public function barcode_print()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+
+
+        $data = array(
+            'title'     => 'Barcode Print',
+            'outlet_list'     =>  $CI->Warehouse->get_outlet_user(),
+            'cw'            => $CI->Warehouse->central_warehouse(),
+            'access'  => '',
+
+        );
+
+
+
+        $view = $this->parser->parse('product/barcode_print', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+    public function append_product()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Products');
+        $product_id = $this->input->post('product_id', TRUE);
+        $rowCount = $this->input->post('rowCount', TRUE);
+
+
+        $product_details  = $CI->Products->product_details($product_id)[0];
+
+        //echo '<pre>';print_r($rowCount);exit();
+        $tr = " ";
+        if (!empty($product_details)) {
+            $qty=0;
+//         $sl=$rowCount+1;
+
+            $tr .= "
+            <tr id=\"row_" . $product_details->product_id . "\">
+                        <td style=\"width: 5%\">
+                                    $rowCount
+                        </td>
+                        <td style=\"width: 10%\">
+                                $product_details->sku
+                        </td>
+						<td class=\"\" style=\"width: 30%\">
+
+                            $product_details->product_name
+
+							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+                            <input type=\"hidden\" name=\"purchase_price[]\" class=\"purchase_price_" . $product_details->product_id . " form-control text-right\" id=\"purchase_price_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $product_details->purchase_price_ecom . "'/>
+
+						</td>	
+							<td class=\"\" style=\"width: 10%\">
+
+                            $product_details->price
+
+						
+						</td>	
+							<td class=\"\" style=\"width: 10%\">
+
+                            $product_details->purchase_price
+
+						
+						</td>
+
+                        <td>
+                            <input type=\"hidden\" name=\"sku[]\" class=\"sku_" . $product_details->product_id . " form-control text-left\" id=\"sku_" . $product_details->product_id . "\" placeholder=\"sku\" min=\"0\" value='".$product_details->sku."'/>
+                            <input type=\"text\" name=\"category_name[]\" class=\"category_name_" . $product_details->product_id . " form-control text-left\" id=\"category_name_" . $product_details->product_id . "\" placeholder=\"Category Name\" min=\"0\" value=''/>
+                        </td> 
+                        
+                          <td>
+                            <input type=\"text\" name=\"p_qty[]\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                        </td>
+
+       
+
+						<td>";
+            $sl = 0;
+
+
+            $tr .= "<button  class=\"btn btn-danger btn-md text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+						</td>
+					</tr>";
+            echo $tr;
+        } else {
+            return false;
+        }
+    }
+
+
+
+    public function insert_barcode_print()
+    {
+        $CI = & get_instance();
+        $CI->load->library('zend');
+        $CI->zend->load('Zend/Barcode');
+        $barcode_id= mt_rand();
+
+        $date = date('Y-m-d');
+        $sku = $this->input->post('sku', TRUE);
+        $category_name = $this->input->post('category_name', TRUE);
+        $product_id = $this->input->post('product_id', TRUE);
+        $quantity = array_filter($this->input->post('p_qty', TRUE));
+
+        // echo '<pre>';print_r($purchase_price);exit();
+
+        if (empty($quantity)){
+            $this->session->set_userdata(array('error_message' => 'Quantity  Required!!'));
+            redirect(base_url('Cproduct/barcode_print'));
+            exit();
+        }
+
+
+
+        $data1 = array(
+            'barcode_id'   => $barcode_id,
+            'date'      => $this->input->post('date', TRUE),
+            'total_product'      => count(array_filter($quantity, function($x) { return !empty($x); })),
+
+        );
+
+
+        // echo '<pre>';print_r($data1);exit();
+            $this->db->insert('barcode_print', $data1);
+
+
+        for ($i = 0; $i < count($product_id); $i++) {
+            $pr_id = $product_id[$i];
+            $qty = $quantity[$i];
+            $cat_name = $category_name[$i];
+            $sk = $sku[$i];
+
+
+
+            $file = Zend_Barcode::draw('code128', 'image', array('text' => $sk,'font'=>5,'fontSize'=>17), array());
+            $code = time().$pr_id;
+            $store_image = imagepng($file,"my-assets/image/barcode/{$code}.png");
+            $barcode_url = base_url()."my-assets/image/barcode/{$code}.png";
+
+            $data2 = array(
+                'barcode_details_id'    => mt_rand(),
+                'barcode_id'           => $barcode_id,
+                'product_id'        => $pr_id,
+                'category_name'        => $cat_name,
+                'quantity'        => $qty,
+                'create_date'            => $date,
+                'barcode_url'         => $barcode_url,
+
+            );
+
+
+            // echo '<pre>';print_r($data1);
+            if (!empty($qty)) {
+                $this->db->insert('barcode_print_details', $data2);
+            }
+
+
+        }
+
+
+        redirect(base_url('Cproduct/barcode_print_html/'.$barcode_id));
+
+    }
+
+
+    public function barcode_print_html($barcode_id) {
+        $CI = & get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lproduct');
+        $content = $CI->lproduct->barcode_print_html($barcode_id);
+        $this->template->full_admin_html_view($content);
+    }
+//Sync Product
+    public function insert_finished_product_ecom()
+    {
+
+
+        $this->db->where('finished_raw',1)->delete('product_information');
+
+        $url = api_url()."products/get_products_all";
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $resp = curl_exec($curl);
+        curl_close($curl);
+
+        $records=json_decode($resp);
+
+         //echo '<pre>';print_r($records);exit();
+//
+        $data2=array();
+        foreach ($records as $r){
+
+            if ($r->discount_type == 'percent'){
+                $discount_price=$r->unit_price-($r->unit_price*($r->discount/100));
+            }else{
+                $discount_price=$r->unit_price- $r->discount;
+
+            }
+            $image_url = ecom_url() . 'public/'.$r->thumbnail_img;
+            $data2['product_id']   = $r->product_id;
+            $data2['category_id']  = $r->cats;
+            $data2['brand_id']  = '';
+            $data2['product_name'] = $r->name;
+            $data2['finished_raw']  = 1;
+            $data2['price']        = $r->unit_price;
+            $data2['purchase_price_ecom']        = $r->purchase_price;
+            $data2['purchase_price']        = $discount_price;
+            $data2['unit']         = $r->unit;
+            $data2['sku']  = $r->sku;
+            $data2['tax']          = 0;
+            $data2['product_details'] = '';
+            $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
+            $data2['status']       = 1;
+            $data2['created_date']       =  $r->created_at;
+            $result=  $this->db->insert('product_information', $data2);
+
+//            $check_product = $this->db->select('product_id')->from('product_information')->where('product_id', $r->sku)->get()->row();
+//            if (!empty($check_product)) {
+//                $this->db->where('product_id', $r->sku);
+//                $result= $this->db->update('product_information', $data2);
+//            }else{
+//                $result=  $this->db->insert('product_information', $data2);
+//
+//            }
+
+
+
+        }
+
+            $this->session->set_userdata(array('message' => 'Synchronized Successfully'));
+            redirect(base_url('Cproduct/manage_product'));
+
+
+    }
     //Insert Product and uload
     public function insert_product()
     {
+
+
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->library('lproduct');
         $CI->load->model('Products');
-        $product_id = (!empty($this->input->post('product_id',TRUE))?$this->input->post('product_id',TRUE):$this->generator(8));
-        $check_product = $this->db->select('*')->from('product_information')->where('product_id',$product_id)->get()->num_rows();
-        if($check_product > 0){
+
+        $product_id = (!empty($this->input->post('product_id', TRUE)) ? $this->input->post('product_id', TRUE) : $this->generator(8));
+        $check_product = $this->db->select('*')->from('product_information')->where('product_id', $product_id)->get()->num_rows();
+        if ($check_product > 0) {
             $this->session->set_userdata(array('error_message' => display('already_exists')));
             redirect(base_url('Cproduct'));
-
         }
-        $product_id_two = $this->input->post('$product_id_two', TRUE);
+        $product_id_two = $this->input->post('product_id_two', TRUE);
 
         $product_model = $this->input->post('model', TRUE);
         $product_code = $this->input->post('product_code', TRUE);
@@ -95,43 +345,63 @@ class Cproduct extends CI_Controller
             }
         }
 
-        $category_id=$this->input->post('category_id', TRUE);
-        $size_id=$this->input->post('product_size', TRUE);
-        $color=$this->input->post('color', TRUE);
+        $category_id = $this->input->post('category_id', TRUE);
+        $size_id = $this->input->post('product_size', TRUE);
+        $color = $this->input->post('color', TRUE);
 
-        if($category_id){
-            $catsdata=implode(",",$category_id);
-        }
-        else {
+        if ($category_id) {
+            $catsdata = implode(",", $category_id);
+        } else {
             $catsdata = json_encode([]);
         }
 
-        if($size_id){
-            $sizedata=implode(",",$size_id);
-        }
-        else {
+        if ($size_id) {
+            $sizedata = implode(",", $size_id);
+        } else {
             $sizedata = json_encode([]);
         }
-        if($color){
-            $colordata=implode(",",$color);
-        }
-        else {
+        if ($color) {
+            $colordata = implode(",", $color);
+        } else {
             $colordata = json_encode([]);
         }
 
-        $data2['product_id']   = $product_id;
+        $finished_raw=$this->input->post('product_status', TRUE);
+
+//        if ($finished_raw == 1){
+//            $api_url=api_url();
+//            $url = $api_url."products/last_id";
+//
+//
+//            $curl = curl_init($url);
+//            curl_setopt($curl, CURLOPT_URL, $url);
+//            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+//
+////for debug only!
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+//            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+//
+//            $last_id =json_decode(curl_exec($curl));
+//            curl_close($curl);
+//
+//            $product_id=$last_id+1;
+//
+//        }
+
+        $data2['product_id']   =(!empty( $this->input->post('sku', TRUE)) ?  $this->input->post('sku', TRUE) : date('Ymdhs'));
         $data2['category_id']  = $catsdata;
-        $data2['brand_id']  = $this->input->post('brand_id',TRUE);
-        $data2['product_name'] = $this->input->post('product_name',TRUE);
+        $data2['brand_id']  = $this->input->post('brand_id', TRUE);
+        $data2['product_name'] = $this->input->post('product_name', TRUE);
         $data2['finished_raw']  = $this->input->post('product_status', TRUE);
         $data2['price']        = $price;
-        $data2['unit']         = $this->input->post('unit',TRUE);
+        $data2['purchase_price']        = $price;
+        $data2['unit']         = $this->input->post('unit', TRUE);
+        $data2['sku']  = $this->input->post('sku', TRUE);
         $data2['tax']          = 0;
-        $data2['product_details'] = $this->input->post('description',TRUE);
+        $data2['product_details'] = $this->input->post('description', TRUE);
         $data2['image']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
         $data2['status']       = 1;
-
-
+        $data2['created_date']       =  date('Y-m-d');
 
         $data['barcode']   = $product_id;
         $data['name'] = $this->input->post('product_name', TRUE);
@@ -145,7 +415,7 @@ class Cproduct extends CI_Controller
         $data['description']  = $this->input->post('description', TRUE);
         $data['product_summary']  = $this->input->post('summery', TRUE);
         $data['information']  = $this->input->post('additional_information', TRUE);
-       $data['tc']  = $this->input->post('additional_terms', TRUE);
+        $data['tc']  = $this->input->post('additional_terms', TRUE);
         $data['variations']  = $sizedata;
         $data['colors']  = $colordata;
         $data['product_status']  = $this->input->post('product_status', TRUE);
@@ -158,7 +428,7 @@ class Cproduct extends CI_Controller
 
         //echo '<pre>';print_r($data);exit();
 
-        $result = $CI->lproduct->insert_product($data,$data2);
+        $result = $CI->lproduct->insert_product($data, $data2);
 
 
 
@@ -197,44 +467,6 @@ class Cproduct extends CI_Controller
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->model('Products');
-
-        // echo '<pre>';
-        // print_r($_POST);
-        // exit();
-
-        $product_id = $this->input->post('product_id', TRUE);
-        $product_id_two = $this->input->post('product_id_two', TRUE);
-        $this->db->where('product_id', $product_id);
-        $this->db->delete('supplier_product');
-        $sup_price = $this->input->post('supplier_price', TRUE);
-        $s_id = $this->input->post('supplier_id', TRUE);
-
-        // $product_code = $this->input->post('product_code', TRUE);
-
-
-        // $pr_code_list = $CI->Products->all_product_code();
-
-        // foreach ($pr_code_list as $pc) {
-        //     if ($pc['product_code'] == $product_code) {
-        //         $this->session->set_userdata(array('error_message' => 'Product code already exists. Try again.'));
-        //         redirect(base_url('Cproduct'));
-        //     }
-        // }
-
-        for ($i = 0, $n = count($s_id); $i < $n; $i++) {
-            $supplier_price = $sup_price[$i];
-            $supp_id = $s_id[$i];
-
-            $supp_prd = array(
-                'product_id'     => $product_id,
-                // 'product_id_two'     => $product_id_two,
-                'supplier_id'    => $supp_id,
-                'supplier_price' => $supplier_price
-            );
-
-            $this->db->insert('supplier_product', $supp_prd);
-        }
-        // configure for upload
         $config = array(
             'upload_path'   => "./my-assets/image/product/",
             'allowed_types' => "png|jpg|jpeg|gif|bmp|tiff",
@@ -262,10 +494,6 @@ class Cproduct extends CI_Controller
         } else {
             $image_name = $this->input->post('old_image', TRUE);
         }
-
-
-        $price = $this->input->post('sell_price', TRUE);
-
         $tablecolumn = $this->db->list_fields('tax_collection');
         $num_column = count($tablecolumn) - 4;
         if ($num_column > 0) {
@@ -277,27 +505,94 @@ class Cproduct extends CI_Controller
                 $data[$value] = $this->input->post($value) / 100;
             }
         }
-        $data['product_name']   = $this->input->post('product_name', TRUE);
-        $data['category_id']    = $this->input->post('category_id', TRUE);
-        $data['product_id']    = $this->input->post('product_id_two', TRUE);
-        $data['brand_id']    = $this->input->post('brand_id', TRUE);
-        $data['ptype_id']    = $this->input->post('ptype_id', TRUE);
-        $data['price']          = $price ? $price : 0.00;
-        $data['color']  = $this->input->post('color', TRUE);
-        $data['size']  = $this->input->post('product_size', TRUE);
-        $data['product_code']  = $this->input->post('product_code', TRUE);
-        $data['serial_no']      = $this->input->post('serial_no', TRUE);
-        $data['re_order_level']      = $this->input->post('re_order_level', TRUE);
-        $data['product_model']  = $this->input->post('model', TRUE);
-        $data['product_details'] = $this->input->post('description', TRUE);
-        $data['unit']           = $this->input->post('unit', TRUE);
-        $data['trxn_unit']           = $this->input->post('transaction_unit', TRUE);
-        $data['unit_multiplier']           = $this->input->post('mult', TRUE);
-        $data['finished_raw']           = $this->input->post('product_status', TRUE);
-        $data['tax']            = 0;
-        $data['image']          = $image_name;
+        // echo "<pre>";
+        // print_r($image_name);
+        // exit();
 
-        $result = $CI->Products->update_product($data, $product_id);
+
+
+        $product_id = $this->input->post('product_id', TRUE);
+        $product_name = $this->input->post('product_name', TRUE);
+        $unit = $this->input->post('unit', TRUE);
+        $price = $this->input->post('sell_price', TRUE);
+        $brand_id = $this->input->post('brand_id', TRUE);
+        $product_type = $this->input->post('product_status', TRUE);
+        $sku = $this->input->post('sku', TRUE);
+        $details = $this->input->post('description', TRUE);
+        $summary =
+            $this->input->post('summery', TRUE);
+        $additional_information =
+            $this->input->post('additional_information', TRUE);
+        $term_condition =
+            $this->input->post('additional_terms', TRUE);
+        $min_qty = $this->input->post('min_qty', TRUE);
+        $tags = $this->input->post('tags', TRUE);
+        $refund =
+            $this->input->post('refund', TRUE);
+        $video_provider = $this->input->post('video_provider', TRUE);
+        $video_link        = $this->input->post('video_link', TRUE);
+        $size_id = $this->input->post('product_size', TRUE);
+        $color = $this->input->post('color', TRUE);
+        $category_id = $this->input->post('category_id', TRUE);
+
+        if ($category_id) {
+            $catsdata = implode(",", $category_id);
+        } else {
+            $catsdata = json_encode([]);
+        }
+
+        if ($size_id) {
+            $sizedata = implode(",", $size_id);
+        } else {
+            $sizedata = json_encode([]);
+        }
+        if ($color) {
+            $colordata = implode(",", $color);
+        } else {
+            $colordata = json_encode([]);
+        }
+
+        $data2['barcode']   = $product_id;
+        $data2['category_id']  = $catsdata;
+        $data2['brand_id']  = $brand_id;
+        $data2['name'] = $product_name;
+        $data2['added_by'] = 'ERP';
+        $data['finished_raw']  = $product_type;
+        $data['price']        = $price;
+        $data2['cats']  = $catsdata;
+        $data2['unit']         = $unit;
+        $data2['tax']          = 0;
+        $data['product_details'] = $details;
+        $data2['thumbnail_img']        = (!empty($image_url) ? $image_url : base_url('my-assets/image/product.png'));
+        $data['status']       = 1;
+        $data2['product_summary']  = $summary;
+        $data2['information']  = $additional_information;
+        $data2['tc']  = $term_condition;
+        $data2['video_provider']  = $video_provider;
+        $data2['video_link']  = $video_link;
+        $data2['description']  = $details;
+
+
+        $data['product_id']   = $sku;
+        $data['product_name'] = $product_name;
+        $data['brand_id']  = $brand_id;
+        $data2['tags']  = $tags;
+        $data2['sku']  = $sku;
+        $data2['variations']  = $sizedata;
+        $data2['colors']  = $colordata;
+        $data2['product_status']  = $product_type;
+        $data2['unit']         = $unit;
+        $data2['min_qty']         = $min_qty;
+        $data['tax']          = 0;
+        $data2['unit_price']        = $price;
+        $data2['refundable'] = $refund;
+        $data2['thumbnail_img']          = $image_name;
+        // echo "<pre>";
+        // print_r($data);
+        // print_r($data2);
+        // exit();
+
+        $result = $CI->Products->update_product($data, $data2, $sku);
         if ($result == true) {
             $this->session->set_userdata(array('message' => display('successfully_updated')));
             redirect(base_url('Cproduct/manage_product'));
@@ -326,6 +621,8 @@ class Cproduct extends CI_Controller
         $this->auth->check_admin_auth();
         $CI->load->library('lproduct');
         $CI->load->model('Products');
+
+
         $content = $this->lproduct->finished_product_list();
         $this->template->full_admin_html_view($content);
     }
@@ -565,7 +862,8 @@ class Cproduct extends CI_Controller
                         'tax'           => '',
                         'product_details' => 'Csv Product',
                         'image'         => base_url('my-assets/image/product.png'),
-                        'status'        => 1
+                        'status'        => 1,
+                        'created_date'      =>  date('Y-m-d')
                     );
 
                     if ($count > 0) {
@@ -1168,12 +1466,12 @@ class Cproduct extends CI_Controller
     public function get_statuswise_category($status)
     {
         $this->load->model('categories');
-        $cat_list = $this->categories->category_list($status);
+        $cat_list = $this->categories->cates();
 
         $html = "<option value=''></option>";
 
         foreach ($cat_list as $ct) {
-            $html .= '<option value="' . $ct['id'] . '">' . $ct['category_name'] . '</option>';
+            $html .= '<option value="' . $ct['id'] . '">' . $ct['name'] . '</option>';
         }
 
         echo $html;

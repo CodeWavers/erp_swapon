@@ -25,6 +25,32 @@ class Creport extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function product_wise_sales_report()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->library('lreport');
+
+        $content = $CI->lreport->product_wise_sales_report();
+
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function ProductSalesReport()
+    {
+        $this->load->model('Reports');
+        $postData = $this->input->post();
+        $data = $this->Reports->ProductSalesReport($postData, null);
+        echo json_encode($data);
+    }
+    public function product_details_report($product_id,$from_date = null,$to_date = null,$outlet_id = null)
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $content = $CI->lreport->product_details_report($product_id,$from_date,$to_date,$outlet_id);
+        $this->template->full_admin_html_view($content);
+    }
     public function raw_stock()
     {
         $CI = &get_instance();
@@ -34,6 +60,407 @@ class Creport extends CI_Controller
         $content = $CI->lreport->stock_report_raw();
 
         $this->template->full_admin_html_view($content);
+    }
+    public function stock_taking()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+
+
+        $data = array(
+            'title'     => 'Stock Taking',
+            'outlet_list'     =>  $CI->Warehouse->get_outlet_user(),
+            'cw'            => $CI->Warehouse->central_warehouse(),
+            'access'  => '',
+
+        );
+
+
+
+        $view = $this->parser->parse('report/stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+    public function stock_taking_edit($id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+        $CI->load->model('Reports');
+
+
+        $res = $CI->Reports->stock_taking_details_by_id($id);
+
+        // echo "<pre>";
+        // print_r($res);
+        // exit();
+
+
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+            $sl++;
+        }
+
+        if ($res[0]['out'] == "HK7TGDT69VFMXB7") {
+            $outlet_name = $this->db->select('central_warehouse')->from('central_warehouse')->where('warehouse_id', 'HK7TGDT69VFMXB7')->get()->row()->central_warehouse;
+            // echo '<pre>';print_r($outlet_name);exit();
+
+        } else {
+            $outlet_name = $res[0]['outlet_name'];
+        }
+
+        $data = array(
+            'title'     => 'Edit Stock Taking',
+            'product_list'  => $res,
+            'access'  => 'edit',
+            'stid'  => $res[0]['stid'],
+            'st'  => $res[0]['stid_no'],
+            'st_date'  => $res[0]['date'],
+            'notes'  => $res[0]['notes'],
+            'approve'  => $res[0]['approve'],
+            'outlet_name'  => $outlet_name,
+            'outlet_id'  => $res[0]['out'],
+
+
+        );
+
+
+        $view = $this->parser->parse('report/stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+    public function stock_taking_view($id, $outlet_id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Purchases');
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
+
+        $res = $CI->Reports->stock_taking_details_by_id($id);
+
+        if ($res[0]['out'] == "HK7TGDT69VFMXB7") {
+            $outlet_name = $this->db->select('central_warehouse')->from('central_warehouse')->where('warehouse_id', 'HK7TGDT69VFMXB7')->get()->row()->central_warehouse;
+            // echo '<pre>';print_r($outlet_name);exit();
+
+        } else {
+            $outlet_name = $res[0]['outlet_name'];
+        }
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+
+            if ($outlet_id == 'HK7TGDT69VFMXB7') {
+                // $stock = $CI->Reports->getCheckList(null, $res[$k]['product_id'], '', '', '')['central_stock'];
+                $stock = $CI->Reports->getCheckList2(null, $res[$k]['product_id'], '', '', '', '')['central_stock'];
+                //   $available_quantity = $this->Reports->current_stock($product_id,1);
+            } else {
+                // $stock = $CI->Rqsn->outlet_stock(null, $res[$k]['product_id'], '', '')['outlet_stock'];
+                $stock = $CI->Rqsn->available_outlet_stock2(null, $res[$k]['product_id'], '', '', '', $outlet_id)['outlet_stock'];
+
+                // echo '<pre>';print_r($available_quantity);exit();
+            }
+
+            // echo "<pre>";
+            // print_r($stock);
+            // exit();
+
+
+
+            $res[$k]['stock_qty'] = $stock;
+            $res[$k]['difference'] = $res[$k]['physical_stock'] - $res[$k]['stock_qty'];
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'View Stock Taking',
+            'product_list'  => $res,
+            'access'  => 'view',
+            'stid'  => $res[0]['stid'],
+            'st'  => $res[0]['stid_no'],
+            'st_date'  => $res[0]['date'],
+            'notes'  => $res[0]['notes'],
+            'approve'  => $res[0]['approve'],
+            'outlet_name'  => $outlet_name,
+
+        );
+
+
+
+        $view = $this->parser->parse('report/stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+
+    public function wastage_dec()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $content = $CI->lreport->wastage_dec();
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function wastage_entry()
+    {
+        $CI = &get_instance();
+
+        //echo "Ok";exit();
+
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Reports');
+
+        $result = $CI->Reports->wastage_entry();
+
+
+
+
+        //   echo "ok";exit();
+
+        if ($result == TRUE) {
+            $this->session->set_userdata(array('message' => display('successfully_added')));
+
+            redirect(base_url('Creport/wastage_dec'));
+        } else {
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Creport/wastage_dec'));
+        }
+    }
+    public function manage_stock_taking()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->library('occational');
+        $CI->load->model('warehouse');
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+        $response = $this->Reports->manage_stock_taking($outlet_id);
+
+
+
+        //  echo '<pre>';print_r($outlet_id);exit();
+
+        $sl = 1;
+        foreach ($response as $k => $v) {
+            $response[$k]['sl']  = $sl;
+            $response[$k]['date']  = $this->occational->dateConvert($response[$k]['date']);
+            if ($response[$k]['out'] == "HK7TGDT69VFMXB7") {
+                $response[$k]['outlet_name'] = $this->db->select('central_warehouse')->from('central_warehouse')->where('warehouse_id', 'HK7TGDT69VFMXB7')->get()->row()->central_warehouse;
+                // echo '<pre>';print_r($outlet_name);exit();
+
+            } else {
+                $response[$k]['outlet_name'] = $response[$k]['outlet_name'];
+            }
+
+
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'Manage Stock Taking',
+            'response_list'  => $response,
+
+        );
+
+
+
+        $view = $this->parser->parse('report/manage_stock_taking', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+    public function append_product()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Products');
+        $product_id = $this->input->post('product_id', TRUE);
+        $rowCount = $this->input->post('rowCount', TRUE);
+
+
+        $product_details  = $CI->Products->product_details($product_id)[0];
+
+        //echo '<pre>';print_r($rowCount);exit();
+        $tr = " ";
+        if (!empty($product_details)) {
+            $qty = 0;
+            //         $sl=$rowCount+1;
+
+            $tr .= "
+            <tr id=\"row_" . $product_details->product_id . "\">
+                        <td style=\"width: 5%\">
+                                    $rowCount
+                        </td>
+                        <td style=\"width: 30%\">
+                                $product_details->sku
+                        </td>
+						<td class=\"\" style=\"width: 50%\">
+
+                            $product_details->product_name
+
+							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+                            <input type=\"hidden\" name=\"purchase_price[]\" class=\"purchase_price_" . $product_details->product_id . " form-control text-right\" id=\"purchase_price_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $product_details->purchase_price_ecom . "'/>
+
+						</td>
+
+                        <td>
+                            <input type=\"text\" name=\"p_qty[]\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                        </td>
+
+       
+
+						<td>";
+            $sl = 0;
+
+
+            $tr .= "<button  class=\"btn btn-danger btn-md text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+						</td>
+					</tr>";
+            echo $tr;
+        } else {
+            return false;
+        }
+    }
+
+
+    //Retrive right now inserted data to cretae html
+    public function stock_taking_print($id)
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lreport');
+        $content = $CI->lreport->stock_taking_print($id);
+        $this->template->full_admin_html_view($content);
+    }
+    public function stock_taking_delete($stid)
+    {
+        $this->db->where('stid', $stid);
+        $this->db->delete('stock_taking');
+
+        $this->db->where('stid', $stid);
+        $this->db->delete('stock_taking_details');
+
+        $this->session->set_userdata(array('message' => 'Successfully Deleted'));
+        redirect(base_url('Creport/manage_stock_taking'));
+    }
+
+    public function save_stock()
+    {
+        $access = $this->input->post('access', TRUE);
+        $stid = (!empty($access)) ?  $this->input->post('st_id', TRUE) : mt_rand();
+
+        $date = date('Y-m-d');
+        $outlet_id = $this->input->post('outlet_name', TRUE);
+        $product_id = $this->input->post('product_id', TRUE);
+        $purchase_price = $this->input->post('purchase_price', TRUE);
+        // $quantity = array_filter($this->input->post('p_qty', TRUE));
+        $quantity = ($this->input->post('p_qty', TRUE));
+
+        // echo '<pre>';print_r($purchase_price);exit();
+
+        // if (empty($quantity)) {
+        //     $this->session->set_userdata(array('error_message' => 'Physical count is empty!!'));
+        //     redirect(base_url('Creport/stock_taking'));
+        //     exit();
+        // }
+
+
+        $data1 = array(
+            'stid'   => $stid,
+            'outlet_id'   => $outlet_id,
+            'stid_no'      => $this->input->post('stid', TRUE),
+            'date'      => $this->input->post('date', TRUE),
+            // 'total_product'      => count(array_filter($quantity, function ($x) {
+            //     // return !empty($x);
+            //     return $x;
+            // })),
+            'total_product'      => count($quantity),
+            'notes'   => $this->input->post('notes', TRUE),
+
+        );
+
+
+        if ($access == 'edit') {
+            $this->db->where('stid', $stid);
+            $this->db->delete('stock_taking_details');
+            $this->db->where('stid', $stid);
+            $this->db->update('stock_taking', $data1);
+
+            $this->db->where('VNo', $stid);
+            $this->db->delete('acc_transaction');
+        } elseif ($access == 'view') {
+            $this->db->where('stid', $stid);
+            $this->db->delete('stock_taking_details');
+            $this->db->set('approve', 1);
+            $this->db->where('stid', $stid);
+            $this->db->update('stock_taking');
+        } else {
+            $this->db->insert('stock_taking', $data1);
+        }
+
+        for ($i = 0; $i < count($product_id); $i++) {
+            $pr_id = $product_id[$i];
+            $qty = $quantity[$i];
+            $purchase_ecom = $purchase_price[$i];
+
+
+            $prinfo  = $this->db->select('Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id', $pr_id)->get()->row()->product_rate;
+            $production_cost = $this->db->select('avg(production_cost) as cost')->from('production_cost a')->where('a.product_id', $pr_id)->get()->row()->cost;
+
+            if (!empty($purchase_ecom)) {
+                $total_amount[] = $quantity[$i] * $purchase_ecom;
+            } else if (!empty($prinfo)) {
+                $total_amount[] = $quantity[$i] * $prinfo;
+            } else if (!empty($production_cost)) {
+                $total_amount[] = $quantity[$i] * $production_cost;
+            } else {
+                $total_amount[] = 0;
+            }
+
+            $data2 = array(
+                'st_details_id'    => mt_rand(),
+                'stid'           => $stid,
+                'product_id'        => $pr_id,
+                'current_stock'             => (!empty($this->input->post('stock_qty', TRUE)[$i]) ? $this->input->post('stock_qty', TRUE)[$i] : 0),
+                'physical_stock'             => $qty,
+                'difference'             => (!empty($this->input->post('difference', TRUE)[$i]) ? $this->input->post('difference', TRUE)[$i] : 0),
+                'create_date'            => $date,
+                'status'            => ($access == 'view') ?  '1' : '0',
+
+            );
+
+
+            // echo '<pre>';print_r($data1);
+            // if (!empty($qty)) {
+            //     $this->db->insert('stock_taking_details', $data2);
+            // }
+            $this->db->insert('stock_taking_details', $data2);
+        }
+
+        if (!empty($total_amount)) {
+            $stcr = array(
+                'VNo'            =>  $stid,
+                'Vtype'          =>  'Stock Taking',
+                'VDate'          =>  $date,
+                'COAID'          =>  201,
+                'Narration'      =>  'Stock Taking For STID -  ' . $stid . '',
+                'Credit'          => array_sum($total_amount),
+                'Debit'         =>   0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $this->session->userdata('user_id'),
+                'CreateDate'     => $date,
+                'IsAppove'       => 1
+            );
+            //$this->db->insert('acc_transaction', $stcr);
+        }
+
+        //   echo '<pre>';print_r(array_sum($total_amount));exit();
+
+
+        redirect(base_url('Creport/manage_stock_taking'));
     }
 
     public function tools_stock()
@@ -67,7 +494,18 @@ class Creport extends CI_Controller
         $postData = $this->input->post();
 
         $pr_status = $this->input->post('pr_status');
-        $data = $this->Reports->getCheckList($postData, null, $pr_status);
+        $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
+        $value = $this->input->post('value');
+        $data = $this->Reports->getCheckList3($postData, null, $pr_status, $from_date, $to_date, $value,null);
+        // $data = $this->Reports->getCheckListNew2(
+        //     $postData,
+        //     null,
+        //     null,
+        //     $pr_status,
+        //     $from_date,
+        //     $to_date
+        // );
         echo json_encode($data);
     }
 
@@ -430,8 +868,21 @@ class Creport extends CI_Controller
         $CI->load->model('Rqsn');
         $rqsn_details = $CI->Rqsn->get_rqsn_transfer($rqsn_id);
         $sl = 1;
+        //        echo '<pre>';
+        //
+        //          print_r($rqsn_details);
+        //          exit();
+        $rcv_by = $this->db->select('b.first_name,b.last_name')->from('outlet_warehouse a')
+            ->join('users b', 'a.user_id=b.user_id')->where('a.outlet_id', $rqsn_details[0]['from_id'])->get()->row();
+
         foreach ($rqsn_details as $rq) {
+
+
+
+
+
             $rq['sl'] = $sl;
+            //            $rq['send_by'] = $send_by;
             $rq['balance'] = $rq['quantity'] - $rq['a_qty'];
             $new_rq[] = $rq;
             $sl++;
@@ -439,12 +890,11 @@ class Creport extends CI_Controller
 
         $data = array(
             'title'     => 'View Transfer Report',
-            'rqsn_list' => $new_rq
+            'rqsn_list' => $new_rq,
+            'rcv_by' => $rcv_by->first_name . ' ' . $rcv_by->last_name
         );
 
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
+
 
         $view = $CI->parser->parse('report/individual_transfer', $data, true);
         $this->template->full_admin_html_view($view);
@@ -602,4 +1052,75 @@ class Creport extends CI_Controller
 
         echo json_encode($response);
     }
+    //csv excel
+    public function exportintocsv()
+    {
+        $this->load->model('Reports');
+        $filename = 'sale_' . date('Ymd') . '.csv';
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$filename");
+        header("Content-Type: application/csv; ");
+        $postData = $this->input->post();
+
+        $invoicedata = $this->Reports->getCheckList3($postData,null,1,$_POST['from_date'],$_POST['to_date'],$_POST['value'],'export');
+        // file creation
+        $file = fopen('php://output', 'w');
+
+        $header = array('Sl No', 'Product Name','Category', 'SKU', 'Product Model', 'Sale Price','Purchase Price', 
+        'Production Cost', 'In Qnty', 'Damaged Quantity', 'Return Given','Out Qnty', 'Opening Stock', 'Closing Stock', 'Stock Sale Price', 'Stock Value');
+        fputcsv($file, $header);
+        foreach ($invoicedata as $line) {
+            fputcsv($file, $line);
+        }
+        fclose($file);
+        exit;
+    }
+    //generate report
+    // public function generate_report()
+    // {
+    //     $this->load->model('Reports');
+    //     $results = $this->Reports->getCheckList4(null,null,null,null,null,null);
+    //     echo "<pre>";
+    //     print_r($results);
+    //     exit();
+    //     if (!empty($results)) {
+    //         // export as an excel sheet
+    //         $this->load->library('excel');
+    //         $this->excel->setActiveSheetIndex(0);
+    //         //name the worksheet
+    //         $this->excel->getActiveSheet()->setTitle('Reports');
+    //         $headers = array("Restaurant", "User Name", "Order Total", "Order Delivery", "Order Date", "Order Status", "Status");
+
+    //         for ($h = 0, $c = 'A'; $h < count($headers); $h++, $c++) {
+    //             $this->excel->getActiveSheet()->setCellValue($c . '1', $headers[$h]);
+    //             $this->excel->getActiveSheet()->getStyle($c . '1')->getFont()->setBold(true);
+    //         }
+    //         $row = 2;
+    //         for ($r = 0; $r < count($results); $r++) {
+    //             $status = ($results[$r]->status) ? 'Active' : 'Deactive';
+    //             $this->excel->getActiveSheet()->setCellValue('A' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('B' . $row, $results[$r]->product_name );
+    //             $this->excel->getActiveSheet()->setCellValue('C' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('D' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('E' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('F' . $row, $results[$r]->product_name);
+    //             $this->excel->getActiveSheet()->setCellValue('G' . $row, $results[$r]->product_name);
+    //             $row++;
+    //         }
+    //         $filename = 'report-export.xls'; //save our workbook as this file name
+    //         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+    //         header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
+    //         header('Cache-Control: max-age=0'); //no cache
+    //         //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //         //if you want to save it as .XLSX Excel 2007 format
+    //         $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+
+    //         //force user to download the Excel file without writing it to server's HD
+    //         $objWriter->save('php://output');
+    //         exit;
+    //     } else {
+    //         $this->session->set_flashdata('not_found', $this->lang->line('not_found'));
+    //         redirect(base_url() . ADMIN_URL . '/' . $this->controller_name . '/view');
+    //     }
+    // }
 }

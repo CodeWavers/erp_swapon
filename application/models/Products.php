@@ -33,6 +33,19 @@ class Products extends CI_Model
         return false;
     }
 
+    public function barcode_details($barcode_id) {
+        $result = $this->db->select('b.*,p.sku,p.price,p.purchase_price')
+            ->from('barcode_print a')
+            ->join('barcode_print_details b','a.barcode_id=b.barcode_id')
+            ->join('product_information p','p.product_id=b.product_id')
+            ->where('a.barcode_id', $barcode_id)
+            ->get()
+            ->result();
+
+        return $result;
+    }
+
+
     //All Product List
     public function all_product_list($pr_status = null, $just_id = null)
     {
@@ -56,7 +69,7 @@ class Products extends CI_Model
 
     public function getProductList($postData = null)
     {
-
+        $this->load->library('occational');
         $response = array();
 
         ## Read value
@@ -71,60 +84,54 @@ class Products extends CI_Model
         ## Search
         $searchQuery = "";
         if ($searchValue != '') {
-            $searchQuery = " (a.product_name like '%" . $searchValue . "%' or a.product_model like '%" . $searchValue . "%' or a.size like '%" . $searchValue . "%' or a.color like '%" . $searchValue . "%' or a.product_code like '%" . $searchValue . "%' or a.price like'%" . $searchValue . "%' or c.supplier_price like'%" . $searchValue . "%' or m.supplier_name like'%" . $searchValue . "%' or x.category_name like'%" . $searchValue . "%' or d.ptype_name like'%" . $searchValue . "%') ";
+            $searchQuery = " (a.product_name like '%" . $searchValue . "%' or a.product_model like '%" . $searchValue  . "%' or a.sku like '%" . $searchValue . "%' or a.price like'%" . $searchValue . "%'  ) ";
         }
 
         ## Total number of records without filtering
         $this->db->select('count(*) as allcount');
         $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+       // $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+       // $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+       // $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+       // $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
         if ($searchValue != '')
             $this->db->where($searchQuery);
         $records = $this->db->get()->result();
         $totalRecords = $records[0]->allcount;
 
+
         ## Total number of record with filtering
         $this->db->select('count(*) as allcount');
         $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+       // $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+      //  $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+        //$this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+       // $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
         if ($searchValue != '')
             $this->db->where($searchQuery);
         $records = $this->db->get()->result();
         $totalRecordwithFilter = $records[0]->allcount;
 
+
         ## Fetch records
-        $this->db->select("a.*,
-                a.product_name,
-                a.product_id,
-                a.product_model,
-                a.finished_raw,
-                a.image,
-                c.supplier_price,
-                c.supplier_id,
-                m.supplier_name,
-                k.color_name,
-                l.size_name,
-              x.category_name,
-              d.*
+        $this->db->select("a.*
+             
                 ");
         $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('color_list k', 'k.color_id = a.color', 'left');
-        $this->db->join('size_list l', 'l.size_id = a.size', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
+        // $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
+        // $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
+        // $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
+       // $this->db->join('products k', 'k.barcode = a.product_id', 'left');
+        //$this->db->join('size_list l', 'l.size_id = a.size', 'left');
+        // $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
         if ($searchValue != '')
             $this->db->where($searchQuery);
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
         $records = $this->db->get()->result();
+        // echo "<pre>";
+        // print_r($records);
+        // exit();
         $data = array();
         $sl = 1;
 
@@ -132,13 +139,15 @@ class Products extends CI_Model
             $button = '';
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
-            $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
+
+             $image = '';
+          //  $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
             if ($this->permission1->method('manage_product', 'delete')->access()) {
 
                 $button .= '<a href="' . $base_url . 'Cproduct/product_delete/' . $record->product_id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
             }
 
-            $button .= '  <a href="' . $base_url . 'Cqrcode/qrgenerator/' . $record->product_id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('qr_code') . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
+//            $button .= '  <a href="' . $base_url . 'Cqrcode/qrgenerator/' . $record->product_id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('qr_code') . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
 
             $button .= '  <a href="' . $base_url . 'Cbarcode/barcode_print/' . $record->product_id . '" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('barcode') . '"><i class="fa fa-barcode" aria-hidden="true"></i></a>';
             if ($this->permission1->method('manage_product', 'update')->access()) {
@@ -146,30 +155,31 @@ class Products extends CI_Model
             }
 
             $product_name = '<a href="' . $base_url . 'Cproduct/product_details/' . $record->product_id . '">' . $record->product_name . '</a>';
-            $supplier = '<a href="' . $base_url . 'Csupplier/supplier_ledger_info/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
-            $product_status='';
-            if ($record->finished_raw == 1){
+            //$supplier = '<a href="' . $base_url . 'Csupplier/supplier_ledger_info/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
+            $product_status = '';
+            if ($record->finished_raw == 1) {
                 $product_status = 'Finished Goods';
             }
-            if ($record->finished_raw == 2){
+            if ($record->finished_raw == 2) {
                 $product_status = 'Raw Materials';
             }
-            if ($record->finished_raw == 3){
+            if ($record->finished_raw == 3) {
                 $product_status = 'Tools';
             }
             $data[] = array(
                 'sl'               => $sl,
                 'product_name'     => $product_name,
-                'product_category'    => $record->category_name,
-                'product_code'     => $record->product_code,
-                'product_type'    => $record->ptype_name,
-                'product_size'    => $record->size_name,
+                'created_date'    => $this->occational->dateConvert($record->created_date),
+                'product_category'    => $record->category_id,
+                //'product_code'     => $record->product_code,
+                //'product_type'    => $record->ptype_name,
+                //'product_size'    => $record->size_name,
                 'product_status'      => $product_status,
-                'color'    => $record->color_name,
-                'product_model'    => $record->product_model,
-                'supplier_name'    => $supplier,
+                //'color'    => $record->color_name,
+                'sku'    => $record->sku,
+                //'supplier_name'    => $supplier,
                 'price'            => $record->price,
-                'purchase_p'       => $record->supplier_price,
+                //'purchase_p'       => $record->supplier_price,
                 'image'            => $image,
                 'button'           => $button,
 
@@ -180,6 +190,9 @@ class Products extends CI_Model
             $sl++;
         }
 
+        //  echo '<pre>';
+        //     print_r($data);
+        //     exit();
         ## Response
         $response = array(
             "draw" => intval($draw),
@@ -206,95 +219,35 @@ class Products extends CI_Model
 
         ## Search
         $searchQuery = "";
-        if ($searchValue != '') {
-            $searchQuery = " (a.product_name like '%" . $searchValue . "%' or a.product_model like '%" . $searchValue . "%' or a.size like '%" . $searchValue . "%' or a.color like '%" . $searchValue . "%' or a.product_code like '%" . $searchValue . "%' or a.price like'%" . $searchValue . "%' or c.supplier_price like'%" . $searchValue . "%' or m.supplier_name like'%" . $searchValue . "%' or x.category_name like'%" . $searchValue . "%' or d.ptype_name like'%" . $searchValue . "%') ";
-        }
 
-        ## Total number of records without filtering
-        $this->db->select('count(*) as allcount');
-        $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
-        if ($searchValue != '')
-            $this->db->where($searchQuery);
-        $records = $this->db->get()->result();
-        $totalRecords = $records[0]->allcount;
-
-        ## Total number of record with filtering
-        $this->db->select('count(*) as allcount');
-        $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
-        if ($searchValue != '')
-            $this->db->where($searchQuery);
-        $records = $this->db->get()->result();
-        $totalRecordwithFilter = $records[0]->allcount;
-
-        ## Fetch records
-        $this->db->select("a.*,
-                a.product_name,
-                a.product_id,
-                a.product_model,
-                a.finished_raw,
-                a.image,
-                c.supplier_price,
-                c.supplier_id,
-                m.supplier_name,
-                k.color_name,
-                l.size_name,
-              x.category_name,
-              d.*
-                ");
-        $this->db->from('product_information a');
-        $this->db->join('supplier_product c', 'c.product_id = a.product_id', 'left');
-        $this->db->join('product_category x', 'x.category_id = a.category_id', 'left');
-        $this->db->join('product_type d', 'd.ptype_id = a.ptype_id', 'left');
-        $this->db->join('color_list k', 'k.color_id = a.color', 'left');
-        $this->db->join('size_list l', 'l.size_id = a.size', 'left');
-        $this->db->join('supplier_information m', 'm.supplier_id = c.supplier_id', 'left');
-        if ($searchValue != '')
-            $this->db->where($searchQuery);
-        $this->db->order_by($columnName, $columnSortOrder);
-        $this->db->limit($rowperpage, $start);
-        $records = $this->db->get()->result();
         $data = array();
         $sl = 1;
 
-        foreach ($records as $record) {
-            $button = '';
-            $base_url = base_url();
-            $jsaction = "return confirm('Are You Sure ?')";
-            $image = '<img src="' . $record->image . '" class="img img-responsive" height="50" width="50">';
-            if ($this->permission1->method('manage_product', 'delete')->access()) {
+        //count product
 
-                $button .= '<a href="' . $base_url . 'Cproduct/product_delete/' . $record->product_id . '" class="btn btn-xs btn-danger "  onclick="' . $jsaction . '"><i class="fa fa-trash"></i></a>';
-            }
 
-            $button .= '  <a href="' . $base_url . 'Cqrcode/qrgenerator/' . $record->product_id . '" class="btn btn-success btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('qr_code') . '"><i class="fa fa-qrcode" aria-hidden="true"></i></a>';
 
-            $button .= '  <a href="' . $base_url . 'Cbarcode/barcode_print/' . $record->product_id . '" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('barcode') . '"><i class="fa fa-barcode" aria-hidden="true"></i></a>';
-            if ($this->permission1->method('manage_product', 'update')->access()) {
-                $button .= ' <a href="' . $base_url . 'Cproduct/product_update_form/' . $record->product_id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
-            }
 
-            $product_name = '<a href="' . $base_url . 'Cproduct/product_details/' . $record->product_id . '">' . $record->product_name . '</a>';
-            $supplier = '<a href="' . $base_url . 'Csupplier/supplier_ledger_info/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
-            $product_status='';
-            if ($record->finished_raw == 1){
-                $product_status = 'Finished Goods';
-            }
-            if ($record->finished_raw == 2){
-                $product_status = 'Raw Materials';
-            }
-            if ($record->finished_raw == 3){
-                $product_status = 'Tools';
-            }
+//search  product
 
-            $url = "https://swaponsworld.com/api/v1/products/home";
+        if ($searchValue != '') {
+
+            $url = api_url()."products/count_product_search/".$searchValue;
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $total_product = curl_exec($curl);
+            curl_close($curl);
+
+
+
+            $url = api_url()."products/search_products/".$searchValue."/".$rowperpage;
 
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -307,22 +260,68 @@ class Products extends CI_Model
             $resp = curl_exec($curl);
             curl_close($curl);
 
-            $json_data=json_decode($resp)->data[0];
+            $records = json_decode($resp)->data;//fetch all product
+
+//            echo '<pre>';
+//            print_r($records);
+//            exit();
+        }else{
+
+
+            $url = api_url()."products/count_product";
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $total_product = curl_exec($curl);
+            curl_close($curl);
+
+            $url = api_url()."products/get_products/".$rowperpage;
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $resp = curl_exec($curl);
+            curl_close($curl);
+
+            $records=json_decode($resp)->data;
+        }
+
+
+
+
+
+
+//        $totalRecordwithFilter = $records[0]->allcount;
+        foreach ($records as $record) {
+            $button = '';
+//            https://swaponsworld.com/public/uploads/products/thumbnail/7nKgZ7HuR0f0qB4dwtxKCQ1CxFe37Qmnrulzjzp0.jpeg
+            if ($this->permission1->method('manage_product', 'update')->access()) {
+                $button .= ' <a href="'  . 'product_update_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
+                $button .= ' <a href="'  . 'product_update_form/' . $record->id . '" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="left" title="Delete"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+            }
+
+            $image = '<img src="https://dev.swaponsworld.com/public/'.$record->thumbnail_image . '" class=" img-responsive img-zoom" height="50" width="50">';
+            $site_url='https://swaponsworld.com';
+            $product_name = '<a href="'  . $site_url .  '/product/' . $record->slug . '">' . $record->name . '</a>';
+
             $data[] = array(
                 'sl'               => $sl,
-                'product_name'     => $json_data->name,
-                'product_category'    => $record->category_name,
-                'product_code'     => $record->product_code,
-                'product_type'    => $record->ptype_name,
-                'product_size'    => $record->size_name,
-                'product_status'      => $product_status,
-                'color'    => $record->color_name,
-                'product_model'    => $record->product_model,
-                'supplier_name'    => $supplier,
-                'price'            => $record->price,
-                'purchase_p'       => $record->supplier_price,
-                'image'            => $image,
-                'button'           => $button,
+                'product_name'     => $product_name,
+                'price'            =>  $record->base_price,
+                'sku'              =>  $record->sku,
+                'image'            =>  $image,
+                'button'           =>  $button,
 
             );
 
@@ -333,18 +332,18 @@ class Products extends CI_Model
 
 //        var_dump($resp);
 
-//        echo '<pre>';
-//        print_r(json_decode($resp)->data[0]->name);
-//        exit();
+
         ## Response
         $response = array(
             "draw" => intval($draw),
-            "iTotalRecords" => $totalRecordwithFilter,
-            "iTotalDisplayRecords" => $totalRecords,
+            "iTotalRecords" => $total_product,
+            "iTotalDisplayRecords" => $total_product,
             "aaData" => $data
             //"aaData" => $json_data
         );
-
+//        echo '<pre>';
+//        print_r(count($records));
+//        exit();
         return $response;
     }
 
@@ -403,9 +402,9 @@ class Products extends CI_Model
     }
 
     //Count Product
-    public function product_entry($data,$data2)
+    public function product_entry($data, $data2)
     {
-        $this->db->insert('products', $data);
+//        $this->db->insert('products', $data);
         $this->db->insert('product_information', $data2);
 
         $this->db->select('*');
@@ -425,13 +424,39 @@ class Products extends CI_Model
     public function retrieve_product_editdata($product_id)
     {
         $this->db->select('*');
-        $this->db->from('product_information');
-        $this->db->where('product_id', $product_id);
+        $this->db->from('product_information a');
+        $this->db->join('product_brand b','a.brand_id=b.id','left');
+        $this->db->join('cats c','a.category_id=c.id','left');
+        $this->db->where('a.product_id', $product_id);
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
         return false;
+    }
+
+    public function ecom_product_edit_data($product_id){
+        $api_url=api_url();
+        $url = $api_url."products/show/".$product_id;
+
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+        $product_details =json_decode(curl_exec($curl));
+        curl_close($curl);
+
+//        echo '<pre>';print_r($product_details->product->name);exit();
+
+        return $product_details;
+
+
+
     }
 
     // Supplier product information
@@ -475,10 +500,12 @@ class Products extends CI_Model
     }
 
     //Update Categories
-    public function update_product($data, $product_id)
+    public function update_product($data, $data2, $product_id)
     {
         $this->db->where('product_id', $product_id);
         $this->db->update('product_information', $data);
+//        $this->db->where('barcode', $product_id);
+//        $this->db->update('products', $data2);
         $this->db->select('*');
         $this->db->from('product_information');
         $this->db->where('status', 1);
@@ -551,6 +578,18 @@ class Products extends CI_Model
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
+        }
+        return false;
+    }
+
+   public function product_details($product_id)
+    {
+        $this->db->select('*');
+        $this->db->from('product_information');
+        $this->db->where('sku', $product_id);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result();
         }
         return false;
     }
@@ -748,11 +787,11 @@ class Products extends CI_Model
         $query = $this->db->select('*, product_information.finished_raw as pr_status')
             ->from('product_information')
             ->join('product_category', 'product_information.category_id=product_category.category_id', 'left')
-            ->join('size_list', 'product_information.size=size_list.size_id', 'left')
-            ->join('color_list', 'product_information.color=color_list.color_id', 'left')
-            ->join('supplier_product', 'product_information.product_id = supplier_product.product_id', 'left')
-            ->join('product_purchase_details', 'product_information.product_id = product_purchase_details.product_id', 'left')
+           // ->join('supplier_product', 'product_information.product_id = supplier_product.product_id', 'left')
+          //  ->join('product_purchase_details', 'product_information.product_id = product_purchase_details.product_id', 'left')
             ->where('product_information.product_id', $product_id)
+            ->or_where('product_information.sku', $product_id)
+            ->where('product_information.finished_raw', 1)
             ->order_by('product_information.product_name', 'asc')
             ->get();
         if ($query->num_rows() > 0) {
@@ -777,5 +816,10 @@ class Products extends CI_Model
         $query = $this->db->get();
         $itemlist = $query->result();
         return $itemlist;
+    }
+
+    public function sku_list(){
+
+        return $this->db->select('sku')->from('product_information')->limit(100)->get()->result();
     }
 }

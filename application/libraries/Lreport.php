@@ -11,6 +11,27 @@ class Lreport extends CI_Model
         $this->load->database();
     }
 
+    public function wastage_dec()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $CI->load->model('Web_settings');
+        $CI->load->model('warehouse');
+
+        $outlet_id = $this->warehouse->get_outlet_user()[0]['outlet_id'];
+
+        $data = array(
+            'title'         => "Wastage Declaration",
+            "outlet_id" => $outlet_id,
+
+        );
+        // echo '<pre'; print_r($data);exit();
+
+        //    die();
+        $invoiceForm = $CI->parser->parse('wastage/wastage_dec', $data, true);
+        return $invoiceForm;
+    }
+
     // Retrieve All Stock Report
     public function stock_report($limit, $page, $links)
     {
@@ -106,16 +127,20 @@ class Lreport extends CI_Model
         $reportList = $CI->parser->parse('report/birthday_noti', $data, true);
         return $reportList;
     }
-
-    // Retrieve Single Item Stock Stock Report
-    public function stock_report_single_item()
+    //Retrieve Product wise sales
+    public function product_wise_sales_report()
     {
         $CI = &get_instance();
         $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
+        $CI->load->model('Products');
         $CI->load->model('categories');
-        $data['title'] = 'Stock Report';
+        $CI->load->model('Warehouse');
 
-        $cat_list = $this->categories->category_list(1);
+        $data['title'] = 'Sales Report( Product Wise)';
+
+        $cat_list = $CI->categories->cates();
+        $sku_list = $this->Products->sku_list();
         $company_info = $CI->Reports->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $data['currency'] = $currency_details[0]['currency'];
@@ -123,6 +148,66 @@ class Lreport extends CI_Model
         $data['company_info'] = $company_info;
         $data['pr_status'] = 1;
         $data['cat_list'] = $cat_list;
+        $data['sku_list'] = $sku_list;
+        $data['outlet_list'] =  $CI->Rqsn->outlet_list_to();
+        $data['cw_list'] =  $CI->Rqsn->cw_list();
+        $data['heading_text'] = "Sales Report( Product Wise)";
+
+     //   echo '<pre>';print_r($data['outlet_list']);exit();
+        $reportList = $CI->parser->parse('report/productwise_sales_report', $data, true);
+        return $reportList;
+    }
+
+     //Purchase details data
+     public function product_details_report($product_id, $from_date=null, $to_date=null,$outlet_id=null)
+     {
+         $CI = &get_instance();
+         $CI->load->model('Reports');
+         $CI->load->library('occational');
+         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+         $product_sales_detail = $CI->Reports->product_sales_details_data($product_id,$from_date,$to_date,$outlet_id);
+        
+       
+ 
+         if (!empty($product_sales_detail)) {
+             foreach ($product_sales_detail as $k => $v) {
+                 $product_sales_detail[$k]['sales_date'] = $CI->occational->dateConvert($product_sales_detail[$k]['date']);
+             }
+         }
+        
+        //  echo "<pre>";
+        //  print_r($product_sales_detail);
+        //  exit();
+        $data['currency'] = $currency_details[0]['currency'];
+         $data['currency_details'] = $currency_details;
+        $data['company'] = $company_info;
+        $data['product_sales_detail'] = $product_sales_detail;
+         $chapterList = $CI->parser->parse('report/details_product_sale', $data, true);
+         return $chapterList;
+     }
+    // Retrieve Single Item Stock Stock Report
+    public function stock_report_single_item()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Products');
+        $CI->load->model('categories');
+        $CI->load->model('Rqsn');
+        $data['title'] = 'Stock Report';
+
+        $cat_list = $CI->categories->cates();
+        $sku_list = $this->Products->sku_list();
+        $company_info = $CI->Reports->retrieve_company();
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $data['currency'] = $currency_details[0]['currency'];
+        $data['totalnumber'] = $CI->Reports->totalnumberof_product();
+        $data['company_info'] = $company_info;
+        $data['pr_status'] = 1;
+        $data['cat_list'] = $cat_list;
+        $data['sku_list'] = $sku_list;
+        $data['outlet_list'] =  $CI->Rqsn->outlet_list_to();
+        $data['cw_list'] =  $CI->Rqsn->cw_list();
         $data['heading_text'] = "Stock Report";
         $reportList = $CI->parser->parse('report/stock_report', $data, true);
         return $reportList;
@@ -464,15 +549,15 @@ class Lreport extends CI_Model
 
         $cw = $CI->Warehouse->branch_list_product();
         $sales_amount = 0;
-        if (!empty($sales_report)) {
-            $i = 0;
-            foreach ($sales_report as $k => $v) {
-                $i++;
-                $sales_report[$k]['sl'] = $i;
-                $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
-                $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
-            }
-        }
+        // if (!empty($sales_report)) {
+        //     $i = 0;
+        //     foreach ($sales_report as $k => $v) {
+        //         $i++;
+        //         $sales_report[$k]['sl'] = $i;
+        //         $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
+        //         $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
+        //     }
+        // }
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -544,15 +629,15 @@ class Lreport extends CI_Model
         $cw = $CI->Warehouse->branch_list_product();
         $sales_report = $CI->Reports->retrieve_dateWise_SalesReports($outlet_id, $from_date, $to_date);
         $sales_amount = 0;
-        if (!empty($sales_report)) {
-            $i = 0;
-            foreach ($sales_report as $k => $v) {
-                $i++;
-                $sales_report[$k]['sl'] = $i;
-                $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
-                $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
-            }
-        }
+        // if (!empty($sales_report)) {
+        //     $i = 0;
+        //     foreach ($sales_report as $k => $v) {
+        //         $i++;
+        //         $sales_report[$k]['sl'] = $i;
+        //         $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
+        //         $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
+        //     }
+        // }
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -570,6 +655,10 @@ class Lreport extends CI_Model
             'software_info' => $currency_details,
             'company' => $company_info,
         );
+
+
+
+        //    echo '<pre>';print_r($data);exit();
         $reportList = $CI->parser->parse('report/sales_report', $data, true);
         return $reportList;
     }
@@ -1174,6 +1263,92 @@ class Lreport extends CI_Model
         return $reportList;
     }
 
+    //    ========== Variance Report ===========
+    public function variance_report($links = null, $per_page = null, $page = null, $category = null, $product_id = null, $from_date = null, $to_date = null)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->model('Categories');
+        $category_list = $CI->Categories->cates();
+        $category_name = $CI->Categories->cates_by_id($category);
+        $product_list = $CI->Reports->product_list();
+
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        $response = $CI->Reports->stock_taking_details($category, $product_id, $from_date, $to_date);
+        $cw = $CI->Warehouse->branch_list_product();
+        $data = array(
+            'title'                      => "Variance_report",
+            'category_list'              => $category_list,
+            'product_list'              => $product_list,
+            'response' => $response,
+            'company_info'               => $company_info,
+            'currency'                   => $currency_details[0]['currency'],
+            'position'                   => $currency_details[0]['currency_position'],
+            'links'                      => $links,
+            'software_info'              => $currency_details,
+            'company'                    => $company_info,
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'product_id' => $product_id,
+            'category_name' => $category_name->name,
+            'category_id' => $category_name->id,
+
+        );
+
+        //echo '<pre>';print_r($response);exit();
+        $reportList = $CI->parser->parse('report/variance_report', $data, true);
+        return $reportList;
+    }
+
+    public function stock_taking_print($id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->library('numbertowords');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Invoices');
+        $company_info = $CI->Invoices->retrieve_company();
+        $redirect_url = $_SESSION['redirect_uri'];
+
+        $res = $CI->Reports->stock_taking_details_by_id($id);
+
+        //  echo '<pre>';print_r($res);exit();
+
+        $sl = 1;
+        foreach ($res as $k => $v) {
+            $res[$k]['sl']  = $sl;
+            $sl++;
+        }
+
+        $data = array(
+            'title'     => 'Print Stock Taking',
+            'product_list'  => $res,
+            'date'  => $CI->occational->dateConvert($res[0]['date']),
+            'stid'  => $res[0]['stid_no'],
+            'company_info'  => $company_info,
+            'access'  => 'view',
+
+
+        );
+
+
+
+
+        $chapterList = $CI->parser->parse('report/stock_taking_print', $data, true);
+
+        return $chapterList;
+    }
+
     //    ============== its for filter_sales_report_category_wise============
     public function filter_sales_report_category_wise($outlet_id = null, $category = null, $from_date = null, $to_date = null, $links = null)
     {
@@ -1334,10 +1509,12 @@ class Lreport extends CI_Model
         $CI = &get_instance();
         $CI->load->model('Reports');
         $CI->load->model('Warehouse');
+        $CI->load->model('Categories');
         $CI->load->model('Web_settings');
         $CI->load->library('occational');
         $product_report = $CI->Reports->retrieve_product_sales_report();
         $outlet_list = $CI->Warehouse->get_outlet_user();
+        $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
 
@@ -1364,6 +1541,7 @@ class Lreport extends CI_Model
             'product_report' => $product_report,
             'links'          => $links,
             'product_list'   => $product_list,
+            'category_list'   => $category_list,
             'product_id'     => '',
             'from_date'      => '',
             'to_date'        => '',
@@ -1376,6 +1554,158 @@ class Lreport extends CI_Model
             'company'        => $company_info,
         );
         $reportList = $CI->parser->parse('report/product_report', $data, true);
+        return $reportList;
+    }
+    public function get_products_report_pre_sales_view($links, $per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Categories');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $product_report = $CI->Reports->retrieve_product_pre_sales_report();
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        $category_list = $CI->Categories->cates();
+
+        $cw = $CI->Warehouse->branch_list_product();
+
+        $product_list = $CI->Reports->product_list();
+        if (!empty($product_report)) {
+            $i = 0;
+            foreach ($product_report as $k => $v) {
+                $i++;
+                $product_report[$k]['sl'] = $i;
+            }
+        }
+        $sub_total = 0;
+        if (!empty($product_report)) {
+            foreach ($product_report as $k => $v) {
+                $product_report[$k]['sales_date'] = $CI->occational->dateConvert($product_report[$k]['date']);
+                $sub_total = $sub_total + $product_report[$k]['total_amount'];
+            }
+        }
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'          => 'Pre Sale Stock Check',
+            'sub_total'      => number_format($sub_total, 2, '.', ','),
+            'product_report' => $product_report,
+            'links'          => $links,
+            'product_list'   => $product_list,
+            'category_list'   => $category_list,
+            'product_id'     => '',
+            'from_date'      => '',
+            'to_date'        => '',
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+            'company_info'   => $company_info,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'software_info' => $currency_details,
+            'company'        => $company_info,
+        );
+        $reportList = $CI->parser->parse('report/product_report_pre_sale', $data, true);
+        return $reportList;
+    }
+    public function get_products_report_purchase_view($links, $per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+
+        $product_report = $CI->Reports->retrieve_product_sales_report($per_page, $page);
+        // echo '<pre>';print_r($product_report);exit();
+
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        $cw = $CI->Warehouse->branch_list_product();
+        $product_list = $CI->Reports->product_list();
+        if (!empty($product_report)) {
+            $i = 0;
+            foreach ($product_report as $k => $v) {
+                $i++;
+                $product_report[$k]['sl'] = $i;
+            }
+        }
+        $sub_total = 0;
+        if (!empty($product_report)) {
+            foreach ($product_report as $k => $v) {
+                $product_report[$k]['sales_date'] = $CI->occational->dateConvert($product_report[$k]['date']);
+                $sub_total = $sub_total + $product_report[$k]['total_amount'];
+            }
+        }
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'          => 'Purchase Report Product Wise',
+            'sub_total'      => number_format($sub_total, 2, '.', ','),
+            'product_report' => $product_report,
+            'links'          => $links,
+            'product_list'   => $product_list,
+            'product_id'     => '',
+            'from_date'      => '',
+            'to_date'        => '',
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+            'company_info'   => $company_info,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'software_info' => $currency_details,
+            'company'        => $company_info,
+        );
+        $reportList = $CI->parser->parse('report/product_report_purchase', $data, true);
+        return $reportList;
+    }
+    public function get_products_report_produce_view($links, $per_page, $page)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+
+        $product_report = $CI->Reports->retrieve_product_sales_report($per_page, $page);
+        // echo '<pre>';print_r($product_report);exit();
+
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        $cw = $CI->Warehouse->branch_list_product();
+        $product_list = $CI->Reports->product_list();
+        if (!empty($product_report)) {
+            $i = 0;
+            foreach ($product_report as $k => $v) {
+                $i++;
+                $product_report[$k]['sl'] = $i;
+            }
+        }
+        $sub_total = 0;
+        if (!empty($product_report)) {
+            foreach ($product_report as $k => $v) {
+                $product_report[$k]['sales_date'] = $CI->occational->dateConvert($product_report[$k]['date']);
+                $sub_total = $sub_total + $product_report[$k]['total_amount'];
+            }
+        }
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'          => 'Production Report Product Wise',
+            'sub_total'      => number_format($sub_total, 2, '.', ','),
+            'product_report' => $product_report,
+            'links'          => $links,
+            'product_list'   => $product_list,
+            'product_id'     => '',
+            'from_date'      => '',
+            'to_date'        => '',
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+            'company_info'   => $company_info,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'software_info' => $currency_details,
+            'company'        => $company_info,
+        );
+        $reportList = $CI->parser->parse('report/product_report_production', $data, true);
         return $reportList;
     }
     public function get_products_id_report_sales_view($links, $per_page, $page)
@@ -1667,7 +1997,7 @@ class Lreport extends CI_Model
 
 
     //Get Product Report Search
-    public function get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $per_page, $page)
+    public function get_products_search_report($outlet_id, $from_date, $to_date, $product_id, $cat_id, $links, $per_page, $page)
     {
         if ($outlet_id == 1) {
             $outlet_id = null;
@@ -1676,11 +2006,13 @@ class Lreport extends CI_Model
         $CI->load->model('Warehouse');
         $CI->load->model('Reports');
         $CI->load->model('Web_settings');
+        $CI->load->model('Categories');
         $CI->load->library('occational');
         $outlet_list = $CI->Warehouse->get_outlet_user();
+        $category_list = $CI->Categories->cates();
 
         $cw = $CI->Warehouse->branch_list_product();
-        $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id);
+        $product_report = $CI->Reports->retrieve_product_search_sales_report($outlet_id, $from_date, $to_date, $product_id, $cat_id);
         $product_list = $CI->Reports->product_list();
 
         if (!empty($product_report)) {
@@ -1704,6 +2036,162 @@ class Lreport extends CI_Model
             'sub_total'      => number_format($sub_total, 2, '.', ','),
             'product_report' => $product_report,
             'product_list'   => $product_list,
+            'category_list'   => $category_list,
+            'product_id'     => $product_id,
+            'cat_id'     => $cat_id,
+            'from_date'      => $from_date,
+            'to_date'        => $to_date,
+            'links'          => $links,
+            'company_info'   => $company_info,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'software_info'  => $currency_details,
+            'company'        => $company_info,
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+        );
+
+        //   echo '<pre>';print_r($product_report);exit();
+        $reportList = $CI->parser->parse('report/product_report', $data, true);
+        return $reportList;
+    }
+    //Print Daily Summary Invoice
+    public function invoice_html_data_manual($from_date, $outlet_id = null)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->library('numbertowords');
+        $CI->load->model('Warehouse');
+
+        $taxfield = $CI->db->select('*')
+            ->from('tax_settings')
+            ->where('is_show', 1)
+            ->get()
+            ->result_array();
+        $txregname = '';
+        foreach ($taxfield as $txrgname) {
+            $regname = $txrgname['tax_name'] . ' Reg No  - ' . $txrgname['reg_no'] . ', ';
+            $txregname .= $regname;
+        }
+        $redirect_url = $_SESSION['redirect_uri'];
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $sales_report = $CI->Reports->daily_summary_report($from_date, $outlet_id);
+        $company_info = $CI->Invoices->retrieve_company();
+        $data = array(
+
+            'company_info'      => $company_info,
+            'sales_report'          => $sales_report,
+            'tax_regno'         => $txregname,
+            'from_date'    => $from_date,
+            'currency'          => $currency_details[0]['currency'],
+            'position'          => $currency_details[0]['currency_position'],
+            'discount_type'     => $currency_details[0]['discount_type'],
+            'inv_logo'          => $currency_details[0]['invoice_logo'],
+
+
+
+        );
+        $chapterList = $CI->parser->parse('report/daily_summary_invoice', $data, true);
+
+        return $chapterList;
+    }
+    public function get_products_pre_sale_search_report($outlet_id, $from_date, $to_date, $product_id, $cat_id, $links, $per_page, $page)
+    {
+        if ($outlet_id == 1) {
+            $outlet_id = null;
+        }
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Categories');
+        $CI->load->library('occational');
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+        $category_list = $CI->Categories->cates();
+
+        $cw = $CI->Warehouse->branch_list_product();
+        $product_report = $CI->Reports->retrieve_product_search_pre_sales_report($outlet_id, $from_date, $to_date, $product_id, $cat_id);
+        $product_list = $CI->Reports->product_list();
+
+        if (!empty($product_report)) {
+            $i = 0;
+            foreach ($product_report as $k => $v) {
+                $i++;
+                $product_report[$k]['sl'] = $i;
+            }
+        }
+        $sub_total = 0;
+        if (!empty($product_report)) {
+            foreach ($product_report as $k => $v) {
+                $product_report[$k]['sales_date'] = $CI->occational->dateConvert($product_report[$k]['date']);
+                $sub_total = $sub_total + $product_report[$k]['total_price'];
+            }
+        }
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'          => 'Pre Sale Stock',
+            'sub_total'      => number_format($sub_total, 2, '.', ','),
+            'product_report' => $product_report,
+            'product_list'   => $product_list,
+            'category_list'   => $category_list,
+            'product_id'     => $product_id,
+            'cat_id'     => $cat_id,
+            'from_date'      => $from_date,
+            'to_date'        => $to_date,
+            'links'          => $links,
+            'company_info'   => $company_info,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'software_info'  => $currency_details,
+            'company'        => $company_info,
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+        );
+
+        //   echo '<pre>';print_r($product_report);exit();
+        $reportList = $CI->parser->parse('report/product_report_pre_sale', $data, true);
+        return $reportList;
+    }
+    public function get_products_purchase_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $per_page, $page)
+    {
+        if ($outlet_id == 1) {
+            $outlet_id = null;
+        }
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+
+        $cw = $CI->Warehouse->branch_list_product();
+        $product_report = $CI->Reports->retrieve_product_search_purchase_report($outlet_id, $from_date, $to_date, $product_id);
+        $product_list = $CI->Reports->product_list();
+
+        if (!empty($product_report)) {
+            $i = 0;
+            foreach ($product_report as $k => $v) {
+                $i++;
+                $product_report[$k]['sl'] = $i;
+            }
+        }
+        $sub_total = 0;
+        if (!empty($product_report)) {
+            foreach ($product_report as $k => $v) {
+                $product_report[$k]['purchase_date'] = $CI->occational->dateConvert($product_report[$k]['purchase_date']);
+                $sub_total = $sub_total + $product_report[$k]['total_amount'];
+            }
+        }
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'          => 'Purchase Report Product Wise',
+            'sub_total'      => number_format($sub_total, 2, '.', ','),
+            'product_report' => $product_report,
+            'product_list'   => $product_list,
             'product_id'     => $product_id,
             'from_date'      => $from_date,
             'to_date'        => $to_date,
@@ -1716,7 +2204,63 @@ class Lreport extends CI_Model
             'outlet_list' => $outlet_list,
             'cw' => $cw,
         );
-        $reportList = $CI->parser->parse('report/product_report', $data, true);
+
+        // echo '<pre>';print_r($product_report);exit();
+        $reportList = $CI->parser->parse('report/product_report_purchase', $data, true);
+        return $reportList;
+    }
+    public function get_products_produce_search_report($outlet_id, $from_date, $to_date, $product_id, $links, $per_page, $page)
+    {
+        if ($outlet_id == 1) {
+            $outlet_id = null;
+        }
+        $CI = &get_instance();
+        $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+
+        $cw = $CI->Warehouse->branch_list_product();
+        $product_report = $CI->Reports->retrieve_product_search_produce_report($outlet_id, $from_date, $to_date, $product_id);
+        $product_list = $CI->Reports->product_list();
+
+        if (!empty($product_report)) {
+            $i = 0;
+            foreach ($product_report as $k => $v) {
+                $i++;
+                $product_report[$k]['sl'] = $i;
+            }
+        }
+        $sub_total = 0;
+        if (!empty($product_report)) {
+            foreach ($product_report as $k => $v) {
+                $product_report[$k]['date'] = $CI->occational->dateConvert($product_report[$k]['date']);
+                $sub_total = $sub_total + $product_report[$k]['price'];
+            }
+        }
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'          => 'Production Report Product Wise',
+            'sub_total'      => number_format($sub_total, 2, '.', ','),
+            'product_report' => $product_report,
+            'product_list'   => $product_list,
+            'product_id'     => $product_id,
+            'from_date'      => $from_date,
+            'to_date'        => $to_date,
+            'links'          => $links,
+            'company_info'   => $company_info,
+            'currency'       => $currency_details[0]['currency'],
+            'position'       => $currency_details[0]['currency_position'],
+            'software_info'  => $currency_details,
+            'company'        => $company_info,
+            'outlet_list' => $outlet_list,
+            'cw' => $cw,
+        );
+
+        // echo '<pre>';print_r($product_report);exit();
+        $reportList = $CI->parser->parse('report/product_report_production', $data, true);
         return $reportList;
     }
     public function get_products_id_search_report($customer_id, $product_id, $links, $per_page, $page)
@@ -2156,15 +2700,7 @@ class Lreport extends CI_Model
         }
         $sales_report = $CI->Reports->retrieve_dateWise_Shippingcost($from_date, $to_date, $outlet_id);
         $sales_amount = 0;
-        if (!empty($sales_report)) {
-            $i = 0;
-            foreach ($sales_report as $k => $v) {
-                $i++;
-                $sales_report[$k]['sl'] = $i;
-                $sales_report[$k]['sales_date'] = $CI->occational->dateConvert($sales_report[$k]['date']);
-                $sales_amount = $sales_amount + $sales_report[$k]['total_amount'];
-            }
-        }
+
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $company_info = $CI->Reports->retrieve_company();
         $data = array(
@@ -2185,6 +2721,45 @@ class Lreport extends CI_Model
         $reportList = $CI->parser->parse('report/shippincost_report', $data, true);
         return $reportList;
     }
+    //Daily Summary Report
+    public function daily_summary_report($from_date)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Reports');
+        $CI->load->model('Web_settings');
+        $CI->load->library('occational');
+        $CI->load->model('Warehouse');
+        $outlet_id = null;
+        $outlet_list = $CI->Warehouse->get_outlet_user();
+
+        if ($outlet_list) {
+            $outlet_id = $outlet_list[0]['outlet_id'];
+        }
+
+        $cw = $CI->Warehouse->branch_list_product();
+        $sales_report = $CI->Reports->daily_summary_report($from_date, $outlet_id);
+
+
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $company_info = $CI->Reports->retrieve_company();
+        $data = array(
+            'title'        => 'Daily Summary Report',
+            'sales_report' => $sales_report,
+            'company_info' => $company_info,
+            'from_date'    => $from_date,
+            'cw' => $cw,
+            'outlet_list' => $outlet_list,
+            'currency'     => $currency_details[0]['currency'],
+            'position'     => $currency_details[0]['currency_position'],
+            'software_info' => $currency_details,
+            'company'       => $company_info,
+        );
+        // echo "<pre>";
+        // print_r($data);
+        // exit();
+        $reportList = $CI->parser->parse('report/daily_summary_report', $data, true);
+        return $reportList;
+    }
     //sales return report
     public function sales_return_data($links, $perpage, $page, $start, $end)
     {
@@ -2200,6 +2775,9 @@ class Lreport extends CI_Model
 
 
         $return_list = $CI->Reports->sales_return_list(null, null, $start, $end, $outlet_id);
+        // echo "<pre>";
+        // print_r($return_list);
+        // exit();
         if (!empty($return_list)) {
             foreach ($return_list as $k => $v) {
                 $return_list[$k]['final_date'] = $CI->occational->dateConvert($return_list[$k]['date_return']);

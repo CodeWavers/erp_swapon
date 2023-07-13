@@ -54,6 +54,25 @@ class Cinvoice extends CI_Controller
             $data['status'] = true;
             $data['invoice_id'] = $invoice_id;
             $data['message'] = display('save_successfully');
+
+            $data['details'] = $this->load->view('invoice/invoice_html', $data, true);
+        } else {
+            $data['status'] = false;
+            $data['error_message'] = 'Sorry';
+        }
+
+        echo json_encode($data);
+    }
+    public function pos_sales_insert()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Invoices');
+        $invoice_id = $CI->Invoices->pos_invoice_entry();
+        if (!empty($invoice_id)) {
+            $data['status'] = true;
+            $data['invoice_id'] = $invoice_id;
+            $data['message'] = display('save_successfully');
             // $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
             // if($mailsetting[0]['isinvoice']==1){
             //     // $mail = $this->invoice_pdf_generate($invoice_id);
@@ -300,6 +319,361 @@ class Cinvoice extends CI_Controller
         $content     = $CI->linvoice->search_inovoice_item($customer_id);
         $this->template->full_admin_html_view($content);
     }
+    //Due Collection
+
+    public function due_payment()
+    {
+        $this->load->model('Settings');
+        $invoice_id = $this->input->post('invoice_id');
+        // echo "<pre>";
+        // print_r($invoice_id);
+        // exit();
+        $notes = $this->input->post('notes');
+
+        $inv_details=$this->db->from('invoice')->where('invoice_id',$invoice_id)->get()->row();
+
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+
+        $bank_id = $this->input->post('bank_id');
+        $card_id = $this->input->post('card_id');
+        $bkash_id = $this->input->post('bkash_id');
+        $nagad_id = $this->input->post('nagad_id');
+        $rocket_id = $this->input->post('rocket_id');
+        $paytype = $this->input->post('paytype');
+
+        $total_amount = $this->input->post('total_amount');
+        $due_amount = $this->input->post('due_amount');
+        $paid_amount = $this->input->post('paid_amount');
+        $pay_amount = $this->input->post('pay_amount');
+
+        if ($inv_details->sale_type == 1 || 2) {
+
+
+            $cusifo = $this->db->select('*')->from('customer_information')->where('customer_id', $inv_details->customer_id)->get()->row();
+            $headn = $inv_details->customer_id . '-' . $cusifo->customer_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->customer_name;
+
+        }
+
+        if ($inv_details->sale_type == 3){
+
+            $cusifo = $this->db->select('*')->from('aggre_list')->where('id', $inv_details->agg_id)->get()->row();
+            $headn =  $inv_details->agg_id . '-' . $cusifo->aggre_name;
+            $coainfo = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn)->get()->row();
+            $customer_headcode = $coainfo->HeadCode;
+            $cs_name= $cusifo->aggre_name;
+        }
+
+      //  echo '<pre>';print_r($cs_name);exit();
+
+        if (!empty($bank_id)) {
+            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+
+            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+        } else {
+            $bankcoaid = '';
+        }
+        if (!empty($bkash_id)) {
+            $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id)->get()->row()->bkash_no;
+
+            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK-' . $bkashname)->get()->row()->HeadCode;
+        } else {
+            $bkashcoaid = '';
+        }
+        if (!empty($nagad_id)) {
+            $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id)->get()->row()->nagad_no;
+
+            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG-' . $nagadname)->get()->row()->HeadCode;
+        } else {
+            $nagadcoaid = '';
+        }
+
+        if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'RK-' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
+        }
+       
+
+        $cosdr= array(
+            'VNo' => $invoice_id,
+            'Vtype' => 'INV',
+            'VDate' => $createdate,
+            'COAID' => $customer_headcode,
+            'Narration' => 'Customer debit For Invoice No -  ' . $inv_details->invoice . ' Customer ' . $cs_name,
+            'Debit' => 0,
+            'Credit' => $pay_amount,
+            'IsPosted' => 1,
+            'CreateBy' => $createby,
+            'CreateDate' => $createdate,
+            'IsAppove' => 1
+        );
+        $this->db->insert('acc_transaction', $cosdr);
+
+        if ($paytype == 1) {
+            $data3 = array(
+                'VNo'            =>  $invoice_id,
+                //'cheque_id' => $cheque_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  1020101,
+                'Narration'      =>  'Customer Cash Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       => 1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1,
+                //'paytype'=>$paytype
+
+            );
+            //  echo '<pre>';print_r($data3);exit();
+            $ddd = $this->db->insert('acc_transaction', $data3);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'notes'       => $notes,
+                'COAID'         => 1020101
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+        }
+        if ($paytype == 4) {
+
+            $bankc = array(
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $createdate,
+                'COAID' => $bankcoaid,
+                'Narration' => 'Customer Bank Debit Due Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$bankname,
+                'Debit' => $pay_amount,
+                'Credit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+            $this->db->insert('acc_transaction', $bankc);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => 4,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'notes'       => $notes,
+                'COAID'         => $bankcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+        }
+        if ($paytype == 3) {
+            $bkashc = array(
+                'VNo' => $invoice_id,
+                'Vtype' => 'INVOICE',
+                'VDate' => $createdate,
+                'COAID' => $bkashcoaid,
+                'Narration' => 'Customer Bkash Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$bkashname,
+                'Debit' => $pay_amount,
+                'Credit' => 0,
+                'IsPosted' => 1,
+                'CreateBy' => $createby,
+                'CreateDate' => $createdate,
+                'IsAppove' => 1,
+
+            );
+            $this->db->insert('acc_transaction', $bkashc);
+
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => 3,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'notes'       => $notes,
+                'COAID'         => $bkashcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+
+        }
+        if ($paytype == 5) {
+            $nagadc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $nagadcoaid,
+                'Narration'      =>  'Customer Nagad Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$nagadname,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $this->db->insert('acc_transaction', $nagadc);
+
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'notes'       => $notes,
+                'COAID'         => $nagadcoaid
+            );
+
+            $this->db->insert('paid_amount', $payment_data);
+
+
+        }
+        if ($paytype == 7) {
+            $rocketc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $rocketcoaid,
+                'Narration'      =>  'Customer Rocket Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$nagadname,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+            $this->db->insert('acc_transaction', $rocketc);
+            $payment_data=array(
+
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => $pay_amount,
+                'pay_date'      =>  date('Y-m-d'),
+                'status'        =>  1,
+                'account'       => '',
+                'notes'       => $notes,
+                'COAID'         => $rocketcoaid
+            );
+            $this->db->insert('paid_amount', $payment_data);
+        }
+        if ($paytype == 6) {
+            $card_info = $this->Settings->get_real_card_data($card_id);
+            if (!empty($card_id)) {
+                $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $card_info[0]['bank_id'])->get()->row()->bank_name;
+
+                $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+            } else {
+                $bankcoaid = '';
+            }
+            $bankc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $bankcoaid,
+                'Narration'      =>  'Paid amount for customer in card - ' . $card_info[0]['card_no'] . '  Invoice ID - ' . $invoice_id . ' customer -' . $cs_name,
+                'Debit'          => ($pay_amount) - ($pay_amount * ($card_info[0]['percentage'] / 100)),
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $data = array(
+                'invoice_id'    => $invoice_id,
+                'pay_type'      => $paytype,
+                'amount'        => $pay_amount,
+                'account'       => $bankname,
+                'pay_date'       =>  $createdate,
+                'COAID'         => $bankcoaid,
+                'status'        =>  1,
+            );
+
+            $this->db->insert('paid_amount', $data);
+            $cuscredit = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $customer_headcode,
+                'Narration'      =>  'Customer credit (Cash In Bank) for Paid Amount For Customer Invoice ID - ' . $invoice_id . ' Customer- ' . $cs_name,
+                'Debit'          =>  0,
+                'Credit'         =>  $pay_amount,
+                'IsPosted'       => 1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+
+            $carddebit = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INV',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  '40404',
+                'Narration'      =>  'Expense Debit for card no. ' . $card_info[0]['card_no'] . ' Invoice NO- ' . $invoice_id,
+                'Debit'          =>  $pay_amount * ($card_info[0]['percentage'] / 100),
+                'Credit'         =>  0,
+                'IsPosted'       => 1,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $cuscredit);
+            $this->db->insert('acc_transaction', $carddebit);
+            $this->db->insert('acc_transaction', $bankc);
+        }
+
+
+        $data=array(
+
+            'total_amount' => $total_amount,
+            'due_amount' => $due_amount,
+            'paid_amount' => $paid_amount,
+        );
+
+
+        $this->db->where('invoice_id',$invoice_id);
+       $result= $this->db->update('invoice',$data);
+
+
+//
+
+        if ($result == true){
+
+            redirect(base_url('Cinvoice/invoice_inserted_data/'.$invoice_id));
+        }else{
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Cinvoice/manage_invoice'));
+        }
+
+
+
+
+
+
+    }
+
 
     //Manage invoice list
     public function manage_invoice()
@@ -375,6 +749,34 @@ class Cinvoice extends CI_Controller
     }
 
 
+    public function order() {
+        $CI = & get_instance();
+        $CI->load->model('Rqsn');
+
+
+        $data = array(
+            'title'         => "Order",
+        );
+
+
+        $view  = $this->parser->parse('invoice/order', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+
+    public function customer_order() {
+
+        $CI = & get_instance();
+        $data = array(
+            'title'         => "Customer's Order",
+        );
+
+
+        $view  = $this->parser->parse('invoice/customer_order', $data, true);
+        $this->template->full_admin_html_view($view);
+    }
+
+
     public function invoicdetails_download($invoice_id = null)
     {
 
@@ -445,11 +847,11 @@ class Cinvoice extends CI_Controller
         $users = $CI->Invoices->user_invoice_data($user_id);
         $data = array(
             'title'             => display('invoice_details'),
-            'balance'        => $customer_balance[0]['balance'],
-            'pay_type' => $invoice_detail[0]['payment_type'],
+            'balance'           => $customer_balance[0]['balance'],
+            'pay_type'          => $invoice_detail[0]['payment_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
-            // 'outlet_name'        => $outlet[0]['outlet_name'],
+            // 'outlet_name'    => $outlet[0]['outlet_name'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
@@ -486,7 +888,7 @@ class Cinvoice extends CI_Controller
 
         );
 
-        $dompdf = new Dompdf\DOMPDF();
+        $dompdf = new Dompdf\Dompdf();
         $page = $this->load->view('invoice/invoice_pdf', $data, true);
 
         $dompdf->loadHTml($page, 'UTF-8');
@@ -641,11 +1043,12 @@ class Cinvoice extends CI_Controller
 
         $outlet_id = $this->Warehouse->outlet_or_cw_logged_in()[0]['outlet_id'];
 
-        // echo '<pre>';
-        // print_r($outlet_id);
-        // exit();
+
 
         $product_details  = $CI->Invoices->pos_invoice_setup($product_id, $outlet_id);
+//         echo '<pre>';
+//         print_r($product_details);
+//         exit();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
         $taxfield = $CI->db->select('tax_name,default_value')
             ->from('tax_settings')
@@ -659,7 +1062,7 @@ class Cinvoice extends CI_Controller
             if ($product_details->total_product > 0) {
                 $qty = 1;
             } else {
-                $qty = 1;
+                $qty = '';
             }
 
             $html = "";
@@ -677,11 +1080,12 @@ class Cinvoice extends CI_Controller
             }
 
             $tr .= "<tr id=\"row_" . $product_details->product_id . "\">
-						<td class=\"\" style=\"\">
+						<td class=\"\" style=\"width: 30%\">
 
-							<input type=\"text\" name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . $product_details->product_name . "- (" . $product_details->product_model . ") - (" . $product_details->product_color . ") - (" . $product_details->product_size . ")" . "' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
+							<input type=\"text\"  size='100' name=\"product_name\" onkeypress=\"invoice_productList('" . $product_details->product_id . "');\" class=\"form-control productSelection \" value='" . html_escape($product_details->sku)."-" . html_escape($product_details->product_name) . "' placeholder='" . display('product_name') . "' required=\"\" id=\"product_name_" . $product_details->product_id . "\" tabindex=\"\" readonly>
 
 							<input type=\"hidden\" class=\"form-control autocomplete_hidden_value product_id_" . $product_details->product_id . "\" name=\"product_id[]\" id=\"SchoolHiddenId_" . $product_details->product_id . "\" value = \"$product_details->product_id\"/>
+							<input type=\"hidden\" class=\"form-control  product_id_" . $product_details->sku . "\" name=\"skuu[]\" id=\"SchoolHiddenSku_" . $product_details->sku . "\" value = \"$product_details->sku\"/>
 
 						</td>
 
@@ -695,13 +1099,10 @@ class Cinvoice extends CI_Controller
                         </td>
 
                         <td>
-                            <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->product_id . " form-control text-right\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
+                            <input type=\"text\" name=\"product_quantity[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" class=\"total_qntt_" . $product_details->sku . " form-control text-right\" required=\"\" id=\"total_qntt_" . $product_details->product_id . "\" placeholder=\"0.00\" min=\"0\" value='" . $qty . "'/>
                         </td>
 
-                        <td>
-
-                              <input id=\'warrenty_date\' type=\"date\" name=\"warrenty_date[]\" class=\"form-control datepicker \" value=\" $product_details->warrenty_date\"  />
-                        </td>
+                  
 
 
 
@@ -709,9 +1110,14 @@ class Cinvoice extends CI_Controller
 
 
 
+						<td class=\"text-center\"  width=\"200\">
+							<input style=\"width: 120px; display:inline-block\" type=\"text\" name=\"product_rate[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" value='" . $product_details->purchase_price . "' id=\"price_item_" . $product_details->product_id . "\" class=\"price_item1 form-control text-right\" required  placeholder=\"0.00\" min=\"0\"/>
+						                                            <s id=\"purchase_price_1\" class=\"purchase_price1 text-right\" style=\"width: 100px ;\">৳" . $product_details->price . "</s>
 
-						<td style=\"width:85px\">
-							<input type=\"text\" name=\"product_rate[]\" onkeyup=\"quantity_calculate('" . $product_details->product_id . "');\" onchange=\"quantity_calculate('" . $product_details->product_id . "');\" value='" . $product_details->price . "' id=\"price_item_" . $product_details->product_id . "\" class=\"price_item1 form-control text-right\" required readonly placeholder=\"0.00\" min=\"0\"/>
+						</td>
+						
+						<td class=\"text-right\" style=\"width:100px\">
+							<input class=\"total_price_wd form-control text-right\" type=\"text\" name=\"total_price_wd[]\" id=\"total_price_wd_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
 						</td>
 
 						<td class=\"\">
@@ -721,7 +1127,7 @@ class Cinvoice extends CI_Controller
 						</td>
 
 						<td class=\"text-right\" style=\"width:100px\">
-							<input class=\"total_price form-control text-right\" type=\"text\" name=\"total_price[]\" id=\"total_price_" . $product_details->product_id . "\" value='" . $product_details->price . "' tabindex=\"-1\" readonly=\"readonly\"/>
+							<input class=\"total_price form-control text-right\" type=\"text\" name=\"total_price[]\" id=\"total_price_" . $product_details->product_id . "\" value='" . $product_details->purchase_price . "' tabindex=\"-1\" readonly=\"readonly\"/>
 						</td>
 
 						<td>";
@@ -729,13 +1135,14 @@ class Cinvoice extends CI_Controller
             foreach ($taxfield as $taxes) {
                 $txs = 'tax' . $sl;
                 $tr .= "<input type=\"hidden\" id=\"total_tax" . $sl . "_" . $product_details->product_id . "\" class=\"total_tax" . $sl . "_" . $product_details->product_id . "\" value='" . $prinfo[0][$txs] . "'/>
-                            <input type=\"hidden\" id=\"all_tax" . $sl . "_" . $product_details->product_id . "\" class=\" total_tax" . $sl . "\" value='" . $prinfo[0][$txs] * $product_details->price . "' name=\"tax[]\"/>";
+                            <input type=\"hidden\" id=\"all_tax" . $sl . "_" . $product_details->product_id . "\" class=\" total_tax" . $sl . "\" value='" . $prinfo[0][$txs] * $product_details->purchase_price . "' name=\"tax[]\"/>";
                 $sl++;
             }
 
-            $tr .= "<input type=\"hidden\" id=\"total_discount_" . $product_details->product_id . "\" />
-							<input type=\"hidden\" id=\"all_discount_" . $product_details->product_id . "\" class=\"total_discount dppr\"/>
-							<button  class=\"btn btn-danger btn-xs text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
+            $tr .= "<input type=\"hidden\"  class=\"total_discount\"  name=\"total_discount[]\" id=\"total_discount_" . $product_details->product_id . "\" />
+            
+							<input type=\"hidden\" id=\"all_discount_" . $product_details->product_id . "\" class=\" dppr\"/>
+							<button  class=\"btn btn-danger  text-center\" type=\"button\"  onclick=\"deleteRow(this)\">" . '<i class="fa fa-close"></i>' . "</button>
 						</td>
 					</tr>";
             echo $tr;
@@ -756,13 +1163,15 @@ class Cinvoice extends CI_Controller
 
     public function invoice_inserted_data_manual()
     {
+//        echo 'Hello';
+//        exit();
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $invoice_id = $this->input->post('invoice_id', TRUE);
-        $chalan_value = $this->input->post('chalan_value', TRUE);
+       // $chalan_value = $this->input->post('chalan_value', TRUE);
         $CI->load->library('linvoice');
 
-        $_SESSION['redirect_uri'] = 'Cinvoice';
+        $_SESSION['redirect_uri'] = 'Cinvoice/manage_invoice';
         //echo '<pre>';print_r($_POST['chalan_value']);exit();
         if (isset($_POST['chalan_value'])) {
             $content = $CI->linvoice->invoice_chalan_html_data_manual($invoice_id);
@@ -871,7 +1280,7 @@ class Cinvoice extends CI_Controller
         if (!empty($product_info)) {
             $list[''] = '';
             foreach ($product_info as $value) {
-                $json_product[] = array('label' => $value['product_name'] . '(' . $value['product_model'] . ')' . '(' . $value['color_name'] . ')' . '(' . $value['size_name'] . ')' . '(' . $value['category_name'] . ')', 'value' => $value['product_id']);
+                $json_product[] = array('label' => $value['sku'] . '-' . $value['product_name'] . '', 'value' => $value['product_id']);
             }
         } else {
             $json_product[] = 'No Product Found';
@@ -937,6 +1346,7 @@ class Cinvoice extends CI_Controller
         $CI = &get_instance();
         $CI->load->model('Customers');
         $customer_id = $this->input->post('customer_id', TRUE);
+
         $this->db->select("a.*,b.HeadCode,((select ifnull(sum(Debit),0) from acc_transaction where COAID= `b`.`HeadCode` AND IsAppove = 1)-(select ifnull(sum(Credit),0) from acc_transaction where COAID= `b`.`HeadCode` AND IsAppove = 1)) as balance");
         $this->db->from('customer_information a');
         $this->db->join('acc_coa b', 'a.customer_id = b.customer_id', 'left');
@@ -964,7 +1374,7 @@ class Cinvoice extends CI_Controller
         if ($customer_info) {
             $json_customer[''] = '';
             foreach ($customer_info as $value) {
-                $json_customer[] = array('label' => $value['customer_name'] . ' (' . $value['customer_mobile'] . ')', 'value' => ["id" => $value['customer_id'], "mobile" => $value['customer_mobile']]);
+                $json_customer[] = array('label' => $value['customer_name'] . ' (' . $value['customer_mobile'] . ')'.' (' . $value['customer_address'] . ')', 'value' => ["id" => $value['customer_id'], "mobile" => $value['customer_mobile']]);
             }
         } else {
             $json_customer[] = 'No Record found';
@@ -1158,17 +1568,23 @@ class Cinvoice extends CI_Controller
     {
         $this->load->model('Customers');
 
+       // echo '<pre>';print_r($_POST);exit();
+
         $data = array(
             'customer_id_two'    => $this->input->post('customer_id_two', TRUE),
             'contact_person'    => $this->input->post('contact_person', TRUE),
+            'shop_name'    => $this->input->post('shop_name', TRUE),
             'contact'    => $this->input->post('contact', TRUE),
             'customer_name'    => $this->input->post('customer_name', TRUE),
             'customer_address' => $this->input->post('address', TRUE),
-            'customer_mobile'  => $this->input->post('mobile', TRUE),
+            'customer_mobile' => $this->input->post('mobile', TRUE),
+//            'customer_mobile'  => (!empty($this->input->post('mobile', TRUE)) ? $this->input->post('mobile', TRUE) : ''),
             'customer_email'   => $this->input->post('email', TRUE),
             'cus_type'   => $this->input->post('cus_type', TRUE),
             'status'           => 1
         );
+
+
 
         $result = $this->Customers->customer_entry($data);
         if ($result) {
@@ -1206,11 +1622,16 @@ class Cinvoice extends CI_Controller
             $this->db->insert('acc_coa', $customer_coa);
             $this->Customers->previous_balance_add($this->input->post('previous_balance', TRUE), $customer_id);
 
+//            $this->session->set_userdata(array('message' => display('save_successfully')));
+            //redirect(base_url('Cinvoice'));
             $data['status']        = true;
             $data['message']       = display('save_successfully');
             $data['customer_id']   = $customer_id;
             $data['customer_name'] = $data['customer_name'];
         } else {
+
+//            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+          //  redirect(base_url('Cinvoice'));
             $data['status'] = false;
             $data['error_message'] = display('please_try_again');
         }

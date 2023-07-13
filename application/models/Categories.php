@@ -28,16 +28,44 @@ class Categories extends CI_Model
         }
         return false;
     }
-    public function cates($pr_status = null)
+    // public function cates()
+    // {
+    //     $this->db->select('name,id');
+    //     $this->db->from('cats');
+
+    //     $query = $this->db->get();
+    //     if ($query->num_rows() > 0) {
+    //         return $query->result_array();
+    //     }
+    //     return false;
+    // }
+
+    public function cates()
+    {
+      $query = $this->db->query("SELECT name,id FROM cats  WHERE  parent_id=0
+      UNION all
+            SELECT (CONCAT(`name`, ' - ', (SELECT Name FROM cats cc WHERE cc.id=cd.parent_id ) )) AS NAME,id FROM cats cd WHERE  cd.parent_id>0");
+
+    if ($query->num_rows() > 0) {
+        return $query->result_array();
+    }
+    return false;
+    }
+
+    
+    public function cates_by_id($id)
     {
         $this->db->select('name,id');
         $this->db->from('cats');
+        $this->db->where('id',$id);
 
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            return $query->result_array();
-        }
-        return false;
+        return $this->db->get()->row();
+
+
+    }
+
+    public function sub_sub_cat_by_id($id){
+
     }
 
     //customer List

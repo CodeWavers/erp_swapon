@@ -87,11 +87,25 @@
                                     <option value=""></option>
                                     <?php foreach ($product_list as $productss) { ?>
                                         <option value="<?php echo  $productss['product_id'] ?>" <?php if ($productss['product_id'] == $product_id) {
-                                                                                                    echo 'selected';
-                                                                                                } ?>><?php echo  $productss['product_name'] . ' - ' . $productss['product_model'] . ' - ' . $productss['color_name'] . ' - ' . $productss['size_name'] ?></option>
+                                            echo 'selected';
+                                        } ?>><?php echo  $productss['product_name'] . ' - ' . $productss['sku']?></option>
                                     <?php } ?>
                                 </select>
                             </div>
+
+                            <label class="" for="from_date">Category:</label>
+                            <div class="form-group">
+
+                                <select name="cat_id" class="form-control">
+                                    <option value=""></option>
+                                    <?php foreach ($category_list as $cat) { ?>
+                                        <option value="<?php echo  $cat['id'] ?>" <?php if ($cat['name'] == $cat) {
+                                            echo 'selected';
+                                        } ?>><?php echo  $cat['name']?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
                         </div>
 
                         <div style="margin-top: 20px;">
@@ -160,9 +174,8 @@
                                         <tr>
                                             <th><?php echo display('sales_date') ?></th>
                                             <th><?php echo display('product_name') ?></th>
-                                            <th><?php echo display('product_model') ?></th>
-                                            <th>Color</th>
-                                            <th>Size</th>
+                                            <th>SKU</th>
+                                            <th>Quantity</th>
                                             <th><?php echo display('invoice_no') ?></th>
                                             <th><?php echo display('customer_name') ?></th>
                                             <th><?php echo display('rate') ?></th>
@@ -177,9 +190,8 @@
                                             <tr>
                                                 <td>{sales_date}</td>
                                                 <td>{product_name}</td>
-                                                <td>{product_model}</td>
-                                                <td>{color_name}</td>
-                                                <td>{size_name}</td>
+                                                <td>{sku}</td>
+                                                <td>{quantity}</td>
                                                 <td>{invoice}</td>
                                                 <td>{customer_name}</td>
                                                 <td class="text-right"><?php echo (($position == 0) ? "$currency {rate}" : "{rate} $currency") ?></td>
@@ -192,7 +204,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="8" align="right">&nbsp; <b><?php echo display('total_ammount') ?></b></td>
+                                            <td colspan="7" align="right">&nbsp; <b><?php echo display('total_ammount') ?></b></td>
                                             <td class="text-right"><b><?php echo (($position == 0) ? "$currency {sub_total}" : "{sub_total} $currency") ?></b></td>
                                         </tr>
                                     </tfoot>
@@ -227,27 +239,27 @@
                     {
                         extend: 'copyHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'excelHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'csvHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'pdfHtml5',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     },
                     {
                         extend: 'print',
                         footer: true,
-                        className: "btn-sm prints",
+                        className: "btn-sm prints text-center",
                     }
                 ]
             });

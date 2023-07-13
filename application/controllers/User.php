@@ -72,7 +72,7 @@ class User extends CI_Controller
         }
         $data = array(
             'user_id'    => $this->generator(15),
-            'outlet_id' => $this->input->post('outlet', true),
+//            'outlet_id' => $this->input->post('outlet', true),
             'first_name' => $this->input->post('first_name', true),
             'last_name'  => $this->input->post('last_name', true),
             'email'      => $this->input->post('email', true),

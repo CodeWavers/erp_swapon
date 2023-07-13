@@ -72,6 +72,7 @@
                                                     <!-- <th class="text-center">Central Warehouse Name</th> -->
                                                     <th class="text-center">Outlet Name</th>
                                                     <th class="text-center">User</th>
+                                                    <th class="text-center">Address</th>
                                                     <th class="text-center"><?php echo display('action') ?></th>
                                                 </tr>
                                             </thead>
@@ -85,15 +86,16 @@
                                                         <!-- <td class="text-center">{central_warehouse}</td> -->
                                                         <td class="text-center">{outlet_name}</td>
                                                         <td class="text-center">{first_name} {last_name}</td>
+                                                        <td class="text-center">{address}</td>
                                                         <td>
 
                                                             <center>
                                                                 <?php echo form_open() ?>
                                                                 <?php if ($this->permission1->method('manage_category', 'update')->access()) { ?>
-                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_update_form/{outlet_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_update_form/{out_id}'; ?>" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="<?php echo display('update') ?>"><i class="fa fa-pencil" aria-hidden="true"></i></a>
                                                                 <?php } ?>
                                                                 <?php if ($this->permission1->method('manage_category', 'delete')->access()) { ?>
-                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_delete/{outlet_id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                                    <a href="<?php echo base_url() . 'Ccwarehouse/branch_delete/{out_id}'; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are You Sure To Want To Delete ?')" data-toggle="tooltip" data-placement="right" title="" data-original-title="<?php echo display('delete') ?> "><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                                                 <?php } ?>
                                                                 <?php echo form_close() ?>
                                                             </center>
@@ -148,11 +150,19 @@
 
                                         </div>
 
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="category_name" class="col-sm-3 col-form-label">Outlet Address</label>
+                                        <div class="col-sm-6">
+
+                                            <textarea name="address" class="form-control" placeholder="Address"></textarea>
+
+                                        </div>
+
                                         <div class="col-sm-3">
                                             <input type="submit" id="add-category" class="btn btn-success btn-large" name="add-category" value="<?php echo display('add') ?>" />
                                         </div>
                                     </div>
-
 
 
                                     <?php echo form_close() ?>

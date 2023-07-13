@@ -19,10 +19,14 @@ class Lpurchase
         $bank_list        = $CI->Web_settings->bank_list();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $outlet_list = $CI->Warehouse->branch_list_product();
         $outlet_user        = $CI->Warehouse->get_outlet_user();
         $cw = $CI->Warehouse->central_warehouse();
         $cates = $CI->Categories->cates();
+
+     //   echo '<pre>';print_r($cates);exit();
+
         $data = array(
             'title'         => display('add_purchase'),
             'all_supplier'  => $all_supplier,
@@ -31,10 +35,14 @@ class Lpurchase
             'bank_list'     => $bank_list,
             'bkash_list'    => $bkash_list,
             'nagad_list'    => $nagad_list,
+            'rocket_list'    => $rocket_list,
             'outlet_list'   => $outlet_user,
             'cw'            => $cw,
             'cates'            => $cates,
         );
+        // echo "<pre>";
+        // print_r($data);
+        // exit();
         $purchaseForm = $CI->parser->parse('purchase/add_purchase_form', $data, true);
         return $purchaseForm;
     }
@@ -193,32 +201,47 @@ class Lpurchase
         $CI->load->model('Suppliers');
         $CI->load->model('Web_settings');
         $CI->load->model('Warehouse');
+        $CI->load->model('Categories');
+        $CI->load->model('Reports');
         $payment_info = $CI->Purchases->payment_details($purchase_id);
 
         $bank_list        = $CI->Web_settings->bank_list();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $purchase_detail = $CI->Purchases->retrieve_purchase_editdata($purchase_id);
         $supplier_id = $purchase_detail[0]['supplier_id'];
         $supplier_list = $CI->Suppliers->supplier_list("110", "0");
         $supplier_selected = $CI->Suppliers->supplier_search_item($supplier_id);
+        // $cates = $CI->Categories->cates();
 
         if (!empty($purchase_detail)) {
             $i = 0;
             foreach ($purchase_detail as $k => $v) {
                 $i++;
                 $purchase_detail[$k]['sl'] = $i;
+
+
+                    $stock = $CI->Reports->getCheckList(null, $purchase_detail[$k]['product_id'])['central_stock'];
+                    //   $available_quantity = $this->Reports->current_stock($product_id,1);
+
+
+                $purchase_detail[$k]['stock_qty'] = $stock ;
             }
         }
 
         $outlet = $CI->Warehouse->branch_search_item($purchase_detail[0]['outlet_id']);
 
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $cates = $CI->Categories->cates();
         $data = array(
             'title'         => display('purchase_edit'),
             'purchase_id'   => $purchase_detail[0]['purchase_id'],
             'chalan_no'     => $purchase_detail[0]['chalan_no'],
             'supplier_name' => $purchase_detail[0]['supplier_name'],
+            'invoice_no' => $purchase_detail[0]['invoice_no'],
+            'labour_wages' => $purchase_detail[0]['labour_wages'],
+            'transport_cost' => $purchase_detail[0]['transport_cost'],
             // 'outlet_name'   => $outlet[0]['outlet_name'],
             'supplier_id'   => $purchase_detail[0]['supplier_id'],
             'grand_total'   => $purchase_detail[0]['grand_total_amount'],
@@ -235,13 +258,15 @@ class Lpurchase
             'due_amount'    => $purchase_detail[0]['due_amount'],
             'bank_list'     => $bank_list,
             'bkash_list'    => $bkash_list,
+            'rocket_list'    => $rocket_list,
             'nagad_list'    => $nagad_list,
             'supplier_selected' => $supplier_selected,
             'discount_type' => $currency_details[0]['discount_type'],
             'paytype'       => $purchase_detail[0]['payment_type'],
-            'payment_info'    => $payment_info,
+            'payment_info'  => $payment_info,
+             'cates'            => $cates
         );
-        // echo "<pre>";print_r($data);exit();
+       // echo "<pre>";print_r($cates);exit();
         $chapterList = $CI->parser->parse('purchase/edit_purchase_form', $data, true);
         return $chapterList;
     }
@@ -291,6 +316,9 @@ class Lpurchase
             'title'            => display('purchase_details'),
             'purchase_id'      => $purchase_detail[0]['purchase_id'],
             'purchase_details' => $purchase_detail[0]['purchase_details'],
+            'invoice_no' => $purchase_detail[0]['invoice_no'],
+            'labour_wages' => $purchase_detail[0]['labour_wages'],
+            'transport_cost' => $purchase_detail[0]['transport_cost'],
             'supplier_name'    => $purchase_detail[0]['supplier_name'],
             'warrenty_date'    => $purchase_detail[0]['warrenty_date'],
             'expired_date'    => $purchase_detail[0]['expired_date'],

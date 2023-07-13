@@ -49,9 +49,9 @@ class Lic
     private $licence     = 'standard';
     private $log_path    = null;
     private $check_days  = array(9, 10, 11);
-    private $api_domain  = 'secure.bdtask.com';
-    private $api_url     = 'https://secure.bdtask.com/beta/class.licence.php';
-    private $whitelist   = '{license_key}';
+    private $api_domain  = '';
+    private $api_url     = '';
+    private $whitelist   = '';
 
     public function __construct()
     {

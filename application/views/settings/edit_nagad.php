@@ -58,7 +58,7 @@
                             <label for="bank_name" class="col-sm-3 col-form-label">Account Name <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" name="ac_name" id="ac_name" required="" placeholder="Account Name" value="<?php echo $nagad_list[0]['ac_name'] ?>" tabindex="1" />
-                                <input type="hidden" name="oldname" value="<?php echo $bkash_list[0]['ac_name'] ?>">
+                                <input type="hidden" name="oldname" value="<?php echo $bkash_list[0]['nagad_no'] ?>">
                             </div>
                         </div>
 

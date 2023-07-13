@@ -189,6 +189,30 @@ class Courier extends CI_Model
         return false;
     }
 
+    public function branch_by_courier($id) {
+        $this->db->select('*');
+        $this->db->from('branch_name');
+        $this->db->where('courier_id', $id);
+        $this->db->where('status', 1);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
+    public function charge_by_branch($id) {
+        $this->db->select('*');
+        $this->db->from('branch_name');
+        $this->db->where('branch_id', $id);
+        $this->db->where('status', 1);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            return $query->result_array();
+        }
+        return false;
+    }
+
     //Count customer
     public function branch_entry($data)
     {
@@ -319,7 +343,7 @@ class Courier extends CI_Model
         $this->db->from('acc_transaction a');
         $this->db->join('acc_coa b', 'a.COAID=b.HeadCode');
         $this->db->join('invoice i', 'i.invoice_id=a.VNo');
-        $this->db->where('b.PHeadName', 'Operating Expenses');
+        $this->db->where('b.PHeadName', 'Courier Ledger');
         $this->db->where('a.IsAppove', 1);
 //        $this->db->where('i.outlet_id', $outlet_id);
         $this->db->order_by('a.VDate', 'desc');
@@ -354,10 +378,15 @@ class Courier extends CI_Model
 
     public function get_invoice_data()
     {
-        $this->db->select('a.*, b.*, c.courier_name');
+        $this->db->select('a.*, b.*, c.courier_name,c.id as c_id,d.branch_name');
         $this->db->from('invoice a');
         $this->db->join('customer_information b', 'b.customer_id = a.customer_id','left');
-        $this->db->join('courier_name c', 'c.id = a.courier_id','left');
+        $this->db->join('courier_name c', 'c.courier_id = a.courier_id','left');
+        $this->db->join('branch_name d', 'd.branch_id = a.branch_id','left');
+        $this->db->where('a.delivery_type','2');
+        $this->db->order_by('a.invoice','desc');
+//        $this->db->where('a.courier_paid',0);
+
 
 
         // $this->db->join('supplier_information d', 'd.supplier_id = b.supplier_id');

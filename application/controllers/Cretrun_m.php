@@ -36,9 +36,9 @@ class Cretrun_m extends CI_Controller
         $outlet_user = $CI->Warehouse->get_outlet_user();
         $invoice_id = $this->input->post('invoice_id', TRUE);
       //  $invid = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->where('outlet_id', $outlet_user[0]['outlet_id'])->get()->row();
-        $invid = $this->db->select('invoice_id')->from('invoice')->where('invoice_id', $invoice_id)->get()->row();
+        $invid = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->get()->row();
       //  $query = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->where('outlet_id', $outlet_user[0]['outlet_id'])->get();
-        $query = $this->db->select('invoice_id')->from('invoice')->where('invoice_id', $invoice_id)->get();
+        $query = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->get();
 
         if ($query->num_rows() == 0) {
             $this->session->set_userdata(array('error_message' => display('please_input_correct_invoice_no')));
@@ -89,6 +89,8 @@ class Cretrun_m extends CI_Controller
         $CI->auth->check_admin_auth();
         $CI->load->library('lreturn');
         $content = $CI->lreturn->supplier_return_data($purchase_id);
+
+
         $this->template->full_admin_html_view($content);
     }
 
@@ -97,7 +99,8 @@ class Cretrun_m extends CI_Controller
         $CI = &get_instance();
         $CI->auth->check_admin_auth();
         $CI->load->model('Returnse');
-        $invoice_id = $CI->Returnse->return_invoice_entry();
+//        $invoice_id = $CI->Returnse->return_invoice_entry();
+        $invoice_id = $CI->Returnse->return_invoice_entry_new();
         $this->session->set_userdata(array('message' => display('successfully_added')));
 
         redirect("Cretrun_m/invoice_inserted_data/" . $invoice_id);

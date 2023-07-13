@@ -1,5 +1,5 @@
 <!-- Invoice js -->
-<script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js.php" type="text/javascript"></script>
+<script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 <style type="text/css">
     .form-control {
         padding: 6px 5px;
@@ -62,7 +62,49 @@
             </div>
         </div>
 
+        <div class="modal fade modal-warning" id="add_receiver_modal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                        <h3 class="modal-title">Add New Receiver</h3>
+                    </div>
 
+                    <?php echo form_open('Cinvoice/add_receiver', array('class' => 'form-vertical', 'id' => 'add_receiver_form')) ?>
+                    <div class="modal-body">
+                        <div id="customeMessage_rec" class="alert hide"></div>
+                        <div class="panel-body">
+                            <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
+
+                            <div class="form-group row">
+                                <label for="receiver_name" class="col-sm-4 col-form-label">Receiver Name<i class="text-danger">*</i></label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="receiver_number" class="col-sm-4 col-form-label">Receiver Mobile No.<i class="text-danger">*</i></label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+
+                        <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
+
+                        <input type="submit" class="btn btn-success" value="Submit">
+                    </div>
+                    <?php echo form_close() ?>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
         <!--Add Invoice -->
         <div class="row">
             <div class="col-sm-12">
@@ -112,12 +154,17 @@
                                     </label>
                                     <div class="col-sm-6" style="margin-bottom: 10px;">
 
-                                        <select name="sel_type" id="sel_type" class="form-control" onchange="sale_type(this.value)" tabindex="3">
+                                        <select name="sel_type" id="sel_type" class="form-control sel_type" onchange="sale_type(this.value)" tabindex="3">
                                             <option value="">Select One</option>
+                                            <?php if ($this->permission1->method('whole_sale', 'create')->access() ) { ?>
                                             <option value="1">Whole Sale</option>
+                                            <?php } ?>
+                                            <?php if ($this->permission1->method('retail_sale', 'create')->access() ) { ?>
                                             <option value="2">Retail</option>
+                                            <?php } ?>
+                                            <?php if ($this->permission1->method('aggregator_sale', 'create')->access() ) { ?>
                                             <option value="3">Aggregators</option>
-
+                                            <?php } ?>
 
                                         </select>
                                     </div>
@@ -134,10 +181,16 @@
                                     <div class="col-sm-6" style="margin-bottom: 10px;">
 
                                         <select name="agg_id" id="aggregator" class="form-control"  >
-                                            <option value="">Select One</option>
+
+                                            <?php if (!empty($aggre_list)){?>
+                                                <option value="">Select One</option>
                                             {aggre_list}
                                             <option value="{id}">{aggre_name}</option>
                                             {/aggre_list}
+
+                                           <?php }else { ?>
+                                                <option value="" selected>No Aggregator Found</option>
+                                           <?php } ?>
                                         </select>
                                     </div>
                                 </div>
@@ -146,19 +199,19 @@
 
                         <div class="row" >
 
-                            <div id="whole_sale" style="display: none">
+                            <div id="whole_sale" class="whole_sale" style="display: none">
 
-                            <div class="col-sm-8 " id="payment_from_1"  >
+                            <div class="col-sm-8  customer_div" id="payment_from_1" >
                                 <div class="form-group row">
                                     <label for="customer_name" class="col-sm-3 col-form-label">Customer Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <input autocomplete="off"  type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="" />
+                                        <input autocomplete="off"  type="text" size="100" name="customer_name" class=" form-control" placeholder='Customer Name' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="Walking Customer" />
 
-                                        <input autocomplete="off" id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="">
+                                        <input autocomplete="off" id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="1">
                                     </div>
                                     <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
                                         <div class=" col-sm-3">
-                                            <a href="#" class="client-add-btn btn btn-success" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
+                                            <a href="#" class="client-add-btn btn btn-success" id="add_customer" onclick="add_customer()" aria-hidden="true" data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -188,32 +241,43 @@
 
 
                             <div class="col-sm-8" style="display:none;" id="courier_div">
+
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-3 col-form-label">Courier Name <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
 
-                                        <select name="courier_id" class="form-control bankpayment" id="">
+                                        <select name="courier_id" class="form-control bankpayment" id="" onchange="get_branch(this.value)">
                                             <option value="">Select Location</option>
                                             <?php foreach ($courier_list as $courier) { ?>
-                                                <option value="<?php echo html_escape($courier['id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
+                                                <option value="<?php echo html_escape($courier['courier_id']) ?>"><?php echo html_escape($courier['courier_name']); ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
 
                                 </div>
-
-                                <div class="form-group row">
+                                <div class="form-group row branch_div" id="branch_div" style="display: none;">
                                     <label for="bank" class="col-sm-3 col-form-label">Branch<i class="text-danger">*</i></label>
-                                    <div class="col-sm-6">
-                                        <select name="branch_id" class="form-control bankpayment" id="">
-                                            <option value="">Select Location</option>
-                                            <?php foreach ($branch_list as $b) { ?>
-                                                <option value="<?php echo html_escape($b['branch_id']) ?>"><?php echo html_escape($b['branch_name']); ?>(<?php echo html_escape($courier['courier_name']); ?>)</option>
-                                            <?php } ?>
+                                    <div class="col-sm-6" >
+                                        <select name="branch_id" id="branch_id" class="branch_id form-control text-right" tabindex="1" onchange="get_charge(this.value)">
+
                                         </select>
                                     </div>
-
                                 </div>
+
+                                <div class="form-group row branch_div" id="branch_div" style="display: none;">
+                                    <label for="bank" class="col-sm-3 col-form-label">Location<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6 " >
+                                          <input type="radio" id="inside" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="outside">Inside</label><br>
+                                          <input type="radio" id="outside" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="outside">Outside</label><br>
+                                          <input type="radio" id="sub" name="charge" value="" onchange="put_value(this.value)">
+                                          <label for="sub">Sub</label>
+                                    </div>
+                                </div>
+
+
+
 
                                 <div class="form-group row">
                                     <label for="bank" class="col-sm-3 col-form-label">Condition<i class="text-danger">*</i></label>
@@ -255,6 +319,8 @@
 
                             </div>
 
+
+
                             <div class="col-sm-8">
                                 <div class="form-group row">
                                     <label for="date" class="col-sm-3 col-form-label"><?php echo display('date') ?> <i class="text-danger">*</i></label>
@@ -267,6 +333,22 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-sm-8 commission_check d-none" id="commission_check" >
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-3 col-form-label">Commission<i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
+                                        <select name="commission_type" class="form-control bankpayment" id="commission_type" onchange="commision_add(this.value)">
+                                            <option value="2" selected>Overall</option>
+                                            <option value="1">Product Wise</option>
+
+                                        </select>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
 
                         </div>
 
@@ -286,11 +368,12 @@
                                         <th class="text-center">Expiry Date </th>
 
                                         <th class="text-center"><?php echo display('rate') ?> <i class="text-danger">*</i></th>
+<!--                                        <th  class="text-center comm_th  d-none" >Commission</th>-->
 
                                         <?php if ($discount_type == 1) { ?>
-                                            <th class="text-center invoice_fields"><?php echo display('discount_percentage') ?> %</th>
+                                            <th class="text-center invoice_fields"><?php echo display('discount_percentage') ?> % <span class="comm_th d-none">|Commission %</span></th>
                                         <?php } elseif ($discount_type == 2) { ?>
-                                            <th class="text-center invoice_fields"><?php echo display('discount') ?> </th>
+                                            <th class="text-center invoice_fields"><?php echo display('discount') ?> <span class="">|Commission %</span> </th>
                                         <?php } elseif ($discount_type == 3) { ?>
                                             <th class="text-center invoice_fields"><?php echo display('fixed_dis') ?> </th>
                                         <?php } ?>
@@ -302,7 +385,7 @@
                                 </thead>
                                 <tbody id="addinvoiceItem">
                                     <tr>
-                                        <td class="product_field">
+                                        <td class="product_field" >
                                             <input type="text" required name="product_name" onkeypress="invoice_productList(1)" id="product_name_1" class="form-control productSelection" placeholder="<?php echo display('product_name') ?>" tabindex="5">
 
                                             <input type="hidden" class="autocomplete_hidden_value product_id_1" name="product_id[]" id="SchoolHiddenId" />
@@ -310,8 +393,8 @@
                                             <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
                                         </td>
 
-                                        <td>
-                                            <input type="text" id="stock_1" class="form-control" value="" readonly>
+                                        <td  width="100">
+                                            <input type="text" id="" class="form-control text-right available_quantity_1" value="" readonly>
                                         </td>
                                         <!-- <td class="invoice_fields">
                                         <select name="warehouse[]" id="warehouse_1" class="form-control text-right" required="" tabindex="1">
@@ -322,37 +405,46 @@
                                         <!-- <td>
                                         <input type="text" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
                                     </td> -->
-                                        <td>
+                                        <td  width="100">
                                             <input type="hidden" name="available_quantity[]" class="form-control text-right available_quantity_1" value="0" readonly="" />
                                             <input name="" id="" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                         </td>
-                                        <td>
+                                        <td  width="100">
                                             <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8" value="1" />
                                         </td>
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <?php $date = date('Y-m-d'); ?>
                                             <input type="date" style="width: 110px" id="warrenty_date" class="form-control warrenty_date_1" name="warrenty_date[]" value="" />
                                         </td>
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <?php $date = date('Y-m-d'); ?>
                                             <input type="date" style="width: 110px" id="expiry_date" class="form-control expiry_date_1" name="expiry_date[]" value="" />
                                         </td>
-                                        <td class="invoice_fields">
-                                            <input type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0" readonly />
+                                        <td class="text-center"  width="200">
+                                            <input style="width: 120px; display:inline-block" type="text" name="product_rate[]" id="price_item_1" class="price_item1 price_item form-control text-right" tabindex="9" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" min="0"  />
+                                            <s id="purchase_price_1" class="purchase_price1 text-right" style="width: 100px ;"><?php echo '৳0.00'?></s>
                                         </td>
                                         <!-- Discount -->
-                                        <td>
-                                            <input type="text" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
-                                            <input type="hidden" value="" name="discount_type" id="discount_type_1">
+                                        <td  width="200" class="text-center">
+
+                                                    <input type="text" style="width: 120px; display:inline-block" name="discount[]" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="discount_1" class="form-control text-right" min="0" tabindex="10" placeholder="0.00" />
+                                                    <input class="comm_th form-control text-right d-none p-5" style="width: 120px ;" type="text" name="comm[]" id="comm_1" value="0" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  />
+
+
 
                                         </td>
 
 
-                                        <td class="invoice_fields">
+                                        <td class="invoice_fields"  width="100">
                                             <input class="total_price form-control text-right" type="text" name="total_price[]" id="total_price_1" value="0.00" readonly="readonly" />
+                                            <input class="total_price_wd form-control text-right" type="hidden" name="total_price_wd[]" id="total_price_wd_1" value="0.00" readonly="readonly" />
+                                            <input type="hidden" value="" name="discount_type" id="discount_type_1">
                                         </td>
 
-                                        <td>
+<!--                                        <td class="invoice_fields comm_th">-->
+<!--                                        </td>-->
+
+                                        <td  width="100">
                                             <!-- Tax calculate start-->
                                             <?php $x = 0;
                                             foreach ($taxes as $taxfldt) { ?>
@@ -368,7 +460,8 @@
                                             <!-- Tax calculate end-->
 
                                             <!-- Discount calculate start-->
-                                            <input type="hidden" id="total_discount_1" class="" />
+                                            <input type="hidden" id="total_comm_1" class="total_comm" name="total_comm[]"/>
+                                            <input type="hidden" id="total_discount_1" class="total_discount" name="total_discount[]"/>
                                             <input type="hidden" id="all_discount_1" class="total_discount dppr" name="discount_amount[]" />
                                             <!-- Discount calculate end -->
 
@@ -377,11 +470,18 @@
                                     </tr>
                                 </tbody>
                                 <tfoot>
+                                <tr>
+                                    <td colspan="6" rowspan="2">
+                                        <center><label class="text-center" for="details" class="  col-form-label"><?php echo display('invoice_details') ?></label></center>
+                                        <textarea name="inva_details" class="form-control" placeholder="<?php echo display('invoice_details') ?>"></textarea>
+                                    </td>
+                                    <td class="text-right" colspan="2"><b>Sub Total:</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="sub_total" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="sub_total" value="" placeholder="0.00" readonly/>
+                                    </td>
+                                </tr>
                                     <tr>
-                                        <td colspan="6" rowspan="2">
-                                            <center><label for="details" class="  col-form-label text-center"><?php echo display('invoice_details') ?></label></center>
-                                            <textarea name="inva_details" id="details" class="form-control" placeholder="<?php echo display('invoice_details') ?>" tabindex="12"></textarea>
-                                        </td>
+
                                         <td class="text-right" colspan="2"><b><?php echo display('invoice_discount') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" id="invoice_discount" class="form-control text-right total_discount" name="invoice_discount" placeholder="0.00" tabindex="13" />
@@ -390,9 +490,22 @@
                                         <td><a id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addInputField('addinvoiceItem');" tabindex="11"><i class="fa fa-plus"></i></a></td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right" colspan="2"><b><?php echo display('total_discount') ?>:</b></td>
+                                        <td class="text-right" colspan="8"><b>Sale Discount(%):</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="perc_discount" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="perc_discount" value="" placeholder="0.00" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right" colspan="8"><b><?php echo display('total_discount') ?>:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="total_discount_ammount" class="form-control text-right" name="total_discount" value="0.00" readonly="readonly" />
+                                        </td>
+                                    </tr>
+
+                                    <tr id="t_comm_tr" class="d-none" >
+                                        <td class="text-right" colspan="8"><b>Total Commission:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="total_commission" class="form-control text-right" name="total_commission" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
 
@@ -412,7 +525,7 @@
                                     } ?>
 
                                     <tr>
-                                    <tr>
+                                    <tr hidden>
                                         <td class="text-right" colspan="8"><b><?php echo display('total_tax') ?>:</b></td>
                                         <td class="text-right">
                                             <input id="total_tax_amount" tabindex="-1" class="form-control text-right valid" name="total_tax" value="0.00" readonly="readonly" aria-invalid="false" type="text">
@@ -421,21 +534,27 @@
                                                 <i class="fa fa-angle-double-down"></i>
                                             </button></td>
                                     </tr>
-
-                                    <tr>
-                                        <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
+                                    <tr class="hidden_tr d-none">
+                                        <td class="text-right " colspan="8"><b>Delivery Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="shipping_cost" class="form-control text-right" name="shipping_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                         </td>
                                     </tr>
-                                    <tr id="condition_tr" class=" d-none" >
+                                    <tr class="hidden_tr d-none">
+                                        <td class="text-right " colspan="8"><b>ADC:</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="delivery_ac" class="form-control text-right" name="delivery_ac" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14"  />
+                                        </td>
+                                    </tr>
+
+                                    <tr id="condition_tr" class=" d-none" hidden>
                                         <td class="text-right" colspan="8"><b>Condition Charge:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="condition_cost" class="form-control text-right" name="condition_cost" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" placeholder="0.00" value="0.00" tabindex="14" />
                                         </td>
                                     </tr>
 
-                                    <tr>
+                                    <tr id="commission_tr" class=" d-none">
                                         <td class="text-right" colspan="8"><b>Commission:</b></td>
                                         <td class="text-right">
                                             <input type="text" id="commission" class="form-control text-right" name="commission" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);"  value="0.00"  />
@@ -454,6 +573,13 @@
                                             <input type="text" id="previous" class="form-control text-right" name="previous" value="0.00" readonly="readonly" />
                                         </td>
                                     </tr>
+
+                                <tr>
+                                    <td class="text-right" colspan="8"><b>Rounding:</b></td>
+                                    <td class="text-right">
+                                        <input type="text" id="rounding" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="form-control text-right" name="rounding" value="" placeholder="0.00" readonly />
+                                    </td>
+                                </tr>
                                     <tr>
                                         <td colspan="8" class="text-right"><b><?php echo display('net_total'); ?>:</b></td>
                                         <td class="text-right">
@@ -506,12 +632,13 @@
                                                                                                                 echo display('payment_type');
                                                                                                                 ?> <i class="text-danger">*</i></label>
                                                     <div class="col-sm-7">
-                                                        <select name="paytype[]" class="form-control" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
+                                                        <select name="paytype[]" class="form-control pay_type" required="" onchange="bank_paymet(this.value, 1)" tabindex="3">
                                                             <option value="1"><?php echo display('cash_payment') ?></option>
-                                                            <option value="2">Cheque Payment</option>
+                                                            <option value="2"><span class="">Cheque Payment</span></option>
                                                             <option value="4"><?php echo display('bank_payment') ?></option>
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
+                                                            <option value="7">Rocket Payment</option>
                                                             <option value="6">Card Payment</option>
 
                                                         </select>
@@ -609,6 +736,28 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-sm-4" style="display: none" id="rocket_div_1">
+                                                    <div class="form-group row">
+                                                        <label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>
+                                                        <div class="col-sm-7">
+                                                            <select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_1">
+                                                                <option value="">Select One</option>
+                                                                <?php foreach ($rocket_list as $rocket) { ?>
+                                                                    <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                                                <?php } ?>
+                                                            </select>
+
+                                                            <input type="hidden" id="rocket_list" value='<option value="">Select One</option>
+                                            <?php foreach ($rocket_list as $rocket) { ?>
+                                                <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                            <?php } ?>'>
+
+                                                        </div>
+
+
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-sm-4" style="display: none" id="card_div_1">
                                                     <div class="form-group row">
                                                         <label for="card" class="col-sm-5 col-form-label">Card Type <i class="text-danger">*</i></label>
@@ -630,12 +779,12 @@
 
                                                     </div>
 
-                                                    <div class="form-group row">
-                                                        <label for="cus_card" class="col-sm-5 col-form-label">Customer Card No.</label>
-                                                        <div class="col-sm-7">
-                                                            <input type="text" class="form-control" id="cus_card" name="cus_card">
-                                                        </div>
-                                                    </div>
+<!--                                                    <div class="form-group row">-->
+<!--                                                        <label for="cus_card" class="col-sm-5 col-form-label">Customer Card No.</label>-->
+<!--                                                        <div class="col-sm-7">-->
+<!--                                                            <input type="text" class="form-control" id="cus_card" name="cus_card">-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
                                                 </div>
 
                                                 <div class="col-sm-3" id="ammnt_1">
@@ -760,7 +909,7 @@
                         <?php echo form_close() ?>
                     </div>
                 </div>
-                <div class="modal fade" id="printconfirmodal" tabindex="-1" role="dialog" aria-labelledby="printconfirmodal" aria-hidden="true">
+                <div class="modal fade" id="printconfirmodal" tabindex="-1" role="dialog" aria-labelledby="printconfirmodal" aria-hidden="true" >
                     <div class="modal-dialog modal-sm">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -805,19 +954,27 @@
                                 <div id="customeMessage" class="alert hide"></div>
                                 <div class="panel-body">
                                     <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                    <div class="form-group row">
-                                        <label for="customer_id_two" class="col-sm-3 col-form-label">Customer ID <i class="text-danger">*</i></label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" name="customer_id_two" id="" type="text" placeholder="Customer ID" required="" tabindex="1">
-                                        </div>
-                                    </div>
+<!--                                    <div class="form-group row">-->
+<!--                                        <label for="customer_id_two" class="col-sm-3 col-form-label">Customer ID <i class="text-danger">*</i></label>-->
+<!--                                        <div class="col-sm-6">-->
+<!--                                            <input class="form-control" name="customer_id_two" id="" type="text" placeholder="Customer ID" required="" tabindex="1">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
                                     <div class="form-group row">
                                         <label for="customer_name" class="col-sm-3 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger">*</i></label>
                                         <div class="col-sm-6">
-                                            <input class="form-control" name="customer_name" id="" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
+                                            <input class="form-control" name="customer_name" id="m_customer_name" type="text" placeholder="<?php echo display('customer_name') ?>" required="" tabindex="1">
                                         </div>
                                     </div>
+
+                                    <div class="form-group row">
+                                        <label for="customer_name" class="col-sm-3 col-form-label">Shop Name </label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control" name="shop_name" id="shop_name" type="text" placeholder="Shop Name"  tabindex="1">
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group row">
                                         <label for="email" class="col-sm-3 col-form-label"><?php echo display('customer_email') ?></label>
@@ -883,49 +1040,7 @@
                 </div><!-- /.modal -->
 
                 <!-- Receiver add Modal start-->
-                <div class="modal fade modal-warning" id="add_receiver_modal" role="dialog">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
 
-                                <a href="#" class="close" data-dismiss="modal">&times;</a>
-                                <h3 class="modal-title">Add New Receiver</h3>
-                            </div>
-
-                            <?php echo form_open('Cinvoice/add_receiver', array('class' => 'form-vertical', 'id' => 'add_receiver_form')) ?>
-                            <div class="modal-body">
-                                <div id="customeMessage_rec" class="alert hide"></div>
-                                <div class="panel-body">
-                                    <input type="hidden" name="csrf_test_name" id="" value="<?php echo $this->security->get_csrf_hash(); ?>">
-                                    <div class="form-group row">
-                                        <label for="receiver_name" class="col-sm-4 col-form-label">Receiever Name<i class="text-danger">*</i></label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" name="receiver_name" id="" type="text" placeholder="Receiver Name" required="" tabindex="1">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="receiver_number" class="col-sm-4 col-form-label">Receiever Mobile No.<i class="text-danger">*</i></label>
-                                        <div class="col-sm-6">
-                                            <input class="form-control" name="receiver_number" id="receiver_number" type="text" placeholder="Mobile No." required="" tabindex="1">
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-
-                            <div class="modal-footer">
-
-                                <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
-
-                                <input type="submit" class="btn btn-success" value="Submit">
-                            </div>
-                            <?php echo form_close() ?>
-                        </div><!-- /.modal-content -->
-                    </div><!-- /.modal-dialog -->
-                </div>
                 <!-- Receiver add Modal end-->
 
             </div>
@@ -935,6 +1050,11 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        //
+        // var inputs = document.querySelectorAll('input[type="radio"]');
+        // for (var i = 0; i < inputs.length; i++) {
+        //     inputs[i].disabled = 'false';
+        // }
 
         $(".add_cheque").click(function() {
             $(".addCheque").append(" <div id=\"cheque\" class=\"cheque\">\n" +
@@ -989,6 +1109,69 @@
         $(this).parents('.cheque').remove();
         //the above method will remove the user_data div
     });
+    "use strict";
+    function get_branch(courier_id) {
 
+        var base_url = "<?= base_url() ?>";
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+        $.ajax( {
+            url: base_url + "Ccourier/branch_by_courier",
+            method: 'post',
+            data: {
+                courier_id:courier_id,
+                csrf_test_name:csrf_test_name
+            },
+            cache: false,
+            success: function( data ) {
+                var obj = jQuery.parseJSON(data);
+                $('.branch_id').html(obj.branch);
+
+
+                $(".branch_div").css("display", "block");
+                // if(courier_id == obj.courier_id ){
+                //     $("#subCat_div").css("display", "block");
+                // }else{
+                //     $("#subCat_div").css("display", "none");
+                // }
+            }
+        })
+
+    }
+
+    function get_charge(branch_id) {
+
+        var base_url = "<?= base_url() ?>";
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+
+
+
+        $.ajax( {
+            url: base_url + "Ccourier/charge_by_branch",
+            method: 'post',
+            data: {
+                branch_id:branch_id,
+                csrf_test_name:csrf_test_name
+            },
+            cache: false,
+            success: function( data ) {
+                var obj = jQuery.parseJSON(data);
+             //   console.log(obj[0].inside)
+
+                $('#inside').val(obj[0].inside);
+                $('#outside').val(obj[0].outside);
+                $('#sub').val(obj[0].sub);
+
+            }
+        })
+
+    }
+
+    function put_value(val){
+
+      $('#delivery_ac').val(val);
+    }
 
 </script>

@@ -106,7 +106,26 @@
                                     </tbody>
                                 </table>
                             </div>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="from">Send By :</label>
+                                        <input id="from" class="form-control" type="text" value="<?= $rqsn_list[0]['first_name'].' '.$rqsn_list[0]['last_name']?>" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6"></div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="to">Receive By :</label>
+                                        <input id="to" class="form-control" type="text" value="<?= $rcv_by ?>" readonly>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+
                         <div class="col-sm-2">
                             <a href="<?= base_url('Creport/transfer_report') ?>">
                                 <button class="btn btn-black">Back</button>

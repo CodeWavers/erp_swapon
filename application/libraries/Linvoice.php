@@ -13,6 +13,7 @@ class Linvoice
         $CI = &get_instance();
         $CI->load->model('Invoices');
         $CI->load->model('Web_settings');
+        $CI->load->model('Settings');
         $CI->load->library('occational');
         $company_info = $CI->Invoices->retrieve_company();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
@@ -21,6 +22,11 @@ class Linvoice
             'total_invoice' => $CI->Invoices->count_invoice(),
             'currency'      => $currency_details[0]['currency'],
             'company_info'  => $company_info,
+            'bank_list'        => $CI->Web_settings->bank_list(),
+            'bkash_list'        =>$CI->Web_settings->bkash_list(),
+            'nagad_list'        =>  $CI->Web_settings->nagad_list(),
+            'rocket_list'        =>  $CI->Web_settings->rocket_list(),
+            'card_list'            => $CI->Settings->get_real_card_data()
         );
         // echo "<pre>";
         // print_r($company_info);
@@ -184,46 +190,7 @@ class Linvoice
         return $invoiceList;
     }
 
-    //Pos invoice add form
-    public function pos_invoice_add_form()
-    {
-        $CI = &get_instance();
-        $CI->load->model('Invoices');
-        $CI->load->model('Web_settings');
-        $CI->load->model('Courier');
-        $CI->load->model('Settings');
-        $CI->load->model('Warehouse');
-        $customer_details = $CI->Invoices->pos_customer_setup();
-        $bank_list        = $CI->Web_settings->bank_list();
-        $bkash_list        = $CI->Web_settings->bkash_list();
-        $branch_list        = $CI->Courier->get_branch_list();
-        $card_list = $CI->Settings->read_all_card();
-        $outlet_user        = $CI->Warehouse->get_outlet_user();
-        $cw = $CI->Warehouse->central_warehouse();
-        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
-        $taxfield = $CI->db->select('tax_name,default_value')
-            ->from('tax_settings')
-            ->get()
-            ->result_array();
-        $tablecolumn = $CI->db->list_fields('tax_collection');
-        $num_column = count($tablecolumn) - 4;
-        $data = array(
-            'title'         => display('pos_invoice'),
-            'customer_name' => $customer_details[0]['customer_name'],
-            'customer_id'   => $customer_details[0]['customer_id'],
-            'discount_type' => $currency_details[0]['discount_type'],
-            'taxes'         => $taxfield,
-            'taxnumber'     => $num_column,
-            'bank_list'     => $bank_list,
-            'bkash_list'     => $bkash_list,
-            'branch_list'     => $branch_list,
-            'card_list'     => $card_list,
-            'outlet_list'     => $outlet_user,
-            'cw'            => $cw
-        );
-        $invoiceForm = $CI->parser->parse('invoice/add_pos_invoice_form', $data, true);
-        return $invoiceForm;
-    }
+
 
     //Retrieve  Invoice List
     public function search_inovoice_item($customer_id)
@@ -264,7 +231,7 @@ class Linvoice
         $CI->load->model('Settings');
         $CI->load->model('Aggre');
 
-        $card_list = $CI->Settings->get_real_card_data();
+
         $employee_list    = $CI->Service->employee_list();
         $customer_details = $CI->Invoices->pos_customer_setup();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
@@ -272,9 +239,7 @@ class Linvoice
             ->from('tax_settings')
             ->get()
             ->result_array();
-        $bank_list          = $CI->Web_settings->bank_list();
-        $bkash_list        = $CI->Web_settings->bkash_list();
-        $nagad_list        = $CI->Web_settings->nagad_list();
+
         $courier_list        = $CI->Courier->get_courier_list();
         $branch_list        = $CI->Courier->get_branch_list();
         $outlet_user        = $CI->Warehouse->get_outlet_user();
@@ -293,10 +258,11 @@ class Linvoice
             'customer_name' => $customer_details[0]['customer_name'],
             'customer_id'   => $customer_details[0]['customer_id'],
             'customer_id_two'   => $customer_details[0]['customer_id_two'],
-            'card_list'     => $card_list,
-            'bank_list'     => $bank_list,
-            'bkash_list'     => $bkash_list,
-            'nagad_list'     => $nagad_list,
+            'card_list'     => $CI->Settings->get_real_card_data(),
+            'bank_list'     => $CI->Web_settings->bank_list(),
+            'bkash_list'     => $CI->Web_settings->bkash_list(),
+            'nagad_list'     => $CI->Web_settings->nagad_list(),
+            'rocket_list'     => $CI->Web_settings->rocket_list(),
             'courier_list'     => $courier_list,
             'branch_list'     => $branch_list,
             'outlet_list'     => $outlet_user,
@@ -304,7 +270,70 @@ class Linvoice
             'aggre_list'    => $aggre_list,
             'cw'            => $cw
         );
+
+      //  echo '<pre>';print_r($data['rocket_list']);
         $invoiceForm = $CI->parser->parse('invoice/add_invoice_form', $data, true);
+        return $invoiceForm;
+    }
+    //Pos invoice add form
+    public function pos_invoice_add_form()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Courier');
+        $CI->load->model('Service');
+        $CI->load->model('Settings');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Aggre');
+        $customer_details = $CI->Invoices->pos_customer_setup();
+        $employee_list    = $CI->Service->employee_list();
+        $card_list = $CI->Settings->get_real_card_data();
+
+        $bank_list          = $CI->Web_settings->bank_list();
+        $bkash_list        = $CI->Web_settings->bkash_list();
+        $nagad_list        = $CI->Web_settings->nagad_list();
+        $rocket_list        = $CI->Web_settings->rocket_list();
+        $courier_list        = $CI->Courier->get_courier_list();
+        $branch_list        = $CI->Courier->get_branch_list();
+        $outlet_user        = $CI->Warehouse->get_outlet_user();
+        $receiver_list        = $CI->Courier->get_receiver_list();
+
+        $outlet_list = $CI->Warehouse->branch_list_product();
+
+        $cw = $CI->Warehouse->central_warehouse();
+        $aggre_list = $CI->Aggre->aggre_list_product();
+
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $taxfield = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $tablecolumn = $CI->db->list_fields('tax_collection');
+        $num_column = count($tablecolumn) - 4;
+        $data = array(
+            'title'         => display('pos_invoice'),
+            'employee_list' => $employee_list,
+            'discount_type' => $currency_details[0]['discount_type'],
+            'taxes'         => $taxfield,
+            'customer_name' => $customer_details[0]['customer_name'],
+            'customer_id'   => $customer_details[0]['customer_id'],
+            'customer_id_two'   => $customer_details[0]['customer_id_two'],
+            'card_list'     => $card_list,
+            'bank_list'     => $bank_list,
+            'bkash_list'     => $bkash_list,
+            'nagad_list'     => $nagad_list,
+            'rocket_list'     => $rocket_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
+            'outlet_list'     => $outlet_user,
+            'receiver_list'    => $receiver_list,
+            'aggre_list'    => $aggre_list,
+            'cw'            => $cw
+        );
+
+     //   echo '<pre>';print_r($card_list);exit();
+        $invoiceForm = $CI->parser->parse('invoice/add_pos_invoice_form', $data, true);
         return $invoiceForm;
     }
     public function pre_invoice_add_form()
@@ -361,26 +390,45 @@ class Linvoice
         $CI->load->model('Service');
         $CI->load->model('Warehouse');
         $CI->load->model('Settings');
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
 
         $employee_list    = $CI->Service->employee_list();
         $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
-
         $payment_info = $CI->Invoices->payment_details($invoice_id);
-
+        $courier_list        = $CI->Courier->get_courier_list();
         $bank_list      = $CI->Web_settings->bank_list();
-        $bkash_list      = $CI->Web_settings->bkash_list();
-        $branch_list      = $CI->Courier->get_branch_list();
+        $bkash_list     = $CI->Web_settings->bkash_list();
+        $rocket_list     = $CI->Web_settings->rocket_list();
+        $branch_list    = $CI->Courier->get_branch_list();
         $taxinfo        = $CI->Invoices->service_invoice_taxinfo($invoice_id);
         $taxfield       = $CI->db->select('tax_name,default_value')
             ->from('tax_settings')
             ->get()
             ->result_array();
         $i = 0;
+
+        $agg_id = $invoice_detail[0]['agg_id'];
+        $outlet_id = $invoice_detail[0]['outlet_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
         if (!empty($invoice_detail)) {
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
-                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
+
+                if ($outlet_id == 'HK7TGDT69VFMXB7') {
+                    $stock = $CI->Reports->getCheckList(null, $invoice_detail[$k]['product_id'])['central_stock'];
+                    //   $available_quantity = $this->Reports->current_stock($product_id,1);
+                } else {
+                    $stock = $CI->Rqsn->outlet_stock(null, $invoice_detail[$k]['product_id'])['outlet_stock'];
+
+                    // echo '<pre>';print_r($available_quantity);exit();
+                }
+//                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
                 $invoice_detail[$k]['stock_qty'] = $stock + $invoice_detail[$k]['quantity'];
             }
         }
@@ -389,13 +437,31 @@ class Linvoice
         $card_list = $CI->Settings->get_real_card_data();
 
         $outlet = $CI->Warehouse->branch_search_item($invoice_detail[0]['outlet_id']);
-
+        $receiver_list        = $CI->Courier->get_receiver_list();
         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
         $data = array(
             'title'           => 'Due Invoice View',
+            'con'      => $con,
+            'courier_condtion'      => $invoice_detail[0]['courier_condtion'],
             'invoice_id'      => $invoice_detail[0]['invoice_id'],
+            'receiver_list'     => $receiver_list,
+            'agg_name'     => $agg_name,
+
+            'agg_id'     => $invoice_detail[0]['agg_id'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
             'customer_id'     => $invoice_detail[0]['customer_id'],
             'customer_name'   => $invoice_detail[0]['customer_name'],
+            'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'customer_name_two'   => $invoice_detail[0]['customer_name_two'],
             'customer_mobile_two'   => $invoice_detail[0]['customer_mobile_two'],
             'date'            => $invoice_detail[0]['date'],
@@ -406,8 +472,10 @@ class Linvoice
             'paid_amount'     => $invoice_detail[0]['p_amnt'],
             'due_amount'      => $invoice_detail[0]['due_amnt'],
             'invoice_discount' => $invoice_detail[0]['invoice_discount'],
+            'delivery_ac' => $invoice_detail[0]['delivery_ac'],
+            'perc_discount' => $invoice_detail[0]['perc_discount'],
             'total_discount'  => $invoice_detail[0]['total_discount'],
-            'unit'            => $invoice_detail[0]['unit'],
+            'rr'            => $invoice_detail[0]['unit'],
             'warrenty_date'   => $invoice_detail[0]['warrenty_date'],
             'sn'              => $invoice_detail[0]['sn'],
             'bank'             => $invoice_detail[0]['bank_id'],
@@ -416,29 +484,179 @@ class Linvoice
             'prev_due'        => $invoice_detail[0]['prevous_due'],
             'net_total'       => $invoice_detail[0]['prevous_due'] + $invoice_detail[0]['total_amount'],
             'shipping_cost'   => $invoice_detail[0]['shipping_cost'],
+            'condition_cost'   => $invoice_detail[0]['condition_cost'],
+            'total_commission'   => $invoice_detail[0]['total_commission'],
+            'comm_type'   => $invoice_detail[0]['comm_type'],
+            'commission'   => $invoice_detail[0]['commission'],
             'total_tax'       => $invoice_detail[0]['taxs'],
             'invoice_all_data' => $invoice_detail,
             'taxvalu'         => $taxinfo,
             'discount_type'   => $currency_details[0]['discount_type'],
             'bank_list'       => $bank_list,
             'bkash_list'      => $bkash_list,
-            'branch_list'     => $branch_list,
+            'rocket_list'      => $rocket_list,
             'employee_list' => $employee_list,
+            'rid'         => $invoice_detail[0]['rid'],
+            'receiver_name'         => $invoice_detail[0]['receiver_name'],
+            'receiver_number'         => $invoice_detail[0]['receiver_number'],
             'bank_id'         => $invoice_detail[0]['bank_id'],
             'bkash_id'        => $invoice_detail[0]['bkash_id'],
             'nagad_list'     => $nagad_list,
             'card_list'     => $card_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
             'courier_id'      => $invoice_detail[0]['courier_id'],
+            'courier_name'      => $invoice_detail[0]['courier_name'],
+            'branch_name'      => $invoice_detail[0]['branch_name'],
             'branch_id'       => $invoice_detail[0]['branch_id'],
             'paytype'         => $invoice_detail[0]['payment_type'],
             'delivery_type'   => $invoice_detail[0]['delivery_type'],
             'payment_info'    => $payment_info,
             //'sales_by'   => $invoice_detail[0]['sales_by'],
-            'sales_first_name'   => $invoice_detail[0]['first_name'],
-            'sales_last_name'   => $invoice_detail[0]['last_name'],
+            'sales_first_name'   => $invoice_detail[0]['customer_name'],
+            // 'sales_last_name'   => $invoice_detail[0]['last_name'],
         );
-        // echo "<pre>" ;print_r($data);exit();
+//      echo "<pre>" ;print_r($invoice_detail[0]['delivery_type']);exit();
         $chapterList = $CI->parser->parse('invoice/edit_invoice_form', $data, true);
+        return $chapterList;
+    }
+
+    public function pre_invoice_edit_data($invoice_id)
+    {
+        $CI = &get_instance();
+        $CI->load->model('Invoices');
+        $CI->load->model('Web_settings');
+        $CI->load->model('Courier');
+        $CI->load->model('Service');
+        $CI->load->model('Warehouse');
+        $CI->load->model('Settings');
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
+
+        $employee_list    = $CI->Service->employee_list();
+        $invoice_detail = $CI->Invoices->retrieve_invoice_editdata($invoice_id);
+        $payment_info = $CI->Invoices->payment_details($invoice_id);
+        $courier_list        = $CI->Courier->get_courier_list();
+        $bank_list      = $CI->Web_settings->bank_list();
+        $bkash_list     = $CI->Web_settings->bkash_list();
+        $branch_list    = $CI->Courier->get_branch_list();
+        $taxinfo        = $CI->Invoices->service_invoice_taxinfo($invoice_id);
+        $taxfield       = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $i = 0;
+
+        $agg_id = $invoice_detail[0]['agg_id'];
+        $outlet_id = $invoice_detail[0]['outlet_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
+        if (!empty($invoice_detail)) {
+            foreach ($invoice_detail as $k => $v) {
+                $i++;
+                $invoice_detail[$k]['sl'] = $i;
+
+                if ($outlet_id == 'HK7TGDT69VFMXB7') {
+                    $stock = $CI->Reports->getCheckList(null, $invoice_detail[$k]['product_id'])['central_stock'];
+                    //   $available_quantity = $this->Reports->current_stock($product_id,1);
+                } else {
+                    $stock = $CI->Rqsn->outlet_stock(null, $invoice_detail[$k]['product_id'])['outlet_stock'];
+
+                    // echo '<pre>';print_r($available_quantity);exit();
+                }
+//                $stock = $CI->Invoices->stock_qty_check($invoice_detail[$k]['product_id']);
+                $invoice_detail[$k]['stock_qty'] = $stock + $invoice_detail[$k]['quantity'];
+            }
+        }
+
+        $nagad_list        = $CI->Web_settings->nagad_list();
+        $card_list = $CI->Settings->get_real_card_data();
+
+        $outlet = $CI->Warehouse->branch_search_item($invoice_detail[0]['outlet_id']);
+        $receiver_list        = $CI->Courier->get_receiver_list();
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
+        $data = array(
+            'title'           => 'Due Invoice View',
+            'con'      => $con,
+            'courier_condtion'      => $invoice_detail[0]['courier_condtion'],
+            'invoice_id'      => $invoice_detail[0]['invoice_id'],
+            'receiver_list'     => $receiver_list,
+            'agg_name'     => $agg_name,
+
+            'agg_id'     => $invoice_detail[0]['agg_id'],
+            'sale_type'     => $invoice_detail[0]['sale_type'],
+            'customer_id'     => $invoice_detail[0]['customer_id'],
+            'customer_name'   => $invoice_detail[0]['customer_name'],
+            'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
+            'customer_name_two'   => $invoice_detail[0]['customer_name_two'],
+            'customer_mobile_two'   => $invoice_detail[0]['customer_mobile_two'],
+            'date'            => $invoice_detail[0]['date'],
+            'invoice_details' => $invoice_detail[0]['invoice_details'],
+            'outlet_name'     => $outlet[0]['outlet_name'],
+            'invoice'         => $invoice_detail[0]['invoice'],
+            'total_amount'    => $invoice_detail[0]['total_amount'],
+            'paid_amount'     => $invoice_detail[0]['p_amnt'],
+            'due_amount'      => $invoice_detail[0]['due_amnt'],
+            'invoice_discount' => $invoice_detail[0]['invoice_discount'],
+            'delivery_ac' => $invoice_detail[0]['delivery_ac'],
+            'perc_discount' => $invoice_detail[0]['perc_discount'],
+            'total_discount'  => $invoice_detail[0]['total_discount'],
+            'rr'            => $invoice_detail[0]['unit'],
+            'warrenty_date'   => $invoice_detail[0]['warrenty_date'],
+            'sn'              => $invoice_detail[0]['sn'],
+            'bank'             => $invoice_detail[0]['bank_id'],
+            'tax'             => $invoice_detail[0]['tax'],
+            'taxes'          => $taxfield,
+            'prev_due'        => $invoice_detail[0]['prevous_due'],
+            'net_total'       => $invoice_detail[0]['prevous_due'] + $invoice_detail[0]['total_amount'],
+            'shipping_cost'   => $invoice_detail[0]['shipping_cost'],
+            'condition_cost'   => $invoice_detail[0]['condition_cost'],
+            'total_commission'   => $invoice_detail[0]['total_commission'],
+            'comm_type'   => $invoice_detail[0]['comm_type'],
+            'commission'   => $invoice_detail[0]['commission'],
+            'total_tax'       => $invoice_detail[0]['taxs'],
+            'invoice_all_data' => $invoice_detail,
+            'taxvalu'         => $taxinfo,
+            'discount_type'   => $currency_details[0]['discount_type'],
+            'bank_list'       => $bank_list,
+            'bkash_list'      => $bkash_list,
+            'employee_list' => $employee_list,
+            'rid'         => $invoice_detail[0]['rid'],
+            'receiver_name'         => $invoice_detail[0]['receiver_name'],
+            'receiver_number'         => $invoice_detail[0]['receiver_number'],
+            'bank_id'         => $invoice_detail[0]['bank_id'],
+            'bkash_id'        => $invoice_detail[0]['bkash_id'],
+            'nagad_list'     => $nagad_list,
+            'card_list'     => $card_list,
+            'courier_list'     => $courier_list,
+            'branch_list'     => $branch_list,
+            'courier_id'      => $invoice_detail[0]['courier_id'],
+            'courier_name'      => $invoice_detail[0]['courier_name'],
+            'branch_name'      => $invoice_detail[0]['branch_name'],
+            'branch_id'       => $invoice_detail[0]['branch_id'],
+            'paytype'         => $invoice_detail[0]['payment_type'],
+            'delivery_type'   => $invoice_detail[0]['delivery_type'],
+            'payment_info'    => $payment_info,
+            //'sales_by'   => $invoice_detail[0]['sales_by'],
+            'sales_first_name'   => $invoice_detail[0]['customer_name'],
+            // 'sales_last_name'   => $invoice_detail[0]['last_name'],
+        );
+//      echo "<pre>" ;print_r($invoice_detail[0]['delivery_type']);exit();
+
+        $chapterList = $CI->parser->parse('quotation/edit_invoice_form', $data, true);
         return $chapterList;
     }
 
@@ -597,7 +815,16 @@ class Linvoice
         $redirect_url = $_SESSION['redirect_uri'];
 
         $invoice_detail = $CI->Invoices->retrieve_invoice_html_data($invoice_id);
+        $payment_info = $CI->Invoices->payment_details_total($invoice_id);
+
+     //   echo '<pre>';print_r($payment_info);exit();
         $cus_id = $invoice_detail[0]['customer_id'];
+        $agg_id = $invoice_detail[0]['agg_id'];
+
+        if (!empty($agg_id)){
+            $agg_name=$CI->db->select('aggre_name')->from('aggre_list')->where('id',$agg_id)->get()->row()->aggre_name;
+
+        }
         $customer_balance = $CI->Invoices->customer_balance($cus_id);
         $taxfield = $CI->db->select('*')
             ->from('tax_settings')
@@ -613,6 +840,7 @@ class Linvoice
         $subTotal_cartoon = 0;
         $subTotal_discount = 0;
         $subTotal_ammount = 0;
+        $subTotal_ammount_wd = 0;
         $descript = 0;
         $isserial = 0;
         $isunit = 0;
@@ -621,6 +849,10 @@ class Linvoice
                 $invoice_detail[$k]['final_date'] = $CI->occational->dateConvert($invoice_detail[$k]['date']);
                 $subTotal_quantity = $subTotal_quantity + $invoice_detail[$k]['quantity'];
                 $subTotal_ammount = $subTotal_ammount + $invoice_detail[$k]['total_price'];
+                if ($invoice_detail[$k]['total_price_wd'] > 0){
+                    $subTotal_ammount_wd = $subTotal_ammount_wd + $invoice_detail[$k]['total_price_wd'];
+
+                }
             }
 
             $i = 0;
@@ -650,32 +882,104 @@ class Linvoice
         $amount_inword = $CI->numbertowords->convert_number($totalbal);
         $user_id = $invoice_detail[0]['sales_by'];
         $users = $CI->Invoices->user_invoice_data($user_id);
+
+
+        if ($invoice_detail[0]['delivery_type'] == 1){
+            $dt='Pick Up';
+        }
+        if ($invoice_detail[0]['delivery_type'] == 2){
+            $dt='Courier';
+        }
+
+        if ($invoice_detail[0]['payment_type'] == 1){
+            $pt='Cash';
+        }
+
+        if ($invoice_detail[0]['payment_type'] == 4){
+            $pt='Bank';
+        }
+        if ($invoice_detail[0]['payment_type'] == 3){
+            $pt='Bkash';
+        }
+        if ($invoice_detail[0]['payment_type'] == 6){
+            $pt='Card';
+        }
+        if ($invoice_detail[0]['payment_type'] == 2){
+            $pt='Cheque';
+        }
+
+        if ($invoice_detail[0]['sale_type'] == 1){
+            $st='Whole Sale';
+        }
+        if ($invoice_detail[0]['sale_type'] == 3){
+            $st='Aggregators Sale';
+        }
+
+        if ($invoice_detail[0]['courier_condtion'] == 1){
+            $con='Conditional';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 2){
+            $con='Partial';
+        }
+        if ($invoice_detail[0]['courier_condtion'] == 3){
+            $con='No Condition';
+        }
+
+       $price=$invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'];
+        $round_price=round($price);
+        $rounding=$round_price-$price;
+
+
+
         $data = array(
-            'title'             => display('invoice_details'),
+            'title'             => $invoice_detail[0]['invoice'].'-'.$outlet[0]['outlet_name'].'-'.date('Y-m-d'),
             'balance'        => $customer_balance[0]['balance'],
             'pay_type' => $invoice_detail[0]['payment_type'],
+            'is_pre' => $invoice_detail[0]['is_pre'],
+            'delivery_type'        => $invoice_detail[0]['delivery_type'],
             'invoice_id'        => $invoice_detail[0]['invoice_id'],
+            'ecom_invoice_id'        => $invoice_detail[0]['ecom_order_id'],
+            'dt'        => $dt,
+            'pt'        => $pt,
+            'st'        => $st,
+            'con'        => $con,
+            'condition_cost'        => $invoice_detail[0]['condition_cost'],
             'invoice_no'        => $invoice_detail[0]['invoice'],
             'outlet_name'        => $outlet[0]['outlet_name'],
+            'outlet_address'        => $outlet[0]['address'],
             'sale_type'     => $invoice_detail[0]['sale_type'],
+            'agg_name'     => $agg_name,
+            'time'     => $invoice_detail[0]['time'],
+            'date'     => $invoice_detail[0]['date'],
             'customer_name'     => $invoice_detail[0]['customer_name'],
+            'shop_name'  => $invoice_detail[0]['shop_name'],
             'customer_address'  => $invoice_detail[0]['customer_address'],
             'customer_mobile'   => $invoice_detail[0]['customer_mobile'],
             'customer_email'    => $invoice_detail[0]['customer_email'],
+            'courier_status'    => $invoice_detail[0]['courier_status'],
             'final_date'        => $invoice_detail[0]['final_date'],
             'inv_date'        => $invoice_detail[0]['date'],
             'invoice_details'   => $invoice_detail[0]['invoice_details'],
-            'total_amount'      => number_format($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due'], 2, '.', ','),
+            'rounding' =>number_format($rounding,2),
+            'total_amount'      => number_format(round($invoice_detail[0]['total_amount'] + $invoice_detail[0]['prevous_due']), 2, '.', ','),
             'total'      => number_format($invoice_detail[0]['total_amount'], 2, '.', ','),
             'subTotal_quantity' => $subTotal_quantity,
+            'previous_paid'    => number_format($invoice_detail[0]['previous_paid'], 2, '.', ','),
             'invoice_discount'    => number_format($invoice_detail[0]['invoice_discount'], 2, '.', ','),
             'total_discount'    => number_format($invoice_detail[0]['total_discount'], 2, '.', ','),
+//            'sub_total'    => number_format($invoice_detail[0]['total_discount']+$invoice_detail[0]['total_amount'], 2, '.', ','),
+            'sub_total'    => number_format($subTotal_ammount_wd, 2, '.', ','),
             'total_tax'         => number_format($invoice_detail[0]['total_tax'], 2, '.', ','),
             'subTotal_ammount'  => number_format($subTotal_ammount, 2, '.', ','),
-            'paid_amount'       => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
-            'due_amount'        => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
+            'paid_amount'       => number_format(round($invoice_detail[0]['paid_amount']), 2, '.', ','),
+            'due_amount'        => number_format(round($invoice_detail[0]['due_amount']), 2, '.', ','),
+            'sales_return'        => number_format(round($invoice_detail[0]['sales_return']), 2, '.', ','),
+            'cash_refund'        => number_format(round($invoice_detail[0]['cash_refund']), 2, '.', ','),
+            'customer_ac'        => number_format(round($invoice_detail[0]['customer_ac']), 2, '.', ','),
+            'changeamount'        => number_format($invoice_detail[0]['changeamount'], 2, '.', ','),
             'previous'          => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
             'shipping_cost'     => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
+            'total_commission'     => number_format($invoice_detail[0]['total_commission']+$invoice_detail[0]['commission'], 2, '.', ','),
             'invoice_all_data'  => $invoice_detail,
             'company_info'      => $company_info,
             'currency'          => $currency_details[0]['currency'],
@@ -691,15 +995,24 @@ class Linvoice
             'is_unit'           => $isunit,
             'inwords'           => $inwords,
             'manage'            => $manage,
+            'payment_info'            => $payment_info,
             'red_url'           => isset($redirect_url) ? $redirect_url : null,
 
         );
 
-        // echo '<pre>';
-        // print_r($data);
-        // exit();
+//
+        $pay_type=$invoice_detail[0]['sale_type'];
+//         echo '<pre>';
+//         print_r($data);
+//         exit();
+        if ($pay_type == 2 ){
+            $chapterList = $CI->parser->parse('invoice/pos_dell_arte_invoice_html_manual', $data, true);
 
-        $chapterList = $CI->parser->parse('invoice/invoice_html_manual', $data, true);
+        }else{
+            $chapterList = $CI->parser->parse('invoice/invoice_html_manual_new', $data, true);
+
+        }
+//        $chapterList = $CI->parser->parse('invoice/invoice_html_manual', $data, true);
         return $chapterList;
     }
     public function invoice_chalan_html_data_manual($invoice_id)

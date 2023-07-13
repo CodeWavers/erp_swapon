@@ -85,6 +85,15 @@ if (!function_exists('base_url')) {
 	{
 		return get_instance()->config->base_url($uri, $protocol);
 	}
+
+    function api_url($uri = '', $protocol = NULL)
+    {
+        return get_instance()->config->api_url($uri);
+    }
+    function ecom_url($uri = '', $protocol = NULL)
+    {
+        return get_instance()->config->ecom_url($uri);
+    }
 }
 
 // ------------------------------------------------------------------------

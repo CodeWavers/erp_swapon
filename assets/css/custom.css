@@ -15,6 +15,12 @@ html {
     min-height: 100%
 }
 
+.sync{
+    float: right;
+    font-weight: bolder;
+}
+
+
 #holder {
     left: 0;
     position: fixed;
@@ -26,7 +32,26 @@ html {
     margin-bottom: 20px;
 }
 
+.img-upload-preview .close-btn {
+    right: 15px;
+    top: 3px;
+    background: rgb(237, 60, 32);
+    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    position: absolute;
+    padding: 0;
+}
 
+.invoice_name{
+
+    font-size:50px;
+    /*font-weight: bold;*/
+}
 
 
 
@@ -100,6 +125,36 @@ body {
 .layout-top-nav .right-side {
     margin-left: 0
 }
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background:white;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--main-color);
+}
+
+/*::-webkit-input-placeholder {color: pink;} !* Chrome/Opera/Safari *!*/
+/*::-moz-placeholder { color: pink;} !* Firefox 19+ *!*/
+/*:-ms-input-placeholder { color: pink;} !* IE 10+ *!*/
+/*:-moz-placeholder {color: pink;}  !* Firefox 18- *!*/
+
 
 @media (max-width:767px) {
     .content-wrapper,
@@ -1354,7 +1409,8 @@ hr {
 }
 
 .navbar-nav>.dropdown-user>.dropdown-menu>li>a {
-    padding: 5px 10px
+    padding: 5px 10px;
+    color:black;
 }
 
 .navbar-nav>.dropdown-user>.dropdown-menu>li>a>i {
@@ -5712,5 +5768,13 @@ pre .arg {
     table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting:after{
         content: "";
         opacity: 0;
+    }
+
+
+
+}
+@media print {
+    a[href]:after {
+        content: none !important;
     }
 }

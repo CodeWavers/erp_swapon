@@ -119,6 +119,7 @@ class Customers extends CI_Model
                 'sl'               => $sl,
                 'customer_id_two'    => html_escape($record->customer_id_two),
                 'customer_name'    => html_escape($record->customer_name),
+                'shop_name'    => html_escape($record->shop_name),
                 'address'          => html_escape($record->customer_address),
                 'address2'         => html_escape($record->address2),
                 'mobile'           => html_escape($record->customer_mobile),
@@ -141,7 +142,145 @@ class Customers extends CI_Model
 
         return $response;
     }
+    public function get_all_customerList($postData = null)
+    {
 
+        $response = array();
+
+        ## Read value
+        $draw = $postData['draw'];
+        $start = $postData['start'];
+        $rowperpage = $postData['length']; // Rows display per page
+        $columnIndex = $postData['order'][0]['column']; // Column index
+        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+        $searchValue = $postData['search']['value']; // Search value
+
+        ## Search
+        $searchQuery = "";
+
+        $data = array();
+        $sl = 1;
+
+        //count product
+
+
+
+
+//search  product
+
+        if ($searchValue != '') {
+
+            $url = api_url()."customers/count_customer_search/".$searchValue;
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $total_product = curl_exec($curl);
+            curl_close($curl);
+
+
+
+            $url = api_url()."customers/search_customer/".$searchValue."/".$rowperpage;
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $resp = curl_exec($curl);
+            curl_close($curl);
+
+            $records = json_decode($resp);//fetch all product
+
+//            echo '<pre>';
+//            print_r($records);
+//            exit();
+        }else{
+
+
+            $url = api_url()."order/count_c";
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $total_product = curl_exec($curl);
+            curl_close($curl);
+
+            $url = api_url()."customers/get_customer/".$rowperpage;
+
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+//for debug only!
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+
+            $resp = curl_exec($curl);
+            curl_close($curl);
+
+            $records=json_decode($resp);
+        }
+
+
+
+
+
+
+//        $totalRecordwithFilter = $records[0]->allcount;
+        foreach ($records as $record) {
+            $button = '';
+            https://swaponsworld.com/public/uploads/products/thumbnail/7nKgZ7HuR0f0qB4dwtxKCQ1CxFe37Qmnrulzjzp0.jpeg
+            if ($this->permission1->method('manage_product', 'update')->access()) {
+                $button .= ' <a href="'  . 'Cproduct/product_update_form/' . $record->id . '" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="left" title="' . display('update') . '"><i class="fa fa-arrow-down" aria-hidden="true"></i></a>';
+
+            }
+
+
+            $data[] = array(
+                'sl'               => $sl,
+                'customer_name'     => $record->name,
+                'email'            =>  $record->email,
+                'phone'              =>  $record->phone,
+                'balance'            =>  $record->balance,
+                'button'           =>  $button,
+            );
+
+            $sl++;
+        }
+
+
+
+//        var_dump($resp);
+
+
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $total_product,
+            "iTotalDisplayRecords" => $total_product,
+            "aaData" => $data
+            //"aaData" => $json_data
+        );
+//        echo '<pre>';
+//        print_r(count($records));
+//        exit();
+        return $response;
+    }
 
 
     public function customer_product_buy($per_page, $page)
@@ -535,9 +674,13 @@ class Customers extends CI_Model
     //Count customer
     public function customer_entry($data)
     {
+
+      //  echo '<pre>';print_r($data);exit();
         $this->db->select('*');
         $this->db->from('customer_information');
-        $this->db->where('customer_name', $data['customer_name']);
+        if (isset( $data['customer_mobile'])) {
+            $this->db->where('customer_mobile', $data['customer_mobile']);
+        }
         $query = $this->db->get();
         if ($query->num_rows() > 0) {
             return FALSE;

@@ -170,6 +170,7 @@
                                     <th class="text-center " width="25%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
 
                                     <th class="text-center"><?php echo display('unit') ?></th>
+                                    <th class="text-center">Available Quantity</th>
                                     <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
 
                                     <th class="text-center"><?php echo display('action') ?></th>
@@ -187,6 +188,9 @@
 
                                     <td>
                                         <input name="unit[]" id="" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
+                                    </td>
+                                    <td>
+                                        <input name="available_quantity[]" id="" class="form-control text-right available_quantity_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                     </td>
                                     <td>
                                         <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8"  value="1" />

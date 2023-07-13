@@ -225,28 +225,28 @@ class Suppliers extends CI_Model
     //Product search item
     public function product_search_item($product_name,$product_status,$cat_id)
     {
+            $this->db->select('*');
+            $this->db->from('product_information a');
+            $this->db->where('a.finished_raw', $product_status);
 
-        // echo '<pre>';
-        // print_r($pr_status);
-        // exit();
+            if (!empty($cat_id)){
+                foreach($cat_id as $key => $value) {
+                    if($key == 0) {
+                        $this->db->like('category_id', $value,'both');
+                    } else {
+                        $this->db->or_like('category_id', $value,'both');
+                    }
+                }
+            }
 
-        $this->db->select('*')
-            ->from('product_information a')
-            ->where('a.finished_raw', $product_status)
-            ->where('a.category_id', $cat_id);
-
-
-
-        $query = $this->db->group_start()
-            ->like('a.product_model', $product_name, 'both')
-            ->or_like('a.product_name', $product_name, 'both')
-            ->group_end()
-            ->join('size_list sz', 'a.size=sz.size_id', 'left')
-            ->join('color_list cl', 'a.color=cl.color_id', 'left')
-            ->group_by('a.product_id')
-            ->order_by('a.product_name', 'asc')
-            // ->limit(15)
-            ->get();
+            $this->db->group_start();
+            $this->db->like('a.sku', $product_name, 'both');
+            $this->db->or_like('a.product_name', $product_name, 'both');
+            $this->db->group_end();
+            $this->db->group_by('a.product_id');
+            $this->db->order_by('a.product_name', 'asc');
+            $this->db->limit(15);
+        $query =$this->db->get();
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }

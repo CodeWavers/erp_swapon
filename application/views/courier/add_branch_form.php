@@ -127,13 +127,54 @@
                          <div class="form-group row">
                             <label for="category_name" class="col-sm-3 col-form-label">Branch Name <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input class="form-control" name ="category_name" id="category_name" type="text" placeholder="Courier Name"  required="">
+                                <input class="form-control" name ="category_name" id="category_name" type="text" placeholder="Branch Name"  required="">
                             </div>
 
                               <div class="col-sm-3">
                                 <input type="submit" id="add-category" class="btn btn-success btn-large" name="add-category" value="<?php echo display('add') ?>" />
                             </div>
                         </div>
+
+             <div class="form-group row">
+
+                 <label for="category_name" class="col-sm-3 col-form-label">Location <i class="text-danger">*</i></label>
+                 <div class="col-sm-3">
+                <table class="table table-striped table-responsive table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+
+
+                         <th>Charge</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>Inside</td>
+                        <td > <input  class="form-control" name ="inside" id="" type="text" placeholder="Charge" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Outside</td>
+                        <td > <input  class="form-control" name ="outside" id="" type="text" placeholder="Charge"  >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sub</td>
+                        <td > <input  class="form-control" name ="sub" id="" type="text" placeholder="Charge" >
+                        </td>
+                    </tr>
+
+
+
+                    </tbody>
+
+
+                </table>
+                 </div>
+             </div>
 
 
                        

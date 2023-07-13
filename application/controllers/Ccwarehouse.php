@@ -191,6 +191,7 @@ class Ccwarehouse extends CI_Controller {
             'user_id' => $user_id,
             'customer_id' => $customer_id,
             'outlet_name' => $customer_id,
+            'address' => $this->input->post('address',TRUE),
             'status'        => 1
         );
 
@@ -223,6 +224,7 @@ class Ccwarehouse extends CI_Controller {
         $data = array(
             'outlet_name' => $this->input->post('category_name',TRUE),
             'user_id'        => $user_id,
+            'address' => $this->input->post('address',TRUE),
             'status'        => 1,
         );
 

@@ -52,12 +52,7 @@
                   <?php echo form_open_multipart('Ccustomer/customer_update',array('class' => 'form-vertical', 'id' => 'customer_update'))?>
                     <div class="panel-body">
                       <div class="col-sm-6">
-                          <div class="form-group row">
-                              <label for="customer_id_two" class="col-sm-4 col-form-label">Customer ID: <i class="text-danger">*</i></label>
-                              <div class="col-sm-8">
-                                  <input class="form-control" name ="customer_id_two" id="customer_name" type="text" placeholder="Customer ID"  value="{customer_id_two}" required="" tabindex="1">
-                              </div>
-                          </div>
+
                     	<div class="form-group row">
                             <label for="customer_name" class="col-sm-4 col-form-label"><?php echo display('customer_name') ?> <i class="text-danger">*</i></label>
                             <div class="col-sm-8">
@@ -67,6 +62,12 @@
                         </div>
    
                        	<div class="form-group row">
+                            <label for="email" class="col-sm-4 col-form-label">Shop Name</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" name ="shop_name" value="{shop_name}" id="shop_name" type="shop_name" placeholder="Shop Name" tabindex="2">
+                            </div>
+                        </div>
+                          <div class="form-group row">
                             <label for="email" class="col-sm-4 col-form-label"><?php echo display('customer_email') ?></label>
                             <div class="col-sm-8">
                                 <input class="form-control" name ="email" value="{customer_email}" id="email" type="email" placeholder="<?php echo display('customer_email') ?>" tabindex="2">

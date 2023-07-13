@@ -321,6 +321,44 @@ class CI_Config {
 
 		return $base_url.$this->_uri_string($uri);
 	}
+	public function api_url($uri = '', $protocol = NULL)
+	{
+		$api_url = $this->slash_item('api_url');
+
+		if (isset($protocol))
+		{
+			// For protocol-relative links
+			if ($protocol === '')
+			{
+				$api_url = substr($api_url, strpos($api_url, '//'));
+			}
+			else
+			{
+				$api_url = $protocol.substr($api_url, strpos($api_url, '://'));
+			}
+		}
+
+		return $api_url.$this->_uri_string($uri);
+	}
+	public function ecom_url($uri = '', $protocol = NULL)
+	{
+        $ecom_url = $this->slash_item('ecom_url');
+
+		if (isset($protocol))
+		{
+			// For protocol-relative links
+			if ($protocol === '')
+			{
+                $ecom_url = substr($ecom_url, strpos($ecom_url, '//'));
+			}
+			else
+			{
+                $ecom_url = $protocol.substr($ecom_url, strpos($ecom_url, '://'));
+			}
+		}
+
+		return $ecom_url.$this->_uri_string($uri);
+	}
 
 	// -------------------------------------------------------------
 

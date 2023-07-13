@@ -27,7 +27,7 @@ function addPurchaseOrderField1(divName){
 
 
 
-        newdiv.innerHTML ='<td class="span3 supplier"><input type="text" name="product_name" required="" class="form-control product_name productSelection" onkeypress="product_pur_or_list('+ count +');" placeholder="Pr. Name" id="product_name_'+ count +'" tabindex="'+tab1+'" > <input type="hidden" class="autocomplete_hidden_value product_id_'+ count +'" name="product_id[]" id="SchoolHiddenId"/>  <input type="hidden" class="sl" value="'+ count +'">  </td> <td class="wt"> <input type="text" id="available_quantity_'+ count +'" class="form-control text-right stock_ctn_'+ count +'" placeholder="0.00" readonly/> </td> <td class="wt"> <input name="unit[]"  type="text" id="unit_'+ count +'" class="form-control text-right unit_'+ count +'" placeholder="Unit" readonly/> </td> <td class="text-right"> <input type="date" style="width: 110px"  id="warrenty_date_'+count+'" class="form-control_'+count+'" name="warrenty_date[]"  id="date" /> </td><td class="text-right"> <input type="date" style="width: 110px"  id="expired_date_'+count+'" class="form-control_'+count+'" name="expired_date[]"  id="date"  /> </td><td class="text-right"><input type="text" name="product_quantity[]" tabindex="'+tab2+'" required  id="cartoon_'+ count +'" class="form-control text-right store_cal_' + count + '" onkeyup="calculate_store(' + count + ');" onchange="calculate_store(' + count + ');" placeholder="0.00" value="" min="0"/>  </td><td class="text-right"><input type="text" name="damaged_qty[]" id="damaged_1" required="" min="0" class="form-control text-right store_cal_1" placeholder="0.00" value="" tabindex="6" /></td><td class="test"><input type="text" name="product_rate[]" onkeyup="calculate_store('+ count +');" onchange="calculate_store('+ count +');" id="product_rate_'+ count +'" class="form-control product_rate_'+ count +' text-right" placeholder="0.00" value="" min="0" tabindex="'+tab3+'"/></td><td class="text-right"><input class="form-control total_price text-right total_price_'+ count +'" type="text" name="total_price[]" id="total_price_'+ count +'" value="0.00" readonly="readonly" /> </td><td> <input type="hidden" id="total_discount_1" class="" /><input type="hidden" id="all_discount_1" class="total_discount" /><button style="text-align: right;" class="btn btn-danger red" type="button"  onclick="deleteRow(this)" tabindex="10"><i class="fa fa-close"></i></button></td>';
+        newdiv.innerHTML ='<td class="span3 supplier"><input type="text" name="product_name" required="" class="form-control product_name productSelection" onkeypress="product_pur_or_list('+ count +');" placeholder="Pr. Name" id="product_name_'+ count +'" tabindex="'+tab1+'" > <input type="hidden" class="autocomplete_hidden_value product_id_'+ count +'" name="product_id[]" id="SchoolHiddenId"/>  <input type="hidden" class="sl" value="'+ count +'">  </td> <td class="wt"> <input type="text" id="available_quantity_'+ count +'" class="form-control text-right stock_ctn_'+ count +'" placeholder="0.00" readonly/> </td> <td class="wt"> <input name="unit[]"  type="text" id="unit_'+ count +'" class="form-control text-right unit_'+ count +'" placeholder="Unit" readonly/> </td> <td class="text-right"> <input type="date" style="width: 110px"  id="warrenty_date_'+count+'" class="form-control_'+count+'" name="warrenty_date[]"  id="date" /> </td><td class="text-right"> <input type="date" style="width: 110px"  id="expired_date_'+count+'" class="form-control_'+count+'" name="expired_date[]"  id="date"  /> </td><td class="text-right"><input type="text" name="product_quantity[]" tabindex="'+tab2+'" required  id="cartoon_'+ count +'" class="form-control text-right store_cal_' + count + '" onkeyup="calculate_store(' + count + ');" onchange="calculate_store(' + count + ');" placeholder="0.00" value="" min="0"/>  </td><td class="text-right"><input type="text" name="damaged_qty[]" id="damaged_1" min="0" class="form-control text-right store_cal_1" placeholder="0.00" value="" tabindex="6" /></td><td class="test"><input type="text" name="product_rate[]" onkeyup="calculate_store('+ count +');" onchange="calculate_store('+ count +');" id="product_rate_'+ count +'" class="form-control product_rate_'+ count +' text-right" placeholder="0.00" value="" min="0" tabindex="'+tab3+'"/></td><td class="text-right"><input class="form-control total_price text-right total_price_'+ count +'" type="text" name="total_price[]" id="total_price_'+ count +'" value="0.00" readonly="readonly" /> </td><td> <input type="hidden" id="total_discount_1" class="" /><input type="hidden" id="all_discount_1" class="total_discount" /><button style="text-align: right;" class="btn btn-danger red" type="button"  onclick="deleteRow(this)" tabindex="10"><i class="fa fa-close"></i></button></td>';
         document.getElementById(divName).appendChild(newdiv);
         document.getElementById(tabin).focus();
         document.getElementById("add_invoice_item").setAttribute("tabindex", tab5);
@@ -52,6 +52,7 @@ function calculate_store(sl) {
 
     var gr_tot = 0;
     var dis = 0;
+
     var item_ctn_qty    = $("#cartoon_"+sl).val();
     var vendor_rate = $("#product_rate_"+sl).val();
 
@@ -68,8 +69,12 @@ function calculate_store(sl) {
     });
 
     $("#Total").val(gr_tot.toFixed(2,2));
-    var grandtotal = gr_tot - dis;
+    var  labour_wages =  (parseInt($('#labour_wages').val())? parseInt($('#labour_wages').val()) : 0);
+    var  transport_cost =  (parseInt($('.transport_cost').val())? parseInt($('.transport_cost').val()) : 0);
+
+    var grandtotal = (gr_tot - dis)+labour_wages+transport_cost;
     $("#grandTotal").val(grandtotal.toFixed(2,2));
+
     invoice_paidamount();
 }
 
@@ -211,6 +216,7 @@ function add_pay_row(sl) {
     sl = count.val();
     var bkash_list = $("#bkash_list").val();
     var nagad_list = $("#nagad_list").val();
+    var rocket_list = $("#rocket_list").val();
     var bank_list = $("#bank_list").val();
     var card_list = $("#card_list").val();
     var pay_div = $("#pay_div");
@@ -224,8 +230,9 @@ function add_pay_row(sl) {
         '<option value="4">Bank Payment</option>' +
         '<option value="3">Bkash Payment</option>' +
         '<option value="5">Nagad Payment</option>' +
-        '<option value="6">TT Payment</option>' +
-        '<option value="7">LC Payment</option>' +
+        '<option value="7">Rocket Payment</option>' +
+        //'<option value="6">TT Payment</option>' +
+        //'<option value="7">LC Payment</option>' +
         "</select>" +
         "</div>" +
         "</div>" +
@@ -282,6 +289,20 @@ function add_pay_row(sl) {
         sl +
         '">' +
         nagad_list +
+        " </select>" +
+        "</div>" +
+        "</div>" +
+        " </div>" +
+        '<div class="col-sm-4" style="display: none" id="rocket_div_' +
+        sl +
+        '">' +
+        '<div class="form-group row">' +
+        '<label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>' +
+        '<div class="col-sm-7">' +
+        '<select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_' +
+        sl +
+        '">' +
+        rocket_list +
         " </select>" +
         "</div>" +
         "</div>" +
@@ -401,13 +422,13 @@ function bank_paymet(val, sl) {
 
         if(val==7){
             var style = 'block';
-            document.getElementById('lc_'+sl).setAttribute("required", true);
+            document.getElementById('rocket_id_'+sl).setAttribute("required", true);
         }else{
             var style ='none';
-            document.getElementById('lc_'+sl).removeAttribute("required");
+            document.getElementById('rocket_id_'+sl).removeAttribute("required");
         }
 
-        document.getElementById('lc_div_'+sl).style.display = style;
+        document.getElementById('rocket_div_'+sl).style.display = style;
     }
 }
 

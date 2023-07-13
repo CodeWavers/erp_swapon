@@ -135,52 +135,62 @@ class Accounts extends CI_Controller
     public function insert_coa()
     {
         $headcode    = $this->input->post('txtHeadCode', TRUE);
-        $HeadName    = $this->input->post('txtHeadName', TRUE);
-        $PHeadName   = $this->input->post('txtPHead', TRUE);
-        $HeadLevel   = $this->input->post('txtHeadLevel', TRUE);
-        $txtHeadType = $this->input->post('txtHeadType', TRUE);
-        $isact       = $this->input->post('IsActive', TRUE);
-        $IsActive    = (!empty($isact) ? $isact : 0);
-        $trns        = $this->input->post('IsTransaction', TRUE);
-        $IsTransaction = (!empty($trns) ? $trns : 0);
-        $isgl        = $this->input->post('IsGL', TRUE);
-        $IsGL       = (!empty($isgl) ? $isgl : 0);
-        $createby = $this->session->userdata('user_id');
-        $createdate = date('Y-m-d H:i:s');
-        $postData = array(
-            'HeadCode'       =>  $headcode,
-            'HeadName'       =>  $HeadName,
-            'PHeadName'      =>  $PHeadName,
-            'HeadLevel'      =>  $HeadLevel,
-            'IsActive'       =>  $IsActive,
-            'IsTransaction'  =>  $IsTransaction,
-            'IsGL'           =>  $IsGL,
-            'HeadType'       => $txtHeadType,
-            'IsBudget'       => 0,
-            'CreateBy'       => $createby,
-            'CreateDate'     => $createdate,
-        );
-        $upinfo = $this->db->select('*')
+        $newdata = $this->db->select('*')
             ->from('acc_coa')
             ->where('HeadCode', $headcode)
             ->get()
             ->row();
-        if (empty($upinfo)) {
-            $this->db->insert('acc_coa', $postData);
+        if ($newdata) {
+            $this->session->set_flashdata('error_message',  "Headcode Exist !");
+            redirect("accounts/show_tree");
         } else {
-
-            $hname = $this->input->post('HeadName', TRUE);
-            $updata = array(
-                'PHeadName'      =>  $HeadName,
+            $HeadName    = $this->input->post('txtHeadName', TRUE);
+            $PHeadName   = $this->input->post('txtPHead', TRUE);
+            $HeadLevel   = $this->input->post('txtHeadLevel', TRUE);
+            $txtHeadType = $this->input->post('txtHeadType', TRUE);
+            $isact       = $this->input->post('IsActive', TRUE);
+            $IsActive    = (!empty($isact) ? $isact : 0);
+            $trns        = $this->input->post('IsTransaction', TRUE);
+            $IsTransaction = (!empty($trns) ? $trns : 0);
+            $isgl        = $this->input->post('IsGL', TRUE);
+            $IsGL       = (!empty($isgl) ? $isgl : 0);
+            $createby = $this->session->userdata('user_id');
+            $createdate = date('Y-m-d H:i:s');
+            $postData = array(
+                'HeadCode'       =>  $headcode,
+                'HeadName'       =>  $HeadName,
+                'PHeadName'      =>  $PHeadName,
+                'HeadLevel'      =>  $HeadLevel,
+                'IsActive'       =>  $IsActive,
+                'IsTransaction'  =>  $IsTransaction,
+                'IsGL'           =>  $IsGL,
+                'HeadType'       => $txtHeadType,
+                'IsBudget'       => 0,
+                'CreateBy'       => $createby,
+                'CreateDate'     => $createdate,
             );
+            $upinfo = $this->db->select('*')
+                ->from('acc_coa')
+                ->where('HeadCode', $headcode)
+                ->get()
+                ->row();
+            if (empty($upinfo)) {
+                $this->db->insert('acc_coa', $postData);
+            } else {
+
+                $hname = $this->input->post('HeadName', TRUE);
+                $updata = array(
+                    'PHeadName'      =>  $HeadName,
+                );
 
 
-            $this->db->where('HeadCode', $headcode)
-                ->update('acc_coa', $postData);
-            $this->db->where('PHeadName', $hname)
-                ->update('acc_coa', $updata);
+                $this->db->where('HeadCode', $headcode)
+                    ->update('acc_coa', $postData);
+                $this->db->where('PHeadName', $hname)
+                    ->update('acc_coa', $updata);
+            }
+            redirect($_SERVER['HTTP_REFERER']);
         }
-        redirect($_SERVER['HTTP_REFERER']);
     }
 
     // Debit voucher Create
@@ -204,6 +214,8 @@ class Accounts extends CI_Controller
         $data['acc'] = $this->accounts_model->Transacc();
         $data['voucher_no'] = $this->accounts_model->voNO();
         $data['crcc'] = $this->accounts_model->Cracc();
+
+        // echo '<pre>';print_r($data['acc']);exit();
         $content = $this->parser->parse('newaccount/debit_voucher', $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -1067,12 +1079,21 @@ class Accounts extends CI_Controller
 
     public function balance_sheet_report_search_new()
     {
+        //        echo '<pre>';print_r($_POST);
+        //        echo '<pre>';print_r($_GET);
+        //        exit();
+
         $CI = &get_instance();
         $CI->load->model('Reports');
         $CI->load->model('Warehouse');
         $CI->load->model('Rqsn');
-        $dtpFromDate = $this->input->post('dtpFromDate', TRUE);
-        $dtpToDate   = $this->input->post('dtpToDate', TRUE);
+        $outlet_text = (!empty($this->input->post('outlet_text', TRUE)) ? $this->input->post('outlet_text', TRUE) : 'Consolidated');
+        $dtpFromDate = (!empty($this->input->post('dtpFromDate', TRUE)) ? $this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
+
+        $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ? $this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
+
+
+
         $today   = date('Y-m-d');
 
         $outlet_id = $this->input->post('outlet');
@@ -1080,22 +1101,42 @@ class Accounts extends CI_Controller
         $cw = $CI->Warehouse->central_warehouse();
         $outlet_list = $CI->Warehouse->branch_list_product();
 
-        $get_profit  = $this->accounts_model->balance_sheet($outlet_id);
+        $get_profit  = $this->accounts_model->balance_sheet($outlet_id, $dtpFromDate, $dtpToDate);
 
         if (!$outlet_id) {
             $outlet_id = $outlet_user[0]['outlet_id'];
         }
 
+
         if ($outlet_id) {
-            $closing_inventory = $this->Rqsn->outlet_stock();
+            $closing = $this->Rqsn->outlet_stock(null, null, null, $dtpFromDate, $dtpToDate);
+            $closing_finished = $closing['closing_finished'];
+            $closing_raw = $closing['closing_raw'];
+            $closing_tools = $closing['closing_tools'];
         } else {
-            $closing_inventory = $this->Reports->getCheckList();
+            $closing = $this->Reports->getCheckList(null, null, null, $dtpFromDate, $dtpToDate);
+            $closing_finished = $closing['closing_finished'];
+            $closing_raw = $closing['closing_raw'];
+            $closing_tools = $closing['closing_tools'];
         }
 
+        $closing_inventory = $closing_finished + $closing_raw + $closing_tools;
 
+
+        if ($outlet_id) {
+            $opening_inventory = $this->Rqsn->outlet_stock(null, null, null, $dtpFromDate, $dtpToDate)['opening_finished'];
+        } else {
+            $opening_inventory = $this->Reports->getCheckList(null, null, null, $dtpFromDate, $dtpToDate)['opening_finished'];
+        }
         //$postData = $this->input->post();
-        $closing_inventory = $this->Reports->getCheckList();
 
+        $data['emp_led_c']  =    $get_profit['emp_led_c'];
+        $data['acc_rcv_c']  =    $get_profit['acc_rcv_c'];
+        $data['cash_eq_c']  =    $get_profit['cash_eq_c'];
+        $data['cash_hand_c']  =    $get_profit['cash_hand_c'];
+        $data['cash_bkash_c']  =    $get_profit['cash_bkash_c'];
+        $data['cash_nagad_c']  =    $get_profit['cash_nagad_c'];
+        $data['cash_bank_c']  =    $get_profit['cash_bank_c'];
         $data['outlet'] = $outlet_user;
         $data['cw'] = $cw;
         $data['outlet_list'] = $outlet_list;
@@ -1104,7 +1145,10 @@ class Accounts extends CI_Controller
         $data['product_sale']  = $get_profit['product_sale'];
         $data['opening_inventory']  = $get_profit['opening_inventory'];
         $data['product_purchase']  = $get_profit['product_purchase'];
-        $data['closing_inventory']  = $closing_inventory['closing_inventory'];
+        $data['closing_inventory']  = $closing_inventory;
+        $data['closing_finished']  = $closing_finished;
+        $data['closing_raw']  = $closing_raw;
+        $data['closing_tools']  = $closing_tools;
         $data['service_income']  = $get_profit['service_income'];
         $data['direct_expense']  = $get_profit['direct_expense'];
         $data['indirect_expense']  = $get_profit['indirect_expense'];
@@ -1113,12 +1157,12 @@ class Accounts extends CI_Controller
         $data['expense']  = $get_profit['expense'];
         $data['indirect_expense_c']  = $get_profit['indirect_expense_c'];
         $data['indirect_income_c']  = $get_profit['indirect_income_c'];
-        $data['goods_sold']  = $get_profit['opening_inventory'] + $get_profit['product_purchase'] + $data['closing_inventory'];
+        $data['goods_sold']  = $get_profit['opening_inventory'] + $get_profit['product_purchase'] + $closing_inventory;
         $data['total_i']  = ($get_profit['opening_inventory'] + $get_profit['product_purchase'] + $data['direct_expense']) - $data['closing_inventory'];
 
-        $data['total_sale']  = $get_profit['product_sale'] - $get_profit['sale_return'] + $get_profit['service_income'];
-        $data['gross_profit']  =    $data['total_sale'] -  $data['total_i'];
-
+        //        $data['total_sale']  = $get_profit['product_sale'] - $get_profit['sale_return'] + $get_profit['service_income'];
+        //        $data['gross_profit']  =    $data['total_sale'] -  $data['total_i'];
+        //
 
         $data['capital']  =    $get_profit['capital'];
         $data['current_liabilities']  =    $get_profit['current_liabilities'];
@@ -1139,26 +1183,31 @@ class Accounts extends CI_Controller
         $data['cash_bkash']  =    $get_profit['cash_bkash'];
 
         $data['cash_nagad']  =    $get_profit['cash_nagad'];
-        $data['cash_bank']  =    $get_profit['cash_bank'];
-        $data['emp_led_c']  =    $get_profit['emp_led_c'];
-        $data['acc_rcv_c']  =    $get_profit['acc_rcv_c'];
-        $data['cash_eq_c']  =    $get_profit['cash_eq_c'];
-        $data['cash_hand_c']  =    $get_profit['cash_hand_c'];
-        $data['cash_bkash_c']  =    $get_profit['cash_bkash_c'];
-        $data['cash_nagad_c']  =    $get_profit['cash_nagad_c'];
-        $data['cash_bank_c']  =    $get_profit['cash_bank_c'];
+        $data['cash_bank']  =    $get_profit['cash_bank'];;
         $data['right_total']  =    $data['current_assets'] +  $get_profit['fixed_assets'];
-        $data['net_profit']  =    ($data['gross_profit'] - $data['indirect_expense']) + $get_profit['indirect_income'];
+
+        ///Net Profit
+        $data['opp']  =  $get_profit['production_expense'] + $opening_inventory + $get_profit['product_purchase'];
+        $data['pmo']  = $data['opp'] - $get_profit['purchase_return'];
+        $data['dmo']  = $data['pmo'] - $get_profit['purchase_discount'];
+        $data['cogs']  = $data['dmo'] - $closing_finished;
+        $data['sme']  =    $data['product_sale'] -  $get_profit['sale_return'];
+        $data['net_sales']  =   $data['sme']  -  $get_profit['sales_discount'];
+        $data['total_sale']  = $data['net_sales']  + $get_profit['service_income'];
+        $data['net_profit']  =    $data['total_sale'] - $data['cogs'];
+        //End Net Profit
         $data['left_total']  =    $get_profit['capital'] +  $get_profit['current_liabilities'] + $get_profit['non_current_liabilities'] + $data['net_profit'];
+
         $data['dtpFromDate']  = $dtpFromDate;
         $data['dtpToDate']    = $dtpToDate;
+        $data['outlet_text']    = $outlet_text;
         $data['today']    = $today;
         $data['pdf']    = 'assets/data/pdf/Statement of Comprehensive Income Till ' . $today . '.pdf';
         $data['title']  = 'Balance Sheet Report';
 
-        //  echo '<pre>';print_r( $data['emp_led_c']);
-        // echo '<pre>';print_r( $data['cash_hand']);exit();
-        //    echo '<pre>';print_r( $data);exit();
+        //echo '<pre>';print_r( $data['emp_led_c']);
+        //  echo '<pre>';print_r( $data);exit();
+        //   echo '<pre>';print_r( $data);exit();
 
         $content = $this->parser->parse('newaccount/balance_sheet_new', $data, true);
         $this->template->full_admin_html_view($content);
@@ -1170,13 +1219,14 @@ class Accounts extends CI_Controller
         $CI->load->model('Reports');
         $CI->load->model('Rqsn');
         $CI->load->model('Warehouse');
-
+        $outlet_text = (!empty($this->input->post('outlet_text', TRUE)) ? $this->input->post('outlet_text', TRUE) : 'Consolidated');
         $outlet_id = $this->input->post('outlet');
-        $dtpFromDate = $this->input->post('dtpFromDate', TRUE);
-        $dtpToDate   = $this->input->post('dtpToDate', TRUE);
+        $dtpFromDate = (!empty($this->input->post('dtpFromDate', TRUE)) ? $this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
+        $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ? $this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
+
         $today   = date('Y-m-d');
 
-        $get_profit  = $this->accounts_model->profit_loss_serach($outlet_id);
+        $get_profit  = $this->accounts_model->profit_loss_serach($outlet_id, $dtpFromDate, $dtpToDate);
 
         $outlet_user        = $CI->Warehouse->get_outlet_user();
 
@@ -1188,12 +1238,17 @@ class Accounts extends CI_Controller
         }
         // $postData = $this->input->post();
         if ($outlet_id) {
-            $closing_inventory = $this->Rqsn->outlet_stock();
+            $closing_inventory = $this->Rqsn->outlet_stock(null, null, null, $dtpFromDate, $dtpToDate)['closing_finished'];
         } else {
-            $closing_inventory = $this->Reports->getCheckList();
+            $closing_inventory = $this->Reports->getCheckList(null, null, null, $dtpFromDate, $dtpToDate)['closing_finished'];
+        }
+        if ($outlet_id) {
+            $opening_inventory = $this->Rqsn->outlet_stock(null, null, null, $dtpFromDate, $dtpToDate)['opening_finished'];
+        } else {
+            $opening_inventory = $this->Reports->getCheckList(null, null, null, $dtpFromDate, $dtpToDate)['opening_finished'];
         }
 
-
+        //  echo '<pre>';print_r($get_profit['expense']);exit();
 
 
         $data['first_outlet'] = $outlet_user;
@@ -1202,10 +1257,19 @@ class Accounts extends CI_Controller
         $data['oResultAsset'] = $get_profit['oResultAsset'];
         $data['oResultLiability']  = $get_profit['oResultLiability'];
         $data['product_sale']  = $get_profit['product_sale'];
-        $data['opening_inventory']  = $get_profit['opening_inventory'];
+        $data['purchase_discount']  = $get_profit['purchase_discount'];
+        $data['opening_inventory']  = $opening_inventory;
+        $data['purchase_return']  = $get_profit['purchase_return'];
+        $data['production_expense']  = $get_profit['production_expense'];
         $data['product_purchase']  = $get_profit['product_purchase'];
-        $data['abc']  = $get_profit['product_purchase'] + $get_profit['opening_inventory'] + $get_profit['direct_expense'];
-        $data['closing_inventory']  = $closing_inventory['closing_inventory'];
+        $data['sales_discount']  = $get_profit['sales_discount'];
+        $data['opp']  =  $get_profit['production_expense'] + $opening_inventory + $get_profit['product_purchase'];
+        $data['pmo']  = $data['opp'] - $get_profit['purchase_return'];
+        $data['dmo']  = $data['pmo'] - $get_profit['purchase_discount'];
+        $data['cogs']  = $data['dmo'] - $closing_inventory;
+
+        $data['abc']  = $get_profit['product_purchase'] + $data['opening_inventory'] + $get_profit['direct_expense'];
+        $data['closing_inventory']  = $closing_inventory;
         $data['service_income']  = $get_profit['service_income'];
         $data['direct_expense']  = $get_profit['direct_expense'];
         $data['indirect_expense']  = $get_profit['indirect_expense'];
@@ -1214,35 +1278,43 @@ class Accounts extends CI_Controller
         $data['expense']  = $get_profit['expense'];
         $data['indirect_expense_c']  = $get_profit['indirect_expense_c'];
         $data['indirect_income_c']  = $get_profit['indirect_income_c'];
-        $data['goods_sold']  = $get_profit['opening_inventory'] + $get_profit['product_purchase'] + $data['closing_inventory'];
-        $data['total_i']  = ($get_profit['opening_inventory'] + $get_profit['product_purchase'] + $data['direct_expense']) - $data['closing_inventory'];
+        $data['goods_sold']  = $data['opening_inventory'] + $get_profit['product_purchase'] + $closing_inventory;
 
-        $data['total_sale']  = $get_profit['product_sale'] - $get_profit['sale_return'] + $get_profit['service_income'];
-        $data['gross_profit']  =    $data['total_sale'] -  $data['total_i'];
+        $data['sme']  =    $data['product_sale'] -  $get_profit['sale_return'];
+        $data['net_sales']  =   $data['sme']  -  $get_profit['sales_discount'];
+        $data['total_sale']  = $data['net_sales']  + $get_profit['service_income'];
+        $data['gross_profit']  =    $data['total_sale'] -  $data['cogs'];
+
+        $data['total_i']  = $data['cogs'] + $data['gross_profit'];
+
+        //        echo '<pre>';print_r(    $data['total_i'] );exit();
 
 
 
-        $data['right_total']  =    $data['gross_profit'] +  $data['indirect_income'];
-        $data['net_profit']  =    ($data['gross_profit'] - $data['indirect_expense']) + $get_profit['indirect_income'];
-        $data['left_total']  =    $data['indirect_expense'] +  $data['net_profit'];
+        $data['net_profit']  =    $data['total_sale'] - $data['cogs'];
+        $data['left_total']  =    $data['gross_profit'] +  $data['total_sale'];
+        $data['right_total']  =    $data['net_profit'] +  $data['total_i'];
         $data['dtpFromDate']  = $dtpFromDate;
         $data['dtpToDate']    = $dtpToDate;
+        $data['outlet_text']    = $outlet_text;
         $data['today']    = $today;
         $data['pdf']    = 'assets/data/pdf/Statement of Comprehensive Income Till ' . $today . '.pdf';
         $data['title']  = display('profit_loss_report');
 
-        // echo '<pre>';print_r( $data['expense'] );exit();
 
+        //echo '<pre>';print_r( $data);exit();
         $content = $this->parser->parse('newaccount/profit_loss', $data, true);
         $this->template->full_admin_html_view($content);
     }
     public function balance_sheet_report_search()
     {
-        $dtpFromDate = $this->input->post('dtpFromDate', TRUE);
-        $dtpToDate   = $this->input->post('dtpToDate', TRUE);
 
+
+
+        $dtpFromDate = (!empty($this->input->post('dtpFromDate', TRUE)) ? $this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
+
+        $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ? $this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
         $get_profit  = $this->accounts_model->balance_sheet_search();
-
         $data['oResultAsset'] = $get_profit['oResultAsset'];
         $data['oResultLiability']  = $get_profit['oResultLiability'];
         $data['oResultIncome']  = $get_profit['oResultIncome'];
@@ -1261,6 +1333,8 @@ class Accounts extends CI_Controller
         $CI = &get_instance();
 
         $CI->load->model('Warehouse');
+        $CI->load->model('Reports');
+        $CI->load->model('Rqsn');
 
         $outlet_id = $this->input->post('outlet', true);
         $outlet_user        = $CI->Warehouse->get_outlet_user();
@@ -1272,14 +1346,31 @@ class Accounts extends CI_Controller
                 $outlet_id = 1;
             }
         }
-        $dtpFromDate = $this->input->post('dtpFromDate', TRUE);
-        $dtpToDate   = $this->input->post('dtpToDate', TRUE);
+        $outlet_text = (!empty($this->input->post('outlet_text', TRUE)) ? $this->input->post('outlet_text', TRUE) : 'Consolidated');
+        $dtpFromDate = (!empty($this->input->post('dtpFromDate', TRUE)) ? $this->input->post('dtpFromDate', TRUE) : date('Y-m-d'));
+        $dtpToDate = (!empty($this->input->post('dtpToDate', TRUE)) ? $this->input->post('dtpToDate', TRUE) : date('Y-m-d'));
         $today   = date('Y-m-d');
         $get_profit  = $this->accounts_model->balance_sheet_search($outlet_id);
 
         $cw = $CI->Warehouse->central_warehouse();
         $outlet_list = $CI->Warehouse->branch_list_product();
-        $data['first_outlet'] = $outlet_user;
+
+        if ($outlet_id) {
+            $opening = $CI->Rqsn->outlet_stock(null, null, null, $dtpFromDate, $dtpToDate);
+            $opening_finished = $opening['opening_finished'];
+            $opening_raw = $opening['opening_finished'];
+            $opening_tools = $opening['opening_finished'];
+        } else {
+            $opening = $CI->Reports->getCheckList(null, null, null, $dtpFromDate, $dtpToDate);
+            $opening_finished = $opening['opening_finished'];
+            $opening_raw = $opening['opening_finished'];
+            $opening_tools = $opening['opening_finished'];
+        }
+
+        //   echo '<pre>';print_r($CI->Reports->getCheckList(null, null, null,$dtpFromDate,$dtpToDate));exit();
+        $data['opening_finished'] =  $opening_finished;
+        $data['opening_raw'] =  $opening_raw;
+        $data['opening_tools'] =  $opening_tools;
         $data['cw'] = $cw;
         $data['outlet_list'] = $outlet_list;
         $data['id_out'] = $outlet_id;
@@ -1289,11 +1380,12 @@ class Accounts extends CI_Controller
         $data['oResultExpence']  = $get_profit['oResultExpence'];
         $data['dtpFromDate']  = $dtpFromDate;
         $data['dtpToDate']    = $dtpToDate;
+        $data['outlet_text']    = $outlet_text;
         $data['total']    = $get_profit['total'];
         $data['today']    = $today;
         $data['pdf']    = 'assets/data/pdf/Statement of Comprehensive Income till ' . $today . 'pdf';
         $data['title']  = 'Trial Balance Report';
-        //  echo '<pre>';print_r($get_profit['total']);exit();
+        //    echo '<pre>';print_r($data);exit();
         $content = $this->parser->parse('newaccount/trial_new', $data, true);
 
         $this->template->full_admin_html_view($content);
@@ -1582,7 +1674,7 @@ class Accounts extends CI_Controller
         $card_list = $CI->Settings->get_real_card_data();
         $bkash_list        = $CI->Web_settings->bkash_list();
         $nagad_list        = $CI->Web_settings->nagad_list();
-
+        $rocket_list        = $CI->Web_settings->rocket_list();
         $is_outlet = $CI->warehouse->get_outlet_user();
         $outlet_list = $CI->warehouse->get_all_outlet();
         $cw = $CI->warehouse->central_warehouse();
@@ -1597,9 +1689,12 @@ class Accounts extends CI_Controller
             'bank_list'     => $bank_list,
             'card_list'     => $card_list,
             'bkash_list'    => $bkash_list,
-            'nagad_list'    => $nagad_list
+            'nagad_list'    => $nagad_list,
+            'rocket_list'    => $rocket_list
         );
-
+        // echo "<pre>";
+        // print_r($data);
+        // exit();
         $content = $this->parser->parse('newaccount/fund_transfer_form', $data, true);
         $this->template->full_admin_html_view($content);
     }
@@ -1615,6 +1710,7 @@ class Accounts extends CI_Controller
         $bank_list        = $CI->Web_settings->outletwise_bank_list($outlet_id);
         $bkash_list        = $CI->Web_settings->outletwise_bkash_list($outlet_id);
         $nagad_list        = $CI->Web_settings->outletwise_nagad_list($outlet_id);
+        $rocket_list        = $CI->Web_settings->outletwise_rocket_list($outlet_id);
         $card_list = $CI->Settings->get_real_card_data();
 
 
@@ -1628,6 +1724,7 @@ class Accounts extends CI_Controller
                 <option value="4">Bank</option>
                 <option value="3">Bkash</option>
                 <option value="5">Nagad</option>
+                <option value="7">Rocket</option>
             </select>
         </div>
     </div>
@@ -1704,6 +1801,24 @@ class Accounts extends CI_Controller
 
         </div>
     </div>
+    <div class="" style="display: none" id="rocket_div_1_to">
+        <div class="form-group row">
+            <label for="rocket" class="col-sm-2 col-form-label">Rocket Number <i class="text-danger">*</i></label>
+            <div class="col-sm-4">
+                <select name="rocket_id_to" class="form-control bankpayment" id="rocket_id_1_to">
+                    <option value="">Select One</option>';
+        if ($rocket_list) {
+            foreach ($rocket_list as $rocket) {
+                $html .= '<option value="' . html_escape($rocket['rocket_id']) . '">' . html_escape($rocket['rocket_no']) . ' (' . html_escape($rocket['ac_name']) . ')</option>';
+            }
+        }
+        $html .= '</select>
+
+            </div>
+
+
+        </div>
+    </div>
 
     <div class="" style="display: none" id="card_div_1">
         <div class="form-group row">
@@ -1728,6 +1843,9 @@ class Accounts extends CI_Controller
 
     public function submit_fund_transfer()
     {
+        // echo "<pre>";
+        // print_r($_POST);
+        // exit();
         $CI = &get_instance();
 
         $CI->load->model('warehouse');
@@ -1761,7 +1879,10 @@ class Accounts extends CI_Controller
         $Vtype = "Fund Transfer";
 
         $bkash_id = $this->input->post('bkash_id', TRUE);
+
         $nagad_id = $this->input->post('nagad_id', TRUE);
+
+        $rocket_id = $this->input->post('rocket_id', TRUE);
 
         $bank_id = $this->input->post('bank_id_m', TRUE);
         if (!empty($bank_id)) {
@@ -1776,7 +1897,7 @@ class Accounts extends CI_Controller
             'VNo'            =>  $voucher_no,
             'Vtype'          =>  $Vtype,
             'VDate'          =>  $date,
-            'COAID'          =>  1020105,
+            'COAID'          =>  1020106,
             'Narration'      =>  'Fund Transfer From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
             'Debit'          =>  $amount,
             'Credit'         =>  0,
@@ -1849,6 +1970,29 @@ class Accounts extends CI_Controller
             'VDate'          =>  $date,
             'COAID'          =>  $nagadcoaid,
             'Narration'      =>  'Fund Transfer in Nagad From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
+            'Debit'          =>  0,
+            'Credit'         =>  $amount,
+            'IsPosted'       =>  1,
+            'CreateBy'       =>  $CreateBy,
+            'CreateDate'     =>  $createdate,
+            'IsAppove'       =>  1,
+        );
+
+        //Rocket Added
+        if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
+        }
+
+        $rocketc = array(
+            'VNo'            =>  $voucher_no,
+            'Vtype'          =>  $Vtype,
+            'VDate'          =>  $date,
+            'COAID'          =>  $rocketcoaid,
+            'Narration'      =>  'Fund Transfer in Rocket From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
             'Debit'          =>  0,
             'Credit'         =>  $amount,
             'IsPosted'       =>  1,
@@ -1870,10 +2014,14 @@ class Accounts extends CI_Controller
         if ($from_pay_type == 5) {
             $this->db->insert('acc_transaction', $nagadc);
         }
+        if ($from_pay_type == 7) {
+            $this->db->insert('acc_transaction', $rocketc);
+        }
 
         // transfer acc
         $bkash_id = $this->input->post('bkash_id_to', TRUE);
         $nagad_id = $this->input->post('nagad_id_to', TRUE);
+        $rocket_id = $this->input->post('rocket_id_to', TRUE);
 
         $bank_id = $this->input->post('bank_id_m_to', TRUE);
         if (!empty($bank_id)) {
@@ -1888,7 +2036,7 @@ class Accounts extends CI_Controller
             'VNo'            =>  $voucher_no,
             'Vtype'          =>  $Vtype,
             'VDate'          =>  $date,
-            'COAID'          =>  1020105,
+            'COAID'          =>  1020106,
             'Narration'      =>  'Fund Transfer From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
             'Debit'          =>  0,
             'Credit'         =>  $amount,
@@ -1969,6 +2117,29 @@ class Accounts extends CI_Controller
             'IsAppove'       =>  1,
         );
 
+        //Rocket Added
+        if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
+        }
+
+        $rocketc = array(
+            'VNo'            =>  $voucher_no,
+            'Vtype'          =>  $Vtype,
+            'VDate'          =>  $date,
+            'COAID'          =>  $rocketcoaid,
+            'Narration'      =>  'Fund Transfer in Rocket From  ' . $logged_in_outlet[0]['outlet_name'] . ' to ' . $transfer_outlet[0]['outlet_name'],
+            'Debit'          =>  0,
+            'Credit'         =>  $amount,
+            'IsPosted'       =>  1,
+            'CreateBy'       =>  $CreateBy,
+            'CreateDate'     =>  $createdate,
+            'IsAppove'       =>  1,
+        );
+
         $this->db->insert('acc_transaction', $toTransferCr);
         if ($to_pay_type == 4) {
             $this->db->insert('acc_transaction', $bankc);
@@ -1981,6 +2152,9 @@ class Accounts extends CI_Controller
         }
         if ($to_pay_type == 5) {
             $this->db->insert('acc_transaction', $nagadc);
+        }
+        if ($from_pay_type == 7) {
+            $this->db->insert('acc_transaction', $rocketc);
         }
 
         $this->session->set_flashdata('message', display('save_successfully'));

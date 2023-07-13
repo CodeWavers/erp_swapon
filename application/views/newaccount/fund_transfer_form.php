@@ -84,6 +84,7 @@
                                     <option value="4">Bank</option>
                                     <option value="3">Bkash</option>
                                     <option value="5">Nagad</option>
+                                    <option value="7">Rocket</option>
                                 </select>
                             </div>
                         </div>
@@ -170,10 +171,28 @@
                                             <?php } ?>'>
 
                                 </div>
-
-
                             </div>
-                        </div>
+                         </div>
+
+                         <div class="" style="display: none" id="rocket_div_1">
+                            <div class="form-group row">
+                                <label for="rocket" class="col-sm-2 col-form-label">Rocket Number <i class="text-danger">*</i></label>
+                                <div class="col-sm-4">
+                                    <select name="rocket_id_" class="form-control bankpayment" id="rocket_id_1">
+                                        <option value="">Select One</option>
+                                        <?php foreach ($rocket_list as $rocket) { ?>
+                                            <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                        <?php } ?>
+                                    </select>
+
+                                    <input type="hidden" id="nagad_list" value='<option value="">Select One</option>
+                                            <?php foreach ($rocket_list as $rocket) { ?>
+                                                <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                            <?php } ?>'>
+
+                                </div>
+                            </div>
+                         </div>
 
                         <div class="" style="display: none" id="card_div_1">
                             <div class="form-group row">
@@ -248,7 +267,7 @@
     }
 
     function bank_paymet_to(val, sl) {
-        if (val == 2 || 3 || 4 || 5 || 6) {
+        if (val == 2 || 3 || 4 || 5 || 6 || 7) {
             if (val == 2) {
                 var style = "block";
                 document.getElementById("bank_id_" + sl + "_to").setAttribute("required", true);
@@ -291,15 +310,25 @@
 
             document.getElementById("nagad_div_" + sl + "_to").style.display = style;
 
-            if (val == 6) {
+            if (val == 7) {
                 var style = "block";
-                document.getElementById("card_id_" + sl + "_to").setAttribute("required", true);
+                document.getElementById("rocket_id_" + sl + "_to").setAttribute("required", true);
             } else {
                 var style = "none";
-                document.getElementById("card_id_" + sl + "_to").removeAttribute("required");
+                document.getElementById("rocket_id_" + sl + "_to").removeAttribute("required");
             }
 
-            document.getElementById("card_div_" + sl + "_to").style.display = style;
+            document.getElementById("rocket_div_" + sl + "_to").style.display = style;
+
+            // if (val == 6) {
+            //     var style = "block";
+            //     document.getElementById("card_id_" + sl + "_to").setAttribute("required", true);
+            // } else {
+            //     var style = "none";
+            //     document.getElementById("card_id_" + sl + "_to").removeAttribute("required");
+            // }
+
+            // document.getElementById("card_div_" + sl + "_to").style.display = style;
         }
     }
 </script>

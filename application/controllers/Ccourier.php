@@ -47,14 +47,14 @@ class Ccourier extends CI_Controller {
         if ($coa->HeadCode != NULL) {
             $headcode = $coa->HeadCode + 1;
         } else {
-            $headcode = "1020601";
+            $headcode = "1040601";
         }
         $c_acc = $courier_id . '-' . $this->input->post('category_name', TRUE);
         $createby = $this->session->userdata('user_id');
         $createdate = date('Y-m-d H:i:s');
 
 
-        $courier_coa = [
+        $courier_coa = array(
             'HeadCode'         => $headcode,
             'HeadName'         => $c_acc,
             'PHeadName'        => 'Courier Ledger',
@@ -69,7 +69,9 @@ class Ccourier extends CI_Controller {
             'DepreciationRate' => '0',
             'CreateBy'         => $createby,
             'CreateDate'       => $createdate,
-        ];
+        );
+
+    //    echo '<pre>';print_r($courier_coa);exit();
 
         $this->db->insert('acc_coa', $courier_coa);
 
@@ -216,10 +218,16 @@ class Ccourier extends CI_Controller {
             'branch_id'   => $branch_id,
             'courier_id'   => $courier_id,
             'branch_name' => $this->input->post('category_name',TRUE),
+            'inside' => $this->input->post('inside',TRUE),
+            'outside' => $this->input->post('outside',TRUE),
+            'sub' => $this->input->post('sub',TRUE),
             'status'        => 1
         );
 
+
+
         $result = $this->Courier->branch_entry($data);
+      //  echo '<pre>';print_r($result);exit();
 
         if ($result == TRUE) {
             $this->session->set_userdata(array('message' => display('successfully_added')));
@@ -231,6 +239,60 @@ class Ccourier extends CI_Controller {
             redirect(base_url('Ccourier/branch'));
         }
     }
+    public function branch_by_courier() {
+
+
+        $CI = & get_instance();
+        $CI->load->library('lpurchase');
+        $CI->load->model('Courier');
+        $id = $this->input->post('courier_id',TRUE);
+
+        $branches = $CI->Courier->branch_by_courier($id);
+
+
+        foreach ($branches as $branch) {
+            $courier_branch[] =array('branch_name'=>$branch['branch_name'],
+                'branch_id'=>$branch['branch_id'],
+                'courier_id'=>$branch['courier_id']);
+
+        }
+        $sub[]= "";
+        if (empty($courier_branch)) {
+            $sub .="No Branch Found !";
+        }else{
+            $sub .="<select name=\"branch_id\"  class=\"branch_id form-control\" id=\"branch_id\">";
+            $sub .= "<option value=''>".display('select_one')."</option>";
+            foreach ($courier_branch as $b) {
+
+                    $sub .="<option value=".$b['branch_id'].">".$b['branch_name']."</option>";
+
+
+            }
+            $sub .="</select>";
+        }
+
+        $data['branch']  =$sub;
+        $data['courier_id']  =$courier_branch['courier_id'];
+        $data['inside']  =$courier_branch['inside'];
+        $data['outside']  =$courier_branch['outside'];
+        $data['sub']  =$courier_branch['sub'];
+        //$data2['txnmber']        = $num_column;
+        echo json_encode($data);
+    }
+    public function charge_by_branch() {
+
+
+        $CI = & get_instance();
+        $CI->load->library('lpurchase');
+        $CI->load->model('Courier');
+        $id = $this->input->post('branch_id',TRUE);
+
+        $data = $CI->Courier->charge_by_branch($id);
+
+
+        echo json_encode($data);
+    }
+
 
     //Category Update Form
     public function branch_update_form($courier_id) {
@@ -244,6 +306,9 @@ class Ccourier extends CI_Controller {
         $courier_id = $this->input->post('courier_id',TRUE);
         $data = array(
             'branch_name' => $this->input->post('category_name',TRUE),
+            'inside' => $this->input->post('inside',TRUE),
+            'outside' => $this->input->post('outside',TRUE),
+            'sub' => $this->input->post('sub',TRUE),
             'status'        => 1,
         );
 
@@ -444,6 +509,226 @@ class Ccourier extends CI_Controller {
 
 
         json_encode($data);
+    }
+
+
+    public function courier_payment()
+    {
+        $invoice_id = $this->input->post('invoice_id');
+
+        $inv_details=$this->db->from('invoice')->where('invoice_id',$invoice_id)->get()->row();
+
+
+
+
+
+
+//        $Vdate = $this->input->post('invoice_date', TRUE);
+        $createby = $this->session->userdata('user_id');
+        $createdate = date('Y-m-d H:i:s');
+
+        $corifo = $this->db->select('*')->from('courier_name')->where('courier_id', $inv_details->courier_id)->get()->row();
+        $headn_cour = $inv_details->courier_id . '-' . $corifo->courier_name;
+        $coainfo_cor = $this->db->select('*')->from('acc_coa')->where('HeadName', $headn_cour)->get()->row();
+        $courier_headcode = $coainfo_cor->HeadCode;
+        $courier_name= $corifo->courier_name;
+        //echo '<pre>';print_r($coainfo_cor);exit();
+        $bank_id = $this->input->post('bank_id');
+        $bkash_id = $this->input->post('bkash_id');
+        $nagad_id = $this->input->post('nagad_id');
+        $rocket_id = $this->input->post('rocket_id');
+        $paytype = $this->input->post('paytype');
+        $condition_cost = $this->input->post('condition_cost');
+        $delivery_ac = $this->input->post('delivery_ac');
+        if (!empty($bank_id)) {
+            $bankname = $this->db->select('bank_name')->from('bank_add')->where('bank_id', $bank_id)->get()->row()->bank_name;
+
+            $bankcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', $bankname)->get()->row()->HeadCode;
+        } else {
+            $bankcoaid = '';
+        }
+        if (!empty($bkash_id)) {
+            $bkashname = $this->db->select('bkash_no')->from('bkash_add')->where('bkash_id', $bkash_id)->get()->row()->bkash_no;
+
+            $bkashcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'BK - ' . $bkashname)->get()->row()->HeadCode;
+        } else {
+            $bkashcoaid = '';
+        }
+        if (!empty($nagad_id)) {
+            $nagadname = $this->db->select('nagad_no')->from('nagad_add')->where('nagad_id', $nagad_id)->get()->row()->nagad_no;
+
+            $nagadcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'NG - ' . $nagadname)->get()->row()->HeadCode;
+        } else {
+            $nagadcoaid = '';
+        }
+
+        if (!empty($rocket_id)) {
+            $rocketname = $this->db->select('rocket_no')->from('rocket_add')->where('rocket_id', $rocket_id)->get()->row()->rocket_no;
+
+            $rocketcoaid = $this->db->select('HeadCode')->from('acc_coa')->where('HeadName', 'RK-' . $rocketname)->get()->row()->HeadCode;
+        } else {
+            $rocketcoaid = '';
+        }
+
+        $dd = '';
+        $ddd = '';
+
+        $pay_amount=($inv_details->due_amount)-(($inv_details->shipping_cost+$inv_details->condition_cost)*2);
+
+        $cordr = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV',
+            'VDate'          =>  date('Y-m-d'),
+            'COAID'          =>  $courier_headcode,
+            'Narration'      =>  'Courier Credit For Invoice No -  ' . $inv_details->invoice . ' Courier  ' . $courier_name,
+            'Credit'          =>  $pay_amount,
+            'Debit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $cordr);
+
+            if ($paytype == 1) {
+                $data3 = array(
+                    'VNo'            =>  $invoice_id,
+                    //'cheque_id' => $cheque_id,
+                    'Vtype'          =>  'INV',
+                    'VDate'          =>  $createdate,
+                    'COAID'          =>  1020101,
+                    'Narration'      =>  'Courier Cash Debit Amount For Courier Invoice NO- ' . $inv_details->invoice .' Courier- ' . $courier_name,
+                    'Debit'          =>  $pay_amount,
+                    'Credit'         =>  0,
+                    'IsPosted'       => 1,
+                    'CreateBy'       => $createby,
+                    'CreateDate'     => $createdate,
+                    'IsAppove'       => 1,
+                    //'paytype'=>$paytype
+
+                );
+                //  echo '<pre>';print_r($data3);exit();
+                $ddd = $this->db->insert('acc_transaction', $data3);
+            }
+            if ($paytype == 4) {
+
+                $bankc = array(
+                    'VNo' => $invoice_id,
+                    'Vtype' => 'INVOICE',
+                    'VDate' => $createdate,
+                    'COAID' => $bankcoaid,
+                    'Narration' => 'Courier Bank Debit Amount For Courier Invoice NO- ' . $inv_details->invoice .' Courier- ' . $courier_name .'in'.$bankname,
+                    'Debit' => $pay_amount,
+                    'Credit' => 0,
+                    'IsPosted' => 1,
+                    'CreateBy' => $createby,
+                    'CreateDate' => $createdate,
+                    'IsAppove' => 1,
+
+                );
+                $this->db->insert('acc_transaction', $bankc);
+            }
+            if ($paytype == 3) {
+                $bkashc = array(
+                    'VNo' => $invoice_id,
+                    'Vtype' => 'INVOICE',
+                    'VDate' => $createdate,
+                    'COAID' => $bkashcoaid,
+                    'Narration' => 'Courier Bkash Debit Amount For Courier Invoice NO- ' . $inv_details->invoice .' Courier- ' . $courier_name .'in'.$bkashname,
+                    'Debit' => $pay_amount,
+                    'Credit' => 0,
+                    'IsPosted' => 1,
+                    'CreateBy' => $createby,
+                    'CreateDate' => $createdate,
+                    'IsAppove' => 1,
+
+                );
+                $this->db->insert('acc_transaction', $bkashc);
+            }
+            if ($paytype == 5) {
+                $nagadc = array(
+                    'VNo'            =>  $invoice_id,
+                    'Vtype'          =>  'INVOICE',
+                    'VDate'          =>  $createdate,
+                    'COAID'          =>  $nagadcoaid,
+                    'Narration'      =>  'Courier Nagad Debit Amount For Courier Invoice NO- ' . $inv_details->invoice .' Courier- ' . $courier_name .'in'.$nagadname,
+                    'Debit'          =>  $pay_amount,
+                    'Credit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       =>  $createby,
+                    'CreateDate'     =>  $createdate,
+                    'IsAppove'       =>  1,
+
+                );
+
+                $this->db->insert('acc_transaction', $nagadc);
+            }
+        if ($paytype == 7) {
+            $rocketc = array(
+                'VNo'            =>  $invoice_id,
+                'Vtype'          =>  'INVOICE',
+                'VDate'          =>  $createdate,
+                'COAID'          =>  $rocketcoaid,
+                'Narration'      =>  'Customer Rocket Debit Amount For  Invoice NO- ' . $inv_details->invoice .' Customer- ' . $cs_name .'in'.$nagadname,
+                'Debit'          =>  $pay_amount,
+                'Credit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       =>  $createby,
+                'CreateDate'     =>  $createdate,
+                'IsAppove'       =>  1,
+
+            );
+
+            $this->db->insert('acc_transaction', $rocketc);
+
+
+        }
+
+        $corcc = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV-CC',
+            'VDate'          =>  $createdate,
+            'COAID'          =>  $courier_headcode,
+            'Narration'      =>  'Condition Charge For Invoice No -  ' . $inv_details->invoice . ' Courier  ' . $courier_name,
+            'Credit'          => (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+            'Debit'         =>   0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $corcc);
+
+        $condition_charge = array(
+            'VNo'            =>  $invoice_id,
+            'Vtype'          =>  'INV-CC',
+            'VDate'          =>  $createdate,
+            'COAID'          =>  4040105,
+            'Narration'      =>  'Condition Charge For Invoice No -  ' . $inv_details->invoice . ' Courier  ' . $courier_name,
+//                'Debit'          =>  $this->input->post('shipping_cost', TRUE),
+            'Debit'          =>   (!empty($this->input->post('condition_cost', TRUE)) ? $this->input->post('condition_cost', TRUE): 0),
+            'Credit'         =>  0,
+            'IsPosted'       =>  1,
+            'CreateBy'       => $createby,
+            'CreateDate'     => $createdate,
+            'IsAppove'       => 1
+        );
+        $this->db->insert('acc_transaction', $condition_charge);
+
+            $this->db->set('delivery_ac',$delivery_ac);
+            $this->db->set('condition_cost',$condition_cost);
+            $this->db->set('courier_paid',1);
+            $this->db->where('invoice_id',$invoice_id);
+            $this->db->update('invoice');
+//
+
+
+        $this->session->set_userdata(array('message' => 'Payment Success'));
+        redirect(base_url('Ccourier/courier_status'));
+
+
+
+
     }
 
 

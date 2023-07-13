@@ -130,16 +130,29 @@
 
 
                         <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-6">
                                 <div class="form-group row">
-                                    <label for="product_status" class="col-sm-2 col-form-label"> Product Type <i class="text-danger">*</i></label>
-                                    <div class="col-sm-3">
+                                    <label for="product_status" class="col-sm-4 col-form-label"> Product Type <i class="text-danger">*</i></label>
+                                    <div class="col-sm-6">
                                         <select name="product_status" id="product_status" class="form-control" required">
-                                        <option value="">Select One</option>
-                                        <option value="1">Finished Goods</option>
-                                        <option value="2">Raw Materials</option>
-                                        <option value="3">Tools</option>
+
+                                            <option value="1" selected>Finished Goods</option>
+                                            <option value="2">Raw Materials</option>
+                                            <option value="3">Tools</option>
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-sm-6">
+                                <div class="form-group row">
+                                    <label for="date" class="col-sm-4 col-form-label">Invoice No:
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+
+                                        <input type="text"  tabindex="2" class="form-control " name="invoice_no" placeholder="Invoice No" value="" id="date" />
                                     </div>
                                 </div>
                             </div>
@@ -149,13 +162,15 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="form-group row">
-                                    <label for="cat_id" class="col-sm-2 col-form-label"> Category <i class="text-danger">*</i></label>
+                                    <label for="cat_id" class="col-sm-2 col-form-label"> Category </label>
                                     <div class="col-sm-3">
-                                        <select name="cat_id" id="cat_id" class="form-control" required">
-                                        <option value="">Select One</option>
-                                        {cates}
-                                        <option value="{id}">{name}</option>
-                                        {/cates}
+                                        <select name="cat_id[]" id="cat_id" class="form-control" multiple  >
+                                            <option value="">Select One</option>
+
+                                            {cates}
+
+                                            <option value="{id}">{name}</option>
+                                            {/cates}
                                         </select>
                                     </div>
                                 </div>
@@ -249,7 +264,7 @@
                                         <th class="text-center" width="9%"><?php echo display('item_information') ?><i class="text-danger">*</i></th>
                                         <!-- <th class="text-center" width="8%">SN</th> -->
                                         <th class="text-center">Stock</th>
-                                         <th class="text-center" width="8%">Unit</th>
+                                        <th class="text-center" width="8%">Unit</th>
                                         <!-- <th class="text-center" width="8%">Origin</th> -->
                                         <!-- <th class="text-center" width="8%">Warehouse</th> -->
 
@@ -281,7 +296,7 @@
                                             <input type="text" id="available_quantity_1" class="form-control text-right stock_ctn_1" placeholder="0.00" readonly />
                                         </td>
 
-                                         <td class="wt"> <input type="text" id="unit_1" placeholder="Unit" name="unit[]"  class="form-control text-right unit_1" readonly/></td>
+                                        <td class="wt"> <input type="text" id="unit_1" placeholder="Unit" name="unit[]" class="form-control text-right unit_1" readonly /></td>
                                         <!-- <td class="wt"> <input type="text" placeholder="Origin" name="origin[]" id="origin" class="form-control text-right stock_ctn_1" /></td> -->
                                         <!-- <td class="wt"> <input type="text" placeholder="Warehouse" name="warehouse[]" id="shelf_number" class="form-control text-right stock_ctn_1"  /></td> -->
 
@@ -327,7 +342,8 @@
                                         <td class="text-right">
                                             <input type="text" id="Total" class="text-right form-control" name="total" value="0.00" readonly="readonly" />
                                         </td>
-                                        <td> <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addPurchaseOrderField1('addPurchaseItem')" tabindex="9" /><i class="fa fa-plus"></i></button>
+                                        <td>
+                                            <button type="button" id="add_invoice_item" class="btn btn-info" name="add-invoice-item" onClick="addPurchaseOrderField1('addPurchaseItem')" tabindex="9" /><i class="fa fa-plus"></i></button>
 
                                             <input type="hidden" name="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
                                         </td>
@@ -342,6 +358,27 @@
 
                                         </td>
                                     </tr>
+                                    <tr>
+
+                                        <td class="text-right" colspan="8"><b>Labour Wages</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="labour_wages" class="text-right form-control labour_wages" onkeyup="calculate_store(1)" name="labour_wages" placeholder="0.00" value="" />
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                        <td class="text-right" colspan="8"><b>Transportation</b></td>
+                                        <td class="text-right">
+                                            <input type="text" id="transport_cost " class="text-right form-control transport_cost" onkeyup="calculate_store(1)" name="transport_cost" placeholder="0.00" value="" />
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+
 
                                     <tr>
 
@@ -398,8 +435,9 @@
                                                             <option value="4"><?php echo display('bank_payment') ?></option>
                                                             <option value="3">Bkash Payment</option>
                                                             <option value="5">Nagad Payment</option>
-                                                            <option value="6">TT</option>
-                                                            <option value="7">LC</option>
+                                                            <option value="7">Rocket Payment</option>
+<!--                                                            <option value="6">TT</option>-->
+<!--                                                            <option value="7">LC</option>-->
 
                                                         </select>
 
@@ -445,14 +483,10 @@
                                                 <option value="<?php echo html_escape($bank['bank_id']) ?>"><?php echo html_escape($bank['bank_name']) . '(' . html_escape($bank['ac_number']) . ')'; ?></option>
                                             <?php } ?>'>
 
-
                                                         </div>
-
 
                                                     </div>
                                                 </div>
-
-
 
                                                 <div class="col-sm-4" style="display: none" id="bkash_div_1">
 
@@ -470,6 +504,27 @@
                                                 <option value="<?php echo html_escape($bkash['bkash_id']) ?>"><?php echo html_escape($bkash['bkash_no']); ?> (<?php echo html_escape($bkash['ac_name']); ?>)</option>
                                             <?php } ?>'>
                                                         </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4" style="display: none" id="rocket_div_1">
+                                                    <div class="form-group row">
+                                                        <label for="rocket" class="col-sm-5 col-form-label">Rocket Number <i class="text-danger">*</i></label>
+                                                        <div class="col-sm-7">
+                                                            <select name="rocket_id[]" class="form-control bankpayment" id="rocket_id_1">
+                                                                <option value="">Select One</option>
+                                                                <?php foreach ($rocket_list as $rocket) { ?>
+                                                                    <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                                                <?php } ?>
+                                                            </select>
+
+                                                            <input type="hidden" id="rocket_list" value='<option value="">Select One</option>
+                                            <?php foreach ($rocket_list as $rocket) { ?>
+                                                <option value="<?php echo html_escape($rocket['rocket_id']) ?>"><?php echo html_escape($rocket['rocket_no']); ?> (<?php echo html_escape($rocket['ac_name']); ?>)</option>
+                                            <?php } ?>'>
+
+                                                        </div>
+
 
                                                     </div>
                                                 </div>
@@ -548,7 +603,6 @@
                                                                                 <option value="<?php echo html_escape($bank['bank_id']) ?>"><?php echo html_escape($bank['bank_name']) . '(' . html_escape($bank['ac_number']) . ')'; ?></option>
                                                                             <?php } ?>' />
 
-
                                                         </div>
 
 
@@ -562,7 +616,6 @@
                                                         <label for="lc_1" class="col-sm-5 col-form-label">LC Number <i class="text-danger">*</i></label>
                                                         <div class="col-sm-7">
                                                             <input type="text" pattern="[a-zA-Z'-'\s]*" name="lc[]" class="form-control" id="lc_1">
-
                                                         </div>
 
 
@@ -609,11 +662,10 @@
                                                             <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
                                                             <input type="text" name="cheque_type[]" class=" form-control" placeholder="" autocomplete="off" />
-                                                            <!--                                                <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
+                                                            <!--  <input type="number"   name="cheque_id[]" class=" form-control" placeholder="" value="--><?php //echo rand()
                                                                                                                                                                                                             ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
-
                                                         <label for="bank" class="col-sm-4 col-form-label">Cheque NO:
                                                             <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
@@ -622,7 +674,6 @@
                                                                                                                                                                                                             ?>
                                                             <!--" autocomplete="off"/>-->
                                                         </div>
-
 
                                                         <label for="date" class="col-sm-4 col-form-label">Due Date <i class="text-danger">*</i></label>
                                                         <div class="col-sm-6">
@@ -651,12 +702,9 @@
                                                         </div>
 
 
-
-
                                                         <div class=" col-sm-1">
                                                             <a href="#" id="Add_cheque" class="client-add-btn btn btn-primary add_cheque"><i class="fa fa-plus-circle m-r-2"></i></a>
                                                         </div>
-
 
                                                     </div>
                                                 </div>
@@ -670,7 +718,6 @@
                                         <div class="modal-footer">
 
                                             <a href="#" class="btn btn-danger" data-dismiss="modal">Close</a>
-
 
                                         </div>
 

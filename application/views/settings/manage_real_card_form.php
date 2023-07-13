@@ -75,8 +75,9 @@
                                 <thead>
                                     <tr>
                                         <th><?php echo display('sl'); ?></th>
-                                        <th>Card No</th>
+                                        <th>Card No/Name</th>
                                         <th>Card Type</th>
+                                        <th>Bank</th>
 
                                         <th><?php echo display('action'); ?></th>
                                     </tr>
@@ -88,6 +89,7 @@
                                             <td>{sl}</td>
                                             <td>{card_no}</td>
                                             <td>{card_name}</td>
+                                            <td>{bank_name}</td>
 
                                             <td>
                                                 <?php echo form_open(); ?>

@@ -143,7 +143,7 @@ $(function ($) {
     // responsive: true,
 
     aaSorting: [[1, "asc"]],
-    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7] }],
+    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6] }],
     processing: true,
     serverSide: true,
 
@@ -156,13 +156,14 @@ $(function ($) {
     buttons: [
       {
         extend: "copy",
+        title: "CustomerList",
         className: "btn-sm prints",
       },
       {
         extend: "csv",
         title: "CustomerList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -170,7 +171,7 @@ $(function ($) {
         extend: "excel",
         title: "CustomerList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -178,14 +179,14 @@ $(function ($) {
         extend: "pdf",
         title: "CustomerList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
       {
         extend: "print",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6, 7], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6], //Your Colume value those you want
         },
         title: "<center>CustomerList</center>",
         className: "btn-sm prints",
@@ -201,8 +202,9 @@ $(function ($) {
     },
     columns: [
       { data: "sl" },
-      { data: "customer_id_two" },
+      // { data: "customer_id_two" },
       { data: "customer_name" },
+      { data: "shop_name" },
       { data: "address" },
       { data: "address2" },
       { data: "mobile" },
@@ -231,11 +233,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -335,11 +337,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -438,11 +440,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -542,11 +544,11 @@ $(function ($) {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -560,7 +562,7 @@ $(function ($) {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6] },
+      { bSortable: false, aTargets: [0, 3, 6, 7] },
     ],
     processing: true,
     serverSide: true,
@@ -623,11 +625,14 @@ $(function ($) {
     columns: [
       { data: "sl" },
       { data: "product_name" },
+      { data: "created_date" },
       { data: "product_status" },
-      { data: "product_model" },
-      { data: "supplier_name" },
+      { data: "sku" },
+      // { data: "product_category" },
+
+      // { data: "supplier_name" },
       { data: "price" },
-      { data: "purchase_p" },
+      // { data: "purchase_p" },
       { data: "image" },
       { data: "button" },
     ],
@@ -637,7 +642,7 @@ $(function ($) {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6] },
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5] },
     ],
     processing: true,
     serverSide: true,
@@ -699,15 +704,203 @@ $(function ($) {
     },
     columns: [
       { data: "sl" },
-      { data: "product_name" },
-      { data: "product_status" },
-      { data: "product_model" },
-      { data: "supplier_name" },
-      { data: "price" },
-      { data: "purchase_p" },
       { data: "image" },
+      { data: "product_name" },
+
+      { data: "sku" },
+
+      { data: "price" },
+
+
       { data: "button" },
     ],
+  });
+  $("#all_customer").DataTable({
+    responsive: true,
+
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [25, 50, 100, 250, 500, total_product],
+      [25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        title: "Customer List",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want
+        },
+        className: "btn-sm prints",
+      },
+      {
+        extend: "csv",
+        title: "Customer List",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        className: "btn-sm prints",
+      },
+      {
+        extend: "excel",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        title: "Customer List",
+        className: "btn-sm prints",
+      },
+      {
+        extend: "pdf",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        title: "Customer List",
+        className: "btn-sm prints",
+      },
+      {
+        extend: "print",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4], //Your Colume value those you want print
+        },
+        title: "<center>Customer List</center>",
+        className: "btn-sm prints",
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Ccustomer/Check_all_customer",
+      data: {
+        csrf_test_name: CSRF_TOKEN,
+      },
+    },
+    columns: [
+      { data: "sl" },
+      { data: "customer_name" },
+      { data: "email" },
+
+      { data: "phone" },
+
+      {
+        data: "balance",
+        class: "balance",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+
+    ],
+  });
+
+
+  var order_table = $("#order_table").DataTable({
+
+    responsive: true,
+    // bPaginate: false,
+
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [30, 50, 100, 250, 500, total_product],
+      [30, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        title: "Order List",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want
+        },
+        className: "btn-sm prints",
+      },
+      {
+        extend: "csv",
+        title: "Order List",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+        },
+        className: "btn-sm prints",
+      },
+      {
+        extend: "excel",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+        },
+        title: "Order List",
+        className: "btn-sm prints",
+      },
+      {
+        extend: "pdf",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+        },
+        title: "Order List",
+        className: "btn-sm prints",
+      },
+      {
+        extend: "print",
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+        },
+        title: "<center>Order List</center>",
+        className: "btn-sm prints",
+      },
+    ],
+    // paging: false,
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Corder/CheckOrderList",
+
+
+      data: function (data) {
+
+
+        data.fromdate = $("#from_date").val();
+        data.todate = $("#to_date").val();
+        data.status = $("#delivery_status").val();
+        // data.last_order =this.row( ':last-child' ).data()[0];
+        data.csrf_test_name = CSRF_TOKEN;
+      },
+
+    },
+
+
+    columns: [
+      { data: "check" },
+      { data: "sl" },
+      { data: "order_code" },
+      { data: "date" },
+      { data: "num_of_product" },
+      { data: "customer_name" },
+      { data: "customer_number" },
+      { data: "amount" },
+      { data: "delivery_status" },
+      { data: "payment_method" },
+      { data: "payment_status" },
+      { data: "refund" },
+      { data: "button" },
+    ],
+
+
+  });
+
+
+
+
+  $("#btn-filter").click(function () {
+    order_table.ajax.reload();
   });
 });
 
@@ -715,15 +908,24 @@ $(document).ready(function () {
   "use strict";
   var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
   var base_url = $("#base_url").val();
-  var currency = $("#currency").val();
+  var currency = '';
   var total_stock = $("#total_stock").val();
   var cat_id = $("#cat_list").val();
   var outlet_id = $("#outlet").val();
+  var value = $("#value").val();
 
-  $("#cat_list").on("change", function (e) {
+
+
+  var from_date = $("#from_date").val();
+  var to_date = $("#to_date").val();
+
+
+  $("#cat_list,#from_date,#to_date,#value").on("change", function (e) {
     var valueSelected = this.value;
-    cat_id = valueSelected;
-
+    cat_id = $("#cat_list").val();
+    from_date = $("#from_date").val();
+    to_date = $("#to_date").val();
+    value = $("#value").val();
     table.ajax.reload();
   });
 
@@ -734,11 +936,17 @@ $(document).ready(function () {
     table.ajax.reload();
   });
 
+  $("#product_sku").on("change", function (e) {
+
+    table.ajax.reload();
+  });
   var table = $("#checkListStockOutlet").DataTable({
     responsive: true,
 
     aaSorting: [[1, "asc"]],
-    columnDefs: [{ bSortable: false, aTargets: [1] }],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11] },
+    ],
     processing: true,
     serverSide: true,
 
@@ -781,47 +989,109 @@ $(document).ready(function () {
       data: function (d) {
         d.csrf_test_name = CSRF_TOKEN;
         d.cat_id = cat_id;
+        d.product_sku = $('.product_sku').val();
         d.outlet_id = outlet_id;
+        d.from_date = from_date;
+        d.to_date = to_date;
+        d.value = value;
+
       },
     },
     columns: [
       { data: "sl" },
       { data: "product_name" },
-      { data: "product_model", class: "text-center" },
       { data: "category", class: "text-center" },
-      { data: "color", class: "text-center" },
-      { data: "size", class: "text-center" },
+      { data: "sku", class: "text-center" },
+      { data: "product_model", class: "text-center" },
+
       {
         data: "sales_price",
         class: "text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },
-      {
-        data: "purchase_p",
-        class: "text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
-      },
-      { data: "totalPurchaseQnty", class: "text-right" },
-      { data: "totalSalesQnty", class: "text-right" },
-      { data: "return_given", class: "text-right" },
+      // {
+      //   data: "purchase_p",
+      //   class: "text-right",
+      //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      // },
+      // {
+      //   data: "production_cost",
+      //   class: "text-right",
+      //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      // },
+      { data: "totalPurchaseQnty", class: "totalPurchaseQnty text-right" },
+      { data: "damagedQnty", class: "damagedQnty text-right" },
+      { data: "return_given", class: "return_given text-right" },
+      { data: "totalSalesQnty", class: "totalSalesQnty text-right" },
+
       //   { data: 'warrenty_stock' ,class:"stock text-right" },
-      { data: "stok_quantity", class: "stock text-right" },
+      { data: "opening_stock", class: "opening_stock text-right" },
+      { data: "stok_quantity", class: "stok_quantity text-right" },
+
       {
         data: "total_sale_price",
         class: "total_sale text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+        render: $.fn.dataTable.render.number(",", ".", 2),
       },
-      {
-        data: "purchase_total",
-        class: "total_purchase text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
-      },
+      // {
+      //   data: "purchase_total",
+      //   class: "total_purchase text-right",
+      //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      // },
     ],
 
     footerCallback: function (row, data, start, end, display) {
       var api = this.api();
       api
-        .columns(".stock", {
+        .columns(".totalPurchaseQnty", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(sum.toLocaleString());
+        });
+        api
+        .columns(".damagedQnty", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(sum.toLocaleString());
+        });
+        api
+        .columns(".return_given", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(sum.toLocaleString());
+        });
+        api
+        .columns(".totalSalesQnty", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(sum.toLocaleString());
+        });
+        api
+        .columns(".opening_stock", {
           page: "current",
         })
         .every(function () {
@@ -844,17 +1114,15 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
 
       api
-        .columns(".total_purchase", {
+        .columns(".stok_quantity", {
           page: "current",
         })
         .every(function () {
@@ -864,8 +1132,6 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-              " " +
               sum.toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -886,7 +1152,7 @@ $(document).ready(function () {
     responsive: true,
 
     aaSorting: [[1, "desc"]],
-    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8] }],
+    columnDefs: [{ bSortable: false, aTargets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13] }],
     processing: true,
     serverSide: true,
 
@@ -900,7 +1166,7 @@ $(document).ready(function () {
       {
         extend: "copy",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want
         },
         className: "btn-sm prints",
       },
@@ -908,14 +1174,14 @@ $(document).ready(function () {
         extend: "csv",
         title: "InvoiceList",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         className: "btn-sm prints",
       },
       {
         extend: "excel",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         title: "InvoiceList",
         className: "btn-sm prints",
@@ -923,7 +1189,7 @@ $(document).ready(function () {
       {
         extend: "pdf",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         title: "Invoice List",
         className: "btn-sm prints",
@@ -931,7 +1197,7 @@ $(document).ready(function () {
       {
         extend: "print",
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5], //Your Colume value those you want print
+          columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], //Your Colume value those you want print
         },
         title: "<center> Invoice List</center>",
         className: "btn-sm prints",
@@ -951,10 +1217,25 @@ $(document).ready(function () {
       { data: "sl" },
       { data: "invoice_id" },
       { data: "invoice" },
+      { data: "ecom_invoice" },
+      { data: "final_date" },
       { data: "outlet_name" },
       { data: "salesman" },
       { data: "customer_name" },
-      { data: "final_date" },
+      { data: "delivery_type" },
+      { data: "sale_type" },
+      { data: "courier_status" },
+      {
+        data: "payment_status",
+        class: "text-center",
+      },
+
+      {
+        data: "due_amount",
+        class: "text-right",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+
       {
         data: "total_amount",
         class: "total_sale text-right",
@@ -977,11 +1258,11 @@ $(document).ready(function () {
           }, 0);
           $(this.footer()).html(
             currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            " " +
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -1040,15 +1321,30 @@ $(document).ready(function () {
   "use strict";
   var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
   var base_url = $("#base_url").val();
-  var currency = $("#currency").val();
+  var currency = '';
   var total_stock = $("#total_stock").val();
   var product_status = $("#product_status").val();
-
+  var product_sku = $("#product_sku").val();
+  var from_date = $("#from_date").val();
+  var outlet_id = $("#outlet_id").val();
+  var to_date = $("#to_date").val();
   var pr_status = $("#pr_status").val();
+  var cat_id = $("#cat_list").val();
+  var value = $("#value").val();
 
-  $("#product_status").on("change", function (e) {
-    var valueSelected = this.value;
-    product_status = valueSelected;
+  $("#cat_list,#product_status,#from_date, #to_date , #value,#outlet_id").on("change", function (e) {
+    //var valueSelected = this.value;
+    product_status = $("#product_status").val();
+    from_date = $("#from_date").val();
+    to_date = $("#to_date").val();
+    cat_id = $("#cat_list").val();
+    outlet_id = $("#outlet_id").val();
+    value = $("#value").val();
+    console.log(value);
+    table.ajax.reload();
+  });
+
+  $("#product_sku").on("change", function (e) {
 
     table.ajax.reload();
   });
@@ -1058,14 +1354,14 @@ $(document).ready(function () {
 
     aaSorting: [[1, "asc"]],
     columnDefs: [
-      { bSortable: false, aTargets: [0, 2, 3, 4, 5, 6, 7] },
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     ],
     processing: true,
     serverSide: true,
 
     lengthMenu: [
-      [10, 25, 50, 100, 250, 500, total_stock],
-      [10, 25, 50, 100, 250, 500, "All"],
+      [10, 25, 50, 100, 250, 500,6000, total_stock],
+      [10, 25, 50, 100, 250, 500,6000, "All"],
     ],
 
     dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
@@ -1128,15 +1424,24 @@ $(document).ready(function () {
       url: base_url + "Creport/CheckList",
       data: function (d) {
         d.csrf_test_name = CSRF_TOKEN;
+        d.outlet_id = outlet_id;
         d.pr_status = pr_status;
+        d.cat_id = cat_id;
         d.product_status = product_status;
+        d.product_sku = $('.product_sku').val();
+        d.from_date = from_date;
+        d.to_date = to_date;
+        d.value = value;
+        d.total_stock = total_stock;
+
       },
     },
     columns: [
       { data: "sl" },
       { data: "product_name" },
+      { data: "category" },
+      { data: "sku" },
       { data: "product_model", class: "text-center" },
-
       {
         data: "sales_price",
         class: "text-right",
@@ -1147,14 +1452,23 @@ $(document).ready(function () {
         class: "text-right",
         render: $.fn.dataTable.render.number(",", ".", 2, currency),
       },
-      { data: "totalPurchaseQnty", class: "text-right" },
-      { data: "damagedQnty", class: "text-right" },
-      { data: "totalSalesQnty", class: "text-right" },
-      { data: "stok_quantity", class: "stock text-right" },
+      {
+        data: "production_cost",
+        class: "text-right",
+        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+
+      
+      { data: "totalPurchaseQnty", class: "totalPurchaseQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "damagedQnty", class: "damagedQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "returnQnty", class: "returnQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "totalSalesQnty", class: "totalSalesQnty text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "opening_stock", class: "opening_stock text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
+      { data: "stok_quantity", class: "stock text-right", render: $.fn.dataTable.render.number(",", ".", 2, currency), },
       {
         data: "total_sale_price",
         class: "total_sale text-right",
-        render: $.fn.dataTable.render.number(",", ".", 2, currency),
+        render: $.fn.dataTable.render.number(",", ".", 2),
       },
       {
         data: "purchase_total",
@@ -1165,6 +1479,82 @@ $(document).ready(function () {
 
     footerCallback: function (row, data, start, end, display) {
       var api = this.api();
+      api
+      .columns(".opening_stock", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(sum.toLocaleString());
+      });
+      var api = this.api();
+      api
+      .columns(".totalPurchaseQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(sum.toLocaleString());
+      });
+      
+      var api = this.api();
+      api
+      .columns(".totalSalesQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(sum.toLocaleString());
+      });
+      var api = this.api();
+      api
+      .columns(".damagedQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(sum.toLocaleString());
+      });
+      api
+      .columns(".returnQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(sum.toLocaleString());
+      });
+      api
+      .columns(".totalSalesQnty", {
+        page: "current",
+      })
+      .every(function () {
+        var sum = this.data().reduce(function (a, b) {
+          var x = parseFloat(a) || 0;
+          var y = parseFloat(b) || 0;
+          return x + y;
+        }, 0);
+        $(this.footer()).html(sum.toLocaleString());
+      });
       api
         .columns(".stock", {
           page: "current",
@@ -1189,12 +1579,10 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
 
@@ -1209,12 +1597,10 @@ $(document).ready(function () {
             return x + y;
           }, 0);
           $(this.footer()).html(
-            currency +
-              " " +
-              sum.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })
+            sum.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })
           );
         });
     },
@@ -1796,3 +2182,317 @@ function popOverInit(button, tooltip) {
     button.addEventListener(event, hide);
   });
 }
+function get_text() {
+
+  var text = $("#outlet option:selected").text();
+  $('#outlet_text').val(text);
+}
+
+
+
+
+//Product report salewise
+$(document).ready(function () {
+  "use strict";
+  var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
+  var base_url = $("#base_url").val();
+  // var product_id = $("#product_id").val();
+  var currency = $("#currency").val();
+  var from_date = $("#from_date").val();
+  var to_date = $("#to_date").val();
+  var outlet_id = $("#outlet_id").val();
+
+  $("#product_id,#from_date, #to_date,#outlet_id").on("change", function (e) {
+    from_date = $("#from_date").val();
+    to_date = $("#to_date").val();
+    // product_id =  $("#product_id").val();
+    outlet_id = $("#outlet_id").val();
+    table.ajax.reload();
+  });
+
+  var table = $("#ProductSalesReport").DataTable({
+    responsive: true,
+
+    aaSorting: [[1, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0,1,2,3,4,5,6] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [10, 25, 50, 100, 250, 500,1000],
+      [10, 25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "csv",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "excel",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "pdf",
+        title: "Stock List",
+        className: "btn-sm prints",
+        footer: true,
+        orientation: "landscape",
+      },
+      {
+        extend: "print",
+        title: "<center>Stock List</center>",
+        className: "btn-sm prints",
+        footer: true,
+        customize: function (win) {
+          var last = null;
+          var current = null;
+          var bod = [];
+
+          var css = "@page { size: landscape; }",
+            head =
+              win.document.head || win.document.getElementsByTagName("head")[0],
+            style = win.document.createElement("style");
+
+          style.type = "text/css";
+          style.media = "print";
+
+          if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+          } else {
+            style.appendChild(win.document.createTextNode(css));
+          }
+
+          head.appendChild(style);
+        },
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Creport/ProductSalesReport",
+      data: function (d) {
+        d.csrf_test_name = CSRF_TOKEN;
+        d.outlet_id = outlet_id;
+        // d.product_id = product_id;
+        d.from_date = from_date;
+        d.to_date = to_date;
+      },
+    },
+    columns: [
+      { data: "sl" },
+      { data: "product_name" },
+      { data: "qnty" },
+      { data: "total_sales", class: "total_sales text-right" },
+      {
+        data: "discount",
+        class: "discount text-right"
+        // render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      },
+      // {
+      //   data: "vat",
+      //   class: "text-right",
+      //   render: $.fn.dataTable.render.number(",", ".", 2, currency),
+      // },
+      { data: "net_sales", class: "net_sales text-right" },
+      // { data: "dc", class: "text-right" },
+      { data: "cost_price", class: "cost_price text-right" },
+      { data: "gross_profit", class: "gross_profit text-right" },
+    ],
+    footerCallback: function (row, data, start, end, display) {
+      var api = this.api();
+     //total gross profit
+      api
+        .columns(".gross_profit", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+  //total Cost Price
+        api
+        .columns(".cost_price", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+        //total Net Sales
+        api
+        .columns(".net_sales", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+        //total Cost Price
+        api
+        .columns(".total_sales", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+
+        //total Cost Price
+        api
+        .columns(".discount", {
+          page: "current",
+        })
+        .every(function () {
+          var sum = this.data().reduce(function (a, b) {
+            var x = parseFloat(a) || 0;
+            var y = parseFloat(b) || 0;
+            return x + y;
+          }, 0);
+          $(this.footer()).html(
+            currency +
+              " " +
+              sum.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })
+          );
+        });
+    },
+  });
+});
+
+$(document).ready(function () {
+  "use strict";
+  var CSRF_TOKEN = $('[name="csrf_test_name"]').val();
+  var base_url = $("#base_url").val();
+  var table = $("#rqsn_approve").DataTable({
+    responsive: true,
+    dom: "bfltip",
+    aaSorting: [[2, "asc"]],
+    columnDefs: [
+      { bSortable: false, aTargets: [0, 2, 4, 5, 6, 7, 8] },
+    ],
+    processing: true,
+    serverSide: true,
+
+    lengthMenu: [
+      [10, 25, 50, 100, 250, 500, 1000],
+      [10, 25, 50, 100, 250, 500, "All"],
+    ],
+
+    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+    buttons: [
+      {
+        extend: "copy",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "csv",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "excel",
+        title: "StockList",
+        className: "btn-sm prints",
+        footer: true,
+      },
+      {
+        extend: "pdf",
+        title: "Stock List",
+        className: "btn-sm prints",
+        footer: true,
+        orientation: "landscape",
+      },
+      {
+        extend: "print",
+        title: "<center>Stock List</center>",
+        className: "btn-sm prints",
+        footer: true,
+      },
+    ],
+
+    serverMethod: "post",
+    ajax: {
+      url: base_url + "Crqsn/Req_Approve",
+      data: function (d) {
+        d.csrf_test_name = CSRF_TOKEN;
+      },
+      
+    },
+    columns: [
+      { data: "a" },
+      { data: "sl" },
+      { data: "outlet_name" },
+      { data: "date" },
+      { data: "product_name" },
+      // { data: "sku", class: "text-center" },
+      { data: "stok_quantity", class: "text-right" },
+      { data: "quantity", class: "text-right" },
+      { data: "qnty", class: "text-right" },
+      { data: "unit", class: "text-right" },
+      { data: "details", class: " text-right" },
+      { data: "action", class: " text-right" },
+    ]
+  });
+  
+})

@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-
+                    <?php echo form_open_multipart('Crqsn/exportintocsv', array('class' => 'form-vertical', 'id' => 'insert_category')) ?>
                     <div class="panel-body">
                         <?php if ($outlet_list) { ?>
 
@@ -71,16 +71,67 @@
                                 </select>
                             </div>
                         <?php } ?>
-                        <div class="" style="margin-bottom: 10px;">
-                            <label for="cat_list" class="col-form-label">Category : </label>
-                            <div class="form-group">
-                                <select id="cat_list" class="form-control" name="cat_list">
-                                    <option value="">Select One</option>
-                                    {cat_list}
-                                    <option value="{category_id}">{category_name}</option>
-                                    {/cat_list}
-                                </select>
+
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label class="" for="from_date"><?php echo display('start_date') ?></label>
+                                <input type="text" name="from_date" class="form-control datepicker" id="from_date" placeholder="<?php echo display('start_date') ?>" value="" autocomplete="off">
                             </div>
+                            <div class="col-sm-6">
+                                <label class="" for="to_date"><?php echo display('end_date') ?></label>
+                                <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="" autocomplete="off">
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="cat_list" class="col-form-label">Category : </label>
+                                <div class="form-group">
+                                    <select id="cat_list" class="form-control" name="cat_id">
+                                        <option value="">Select One</option>
+                                        {cat_list}
+                                        <option value="{id}">{name}</option>
+                                        {/cat_list}
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="product_sku" class="col-form-label">SKU: </label>
+                                <select name="product_sku" id="product_sku" class="form-control product_sku" multiple>
+                                    <option value="">Select SKU</option>
+                                    {sku_list}
+                                    <option value="{sku}">{sku}</option>
+                                    {/sku_list}
+                                </select>
+
+
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                                <label for="value" class="col-form-label">Quantity </label>
+                                <select name="value" id="value" class="form-control value">
+                                    <option value="2">Select Value</option>
+                                    <option value="0">Zero</option>
+                                    <option value="2">All</option>
+                                    <option value="1">Positive</option> 
+                                    <option value="3">All Transaction Items</option>
+                                    <option value="4">Positive Transaction Items</option>
+                                    <option value="5">Zero Transaction Items</option>
+
+
+                                </select>
+
+                            </div>
+                            <div class="col-md-6" style="margin-bottom: 10px;">
+                              <div class="col-md-2" style="margin-bottom: 10px;">
+                                
+                                <button class="btn btn-info" id="submit-buttons" type="submit"​​​​​>Export</button>
+                               
+                               </div>
+                               <!-- <div class="col-md-3" style="margin-bottom: 10px;"> 
+                                  <input name="range" type="number" id="typeNumber" class="form-control" />
+                               </div> -->
+                            </div>
+                            <?php echo form_close() ?>
                         </div>
                         <div>
 
@@ -90,29 +141,39 @@
                                         <tr>
                                             <th class="text-center"><?php echo display('sl') ?></th>
                                             <th class="text-center"><?php echo display('product_name') ?></th>
-                                            <th class="text-center"><?php echo display('product_model') ?></th>
                                             <th class="text-center">Category</th>
-                                            <th class="text-center">Color</th>
-                                            <th class="text-center">Size</th>
-                                            <th class="text-center"><?php echo display('sell_price') ?></th>
-                                            <th class="text-center"><?php echo display('purchase_price') ?></th>
+                                            <th class="text-center">SKU</th>
+                                            <th class="text-center"><?php echo display('product_model') ?></th>
+
+                                            <th class="text-center"><?php echo "Discounted Price" ?></th>
+
+                                            <!-- <th class="text-center">Production Cost</th> -->
+
                                             <th class="text-center"><?php echo display('in_qnty') ?></th>
-                                            <th class="text-center"><?php echo display('out_qnty') ?></th>
+                                            <th class="text-center">Damaged Quantity</th>
                                             <th class="text-center">Return Given</th>
-                                            <th class="text-center"><?php echo display('stock') ?></th>
+                                            <th class="text-center"><?php echo display('out_qnty') ?></th>
+
+                                            <th class="text-center">Opening Stock </th>
+                                            <th class="text-center">Closing Stock</th>
                                             <th class="text-center"><?php echo display('stock_sale') ?></th>
-                                            <th class="text-center">Stock Purchase Price</th>
+                                            <!-- <th class="text-center">Stock Purchase Price</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="9" class="text-right"><?php echo display('total') ?> :</th>
+
+                                            <th colspan="6" class="text-right"><?php echo display('total') ?> :</th>
+                                            <th></th>
+                                            <th></th>
+                                           
                                             <th id="stockqty"></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
                                             <th></th>
+
                                         </tr>
 
                                     </tfoot>

@@ -34,15 +34,26 @@
 	margin-top: 10px;
 }
 .productbarcode-margin{
-	margin-left: 250px;
+	margin-left: 290px;
+}
+
+.productbarcode-mg{
+	margin-left: 230px;
 }
 .barcode-toptd{
-	border: 1px solid black ;padding: 5px;
+	/*border: 1px solid black ;*/
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	/*width: 50px !important;*/
+
 }
 
 .barcode-innerdiv{
 	font-family: 'Open Sans','Helvetica Neue',Helvetica,Arial,sans-serif;
 	text-align: center; position: relative;
+
 }
 
 .barcode-productname{
@@ -65,7 +76,7 @@
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-	height: 60px;
+	height: 40px;
 	width: 143px;
 }
 
@@ -166,7 +177,7 @@
 }
 
 .product_field{
-	width: 220px;
+	width: 500px;
 }
 
 .invoice_fields{
@@ -207,6 +218,8 @@
 .company-content{
 	display: inline-block;
 	width: 64%;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .img-bottom-m{
@@ -977,10 +990,10 @@
 }
 
 .ui-autocomplete {
-    max-height: 400px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    z-index:1000 !important;
+	max-height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	z-index:1000 !important;
 }
 
 #tooltip {
@@ -1075,4 +1088,7 @@
 	display: none;
 
 
+}
+.d-inline{
+	display: inline-block;
 }

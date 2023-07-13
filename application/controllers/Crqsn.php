@@ -54,6 +54,15 @@ class Crqsn extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function return_products()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lrqsn');
+        $content = $CI->lrqsn->return_products_form();
+        $this->template->full_admin_html_view($content);
+    }
+
     public function cw_purchase()
     {
         $CI = &get_instance();
@@ -73,6 +82,30 @@ class Crqsn extends CI_Controller
         $CI->load->model('Rqsn');
 
         $rqsn = $CI->Rqsn->rqsn_entry();
+
+
+
+        //   echo "ok";exit();
+
+        if ($rqsn == TRUE) {
+            $this->session->set_userdata(array('message' => display('successfully_added')));
+
+            redirect(base_url('Crqsn/rqsn_form'));
+        } else {
+            $this->session->set_userdata(array('error_message' => display('please_try_again')));
+            redirect(base_url('Crqsn/rqsn_form'));
+        }
+    }
+    public function insert_transfer()
+    {
+        $CI = &get_instance();
+
+        //echo "Ok";exit();
+
+        $CI->auth->check_admin_auth();
+        $CI->load->model('Rqsn');
+
+        $rqsn = $CI->Rqsn->transfer_entry();
 
 
 
@@ -140,21 +173,36 @@ class Crqsn extends CI_Controller
     }
 
     //Aprove voucher
+    // public function aprove_rqsn()
+    // {
+    //     $CI = &get_instance();
+    //     $this->auth->check_admin_auth();
+    //     $CI->load->model('Rqsn');
+    //     $CI->load->model('Reports');
+    //     $data['title'] = 'Approve Requisition';
+    //     $data['t'] = $this->Rqsn->approve_rqsn();
+    //     //$data['t'] = $this->Reports->getCheckList_rqsn();
+    //     // $data = $this->Reports->getCheckLi st_rqsn();
+
+
+    //     //  echo '<pre>';print_r($data);exit();
+    //     $content = $this->parser->parse('rqsn/rqsn_approve', $data, true);
+    //     $this->template->full_admin_html_view($content);
+    // }
     public function aprove_rqsn()
     {
         $CI = &get_instance();
         $this->auth->check_admin_auth();
-        $CI->load->model('Rqsn');
-        $CI->load->model('Reports');
-        $data['title'] = 'Approve Requisition';
-        $data['t'] = $this->Rqsn->approve_rqsn();
-        //$data['t'] = $this->Reports->getCheckList_rqsn();
-        // $data = $this->Reports->getCheckLi st_rqsn();
+        $content = $this->lrqsn->approve_outlet_rqsn();
 
-
-        //  echo '<pre>';print_r($data);exit();
-        $content = $this->parser->parse('rqsn/rqsn_approve', $data, true);
         $this->template->full_admin_html_view($content);
+    }
+    public function Req_Approve()
+    {
+        $postData = $this->input->post();
+        $this->load->model('Rqsn');
+        $data = $this->Rqsn->approve_rqsn2($postData);
+        echo json_encode($data);
     }
 
     public function aprove_rqsn_outlet()
@@ -372,8 +420,21 @@ class Crqsn extends CI_Controller
         $data['title'] = 'Outlet Approve';
         $data['t'] = $this->Rqsn->approve_outlet();
 
-     //   echo '<pre>';print_r($data);exit();
+
         $content = $this->parser->parse('rqsn/rqsn_approve_outlet', $data, true);
+        $this->template->full_admin_html_view($content);
+    }
+
+    public function return_rcv()
+    {
+        $CI = &get_instance();
+        $this->auth->check_admin_auth();
+        $CI->load->model('Rqsn');
+        $data['title'] = 'Return Receive';
+        $data['t'] = $this->Rqsn->return_rcv();
+
+
+        $content = $this->parser->parse('rqsn/return_rcv', $data, true);
         $this->template->full_admin_html_view($content);
     }
 
@@ -389,12 +450,6 @@ class Crqsn extends CI_Controller
             'isaprv' => 1,
             'iscw' => 1
         );
-
-        //        print_r($postData);
-        //        die();
-
-        // echo '<script>alert("Welcome to Geeks for Geeks")</script>';
-
         if ($this->Rqsn->approved($postData)) {
             $this->session->set_flashdata('message', display('successfully_approved'));
         } else {
@@ -403,6 +458,53 @@ class Crqsn extends CI_Controller
 
         redirect($_SERVER['HTTP_REFERER']);
     }
+    public function isactiveall()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $rqsn_ids = $this->input->post('rqsn_ids', true);
+        $stocks = $this->input->post('stocks', true);
+        
+        $approve_qntys = $this->input->post('approve_qntys', true);
+        $action = 2;
+        foreach ($rqsn_ids as $key=> $value) {
+            if($stocks[$key] >= $approve_qntys[$key])
+            {
+                $postData = array(
+                    'rqsn_detail_id'     => $rqsn_ids[$key],
+                    'a_qty' => $approve_qntys[$key],
+                    'status' => $action,
+                    'isaprv' => 1,
+                    'iscw' => 1
+                );
+                $result = $this->Rqsn->approved($postData);
+            }
+      }
+       
+        if ($result) {
+            $this->session->set_flashdata('message', display('successfully_approved'));
+        } else {
+            $this->session->set_flashdata('error_message', display('please_try_again'));
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    public function rqsn_delete_all()
+    {
+        $rqsn_ids = $this->input->post('rqsn_ids', true);
+        foreach ($rqsn_ids as $key=> $value) {
+            $result = $this->Rqsn->delete_rqsn($value);
+        }
+        if ($result) {
+            $this->session->set_flashdata('message', display('successfully_delete'));
+        } else {
+            $this->session->set_flashdata('error_message', display('please_try_again'));
+        }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+
     public function ischalan($id = null, $action = null, $value = null)
     {
         $CI = &get_instance();
@@ -482,6 +584,8 @@ class Crqsn extends CI_Controller
     {
         $CI = &get_instance();
         $CI->load->model('Rqsn');
+        $user_id = $this->session->userdata('user_id');
+        $Vdate = date('Y-m-d');
         $action = ($action == 'active' ? 3 : 2);
         $postData = array(
             'rqsn_detail_id'     => $id,
@@ -489,15 +593,191 @@ class Crqsn extends CI_Controller
             'isrcv' => 1
         );
 
+        $item_total = $this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id', $id)->get()->row()->item_total;
+
         //        print_r($postData);
         //        die();
+        //Income Credit
 
+        if ($item_total > 0) {
+
+
+            $incCr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  306,
+                'Narration'      =>  'Income For ID -  ' . $id,
+                'Credit'          => (!empty($item_total) ? $item_total : 0),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $incCr);
+            //Current Asset Receivable
+            $curDr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  1020303,
+                'Narration'      =>  'Receivable For ID -  ' . $id,
+                'Credit'          =>  0,
+                'Debit'         => (!empty($item_total) ? $item_total : 0),
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $curDr);
+            //Current Liabilties Payable
+            $curLCr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  50201,
+                'Narration'      =>  'Payable For  ID -  '  . $id,
+                'Credit'          => (!empty($item_total) ? $item_total : 0),
+                'Debit'         =>  0,
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $curLCr);
+            //Expense Debit
+            $exDr = array(
+                'VNo'            =>  $id,
+                'Vtype'          =>  'RQSN',
+                'VDate'          =>  $Vdate,
+                'COAID'          =>  408,
+                'Narration'      =>  'Expense For ID -  ' . $id,
+                'Credit'          => 0,
+                'Debit'         => (!empty($item_total) ? $item_total : 0),
+                'IsPosted'       =>  1,
+                'CreateBy'       => $user_id,
+                'CreateDate'     => $Vdate,
+                'IsAppove'       => 1
+            );
+            $this->db->insert('acc_transaction', $exDr);
+        }
 
         if ($this->Rqsn->received($postData)) {
             $this->session->set_flashdata('message', display('successfully_approved'));
         } else {
             $this->session->set_flashdata('error_message', display('please_try_again'));
         }
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
+    public function isreceiveall()
+    {
+
+        $rqsn_ids = $this->input->post('rqsn_ids', true);
+        // echo "<pre>";
+        // print_r($rqsn_ids);
+        // exit();
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $user_id = $this->session->userdata('user_id');
+        $Vdate = date('Y-m-d');
+        // $action = ($action == 'active' ? 3 : 2);
+        $action = 3;
+        foreach ($rqsn_ids as $rqsn_id) {
+            $postData = array(
+                'rqsn_detail_id'     => $rqsn_id,
+                'status' => $action,
+                'isrcv' => 1
+            );
+
+            $item_total = $this->db->select('item_total')->from('rqsn_details')->where('rqsn_detail_id', $rqsn_id)->get()->row()->item_total;
+            //Income Credit
+            // echo "<pre>";
+            // print_r($item_total);
+            // exit();
+            if ($item_total > 0) {
+
+
+                $incCr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  306,
+                    'Narration'      =>  'Income For ID -  ' . $rqsn_id,
+                    'Credit'          => (!empty($item_total) ? $item_total : 0),
+                    'Debit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $incCr);
+                //Current Asset Receivable
+                $curDr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  1020303,
+                    'Narration'      =>  'Receivable For ID -  ' . $rqsn_id,
+                    'Credit'          =>  0,
+                    'Debit'         => (!empty($item_total) ? $item_total : 0),
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $curDr);
+                //Current Liabilties Payable
+                $curLCr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  50201,
+                    'Narration'      =>  'Payable For  ID -  '  . $rqsn_id,
+                    'Credit'          => (!empty($item_total) ? $item_total : 0),
+                    'Debit'         =>  0,
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $curLCr);
+                //Expense Debit
+                $exDr = array(
+                    'VNo'            =>  $rqsn_id,
+                    'Vtype'          =>  'RQSN',
+                    'VDate'          =>  $Vdate,
+                    'COAID'          =>  408,
+                    'Narration'      =>  'Expense For ID -  ' . $rqsn_id,
+                    'Credit'          => 0,
+                    'Debit'         => (!empty($item_total) ? $item_total : 0),
+                    'IsPosted'       =>  1,
+                    'CreateBy'       => $user_id,
+                    'CreateDate'     => $Vdate,
+                    'IsAppove'       => 1
+                );
+                $this->db->insert('acc_transaction', $exDr);
+            }
+
+
+            $this->db->where('rqsn_detail_id', $rqsn_id)
+                ->update('rqsn_details', $postData);
+        }
+        // echo true;
+
+        // if ($this->Rqsn->received($postData)) {
+        $this->session->set_flashdata('message', display('successfully_approved'));
+        $data = [
+            'result' => 1,
+            'msg' => 'successfully_approved',
+        ];
+        echo json_encode($data);
+
+
+        // } else {
+        // $this->session->set_flashdata('error_message', display('please_try_again'));
+        // }
 
         redirect($_SERVER['HTTP_REFERER']);
     }
@@ -525,10 +805,34 @@ class Crqsn extends CI_Controller
     public function outlet_stock()
     {
         $this->load->model('Rqsn');
-
+        $from_date = $this->input->post('from_date');
+        $to_date = $this->input->post('to_date');
+        $value = $this->input->post('value');
         $postData = $this->input->post();
-        $data = $this->Rqsn->outlet_stock($postData);
+        $data = $this->Rqsn->outlet_stock3($postData, null, $from_date, $to_date, $value,null);
         echo json_encode($data);
+    }
+    public function exportintocsv()
+    {
+        $this->load->model('Rqsn');
+        $filename = 'sale_' . date('Ymd') . '.csv';
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$filename");
+        header("Content-Type: application/csv; ");
+        $postData = $this->input->post();
+
+        $invoicedata = $this->Rqsn->outlet_stock3($postData, null, $from_date, $to_date, $value,'export');
+        // file creation
+        $file = fopen('php://output', 'w');
+
+        $header = array('Sl No', 'Product Name','Category', 'SKU', 'Product Model', 'Sale Price','Purchase Price', 
+        'Production Cost', 'In Qnty', 'Damaged Quantity', 'Return Given','Out Qnty', 'Opening Stock', 'Closing Stock', 'Stock Sale Price', 'Stock Value');
+        fputcsv($file, $header);
+        foreach ($invoicedata as $line) {
+            fputcsv($file, $line);
+        }
+        fclose($file);
+        exit;
     }
 
     public function rqsn_report()
@@ -655,12 +959,21 @@ class Crqsn extends CI_Controller
         $this->template->full_admin_html_view($content);
     }
 
+    public function item_finalize()
+    {
+        $CI = &get_instance();
+        $CI->auth->check_admin_auth();
+        $CI->load->library('lrqsn');
+        $content = $CI->lrqsn->item_list_finalize();
+        $this->template->full_admin_html_view($content);
+    }
+
     public function update_pr_rqsn()
     {
-        $product_id=$_POST["product_id"];
-        $rq_d_id=$_POST["rq_d_id"];
+        $product_id = $_POST["product_id"];
+        $rq_d_id = $_POST["rq_d_id"];
 
-        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id',$product_id)->get()->row()->finished_qty;
+        $exist_fq = $this->db->select('finished_qty')->from('pr_rqsn_details')->where('product_id', $product_id)->get()->row();
 
 
         $data = array(
@@ -668,14 +981,14 @@ class Crqsn extends CI_Controller
             "printing"  => $_POST["printing"],
             "sewing"  => $_POST["sewing"],
             "finishing"  => $_POST["finishing"],
-            "finished_qty"  => $_POST["finishing"]+$exist_fq,
+            "finished_qty"  => $_POST["finishing"] + $exist_fq,
             "last_updated"  => date('Y-m-d'),
             "isrcv"  => '',
         );
 
 
         $this->db->where('product_id', $product_id);
-        $this->db->update('pr_rqsn_details',$data);
+        $this->db->update('pr_rqsn_details', $data);
 
         //            $sq = "UPDATE rqsn_details
         //            SET purchase_status = 2
@@ -688,4 +1001,29 @@ class Crqsn extends CI_Controller
         json_encode($data);
     }
 
+    public function update_item_finalize()
+    {
+        $product_id = $_POST["product_id"];
+        $variation = $_POST["variation"];
+
+        $data = array(
+            "quantity"  => $_POST["quantity"],
+            "last_updated"  => date('Y-m-d'),
+            "isaprv"  => '1',
+        );
+
+
+        $this->db->where(array('product_id' => $product_id));
+        $this->db->update('pr_rqsn_details', $data);
+
+        //            $sq = "UPDATE rqsn_details
+        //            SET purchase_status = 2
+        //            WHERE rqsn_detail_id = ".$product_id.";";
+        //
+        //            $this->db->query($sq);
+
+
+
+        json_encode($data);
+    }
 }

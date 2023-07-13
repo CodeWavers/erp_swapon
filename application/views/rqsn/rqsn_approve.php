@@ -76,7 +76,7 @@
                                             <td><?php echo $sl++; ?></td>
                                             <td><?php echo $approve['outlet_name'] ?> </td>
                                             <td><?php echo $approve['date'] ?> </td>
-                                            <td><?php echo $approve['product_name'] . ' (' . $approve['model'] . ')' . ' (' . $approve['color_name'] . ')' . ' (' . $approve['size_name'] . ')' ?> </td>
+                                            <td><?php echo $approve['product_name'] . ' (' . $approve['sku'] . ')' ?> </td>
                                             <td class="s_qty"><?php echo $approve['stok_quantity'] ?> </td>
                                             <td class="r_qty"><?php echo $approve['quantity'] ?> </td>
 
@@ -137,7 +137,29 @@
     $(document).ready(function() {
 
 
-        // console.log(data_id);
+        $('.a_qty').on('keyup', function() {
+
+        var qty = this.value;
+        var y = $(this).closest('tr').find('.r_qty').html()
+        var s = $(this).closest('tr').find('.s_qty').html()
+        var z = parseInt(y);
+        var s_qty = parseInt(s);
+        //  console.log( qty);
+        if (qty > z) {
+            var msg = "You can not transfer more than requested " + z + " Items";
+            alert(msg);
+            $(".a_qty").val(z);
+            
+        }
+        
+        if (qty > s_qty) {
+            var msg = "You can transfer maximum " + s_qty + " Items";
+            alert(msg);
+            $(".a_qty").val(z);
+            
+        }
+       
+        });
         $('.a_qty').on('change', function() {
 
             var qty = this.value;
@@ -149,11 +171,15 @@
             if (qty > z) {
                 var msg = "You can not transfer more than requested " + z + " Items";
                 alert(msg);
+                $(".a_qty").val(z);
             }
+            
             if (qty > s_qty) {
                 var msg = "You can transfer maximum " + s_qty + " Items";
                 alert(msg);
+                $(".a_qty").val(z);
             }
+            
         });
     });
 </script>

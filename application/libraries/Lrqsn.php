@@ -14,12 +14,14 @@ class Lrqsn
         $CI->load->model('Rqsn');
         $CI->load->model('Web_settings');
         $CI->load->model('Reports');
+        $CI->load->model('Products');
         $CI->load->model('categories');
         $CI->load->model('Warehouse');
 
-        $cat_list = $CI->categories->category_list(1);
+        $cat_list = $CI->categories->cates();
         $outlet_list    = $CI->Warehouse->get_outlet_user();
         $cw_list    = $CI->Rqsn->cw_list();
+        $sku_list = $CI->Products->sku_list();
 
         $cw = $CI->Warehouse->branch_list_product();
 
@@ -33,6 +35,7 @@ class Lrqsn
             'outlet_list' => $outlet_list,
             'cw'    => $cw,
             'cat_list'  => $cat_list,
+            'sku_list'  => $sku_list,
             'discount_type' => $currency_details[0]['discount_type'],
             'currency' => $currency_details[0]['currency'],
             'totalnumber' => $CI->Reports->totalnumberof_product(),
@@ -40,11 +43,23 @@ class Lrqsn
         );
 
 
-        //        echo print_r($data);
-        //        die();
+//                echo print_r($sku_list);
+//                die();
         $invoiceForm = $CI->parser->parse('rqsn/outlet_stock', $data, true);
         return $invoiceForm;
     }
+     // Retrieve Single Item Stock Stock Report
+     public function approve_outlet_rqsn()
+     {
+         $CI = &get_instance();
+         $CI->load->model('Rqsn');
+         $CI->load->model('Web_settings');
+         $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+         $data['currency'] = $currency_details[0]['currency'];
+         $data['heading_text'] = "Stock Report";
+         $reportList = $CI->parser->parse('rqsn/central_rqsn_approve', $data, true);
+         return $reportList;
+     }
 
     public function rqsn_add_form()
     {
@@ -127,6 +142,34 @@ class Lrqsn
         // echo '<pre'; print_r($cw_list);exit();
         //    die();
         $invoiceForm = $CI->parser->parse('rqsn/transfer_form', $data, true);
+        return $invoiceForm;
+    }
+
+    public function return_products_form()
+    {
+        $CI = &get_instance();
+        $CI->load->model('Rqsn');
+        $CI->load->model('Web_settings');
+        $outlet_list    = $CI->Rqsn->outlet_list();
+        $outlet_list_to    = $CI->Rqsn->outlet_list_to();
+        $cw_list    = $CI->Rqsn->cw_list();
+        $currency_details = $CI->Web_settings->retrieve_setting_editdata();
+        $taxfield = $CI->db->select('tax_name,default_value')
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
+        $data = array(
+            'title'         => "Return Products",
+            'outlet_list' => $outlet_list,
+            'outlet_list_to' => $outlet_list_to,
+            'cw_list' => $cw_list,
+            'discount_type' => $currency_details[0]['discount_type'],
+            'taxes'         => $taxfield,
+        );
+
+        // echo '<pre'; print_r($cw_list);exit();
+        //    die();
+        $invoiceForm = $CI->parser->parse('rqsn/return_form', $data, true);
         return $invoiceForm;
     }
 
@@ -295,7 +338,7 @@ class Lrqsn
         }
 
         $data = array(
-            'title'     => 'Requsition Report',
+            'title'     => 'Requisition Report',
             'rqsn_list' => $new_rq
         );
 
@@ -361,6 +404,29 @@ class Lrqsn
         // echo '<pre>'; print_r($data); die();
 
         return $CI->parser->parse('production/production_list_form', $data, true);
+
+    }
+    public function item_list_finalize()
+    {
+        $CI = & get_instance();
+        $CI->load->model('Rqsn');
+
+        $rqsn_list = $CI->Rqsn->get_item_list_finalize();
+
+
+        $i = 0;
+        foreach ($rqsn_list as $k => $v) {
+            $i++;
+            $rqsn_list[$k]['sl'] = $i + $CI->uri->segment(3);
+        }
+
+        $data = array(
+            'title'     => 'Item Finalize ',
+            'pur_list'  => $rqsn_list
+        );
+        // echo '<pre>'; print_r($data); die();
+
+        return $CI->parser->parse('production/item_finalize', $data, true);
 
     }
 }

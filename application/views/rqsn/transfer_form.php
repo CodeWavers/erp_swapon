@@ -78,7 +78,7 @@
 
 
                     <div class="rqsn_panel" >
-                        <?php echo form_open_multipart('Crqsn/insert_rqsn',array('class' => 'form-vertical', 'id' => 'insert_rqsn'))?>
+                        <?php echo form_open_multipart('Crqsn/insert_transfer',array('class' => 'form-vertical', 'id' => 'insert_rqsn'))?>
                         <div class="row">
 
                             <div class="col-sm-8" id="payment_from_2">
@@ -102,7 +102,7 @@
                                 <div class="form-group row">
                                     <label for="payment_type" class="col-sm-3 col-form-label">From<i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
-                                        <select name="from_id" class="form-control" required=""  tabindex="3">
+                                        <select name="from_id" class="form-control" id="from_id" required=""  tabindex="3">
                                             <?php foreach($outlet_list as $outlet){?>
                                                 <option value="<?php echo html_escape($outlet['outlet_id'])?>"><?php echo html_escape($outlet['outlet_name']) ;?></option>
                                             <?php }?>
@@ -168,9 +168,10 @@
                                     <th class="text-center " width="25%"><?php echo display('item_information') ?> <i class="text-danger">*</i></th>
 
                                     <th class="text-center"><?php echo display('unit') ?></th>
+                                    <th class="text-center">Stock</th>
                                     <th class="text-center"><?php echo display('quantity') ?> <i class="text-danger">*</i></th>
-
                                     <th class="text-center">Sale Price</th>
+                                    <th class="text-center">Total</th>
                                     <th class="text-center"><?php echo display('action') ?></th>
                                 </tr>
                                 </thead>
@@ -184,44 +185,49 @@
                                         <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
                                     </td>
 
+
                                     <td>
                                         <input name="unit[]" id="unit_1" class="form-control text-right unit_1 valid" value="None" readonly="" aria-invalid="false" type="text">
                                     </td>
                                     <td>
-                                        <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8"  value="1" />
+                                        <input type="text" name="available_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="available_quantity_1 form-control text-right" id="available_quantity_1" placeholder="0.00" min="0" tabindex="8"  value="" readonly />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="product_quantity[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_qntt_1 form-control text-right" id="total_qntt_1" placeholder="0.00" min="0" tabindex="8"  value="" />
                                     </td>
 
                                     <td>
-                                        <input type="text" name="qty_price[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="qty_price form-control text-right" id="qty_price_1" placeholder="0.00" value="<?= (isset($isedit) ? $pr_total_price : '0.00') ?>" tabindex="8" />
-                                        <input type="hidden" name="rate[]" required="" onkeyup="quantity_calculate_p(1);" onchange="quantity_calculate_p(1);" class="rate_1 form-control text-right" id="rate_1" placeholder="0.00" tabindex="8" value="<?= (isset($isedit) ? $pr_per_price : '0.00') ?>" />
+                                        <input type="text" name="qty_price[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="qty_price form-control text-right" id="qty_price_1" placeholder="0.00" value="" tabindex="8" />
+                                        <input type="hidden" name="rate[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="rate_1 form-control text-right" id="rate_1" placeholder="0.00" tabindex="8" value="<?= (isset($isedit) ? $pr_per_price : '') ?>" />
+                                    </td>
+                                    <td>
+                                        <input type="text" name="total_price[]" required="" onkeyup="quantity_calculate(1);" onchange="quantity_calculate(1);" class="total_price form-control text-right" id="total_price_1" placeholder="0.00" value="" tabindex="8" readonly />
                                     </td>
                                     <td>
 
 
-                                        <button  class='btn btn-danger text-right' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button>
-                                        <a   id="add_invoice_item" class="btn btn-info" name="add-invoice-item"  onClick="addInputField('addinvoiceItem');"  tabindex="11"><i class="fa fa-plus"></i></a>
+                                        <button  class='btn btn-danger  btn-sm text-right' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button>
+                                        <a   id="add_invoice_item" class="btn btn-sm btn-info" name="add-invoice-item"  onClick="addInputField_tr('addinvoiceItem');"  tabindex="11"><i class="fa fa-plus"></i></a>
 
                                     </td>
                                 </tr>
                                 </tbody>
                                 <tfoot>
 
-<!--                                <tr>-->
-<!--                                    <td colspan="3" class="text-right">-->
-<!--                                        <strong>Total</strong>-->
-<!--                                    </td>-->
-<!--                                    <td>-->
-<!--                                        <input class="form-control" type="text" name="total_expense" id="total_expense" readonly>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
                                 <tr>
-                                    <td colspan="4" rowspan="1">
+                                    <td colspan="4" rowspan="3">
                                         <center><label  for="details" class="  col-form-label text-center">Remark...</label></center>
                                         <textarea name="inva_details" id="details" class="form-control" placeholder="Remark..." ></textarea>
                                     </td>
+                                    <td colspan="1" class="text-right">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td>
 
-
+                                        <input class="form-control text-right" type="text" name="total_expense" id="total_expense" placeholder="0.00" readonly>
+                                    </td>
                                 </tr>
+
 
 
 
